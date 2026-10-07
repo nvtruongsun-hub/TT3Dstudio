@@ -228,7 +228,7 @@
 
         return `
           <div class="flex gap-3.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800 relative group transition-all hover:border-slate-700">
-            <img src="${item.image || 'assets/images/logo.jpg'}" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover border border-slate-800 flex-shrink-0">
+            <img src="${item.image || 'assets/images/logo.jpg'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=300&q=80';" alt="${item.title}" class="w-16 h-16 rounded-xl object-cover border border-slate-800 flex-shrink-0">
             <div class="flex-1 min-w-0 space-y-1.5">
               <div class="flex items-start justify-between gap-2">
                 <h4 class="text-xs font-display font-bold text-white leading-tight line-clamp-1">${item.title}</h4>
@@ -431,7 +431,7 @@
           const itemTotal = (item.price * item.qty).toLocaleString('vi-VN');
           return `
             <div class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80">
-              <img src="${item.image || 'assets/images/logo.jpg'}" alt="${item.title}" class="w-12 h-12 rounded-lg object-cover border border-slate-800 flex-shrink-0">
+              <img src="${item.image || 'assets/images/logo.jpg'}" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=300&q=80';" alt="${item.title}" class="w-12 h-12 rounded-lg object-cover border border-slate-800 flex-shrink-0">
               <div class="flex-1 min-w-0">
                 <div class="font-bold text-white text-xs line-clamp-1">${item.title}</div>
                 <div class="flex flex-wrap mt-0.5">${optionsHtml}</div>

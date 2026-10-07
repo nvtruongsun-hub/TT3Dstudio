@@ -49,6 +49,43 @@
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/OBJLoader.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+  <!-- Auto Image Fallback Protection (Ensures zero broken images on all networks / GitHub Pages) -->
+  <script>
+    (function() {
+      const FALLBACK_MAP = {
+        'logo': 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80',
+        'product-nfc-wifi': 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80',
+        'product-pleated-vase': 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80',
+        'product-desk-dock': 'https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80',
+        'product-soft-serve-lamp': 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80',
+        'product-pegboard': 'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80',
+        'product-monogram': 'https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80',
+        'hero-printer': 'https://images.unsplash.com/photo-1631541909061-71e349d1f203?auto=format&fit=crop&w=1200&q=80',
+        'archi-model': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=800&q=80',
+        'eng-parts': 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80',
+        'resin-figure': 'https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=800&q=80'
+      };
+
+      document.addEventListener('error', function(e) {
+        if (e.target && e.target.tagName && e.target.tagName.toLowerCase() === 'img') {
+          const img = e.target;
+          const src = img.getAttribute('src') || '';
+          for (const [key, fallbackUrl] of Object.entries(FALLBACK_MAP)) {
+            if (src.includes(key) && !img.dataset.hasFallenBack) {
+              img.dataset.hasFallenBack = 'true';
+              img.src = fallbackUrl;
+              return;
+            }
+          }
+          if (!img.dataset.hasFallenBack && !src.startsWith('data:') && !src.includes('unsplash.com')) {
+            img.dataset.hasFallenBack = 'true';
+            img.src = 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80';
+          }
+        }
+      }, true);
+    })();
+  </script>
 </head>
 
 <body class="bg-[#07090e] text-slate-100 selection:bg-cyan-500 selection:text-black">
@@ -68,7 +105,7 @@
         <!-- Brand Logo & Name -->
         <a href="#hero" class="flex items-center gap-3 group">
           <div class="relative w-11 h-11 rounded-xl overflow-hidden border border-cyan-500/40 shadow-lg shadow-cyan-500/20 group-hover:border-cyan-400 transition-all duration-300">
-            <img src="assets/images/logo.jpg" alt="T&T 3D Studio Logo" class="w-full h-full object-cover">
+            <img src="assets/images/logo.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80';" alt="T&T 3D Studio Logo" class="w-full h-full object-cover">
           </div>
           <div>
             <div class="font-display font-bold text-xl tracking-wider text-white group-hover:text-cyan-400 transition-colors flex items-center gap-1.5">
@@ -300,7 +337,7 @@
         <!-- Product 1: T&T TapConnect NFC WiFi Stand -->
         <div data-product-category="smart-nfc" data-product-item data-type="nfc" data-title="Đế WiFi 1 Chạm Thông Minh (T&T TapConnect™ Stand)" data-price="109,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-cyan-400 transition-all overflow-hidden flex flex-col group">
           <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-nfc-wifi.jpg" alt="Đế WiFi NFC TapConnect" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="assets/images/product-nfc-wifi.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80';" alt="Đế WiFi NFC TapConnect" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg badge-hot text-[11px] font-bold text-white">
               🔥 VIRAL TIKTOK
             </span>
@@ -349,7 +386,7 @@
         <!-- Product 2: Pleated Fluted Vase (Origami Vase Mode) -->
         <div data-product-category="decor-light" data-product-item data-type="standard" data-title="Bình Hoa Dập Ly Origami (Pleated Fluted Vase - Watertight)" data-price="125,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-secondary transition-all overflow-hidden flex flex-col group">
           <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-pleated-vase.jpg" alt="Bình Hoa Dập Ly Origami" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="assets/images/product-pleated-vase.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80';" alt="Bình Hoa Dập Ly Origami" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg badge-eco text-[11px] font-bold text-white flex items-center gap-1">
               <i class="fa-solid fa-droplet text-[10px]"></i> Chống thấm 100%
             </span>
@@ -398,7 +435,7 @@
         <!-- Product 3: BedSide & Desk Organizer Dock -->
         <div data-product-category="desk-setup" data-product-item data-type="standard" data-title="Khay Kệ Đa Năng 5-in-1 (BedSide & Desk Organizer Pro)" data-price="199,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-cyan-400 transition-all overflow-hidden flex flex-col group">
           <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-desk-dock.jpg" alt="Khay Kệ Desk Organizer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="assets/images/product-desk-dock.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80';" alt="Khay Kệ Desk Organizer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg bg-indigo-600 text-[11px] font-bold text-white">
               ⚡ 5-IN-1 DOCK
             </span>
@@ -447,7 +484,7 @@
         <!-- Product 4: Soft-Serve Swirl Lamp -->
         <div data-product-category="decor-light" data-product-item data-type="standard" data-title="Đèn Ngủ Búp Kem Xoắn (T&T Swirl Soft-Serve Lamp)" data-price="320,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-warm transition-all overflow-hidden flex flex-col group">
           <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-soft-serve-lamp.jpg" alt="Đèn Búp Kem Soft-Serve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="assets/images/product-soft-serve-lamp.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80';" alt="Đèn Búp Kem Soft-Serve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg badge-hot text-[11px] font-bold text-white">
               ✨ BEST SELLER
             </span>
@@ -496,7 +533,7 @@
         <!-- Product 5: Hexa Modular Pegboard -->
         <div data-product-category="desk-setup" data-product-item data-type="standard" data-title="Bảng Treo Tường Module Lục Giác (T&T Hexa Modular Pegboard)" data-price="145,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-purple-400 transition-all overflow-hidden flex flex-col group">
           <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-pegboard.jpg" alt="Bảng Pegboard Module Lục Giác" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="assets/images/product-pegboard.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80';" alt="Bảng Pegboard Module Lục Giác" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg bg-purple-600 text-[11px] font-bold text-white">
               🧩 MODULAR SYSTEM
             </span>
@@ -545,7 +582,7 @@
         <!-- Product 6: Custom 3D Monogram & Name Sign -->
         <div data-product-category="desk-setup" data-product-item data-type="monogram" data-title="Bảng Chữ Cái & Tên Cá Nhân Hóa (T&T Monogram Signature)" data-price="135,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-emerald-400 transition-all overflow-hidden flex flex-col group">
           <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-monogram.jpg" alt="Bảng Chữ Cái Monogram 3D" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            <img src="assets/images/product-monogram.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80';" alt="Bảng Chữ Cái Monogram 3D" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg bg-emerald-600 text-[11px] font-bold text-white">
               🎁 QUÀ TẶNG Ý NGHĨA
             </span>
@@ -1361,7 +1398,7 @@
         <div class="md:col-span-5 space-y-4">
           <div class="flex items-center gap-3">
             <div class="w-9 h-9 rounded-xl overflow-hidden border border-cyan-500/40">
-              <img src="assets/images/logo.jpg" alt="Logo" class="w-full h-full object-cover">
+              <img src="assets/images/logo.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=300&q=80';" alt="Logo" class="w-full h-full object-cover">
             </div>
             <span class="font-display font-bold text-lg text-white">T&T <span class="text-secondary">3D STUDIO</span></span>
           </div>
