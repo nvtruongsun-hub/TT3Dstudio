@@ -1174,4 +1174,26 @@ body.light-theme .spool-progress-bar {
   }
 }
 
+/* ==========================================================================
+   Image Performance & Skeleton Shimmer Loaders
+   ========================================================================== */
+.img-skeleton {
+  background: linear-gradient(90deg, #0b101c 0%, #172238 50%, #0b101c 100%);
+  background-size: 200% 100%;
+  animation: shimmerEffect 1.8s ease-in-out infinite;
+  position: relative;
+}
 
+@keyframes shimmerEffect {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.product-img-fade {
+  opacity: 0;
+  transition: opacity 0.35s ease-in-out, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.product-img-fade.loaded {
+  opacity: 1 !important;
+}

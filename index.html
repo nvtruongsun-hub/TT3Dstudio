@@ -84,6 +84,12 @@
           }
         }
       }, true);
+
+      document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.product-img-fade').forEach(function(img) {
+          if (img.complete) img.classList.add('loaded');
+        });
+      });
     })();
   </script>
 </head>
@@ -336,8 +342,8 @@
         
         <!-- Product 1: T&T TapConnect NFC WiFi Stand -->
         <div data-product-category="smart-nfc" data-product-item data-type="nfc" data-title="Đế WiFi 1 Chạm Thông Minh (T&T TapConnect™ Stand)" data-price="109,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-cyan-400 transition-all overflow-hidden flex flex-col group">
-          <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-nfc-wifi.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80';" alt="Đế WiFi NFC TapConnect" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="relative h-64 overflow-hidden img-skeleton cursor-pointer" data-lightbox-trigger>
+            <img src="assets/images/product-nfc-wifi.jpg" width="800" height="597" loading="eager" fetchpriority="high" decoding="async" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" alt="Đế WiFi NFC TapConnect" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg badge-hot text-[11px] font-bold text-white">
               🔥 VIRAL TIKTOK
             </span>
@@ -385,8 +391,8 @@
 
         <!-- Product 2: Pleated Fluted Vase (Origami Vase Mode) -->
         <div data-product-category="decor-light" data-product-item data-type="standard" data-title="Bình Hoa Dập Ly Origami (Pleated Fluted Vase - Watertight)" data-price="125,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-secondary transition-all overflow-hidden flex flex-col group">
-          <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-pleated-vase.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80';" alt="Bình Hoa Dập Ly Origami" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="relative h-64 overflow-hidden img-skeleton cursor-pointer" data-lightbox-trigger>
+            <img src="assets/images/product-pleated-vase.jpg" width="800" height="597" loading="eager" fetchpriority="high" decoding="async" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" alt="Bình Hoa Dập Ly Origami" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg badge-eco text-[11px] font-bold text-white flex items-center gap-1">
               <i class="fa-solid fa-droplet text-[10px]"></i> Chống thấm 100%
             </span>
@@ -434,8 +440,8 @@
 
         <!-- Product 3: BedSide & Desk Organizer Dock -->
         <div data-product-category="desk-setup" data-product-item data-type="standard" data-title="Khay Kệ Đa Năng 5-in-1 (BedSide & Desk Organizer Pro)" data-price="199,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-cyan-400 transition-all overflow-hidden flex flex-col group">
-          <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-desk-dock.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80';" alt="Khay Kệ Desk Organizer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="relative h-64 overflow-hidden img-skeleton cursor-pointer" data-lightbox-trigger>
+            <img src="assets/images/product-desk-dock.jpg" width="800" height="597" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1544816155-12df9643f363?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" alt="Khay Kệ Desk Organizer" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg bg-indigo-600 text-[11px] font-bold text-white">
               ⚡ 5-IN-1 DOCK
             </span>
@@ -483,8 +489,8 @@
 
         <!-- Product 4: Soft-Serve Swirl Lamp -->
         <div data-product-category="decor-light" data-product-item data-type="standard" data-title="Đèn Ngủ Búp Kem Xoắn (T&T Swirl Soft-Serve Lamp)" data-price="320,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-warm transition-all overflow-hidden flex flex-col group">
-          <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-soft-serve-lamp.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80';" alt="Đèn Búp Kem Soft-Serve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="relative h-64 overflow-hidden img-skeleton cursor-pointer" data-lightbox-trigger>
+            <img src="assets/images/product-soft-serve-lamp.jpg" width="800" height="597" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" alt="Đèn Búp Kem Soft-Serve" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg badge-hot text-[11px] font-bold text-white">
               ✨ BEST SELLER
             </span>
@@ -532,8 +538,8 @@
 
         <!-- Product 5: Hexa Modular Pegboard -->
         <div data-product-category="desk-setup" data-product-item data-type="standard" data-title="Bảng Treo Tường Module Lục Giác (T&T Hexa Modular Pegboard)" data-price="145,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-purple-400 transition-all overflow-hidden flex flex-col group">
-          <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-pegboard.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80';" alt="Bảng Pegboard Module Lục Giác" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="relative h-64 overflow-hidden img-skeleton cursor-pointer" data-lightbox-trigger>
+            <img src="assets/images/product-pegboard.jpg" width="800" height="597" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" alt="Bảng Pegboard Module Lục Giác" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg bg-purple-600 text-[11px] font-bold text-white">
               🧩 MODULAR SYSTEM
             </span>
@@ -581,8 +587,8 @@
 
         <!-- Product 6: Custom 3D Monogram & Name Sign -->
         <div data-product-category="desk-setup" data-product-item data-type="monogram" data-title="Bảng Chữ Cái & Tên Cá Nhân Hóa (T&T Monogram Signature)" data-price="135,000 đ" class="rounded-3xl glass-panel border border-slate-800 hover:border-emerald-400 transition-all overflow-hidden flex flex-col group">
-          <div class="relative h-64 overflow-hidden bg-slate-900 cursor-pointer" data-lightbox-trigger>
-            <img src="assets/images/product-monogram.jpg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80';" alt="Bảng Chữ Cái Monogram 3D" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+          <div class="relative h-64 overflow-hidden img-skeleton cursor-pointer" data-lightbox-trigger>
+            <img src="assets/images/product-monogram.jpg" width="800" height="597" loading="lazy" decoding="async" onload="this.classList.add('loaded')" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" alt="Bảng Chữ Cái Monogram 3D" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
             <span class="absolute top-4 left-4 px-2.5 py-1 rounded-lg bg-emerald-600 text-[11px] font-bold text-white">
               🎁 QUÀ TẶNG Ý NGHĨA
             </span>
