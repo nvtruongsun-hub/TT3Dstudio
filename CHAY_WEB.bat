@@ -1,33 +1,34 @@
 @echo off
+setlocal
 chcp 65001 >nul
-title T&T 3D Studio - Khởi Chạy Website
+title TT 3D Studio - Khoi Chay Website
 cls
 echo ===================================================================
-echo               T&T 3D STUDIO - KHỞI CHẠY HỆ THỐNG
+echo               TT 3D STUDIO - KHOI CHAY HE THONG
 echo ===================================================================
 echo.
-echo  [1] Mở trực tiếp trên Trình duyệt mặc định (Chrome / Edge)
-echo  [2] Khởi chạy Local Web Server (http://localhost:8080)
-echo  [3] Mở trang Quản trị Xưởng (Admin Dashboard)
+echo  [1] Mo truc tiep tren Trinh duyet mac dinh (Chrome / Edge)
+echo  [2] Khoi chay Local Web Server (http://localhost:8080)
+echo  [3] Mo trang Quan tri Xuong (Admin Dashboard)
 echo.
-set /p opt="Vui lòng chọn (1, 2 hoặc 3, mặc định là 1): "
+set /p opt="Vui long chon (1, 2 hoac 3, mac dinh la 1): "
 
 if "%opt%"=="2" (
     echo.
-    echo Đang khởi động máy chủ Web nội bộ...
+    echo Dang khoi dong may chu Web noi bo...
     powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0server.ps1"
     goto end
 )
 
 if "%opt%"=="3" (
     echo.
-    echo Đang mở trang Quản trị Admin Dashboard...
+    echo Dang mo trang Quan tri Admin Dashboard...
     start "" "%~dp0admin.html"
     goto end
 )
 
 echo.
-echo Đang mở trang chủ T&T 3D Studio...
+echo Dang mo trang chu TT 3D Studio...
 start "" "%~dp0index.html"
 
 :end
