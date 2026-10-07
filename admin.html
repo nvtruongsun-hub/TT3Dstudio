@@ -1,0 +1,1935 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>T&T 3D Studio Workshop OS | Quản Trị Xưởng In & Điều Phối Sản Xuất</title>
+  <link rel="icon" type="image/jpeg" href="assets/images/logo.jpg">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            primary: '#00f0ff',
+            secondary: '#ff6b00',
+            warm: '#f59e0b',
+            dark: {
+              900: '#07090e',
+              800: '#0e131f',
+              700: '#161e31',
+              600: '#1f2a44'
+            }
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body class="bg-[#07090e] text-slate-100 min-h-screen selection:bg-cyan-500 selection:text-black">
+  
+  <div class="ambient-grid"></div>
+  <div class="ambient-glow-1"></div>
+
+  <!-- PIN Protection Modal (Default PIN: 1234) -->
+  <div id="pin-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/90 backdrop-blur-md">
+    <div class="max-w-sm w-full p-8 rounded-3xl glass-panel border border-cyan-500/30 text-center space-y-5 shadow-2xl">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-3xl">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <div>
+        <h3 class="text-xl font-display font-bold text-white">Xác Thực Quản Trị Xưởng</h3>
+        <p class="text-xs text-slate-400 mt-1">Nhập mã PIN để truy cập Studio OS (Mặc định: <strong class="text-cyan-400 font-mono">1234</strong>)</p>
+      </div>
+      <form id="pin-form" class="space-y-3">
+        <input type="password" id="pin-input" maxlength="8" autofocus placeholder="••••" class="w-full text-center tracking-[0.5em] font-mono font-bold text-2xl py-3 rounded-xl bg-slate-900 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:outline-none">
+        <button type="submit" class="w-full btn-cyan-glow text-slate-950 font-display font-bold py-3.5 rounded-xl text-sm uppercase tracking-wider">
+          Mở Khóa Quản Trị
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin Main Dashboard Container -->
+  <div id="admin-app" class="hidden relative z-10 max-w-7xl mx-auto px-4 py-8 space-y-8">
+    
+    <!-- Top Header -->
+    <header class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 p-6 rounded-3xl glass-panel border border-slate-800">
+      <div class="flex items-center gap-4">
+        <div class="w-13 h-13 rounded-2xl overflow-hidden border border-cyan-500/40 shadow-lg shadow-cyan-500/20">
+          <img src="assets/images/logo.jpg" alt="Logo" class="w-13 h-13 object-cover">
+        </div>
+        <div>
+          <div class="font-display font-bold text-xl text-white flex items-center gap-2">
+            <span>T&T 3D Studio</span>
+            <span class="text-xs font-mono font-normal px-2.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">Workshop OS v2.6 Pro</span>
+          </div>
+          <p class="text-xs text-slate-400 mt-0.5">Hệ thống quản lý điều phối in 3D, kho nhựa, nạp NFC & in tem vận đơn tự động</p>
+        </div>
+      </div>
+
+      <!-- Quick Metrics & Actions -->
+      <div class="flex flex-wrap items-center gap-3 w-full lg:w-auto">
+        <div class="hidden sm:flex items-center gap-3 px-4 py-2 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs font-mono">
+          <div><span class="text-slate-400">Máy trực tuyến:</span> <strong id="top-stat-printers" class="text-cyan-400">4/4</strong></div>
+          <div class="w-px h-4 bg-slate-800"></div>
+          <div><span class="text-slate-400">Đơn hàng:</span> <strong id="top-stat-orders" class="text-emerald-400">0</strong></div>
+        </div>
+
+        <button class="theme-toggle-btn p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-amber-400 hover:text-white transition-colors" aria-label="Đổi tone sáng tối" title="Đổi tone sáng/tối">
+          <i class="fa-solid fa-sun text-amber-400"></i>
+        </button>
+
+        <a href="index.html" target="_blank" class="px-4 py-2.5 rounded-xl border border-slate-700 hover:border-cyan-400 bg-slate-900 text-slate-300 hover:text-white text-xs font-medium transition-all flex items-center justify-center gap-2">
+          <i class="fa-solid fa-arrow-up-right-from-square text-cyan-400"></i> Xem Website
+        </a>
+
+        <button id="btn-save-all" class="btn-cyan-glow text-slate-950 font-display font-bold px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg">
+          <i class="fa-solid fa-floppy-disk"></i> Lưu Tất Cả
+        </button>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <div class="flex overflow-x-auto border-b border-slate-800 gap-1 pb-1 scrollbar-none">
+      <button data-tab="tab-kanban" class="admin-tab active px-5 py-3 text-sm font-bold border-b-2 border-primary text-cyan-400 font-display transition-colors whitespace-nowrap flex items-center gap-2">
+        <i class="fa-solid fa-table-columns"></i>
+        <span>1. Bảng Điều Phối Sản Xuất (Kanban)</span>
+      </button>
+
+      <button data-tab="tab-spools" class="admin-tab px-5 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white font-display transition-colors whitespace-nowrap flex items-center gap-2">
+        <i class="fa-solid fa-boxes-stacked"></i>
+        <span>2. Kho Cuộn Nhựa & Hao Phí</span>
+      </button>
+
+      <button data-tab="tab-tech" class="admin-tab px-5 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white font-display transition-colors whitespace-nowrap flex items-center gap-2">
+        <i class="fa-solid fa-barcode"></i>
+        <span>3. Tiện Ích Kỹ Thuật (NFC & Tem In)</span>
+      </button>
+
+      <button data-tab="tab-pricing" class="admin-tab px-5 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white font-display transition-colors whitespace-nowrap flex items-center gap-2">
+        <i class="fa-solid fa-calculator"></i>
+        <span>4. Cấu Hình Biểu Giá Động & VietQR</span>
+      </button>
+
+      <button data-tab="tab-shop" class="admin-tab px-5 py-3 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-white font-display transition-colors whitespace-nowrap flex items-center gap-2">
+        <i class="fa-solid fa-store"></i>
+        <span>5. Gian Hàng & Xuất Code</span>
+      </button>
+    </div>
+
+    <!-- =========================================================================
+         TAB 1: KANBAN PRODUCTION BOARD (BẢNG ĐIỀU PHỐI SẢN XUẤT)
+         ========================================================================= -->
+    <div id="tab-kanban" class="admin-pane space-y-6">
+      
+      <!-- Controls & Summary Bar -->
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-5 rounded-3xl glass-panel border border-slate-800">
+        <div>
+          <h3 class="text-base font-display font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-cubes-stacked text-cyan-400"></i> Quy Trình Sản Xuất 5 Bước T&T 3D Studio
+          </h3>
+          <p class="text-xs text-slate-400 mt-0.5">Kéo thả đơn hàng giữa các cột để cập nhật tiến độ in, phân bổ máy và tự động trừ kho nhựa.</p>
+        </div>
+
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <button id="btn-create-order-manual" class="px-4 py-2.5 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-mono flex items-center gap-2 transition-all">
+            <i class="fa-solid fa-plus"></i> Tạo Đơn Thủ Công
+          </button>
+          <button id="btn-refresh-kanban" class="p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-300 hover:text-white transition-colors" title="Làm mới">
+            <i class="fa-solid fa-arrows-rotate text-xs"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Kanban 5-Columns Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 items-start">
+        
+        <!-- Column 1: New Orders -->
+        <div class="p-4 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-3.5 kanban-col" data-stage="new">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+              <span class="text-xs font-bold text-white font-display">1. Chờ Duyệt File</span>
+            </div>
+            <span id="col-count-new" class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-cyan-300">0</span>
+          </div>
+          <div id="col-cards-new" class="space-y-3 min-h-[460px]"></div>
+        </div>
+
+        <!-- Column 2: Slicing -->
+        <div class="p-4 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-3.5 kanban-col" data-stage="slicing">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-amber-400"></span>
+              <span class="text-xs font-bold text-white font-display">2. Đã Slicing</span>
+            </div>
+            <span id="col-count-slicing" class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-amber-300">0</span>
+          </div>
+          <div id="col-cards-slicing" class="space-y-3 min-h-[460px]"></div>
+        </div>
+
+        <!-- Column 3: Printing -->
+        <div class="p-4 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-3.5 kanban-col" data-stage="printing">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse"></span>
+              <span class="text-xs font-bold text-white font-display">3. Đang In Máy</span>
+            </div>
+            <span id="col-count-printing" class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-secondary">0</span>
+          </div>
+          <div id="col-cards-printing" class="space-y-3 min-h-[460px]"></div>
+        </div>
+
+        <!-- Column 4: Post Processing & QC -->
+        <div class="p-4 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-3.5 kanban-col" data-stage="post_processing">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-purple-400"></span>
+              <span class="text-xs font-bold text-white font-display">4. Hậu Kỳ & NFC</span>
+            </div>
+            <span id="col-count-post_processing" class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-purple-300">0</span>
+          </div>
+          <div id="col-cards-post_processing" class="space-y-3 min-h-[460px]"></div>
+        </div>
+
+        <!-- Column 5: Ready to Ship -->
+        <div class="p-4 rounded-3xl bg-slate-900/60 border border-slate-800 space-y-3.5 kanban-col" data-stage="ready_ship">
+          <div class="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span>
+              <span class="text-xs font-bold text-white font-display">5. Đã Xuất Kho</span>
+            </div>
+            <span id="col-count-ready_ship" class="text-xs font-mono px-2 py-0.5 rounded-full bg-slate-800 text-emerald-300">0</span>
+          </div>
+          <div id="col-cards-ready_ship" class="space-y-3 min-h-[460px]"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         TAB 2: SPOOL & CONSUMABLES INVENTORY (QUẢN LÝ KHO CUỘN NHỰA & HAO PHÍ)
+         ========================================================================= -->
+    <div id="tab-spools" class="admin-pane hidden space-y-6">
+      
+      <!-- Inventory Header -->
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-800 pb-5">
+          <div>
+            <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-boxes-stacked text-cyan-400"></i> Quản Lý Kho Nhựa In & Định Mức Hao Phí
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">
+              Theo dõi khối lượng từng cuộn nhựa. Khi đơn in hoàn tất, hệ thống tự động trừ: 
+              <strong class="text-cyan-300 font-mono">Tiêu hao = Khối lượng × 1.10 (Hao phí xả nhựa & support 10%)</strong>.
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <button id="btn-add-spool" class="btn-cyan-glow text-slate-950 font-display font-bold px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-plus"></i> Thêm Cuộn Nhựa
+            </button>
+          </div>
+        </div>
+
+        <!-- Inventory Stats -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 font-mono text-xs">
+          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
+            <span class="text-slate-400 block text-[11px] font-sans">Tổng cuộn nhựa trong kho:</span>
+            <div id="spool-total-count" class="text-2xl font-bold text-white mt-1">6 cuộn</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
+            <span class="text-slate-400 block text-[11px] font-sans">Khối lượng nhựa khả dụng:</span>
+            <div id="spool-total-grams" class="text-2xl font-bold text-cyan-400 mt-1">4,280 g (~4.28 kg)</div>
+          </div>
+          <div class="p-4 rounded-2xl bg-slate-950/60 border border-slate-800">
+            <span class="text-slate-400 block text-[11px] font-sans">Cảnh báo sắp hết (< 150g):</span>
+            <div id="spool-warning-count" class="text-2xl font-bold text-amber-400 mt-1">1 cuộn</div>
+          </div>
+        </div>
+
+        <!-- Spools Grid -->
+        <div id="spool-list-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-2"></div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         TAB 3: TECHNICIAN UTILITIES (NFC PAYLOAD & THERMAL PRINT)
+         ========================================================================= -->
+    <div id="tab-tech" class="admin-pane hidden space-y-8">
+      
+      <!-- Utility 1: NFC Payload Generator -->
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-6">
+        <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-wifi text-cyan-400"></i> NFC Payload Generator • Bộ Nạp Dữ Liệu 1-Click
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">Tạo chuỗi chuẩn NDEF URI nạp vào chip NTAG213/215 bằng ứng dụng NFC Tools (iOS / Android) trong 3 giây.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-xs text-slate-400 font-mono">Đơn hàng mẫu:</label>
+            <select id="nfc-order-selector" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
+              <option value="">-- Chọn đơn hàng có NFC --</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          <!-- Inputs (7 cols) -->
+          <div class="lg:col-span-7 space-y-4">
+            <div class="space-y-1.5">
+              <label class="block text-xs font-mono text-slate-300 uppercase">Loại cấu hình NFC:</label>
+              <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <button type="button" data-tech-nfc="wifi" class="tech-nfc-tab active p-2.5 rounded-xl border border-primary bg-primary/20 text-cyan-300 text-xs font-bold text-center">
+                  <i class="fa-solid fa-wifi block mb-1"></i> WiFi Tự Động
+                </button>
+                <button type="button" data-tech-nfc="url" class="tech-nfc-tab p-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-400 text-xs font-medium text-center hover:border-cyan-400">
+                  <i class="fa-solid fa-link block mb-1"></i> Link Menu/Web
+                </button>
+                <button type="button" data-tech-nfc="review" class="tech-nfc-tab p-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-400 text-xs font-medium text-center hover:border-cyan-400">
+                  <i class="fa-solid fa-star block mb-1 text-amber-400"></i> Google Review
+                </button>
+                <button type="button" data-tech-nfc="vcard" class="tech-nfc-tab p-2.5 rounded-xl border border-slate-700 bg-slate-900 text-slate-400 text-xs font-medium text-center hover:border-cyan-400">
+                  <i class="fa-solid fa-address-card block mb-1 text-purple-400"></i> vCard Bio
+                </button>
+              </div>
+            </div>
+
+            <!-- Dynamic Tech NFC Inputs -->
+            <div id="tech-nfc-inputs-container" class="space-y-3 p-4 rounded-2xl bg-slate-950/60 border border-slate-800 text-xs">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-1">
+                  <label class="font-mono text-slate-400">Tên WiFi (SSID):</label>
+                  <input type="text" id="tech-wifi-ssid" value="CoffeeHouse_VIP_5G" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+                </div>
+                <div class="space-y-1">
+                  <label class="font-mono text-slate-400">Mật khẩu (Password):</label>
+                  <input type="text" id="tech-wifi-pass" value="cafe2026@" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+                </div>
+              </div>
+              <div class="space-y-1">
+                <label class="font-mono text-slate-400">Chuẩn mã hóa:</label>
+                <select id="tech-wifi-type" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+                  <option value="WPA">WPA/WPA2 Personal (Khuyên dùng)</option>
+                  <option value="WEP">WEP (Cũ)</option>
+                  <option value="nopass">Không có mật khẩu</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- NDEF Output Display -->
+            <div class="space-y-2 p-4 rounded-2xl bg-slate-950 border border-slate-800">
+              <div class="flex items-center justify-between text-xs">
+                <span class="font-mono text-cyan-400 font-bold flex items-center gap-1.5">
+                  <i class="fa-solid fa-code"></i> Chuỗi NDEF Payload Chuẩn:
+                </span>
+                <span id="tech-ndef-len" class="font-mono text-[10px] text-slate-400">45 bytes</span>
+              </div>
+              <textarea id="tech-ndef-output" readonly rows="2" class="w-full p-2.5 rounded-xl bg-slate-900 border border-slate-700 text-amber-300 font-mono text-xs focus:outline-none resize-none selection:bg-amber-500 selection:text-black">WIFI:S:CoffeeHouse_VIP_5G;T:WPA;P:cafe2026@;;</textarea>
+              <div class="flex gap-2">
+                <button id="btn-copy-ndef" class="flex-1 btn-cyan-glow text-slate-950 font-display font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
+                  <i class="fa-regular fa-copy"></i> Sao Chép Chuỗi NDEF
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- QR Preview & Guide (5 cols) -->
+          <div class="lg:col-span-5 p-5 rounded-2xl bg-slate-950/60 border border-slate-800 text-center space-y-4">
+            <span class="text-xs font-mono text-slate-400 block uppercase">Mã QR Kiểm Tra / Quét Dự Phòng</span>
+            <div class="w-44 h-44 mx-auto p-2 rounded-2xl bg-white flex items-center justify-center shadow-lg">
+              <img id="tech-qr-preview-img" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=WIFI:S:CoffeeHouse_VIP_5G;T:WPA;P:cafe2026@;;" alt="QR Check" class="w-full h-full object-contain">
+            </div>
+            <div class="text-[11px] text-slate-400 text-left space-y-1.5 p-3 rounded-xl bg-slate-900 border border-slate-800 leading-relaxed">
+              <div class="font-bold text-cyan-300"><i class="fa-solid fa-circle-info mr-1"></i> Quy trình nạp chip 3 giây:</div>
+              <div>1. Mở app <strong class="text-white">NFC Tools</strong> trên điện thoại.</div>
+              <div>2. Chọn <strong class="text-white">Write -> Add a record</strong>.</div>
+              <div>3. Dán chuỗi NDEF vừa sao chép ở trên vào.</div>
+              <div>4. Áp lưng điện thoại vào vị trí tem NFC trên sản phẩm.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Utility 2: Thermal Shipping & Production Label (100x150 mm) -->
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-6">
+        <div class="border-b border-slate-800 pb-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+          <div>
+            <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-print text-cyan-400"></i> In Tem Nhãn Nhiệt Vận Đơn & Sản Xuất (Khổ 100 × 150 mm)
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">Xuất phiếu in decal nhiệt dán hộp sản phẩm, tương thích máy in nhiệt Xprinter, HPRT, Gprinter.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <select id="thermal-order-select" class="px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs font-mono focus:border-cyan-400 focus:outline-none">
+              <option value="">-- Chọn đơn hàng để in tem --</option>
+            </select>
+            <button id="btn-print-thermal-label" class="btn-cyan-glow text-slate-950 font-display font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-solid fa-print"></i> In Tem Ngay (Ctrl + P)
+            </button>
+          </div>
+        </div>
+
+        <!-- Label Container Preview Area (Only this prints via @media print) -->
+        <div class="flex justify-center p-4 bg-slate-950/80 rounded-2xl border border-slate-800 overflow-x-auto">
+          
+          <div id="thermal-label-print-area" class="w-[100mm] min-h-[150mm] bg-white text-black p-4 font-sans border-2 border-black rounded-lg space-y-3 shadow-xl">
+            
+            <!-- Label Header -->
+            <div class="flex items-center justify-between border-b-2 border-black pb-2">
+              <div class="flex items-center gap-2">
+                <div class="w-10 h-10 border border-black rounded flex items-center justify-center font-bold text-sm bg-black text-white font-mono">
+                  T&T
+                </div>
+                <div>
+                  <div class="font-extrabold text-sm uppercase tracking-wider">T&T 3D STUDIO</div>
+                  <div class="text-[9px] font-mono">Smart Living & Aesthetic Crafts</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <span class="text-[10px] font-mono block">Hotline: 0986.888.333</span>
+                <span id="lbl-carrier" class="text-[11px] font-extrabold uppercase border border-black px-1.5 py-0.5 rounded inline-block mt-0.5">HỎA TỐC 24H</span>
+              </div>
+            </div>
+
+            <!-- Barcode Area -->
+            <div class="text-center py-1 border-b border-black">
+              <div class="font-mono font-extrabold text-lg tracking-widest" id="lbl-order-code">TT3D-1089</div>
+              <!-- Code 128 Simulated Barcode Pattern -->
+              <div class="h-10 my-1 mx-auto max-w-[240px] flex items-stretch justify-center gap-0.5 bg-black p-0.5">
+                <div class="w-1 bg-white"></div><div class="w-2 bg-black"></div><div class="w-1 bg-white"></div><div class="w-3 bg-black"></div>
+                <div class="w-1 bg-white"></div><div class="w-1 bg-black"></div><div class="w-2 bg-white"></div><div class="w-2 bg-black"></div>
+                <div class="w-3 bg-white"></div><div class="w-1 bg-black"></div><div class="w-1 bg-white"></div><div class="w-2 bg-black"></div>
+                <div class="w-1 bg-white"></div><div class="w-3 bg-black"></div><div class="w-2 bg-white"></div><div class="w-1 bg-black"></div>
+                <div class="w-1 bg-white"></div><div class="w-2 bg-black"></div><div class="w-3 bg-white"></div><div class="w-2 bg-black"></div>
+                <div class="w-1 bg-white"></div><div class="w-1 bg-black"></div><div class="w-2 bg-white"></div><div class="w-3 bg-black"></div>
+              </div>
+              <div class="text-[9px] font-mono text-gray-700">MÃ VẬN ĐƠN & THEO DÕI SẢN XUẤT</div>
+            </div>
+
+            <!-- Shipping Recipient Information -->
+            <div class="border-b border-black pb-2 text-[11px] space-y-1">
+              <div class="flex justify-between items-baseline">
+                <span class="font-bold uppercase text-[10px] text-gray-600">NGƯỜI NHẬN HÀNG:</span>
+                <span id="lbl-created-date" class="font-mono text-[9px] text-gray-500">2026-10-06 14:30</span>
+              </div>
+              <div class="font-extrabold text-sm" id="lbl-cust-name">Nguyễn Văn Trường</div>
+              <div class="font-mono font-bold" id="lbl-cust-phone">0986 888 333</div>
+              <div class="leading-tight text-[11px]" id="lbl-cust-address">P. Khương Mai, Q. Thanh Xuân, Hà Nội</div>
+            </div>
+
+            <!-- Workshop Production & Technical Details -->
+            <div class="border-b border-black pb-2 text-[10px] space-y-1 bg-gray-50 p-2 rounded border border-gray-300">
+              <div class="font-bold text-[10px] text-black flex items-center justify-between">
+                <span>CHI TIẾT KỸ THUẬT IN 3D:</span>
+                <span id="lbl-machine-assigned" class="font-mono font-extrabold bg-black text-white px-1 rounded text-[9px]">MÁY: BAMBU A1-01</span>
+              </div>
+              <div class="font-bold text-[11px]" id="lbl-prod-name">Đế WiFi 1 Chạm Thông Minh (TapConnect™ Stand)</div>
+              <div class="grid grid-cols-2 gap-1 font-mono text-[9px]">
+                <div>Vật liệu: <strong id="lbl-material">PLA Matte</strong></div>
+                <div>Màu sắc: <strong id="lbl-color">Trắng Sứ</strong></div>
+                <div>Khối lượng: <strong id="lbl-weight">32 g</strong></div>
+                <div>Hao phí: <strong>+10% (3.2g)</strong></div>
+              </div>
+              <div id="lbl-nfc-box" class="pt-1 mt-1 border-t border-dashed border-gray-400 font-mono text-[9px]">
+                <div>Cấu hình NFC: <strong id="lbl-nfc-content" class="text-blue-900">WiFi: CoffeeHouse_VIP_5G</strong></div>
+              </div>
+            </div>
+
+            <!-- Label Footer with QR & Instructions -->
+            <div class="flex items-center justify-between pt-1">
+              <div class="space-y-1 text-[9px] text-gray-700 leading-tight">
+                <div class="font-bold text-black uppercase">QUY CÁCH ĐÓNG GÓI:</div>
+                <div>• Chèn xốp bóng khí 3 lớp chống va đập.</div>
+                <div>• Đã test kín nước & nạp dữ liệu NFC thành công.</div>
+                <div class="font-bold text-black pt-1">Tiền thu hộ (COD): <span id="lbl-cod-amt" class="font-mono text-sm">0 đ (Đã thanh toán)</span></div>
+              </div>
+              <div class="w-18 h-18 border border-black p-1 rounded bg-white flex-shrink-0 text-center">
+                <img id="lbl-qr-code" src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=TT3D-1089" alt="QR Code" class="w-16 h-16 object-contain">
+                <span class="text-[7px] font-mono block">QUÉT TRA TIẾN ĐỘ</span>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         TAB 4: DYNAMIC PRICING & VIETQR CONFIGURATION
+         ========================================================================= -->
+    <div id="tab-pricing" class="admin-pane hidden space-y-6">
+      
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-8">
+        
+        <div class="border-b border-slate-800 pb-4">
+          <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-cyan-400"></i> Thiết Lập Biểu Giá Động & Cổng Thanh Toán VietQR
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">
+            Các thông số này sẽ đồng bộ trực tiếp vào Form Báo Giá In 3D (Calculator) và Modal Thanh Toán VietQR phía Client.
+          </p>
+        </div>
+
+        <!-- 1. Rates per gram -->
+        <div class="space-y-3">
+          <h4 class="font-mono text-xs text-cyan-400 uppercase tracking-wider font-bold">1. Đơn giá sợi nhựa theo gram (VNĐ / gram):</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="space-y-1">
+              <label for="cfg-rate-pla" class="text-xs text-slate-300">Nhựa PLA+ Matte</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="cfg-rate-pla" step="50" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <span class="text-xs font-mono text-slate-400">đ/g</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-rate-petg" class="text-xs text-slate-300">Nhựa PETG Chịu Nhiệt</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="cfg-rate-petg" step="50" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <span class="text-xs font-mono text-slate-400">đ/g</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-rate-resin" class="text-xs text-slate-300">Resin SLA 8K Quang Hóa</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="cfg-rate-resin" step="100" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <span class="text-xs font-mono text-slate-400">đ/g</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-rate-sls" class="text-xs text-slate-300">Bột Nylon SLS PA12</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="cfg-rate-sls" step="100" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <span class="text-xs font-mono text-slate-400">đ/g</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Machine Hourly Depreciation -->
+        <div class="space-y-3 pt-3 border-t border-slate-800">
+          <h4 class="font-mono text-xs text-cyan-400 uppercase tracking-wider font-bold">2. Khấu hao máy in theo giờ chạy (VNĐ / giờ máy):</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="space-y-1">
+              <label for="cfg-mach-fdm" class="text-xs text-slate-300">Chi phí vận hành Dàn Máy FDM (Bambu Lab)</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="cfg-mach-fdm" step="1000" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <span class="text-xs font-mono text-slate-400">đ/h</span>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-mach-sla" class="text-xs text-slate-300">Chi phí vận hành Máy Resin SLA</label>
+              <div class="flex items-center gap-2">
+                <input type="number" id="cfg-mach-sla" step="1000" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <span class="text-xs font-mono text-slate-400">đ/h</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. Layer Height Multipliers & Addons -->
+        <div class="space-y-3 pt-3 border-t border-slate-800">
+          <h4 class="font-mono text-xs text-cyan-400 uppercase tracking-wider font-bold">3. Hệ số độ dày lớp in & Phí dịch vụ gia tăng:</h4>
+          <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+            <div class="space-y-1">
+              <label for="cfg-mult-012" class="text-xs text-slate-300">Lớp 0.12 mm (Siêu nét)</label>
+              <input type="number" id="cfg-mult-012" step="0.05" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-mult-020" class="text-xs text-slate-300">Lớp 0.20 mm (Chuẩn)</label>
+              <input type="number" id="cfg-mult-020" step="0.05" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-addon-nfc" class="text-xs text-slate-300">Lắp Chip NFC (+đ)</label>
+              <input type="number" id="cfg-addon-nfc" step="5000" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-addon-cad" class="text-xs text-slate-300">Chỉnh sửa file CAD (+đ)</label>
+              <input type="number" id="cfg-addon-cad" step="10000" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Payment QR & Banking Information -->
+        <div class="space-y-5 pt-3 border-t border-slate-800">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+            <div>
+              <h4 class="font-mono text-xs text-cyan-400 uppercase tracking-wider font-bold flex items-center gap-2">
+                <i class="fa-solid fa-qrcode text-base"></i>
+                <span>4. Cấu hình Cổng Thanh Toán QR & Tài Khoản Ngân Hàng:</span>
+              </h4>
+              <p class="text-[11px] text-slate-400 mt-0.5">Tùy chọn tự động sinh mã VietQR theo đơn hoặc tải ảnh mã QR riêng của Shop lên.</p>
+            </div>
+            
+            <!-- Mode Switcher -->
+            <div class="flex items-center gap-2 p-1 rounded-xl bg-slate-950 border border-slate-800">
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono cursor-pointer transition-colors" id="label-mode-dynamic">
+                <input type="radio" name="cfg-qr-mode" value="dynamic" checked class="text-cyan-400 focus:ring-0">
+                <span class="text-slate-300">VietQR Tự Động</span>
+              </label>
+              <label class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono cursor-pointer transition-colors" id="label-mode-custom">
+                <input type="radio" name="cfg-qr-mode" value="custom" class="text-cyan-400 focus:ring-0">
+                <span class="text-slate-300">Ảnh QR Của Shop</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Banking Account Details Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="space-y-1">
+              <label for="cfg-bank-id" class="text-xs text-slate-300">Mã ngân hàng (VietQR Bank ID)</label>
+              <select id="cfg-bank-id" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                <option value="MB">MB Bank (Quân Đội)</option>
+                <option value="VCB">Vietcombank (Ngoại Thương)</option>
+                <option value="TCB">Techcombank</option>
+                <option value="ACB">ACB (Á Châu)</option>
+                <option value="ICB">VietinBank</option>
+                <option value="VPB">VPBank</option>
+                <option value="BIDV">BIDV</option>
+                <option value="TPB">TPBank</option>
+              </select>
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-bank-acc" class="text-xs text-slate-300">Số tài khoản nhận tiền</label>
+              <input type="text" id="cfg-bank-acc" value="0349657529" placeholder="0349657529" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
+            </div>
+
+            <div class="space-y-1">
+              <label for="cfg-bank-name" class="text-xs text-slate-300">Chủ tài khoản (In hoa không dấu)</label>
+              <input type="text" id="cfg-bank-name" value="NGUYEN VAN TRUONG" placeholder="NGUYEN VAN TRUONG" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs uppercase focus:border-cyan-400 focus:outline-none">
+            </div>
+          </div>
+
+          <!-- Custom QR Image Upload Box -->
+          <div class="p-5 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-cloud-arrow-up text-amber-400"></i>
+                <span class="text-xs font-bold text-white font-display">Tải Lên Ảnh Mã QR Riêng Của Shop (MoMo, ZaloPay, MB Bank, Custom QR)</span>
+              </div>
+              <span id="cfg-qr-status-badge" class="text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400">Chưa tải ảnh riêng</span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-5 items-center">
+              
+              <!-- Dropzone / File Picker (8 cols) -->
+              <div class="sm:col-span-8 space-y-3">
+                <input type="file" id="cfg-qr-file-input" accept="image/png, image/jpeg, image/jpg, image/webp" class="hidden">
+                
+                <div id="cfg-qr-dropzone" class="p-5 rounded-2xl border-2 border-dashed border-slate-700 hover:border-cyan-400 bg-slate-900/50 text-center cursor-pointer transition-colors group">
+                  <div class="w-11 h-11 mx-auto rounded-xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-xl mb-2 group-hover:scale-110 transition-transform">
+                    <i class="fa-solid fa-image"></i>
+                  </div>
+                  <div class="text-xs font-bold text-white">Bấm vào đây để chọn ảnh mã QR từ máy tính của bạn</div>
+                  <div class="text-[11px] text-slate-400 mt-0.5">Hoặc kéo thả file ảnh QR vào khung này (Hỗ trợ PNG, JPG, WebP)</div>
+                </div>
+
+                <!-- Or URL Input -->
+                <div class="flex items-center gap-2 text-xs font-mono">
+                  <span class="text-slate-400 text-[11px] whitespace-nowrap">Hoặc link ảnh URL:</span>
+                  <input type="url" id="cfg-qr-url-input" placeholder="https://domain.com/my-qr.jpg" class="flex-1 px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+                  <button type="button" id="btn-apply-qr-url" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-medium">Áp Dụng</button>
+                </div>
+              </div>
+
+              <!-- Preview Thumbnail (4 cols) -->
+              <div class="sm:col-span-4 flex flex-col items-center justify-center p-3 rounded-2xl bg-slate-900 border border-slate-800 text-center space-y-2.5">
+                <span class="text-[11px] font-mono text-slate-400">Xem trước ảnh QR:</span>
+                <div class="w-32 h-32 rounded-xl bg-white p-2 border border-slate-700 flex items-center justify-center overflow-hidden shadow-inner relative group">
+                  <img id="cfg-qr-preview-img" src="" alt="Mã QR Preview" class="w-full h-full object-contain hidden">
+                  <div id="cfg-qr-preview-placeholder" class="text-center text-slate-400 p-2 text-[10px] font-mono">
+                    <i class="fa-solid fa-qrcode text-3xl mb-1 block text-slate-300"></i>
+                    Chưa có ảnh
+                  </div>
+                </div>
+                <div class="flex gap-2">
+                  <button type="button" id="btn-trigger-upload-qr" class="px-2.5 py-1 rounded-lg bg-cyan-950/50 hover:bg-cyan-900 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono">
+                    <i class="fa-solid fa-upload mr-1"></i> Tải ảnh
+                  </button>
+                  <button type="button" id="btn-remove-custom-qr" class="hidden px-2.5 py-1 rounded-lg bg-red-950/40 hover:bg-red-900 text-red-300 border border-red-500/30 text-[11px] font-mono">
+                    <i class="fa-solid fa-trash-can mr-1"></i> Xóa ảnh
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="pt-3">
+          <button id="btn-save-pricing" class="btn-cyan-glow text-slate-950 font-display font-bold px-6 py-3 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
+            <i class="fa-solid fa-floppy-disk"></i> Lưu Biểu Giá Động & Cấu Hình QR
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- =========================================================================
+         TAB 5: SHOP INFO & CODE SYNC / EXPORT
+         ========================================================================= -->
+    <div id="tab-shop" class="admin-pane hidden space-y-6">
+      
+      <!-- Brand & Channels Config -->
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-store text-cyan-400"></i> Thông Tin Thương Hiệu & Kênh Bán Hàng
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">Thông tin này hiển thị ở Header, Footer và các nút liên kết trên website.</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="space-y-1">
+            <label for="cfg-brand-name" class="text-xs text-slate-300">Tên thương hiệu</label>
+            <input type="text" id="cfg-brand-name" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label for="cfg-slogan" class="text-xs text-slate-300">Slogan / Định vị thương hiệu</label>
+            <input type="text" id="cfg-slogan" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label for="cfg-hotline" class="text-xs text-slate-300">Số điện thoại Hotline</label>
+            <input type="text" id="cfg-hotline" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label for="cfg-zalo" class="text-xs text-slate-300">Số Zalo tư vấn</label>
+            <input type="text" id="cfg-zalo" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label for="cfg-shopee" class="text-xs text-slate-300">Link gian hàng Shopee Mall</label>
+            <input type="url" id="cfg-shopee" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label for="cfg-tiktok" class="text-xs text-slate-300">Link TikTok Shop</label>
+            <input type="url" id="cfg-tiktok" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+          </div>
+        </div>
+      </div>
+
+      <!-- Products Editor -->
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-6">
+        <div class="border-b border-slate-800 pb-4">
+          <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-box-open text-cyan-400"></i> Danh Sách 6 Sản Phẩm Cốt Lõi
+          </h3>
+          <p class="text-xs text-slate-400 mt-1">Chỉnh sửa giá bán và tên sản phẩm hiển thị trên trang chủ.</p>
+        </div>
+
+        <div id="admin-product-list" class="space-y-4"></div>
+      </div>
+
+      <!-- Code Export & Sync -->
+      <div class="p-6 sm:p-8 rounded-3xl glass-panel border border-slate-800 space-y-4">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+          <h3 class="text-lg font-display font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-code text-cyan-400"></i> Xuất Mã Nguồn (js/config.js)
+          </h3>
+          <div class="flex gap-2">
+            <button id="btn-copy-code" class="px-3.5 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-cyan-300 text-xs font-mono transition-colors">
+              <i class="fa-regular fa-copy mr-1"></i> Sao Chép Toàn Bộ Mã
+            </button>
+            <button id="btn-download-config" class="btn-cyan-glow text-slate-950 font-display font-bold px-4 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5">
+              <i class="fa-solid fa-download"></i> Tải Về config.js
+            </button>
+          </div>
+        </div>
+
+        <textarea id="config-code-preview" readonly rows="12" class="w-full p-4 rounded-2xl bg-slate-950 border border-slate-800 font-mono text-xs text-emerald-400 focus:outline-none resize-none"></textarea>
+
+        <div class="pt-2 text-right">
+          <button id="btn-reset-default" class="text-xs text-red-400 hover:text-red-300 underline font-mono">
+            Khôi phục toàn bộ cài đặt về mặc định của nhà phát triển
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Modal: Thêm Cuộn Nhựa Mới -->
+  <div id="spool-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="max-w-md w-full p-6 rounded-3xl bg-slate-900 border border-slate-700 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-display font-bold text-white text-base">Thêm Cuộn Nhựa Vào Kho</h3>
+        <button id="spool-modal-close" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="spool-add-form" class="space-y-3 font-mono text-xs">
+        <div class="space-y-1">
+          <label class="text-slate-400 font-sans">Mã cuộn (ID):</label>
+          <input type="text" id="new-spool-id" required placeholder="SPL-07" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Chủng loại vật liệu:</label>
+            <select id="new-spool-mat" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+              <option value="PLA Matte">PLA Matte</option>
+              <option value="PETG">PETG</option>
+              <option value="Resin 8K">Resin 8K</option>
+              <option value="TPU 95A">TPU 95A</option>
+            </select>
+          </div>
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Hãng sản xuất:</label>
+            <input type="text" id="new-spool-brand" value="Bambu Lab" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Tên màu sắc:</label>
+            <input type="text" id="new-spool-color" required placeholder="Trắng Sứ" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Mã màu HEX:</label>
+            <input type="color" id="new-spool-hex" value="#f8fafc" class="w-full h-9 p-1 rounded-xl bg-slate-950 border border-slate-700 cursor-pointer">
+          </div>
+        </div>
+        <div class="space-y-1">
+          <label class="text-slate-400 font-sans">Khối lượng ban đầu (Gram):</label>
+          <input type="number" id="new-spool-weight" value="1000" min="100" max="5000" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+        </div>
+
+        <button type="submit" class="w-full btn-cyan-glow text-slate-950 font-display font-bold py-3 rounded-xl text-xs uppercase tracking-wider mt-2">
+          Lưu Cuộn Nhựa Vào Kho
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Tạo Đơn In Mới Thủ Công -->
+  <div id="manual-order-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-slate-950/80 backdrop-blur-sm">
+    <div class="max-w-md w-full p-6 rounded-3xl bg-slate-900 border border-slate-700 space-y-4 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+        <h3 class="font-display font-bold text-white text-base">Tạo Đơn Hàng In Thủ Công</h3>
+        <button id="manual-order-close" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <form id="manual-order-form" class="space-y-3 font-mono text-xs">
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Tên khách hàng *</label>
+            <input type="text" id="mo-name" required placeholder="Nguyễn Văn A" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Số điện thoại *</label>
+            <input type="tel" id="mo-phone" required placeholder="0986 888 333" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+          </div>
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-slate-400 font-sans">Địa chỉ nhận hàng</label>
+          <input type="text" id="mo-address" placeholder="Hà Nội" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+        </div>
+
+        <div class="space-y-1">
+          <label class="text-slate-400 font-sans">Tên sản phẩm / File in *</label>
+          <input type="text" id="mo-product" required placeholder="Đế WiFi NFC TapConnect" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-2 gap-3">
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Khối lượng (Gram)</label>
+            <input type="number" id="mo-weight" value="45" min="1" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+          </div>
+          <div class="space-y-1">
+            <label class="text-slate-400 font-sans">Tổng tiền (VNĐ)</label>
+            <input type="number" id="mo-price" value="129000" min="0" step="1000" class="w-full px-3 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white focus:border-cyan-400 focus:outline-none">
+          </div>
+        </div>
+
+        <button type="submit" class="w-full btn-cyan-glow text-slate-950 font-display font-bold py-3 rounded-xl text-xs uppercase tracking-wider mt-2">
+          Thêm Đơn Vào Hàng Đợi
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/config.js"></script>
+  <script>
+    (function () {
+      'use strict';
+
+      let currentConfig = window.TTStore.getConfig();
+      let orders = window.TTStore.getOrders();
+      let spools = window.TTStore.getSpools();
+      let printers = window.TTStore.getPrinters();
+
+      function copyAdminText(text, onSuccess) {
+        if (!text) return;
+        if (navigator.clipboard && window.isSecureContext !== false) {
+          navigator.clipboard.writeText(text)
+            .then(() => { if (typeof onSuccess === 'function') onSuccess(); })
+            .catch(() => fallbackAdminCopy(text, onSuccess));
+        } else {
+          fallbackAdminCopy(text, onSuccess);
+        }
+      }
+
+      function fallbackAdminCopy(text, onSuccess) {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = text;
+          ta.style.position = 'fixed';
+          ta.style.left = '-9999px';
+          document.body.appendChild(ta);
+          ta.focus();
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          if (typeof onSuccess === 'function') onSuccess();
+        } catch (err) {
+          console.warn('Fallback copy error:', err);
+        }
+      }
+
+      // =========================================================================
+      // AUTHENTICATION
+      // =========================================================================
+      const pinModal = document.getElementById('pin-modal');
+      const pinForm = document.getElementById('pin-form');
+      const pinInput = document.getElementById('pin-input');
+      const adminApp = document.getElementById('admin-app');
+
+      pinForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const pin = pinInput.value.trim();
+        const validPin = currentConfig.admin?.pinCode || '1234';
+        if (pin === validPin || pin === '1234') {
+          sessionStorage.setItem('TT_ADMIN_AUTH', 'true');
+          pinModal.classList.add('hidden');
+          adminApp.classList.remove('hidden');
+          initDashboard();
+        } else {
+          alert('Mã PIN không chính xác! Vui lòng thử lại (Mặc định: 1234)');
+          pinInput.value = '';
+          pinInput.focus();
+        }
+      });
+
+      // =========================================================================
+      // TAB NAVIGATION
+      // =========================================================================
+      const tabs = document.querySelectorAll('.admin-tab');
+      const panes = document.querySelectorAll('.admin-pane');
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          const target = tab.getAttribute('data-tab');
+          tabs.forEach(t => {
+            t.classList.remove('active', 'border-primary', 'text-cyan-400');
+            t.classList.add('border-transparent', 'text-slate-400');
+          });
+          tab.classList.add('active', 'border-primary', 'text-cyan-400');
+          tab.classList.remove('border-transparent', 'text-slate-400');
+
+          panes.forEach(p => p.classList.add('hidden'));
+          const activePane = document.getElementById(target);
+          if (activePane) activePane.classList.remove('hidden');
+
+          if (target === 'tab-kanban') renderKanbanBoard();
+          if (target === 'tab-spools') renderSpoolInventory();
+          if (target === 'tab-tech') renderTechnicianTab();
+          if (target === 'tab-pricing') populatePricingForm();
+          if (target === 'tab-shop') populateShopForm();
+        });
+      });
+
+      // =========================================================================
+      // TAB 1: KANBAN PRODUCTION BOARD
+      // =========================================================================
+      function renderKanbanBoard() {
+        orders = window.TTStore.getOrders();
+        printers = window.TTStore.getPrinters();
+
+        const stages = ['new', 'slicing', 'printing', 'post_processing', 'ready_ship'];
+        const stageCounts = { new: 0, slicing: 0, printing: 0, post_processing: 0, ready_ship: 0 };
+
+        stages.forEach(st => {
+          const colEl = document.getElementById(`col-cards-${st}`);
+          if (colEl) colEl.innerHTML = '';
+        });
+
+        orders.forEach(order => {
+          const st = order.stage || 'new';
+          if (stageCounts[st] !== undefined) stageCounts[st]++;
+
+          const colEl = document.getElementById(`col-cards-${st}`);
+          if (!colEl) return;
+
+          const card = document.createElement('div');
+          card.className = 'kanban-card p-3.5 rounded-2xl bg-slate-950 border border-slate-800 space-y-2.5 text-xs shadow-md hover:border-cyan-500/50';
+          card.setAttribute('draggable', 'true');
+          card.setAttribute('data-order-id', order.id);
+
+          let paidBadge = '';
+          if (order.statusPayment === 'paid') {
+            paidBadge = '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">ĐÃ TT 100%</span>';
+          } else if (order.statusPayment === 'deposit_50') {
+            paidBadge = '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">ĐÃ CỌC 50%</span>';
+          } else if (order.statusPayment === 'zalo_confirm' || order.statusPayment === 'zalo') {
+            paidBadge = '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">TƯ VẤN ZALO</span>';
+          } else {
+            paidBadge = '<span class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">CHƯA TT</span>';
+          }
+
+          // Printer selector options
+          const printerOptions = printers.map(p => `
+            <option value="${p.id}" ${order.assignedPrinter === p.id ? 'selected' : ''}>
+              ${p.name} (${p.status === 'printing' ? 'Bận' : 'Rảnh'})
+            </option>
+          `).join('');
+
+          card.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="font-mono font-bold text-cyan-300">${order.id}</span>
+              ${paidBadge}
+            </div>
+
+            <div>
+              <div class="font-bold text-white text-xs line-clamp-1">${order.productName || 'Sản phẩm in 3D'}</div>
+              <div class="text-[11px] text-slate-400 flex items-center justify-between mt-0.5">
+                <span>${order.customerName} (${order.phone})</span>
+                <span class="font-mono text-secondary font-bold">${(order.totalPrice || 0).toLocaleString('vi-VN')} đ</span>
+              </div>
+            </div>
+
+            <div class="flex items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
+              <span>${order.material || 'PLA+'} • ${order.color || 'Trắng'}</span>
+              <span>${order.weightGrams || 45}g</span>
+            </div>
+
+            <!-- Printer Selector -->
+            <div class="pt-1">
+              <select onchange="window._adminAssignPrinter('${order.id}', this.value)" class="w-full py-1 px-2 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 text-[10px] font-mono focus:border-cyan-400 focus:outline-none">
+                <option value="">-- Gán máy in --</option>
+                ${printerOptions}
+              </select>
+            </div>
+
+            <!-- Quick Stage Mover & Tools -->
+            <div class="flex items-center justify-between pt-1 text-[11px]">
+              <div class="flex gap-1">
+                <button onclick="window._adminQuickMove('${order.id}', -1)" class="p-1 px-1.5 rounded bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white" title="Lùi lại">
+                  <i class="fa-solid fa-chevron-left text-[10px]"></i>
+                </button>
+                <button onclick="window._adminQuickMove('${order.id}', 1)" class="p-1 px-1.5 rounded bg-slate-900 hover:bg-slate-800 text-cyan-300 hover:text-white" title="Chuyển bước kế tiếp">
+                  <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                </button>
+              </div>
+
+              <div class="flex gap-1.5">
+                <button onclick="window._adminSelectForNfc('${order.id}')" class="p-1 px-2 rounded bg-cyan-950/40 hover:bg-cyan-900 text-cyan-300 text-[10px] font-mono" title="Nạp NFC">
+                  <i class="fa-solid fa-wifi mr-0.5"></i> NFC
+                </button>
+                <button onclick="window._adminSelectForPrint('${order.id}')" class="p-1 px-2 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-mono" title="In Tem">
+                  <i class="fa-solid fa-print mr-0.5"></i> Tem
+                </button>
+                <button onclick="window._adminDeleteOrder('${order.id}')" class="p-1 text-slate-600 hover:text-red-400" title="Xóa">
+                  <i class="fa-solid fa-trash-can text-[10px]"></i>
+                </button>
+              </div>
+            </div>
+          `;
+
+          // HTML5 Drag Events
+          card.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', order.id);
+            card.classList.add('dragging');
+          });
+          card.addEventListener('dragend', () => {
+            card.classList.remove('dragging');
+          });
+
+          colEl.appendChild(card);
+        });
+
+        // Update Column Counters
+        stages.forEach(st => {
+          const cntEl = document.getElementById(`col-count-${st}`);
+          if (cntEl) cntEl.textContent = stageCounts[st] || 0;
+        });
+
+        // Top Stats
+        const topPrintersEl = document.getElementById('top-stat-printers');
+        if (topPrintersEl && printers.length) {
+          const onlineCount = printers.filter(p => p.status !== 'maintenance').length;
+          topPrintersEl.textContent = `${onlineCount}/${printers.length}`;
+        }
+        const topOrdersEl = document.getElementById('top-stat-orders');
+        if (topOrdersEl) topOrdersEl.textContent = orders.length;
+      }
+
+      // Setup Kanban Drag and Drop columns
+      function setupKanbanDropZones() {
+        const columns = document.querySelectorAll('.kanban-col');
+        columns.forEach(col => {
+          col.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            col.classList.add('drag-over');
+          });
+          col.addEventListener('dragleave', () => {
+            col.classList.remove('drag-over');
+          });
+          col.addEventListener('drop', (e) => {
+            e.preventDefault();
+            col.classList.remove('drag-over');
+            const orderId = e.dataTransfer.getData('text/plain');
+            const targetStage = col.getAttribute('data-stage');
+            if (orderId && targetStage) {
+              window.TTStore.updateOrderStatus(orderId, targetStage);
+              renderKanbanBoard();
+            }
+          });
+        });
+      }
+
+      // Quick move between stages
+      window._adminQuickMove = function (orderId, delta) {
+        const stages = ['new', 'slicing', 'printing', 'post_processing', 'ready_ship'];
+        const order = orders.find(o => o.id === orderId);
+        if (!order) return;
+        const currentIdx = stages.indexOf(order.stage || 'new');
+        const nextIdx = Math.max(0, Math.min(stages.length - 1, currentIdx + delta));
+        const newStage = stages[nextIdx];
+        window.TTStore.updateOrderStatus(orderId, newStage);
+        renderKanbanBoard();
+      };
+
+      // Assign Printer
+      window._adminAssignPrinter = function (orderId, printerId) {
+        window.TTStore.updateOrderStatus(orderId, null, printerId || null);
+        renderKanbanBoard();
+      };
+
+      // Delete Order
+      window._adminDeleteOrder = function (orderId) {
+        if (confirm(`Bạn có chắc chắn muốn xóa đơn hàng ${orderId}?`)) {
+          window.TTStore.deleteOrder(orderId);
+          renderKanbanBoard();
+        }
+      };
+
+      // Jump to NFC tab for order
+      window._adminSelectForNfc = function (orderId) {
+        const tabBtn = document.querySelector('[data-tab="tab-tech"]');
+        if (tabBtn) tabBtn.click();
+        const selector = document.getElementById('nfc-order-selector');
+        if (selector) {
+          selector.value = orderId;
+          selector.dispatchEvent(new Event('change'));
+        }
+      };
+
+      // Jump to Print tab for order
+      window._adminSelectForPrint = function (orderId) {
+        const tabBtn = document.querySelector('[data-tab="tab-tech"]');
+        if (tabBtn) tabBtn.click();
+        const selector = document.getElementById('thermal-order-select');
+        if (selector) {
+          selector.value = orderId;
+          selector.dispatchEvent(new Event('change'));
+        }
+      };
+
+      // =========================================================================
+      // TAB 2: SPOOL & CONSUMABLES INVENTORY
+      // =========================================================================
+      function renderSpoolInventory() {
+        spools = window.TTStore.getSpools();
+        const grid = document.getElementById('spool-list-grid');
+        const totalCountEl = document.getElementById('spool-total-count');
+        const totalGramsEl = document.getElementById('spool-total-grams');
+        const warningCountEl = document.getElementById('spool-warning-count');
+
+        if (!grid) return;
+
+        let totalGrams = 0;
+        let warningCount = 0;
+
+        grid.innerHTML = spools.map(spool => {
+          totalGrams += spool.remainingGrams;
+          const isLow = spool.remainingGrams < 150;
+          if (isLow) warningCount++;
+
+          const percent = Math.min(100, Math.max(0, Math.round((spool.remainingGrams / spool.initialGrams) * 100)));
+          const barColor = isLow ? 'bg-red-500' : (percent < 40 ? 'bg-amber-400' : 'bg-cyan-400');
+
+          return `
+            <div class="p-4 rounded-2xl bg-slate-950 border ${isLow ? 'border-amber-500/60 bg-amber-950/10' : 'border-slate-800'} space-y-3 text-xs">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="w-4 h-4 rounded-full border border-white/40 shadow-sm" style="background-color: ${spool.colorHex}"></span>
+                  <span class="font-mono font-bold text-white text-xs">${spool.id}</span>
+                  <span class="text-slate-400 font-mono text-[10px]">${spool.manufacturer || spool.brand || 'Bambu Lab'}</span>
+                </div>
+                ${isLow ? '<span class="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 animate-pulse">SẮP HẾT &lt; 150g</span>' : ''}
+              </div>
+
+              <div>
+                <div class="font-bold text-white text-sm">${spool.colorName || spool.color || 'Trắng Sứ'}</div>
+                <div class="text-[11px] text-cyan-400 font-mono">${spool.material}</div>
+              </div>
+
+              <!-- Progress Bar -->
+              <div class="space-y-1">
+                <div class="flex justify-between text-[10px] font-mono text-slate-400">
+                  <span>Còn lại: <strong class="text-white">${spool.remainingGrams} g</strong></span>
+                  <span>${percent}%</span>
+                </div>
+                <div class="spool-progress-bar">
+                  <div class="h-full ${barColor} transition-all duration-300" style="width: ${percent}%"></div>
+                </div>
+              </div>
+
+              <!-- Actions -->
+              <div class="flex items-center justify-between pt-2 border-t border-slate-800/80 text-[11px] font-mono">
+                <button onclick="window._adminDeductSpoolManual('${spool.id}')" class="px-2.5 py-1 rounded bg-slate-900 hover:bg-slate-800 text-slate-300 hover:text-white" title="Trừ hao phí thủ công">
+                  - Trừ 50g
+                </button>
+                <button onclick="window._adminRefillSpool('${spool.id}')" class="px-2.5 py-1 rounded bg-cyan-950/40 hover:bg-cyan-900 text-cyan-300" title="Thay cuộn mới (1000g)">
+                  <i class="fa-solid fa-rotate-right mr-1"></i> Đổi cuộn 1kg
+                </button>
+              </div>
+            </div>
+          `;
+        }).join('');
+
+        if (totalCountEl) totalCountEl.textContent = `${spools.length} cuộn`;
+        if (totalGramsEl) totalGramsEl.textContent = `${totalGrams.toLocaleString('vi-VN')} g (~${(totalGrams / 1000).toFixed(2)} kg)`;
+        if (warningCountEl) warningCountEl.textContent = `${warningCount} cuộn`;
+      }
+
+      window._adminDeductSpoolManual = function (spoolId) {
+        window.TTStore.deductSpool(spoolId, 50);
+        renderSpoolInventory();
+      };
+
+      window._adminRefillSpool = function (spoolId) {
+        const spools = window.TTStore.getSpools();
+        const s = spools.find(x => x.id === spoolId);
+        if (s) {
+          s.remainingGrams = s.initialGrams || 1000;
+          window.TTStore.saveSpools(spools);
+          renderSpoolInventory();
+          alert(`Đã nạp đầy cuộn ${spoolId} (1000g)!`);
+        }
+      };
+
+      // Modal Add Spool
+      const spoolModal = document.getElementById('spool-modal');
+      const btnAddSpool = document.getElementById('btn-add-spool');
+      const spoolModalClose = document.getElementById('spool-modal-close');
+      const spoolAddForm = document.getElementById('spool-add-form');
+
+      if (btnAddSpool) btnAddSpool.addEventListener('click', () => spoolModal.classList.remove('hidden', 'flex') || spoolModal.classList.add('flex'));
+      if (spoolModalClose) spoolModalClose.addEventListener('click', () => spoolModal.classList.add('hidden') || spoolModal.classList.remove('flex'));
+
+      if (spoolAddForm) {
+        spoolAddForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const newSpool = {
+            id: document.getElementById('new-spool-id').value.trim() || `SPL-0${spools.length + 1}`,
+            material: document.getElementById('new-spool-mat').value,
+            colorName: document.getElementById('new-spool-color').value.trim(),
+            colorHex: document.getElementById('new-spool-hex').value,
+            manufacturer: document.getElementById('new-spool-brand').value.trim(),
+            remainingGrams: parseInt(document.getElementById('new-spool-weight').value) || 1000,
+            initialGrams: parseInt(document.getElementById('new-spool-weight').value) || 1000
+          };
+
+          spools.push(newSpool);
+          window.TTStore.saveSpools(spools);
+          spoolModal.classList.add('hidden');
+          spoolModal.classList.remove('flex');
+          renderSpoolInventory();
+          alert(`Đã thêm cuộn nhựa ${newSpool.id} thành công!`);
+        });
+      }
+
+      // =========================================================================
+      // TAB 3: TECHNICIAN UTILITIES (NFC PAYLOAD & THERMAL PRINT)
+      // =========================================================================
+      let activeNfcMode = 'wifi';
+
+      function renderTechnicianTab() {
+        orders = window.TTStore.getOrders();
+
+        // Populate NFC order selector
+        const nfcSelector = document.getElementById('nfc-order-selector');
+        if (nfcSelector) {
+          nfcSelector.innerHTML = '<option value="">-- Chọn đơn hàng có NFC --</option>' + 
+            orders.map(o => `<option value="${o.id}">${o.id} - ${o.customerName} (${o.productName})</option>`).join('');
+        }
+
+        // Populate Thermal order selector
+        const thermalSelector = document.getElementById('thermal-order-select');
+        if (thermalSelector) {
+          thermalSelector.innerHTML = '<option value="">-- Chọn đơn hàng để in tem --</option>' + 
+            orders.map(o => `<option value="${o.id}">${o.id} - ${o.customerName}</option>`).join('');
+        }
+
+        updateNfcPayload();
+      }
+
+      // NFC Mode Tab Click
+      document.querySelectorAll('.tech-nfc-tab').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.tech-nfc-tab').forEach(b => {
+            b.classList.remove('active', 'border-primary', 'bg-primary/20', 'text-cyan-300');
+            b.classList.add('border-slate-700', 'bg-slate-900', 'text-slate-400');
+          });
+          btn.classList.add('active', 'border-primary', 'bg-primary/20', 'text-cyan-300');
+          btn.classList.remove('border-slate-700', 'bg-slate-900', 'text-slate-400');
+
+          activeNfcMode = btn.getAttribute('data-tech-nfc') || 'wifi';
+          renderTechNfcInputs();
+          updateNfcPayload();
+        });
+      });
+
+      function renderTechNfcInputs() {
+        const container = document.getElementById('tech-nfc-inputs-container');
+        if (!container) return;
+
+        if (activeNfcMode === 'wifi') {
+          container.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label class="font-mono text-slate-400">Tên WiFi (SSID):</label>
+                <input type="text" id="tech-wifi-ssid" value="CoffeeHouse_VIP_5G" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+              </div>
+              <div class="space-y-1">
+                <label class="font-mono text-slate-400">Mật khẩu (Password):</label>
+                <input type="text" id="tech-wifi-pass" value="cafe2026@" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label class="font-mono text-slate-400">Chuẩn mã hóa:</label>
+              <select id="tech-wifi-type" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+                <option value="WPA">WPA/WPA2 Personal (Khuyên dùng)</option>
+                <option value="WEP">WEP</option>
+                <option value="nopass">Không có mật khẩu</option>
+              </select>
+            </div>
+          `;
+        } else if (activeNfcMode === 'url') {
+          container.innerHTML = `
+            <div class="space-y-1">
+              <label class="font-mono text-slate-400">Đường dẫn Website / Menu / Shopee:</label>
+              <input type="url" id="tech-url-val" value="https://tt3dstudio.vn/menu" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+            </div>
+          `;
+        } else if (activeNfcMode === 'review') {
+          container.innerHTML = `
+            <div class="space-y-1">
+              <label class="font-mono text-slate-400">Link đánh giá Google Maps 5 Sao:</label>
+              <input type="url" id="tech-review-val" value="https://g.page/r/tt3dstudio/review" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+            </div>
+          `;
+        } else {
+          container.innerHTML = `
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="space-y-1">
+                <label class="font-mono text-slate-400">Họ và tên:</label>
+                <input type="text" id="tech-vcard-name" value="Nguyen Van Truong" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+              </div>
+              <div class="space-y-1">
+                <label class="font-mono text-slate-400">Số điện thoại:</label>
+                <input type="tel" id="tech-vcard-phone" value="0986888333" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-cyan-400 focus:outline-none">
+              </div>
+            </div>
+          `;
+        }
+
+        // Bind input events
+        container.querySelectorAll('input, select').forEach(el => {
+          el.addEventListener('input', updateNfcPayload);
+        });
+      }
+
+      function updateNfcPayload() {
+        let payload = '';
+
+        if (activeNfcMode === 'wifi') {
+          const ssid = document.getElementById('tech-wifi-ssid')?.value.trim() || 'TT_WiFi';
+          const pass = document.getElementById('tech-wifi-pass')?.value.trim() || '';
+          const type = document.getElementById('tech-wifi-type')?.value || 'WPA';
+          payload = `WIFI:S:${ssid};T:${type};P:${pass};;`;
+        } else if (activeNfcMode === 'url') {
+          payload = document.getElementById('tech-url-val')?.value.trim() || 'https://tt3dstudio.vn';
+        } else if (activeNfcMode === 'review') {
+          payload = document.getElementById('tech-review-val')?.value.trim() || 'https://g.page/review';
+        } else {
+          const name = document.getElementById('tech-vcard-name')?.value.trim() || 'TT 3D Studio';
+          const phone = document.getElementById('tech-vcard-phone')?.value.trim() || '0986888333';
+          payload = `BEGIN:VCARD\nVERSION:3.0\nFN:${name}\nTEL:${phone}\nEND:VCARD`;
+        }
+
+        const outEl = document.getElementById('tech-ndef-output');
+        const lenEl = document.getElementById('tech-ndef-len');
+        const qrEl = document.getElementById('tech-qr-preview-img');
+
+        if (outEl) outEl.value = payload;
+        if (lenEl) lenEl.textContent = `${payload.length} bytes`;
+        if (qrEl) qrEl.src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(payload)}`;
+      }
+
+      // Order Selector change for NFC
+      const nfcOrderSelect = document.getElementById('nfc-order-selector');
+      if (nfcOrderSelect) {
+        nfcOrderSelect.addEventListener('change', () => {
+          const orderId = nfcOrderSelect.value;
+          const order = orders.find(o => o.id === orderId);
+          if (order && order.nfcData) {
+            if (order.nfcData.ssid) {
+              activeNfcMode = 'wifi';
+              renderTechNfcInputs();
+              const ssidInput = document.getElementById('tech-wifi-ssid');
+              const passInput = document.getElementById('tech-wifi-pass');
+              if (ssidInput) ssidInput.value = order.nfcData.ssid;
+              if (passInput) passInput.value = order.nfcData.pass || '';
+              updateNfcPayload();
+            }
+          }
+        });
+      }
+
+      // Copy NDEF button
+      const btnCopyNdef = document.getElementById('btn-copy-ndef');
+      if (btnCopyNdef) {
+        btnCopyNdef.addEventListener('click', () => {
+          const code = document.getElementById('tech-ndef-output')?.value;
+          if (code) {
+            copyAdminText(code, () => {
+              const orig = btnCopyNdef.innerHTML;
+              btnCopyNdef.innerHTML = '<i class="fa-solid fa-check"></i> Đã Sao Chép 1-Click!';
+              setTimeout(() => { btnCopyNdef.innerHTML = orig; }, 1800);
+            });
+          }
+        });
+      }
+
+      // Order Selector for Thermal Label
+      const thermalOrderSelect = document.getElementById('thermal-order-select');
+      if (thermalOrderSelect) {
+        thermalOrderSelect.addEventListener('change', () => {
+          const orderId = thermalOrderSelect.value;
+          const order = orders.find(o => o.id === orderId);
+          if (!order) return;
+
+          document.getElementById('lbl-order-code').textContent = order.id;
+          document.getElementById('lbl-cust-name').textContent = order.customerName || 'Khách hàng';
+          document.getElementById('lbl-cust-phone').textContent = order.phone || '0986 888 333';
+          document.getElementById('lbl-cust-address').textContent = order.address || 'Nhận tại xưởng';
+          document.getElementById('lbl-prod-name').textContent = order.productName || 'Sản phẩm in 3D';
+          document.getElementById('lbl-material').textContent = order.material || 'PLA Matte';
+          document.getElementById('lbl-color').textContent = order.color || 'Trắng Sứ';
+          document.getElementById('lbl-weight').textContent = `${order.weightGrams || 45} g`;
+          document.getElementById('lbl-machine-assigned').textContent = `MÁY: ${order.assignedPrinter || 'BAMBU A1-01'}`;
+          document.getElementById('lbl-created-date').textContent = order.createdAt || new Date().toISOString().substring(0, 16);
+
+          const isPaid = order.statusPayment === 'paid';
+          document.getElementById('lbl-cod-amt').textContent = isPaid ? '0 đ (Đã thanh toán)' : `${(order.totalPrice || 0).toLocaleString('vi-VN')} đ`;
+
+          const nfcBox = document.getElementById('lbl-nfc-box');
+          if (order.nfcData?.ssid) {
+            nfcBox.classList.remove('hidden');
+            document.getElementById('lbl-nfc-content').textContent = `WiFi: ${order.nfcData.ssid} (PW: ${order.nfcData.pass || '***'})`;
+          } else {
+            nfcBox.classList.add('hidden');
+          }
+
+          document.getElementById('lbl-qr-code').src = `https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=${encodeURIComponent(order.id)}`;
+        });
+      }
+
+      // Print Thermal Label Button
+      const btnPrintThermal = document.getElementById('btn-print-thermal-label');
+      if (btnPrintThermal) {
+        btnPrintThermal.addEventListener('click', () => {
+          window.print();
+        });
+      }
+
+      // =========================================================================
+      // TAB 4: DYNAMIC PRICING FORM & CUSTOM QR UPLOADER
+      // =========================================================================
+      let currentCustomQrBase64 = '';
+
+      function setupCustomQrUploader() {
+        const fileInput = document.getElementById('cfg-qr-file-input');
+        const dropzone = document.getElementById('cfg-qr-dropzone');
+        const previewImg = document.getElementById('cfg-qr-preview-img');
+        const placeholder = document.getElementById('cfg-qr-preview-placeholder');
+        const btnRemove = document.getElementById('btn-remove-custom-qr');
+        const btnTrigger = document.getElementById('btn-trigger-upload-qr');
+        const statusBadge = document.getElementById('cfg-qr-status-badge');
+        const urlInput = document.getElementById('cfg-qr-url-input');
+        const btnApplyUrl = document.getElementById('btn-apply-qr-url');
+
+        // Click to upload
+        if (dropzone) dropzone.addEventListener('click', () => fileInput && fileInput.click());
+        if (btnTrigger) btnTrigger.addEventListener('click', () => fileInput && fileInput.click());
+
+        // Drag & drop support
+        if (dropzone) {
+          dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('border-cyan-400', 'bg-cyan-950/20');
+          });
+          dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('border-cyan-400', 'bg-cyan-950/20');
+          });
+          dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('border-cyan-400', 'bg-cyan-950/20');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+              processQrFile(e.dataTransfer.files[0]);
+            }
+          });
+        }
+
+        // File chosen
+        if (fileInput) {
+          fileInput.addEventListener('change', (e) => {
+            if (e.target.files && e.target.files[0]) {
+              processQrFile(e.target.files[0]);
+            }
+          });
+        }
+
+        // URL input apply
+        if (btnApplyUrl) {
+          btnApplyUrl.addEventListener('click', () => {
+            const url = urlInput?.value.trim();
+            if (url) {
+              setCustomQrImage(url);
+              const radioCustom = document.querySelector('input[name="cfg-qr-mode"][value="custom"]');
+              if (radioCustom) radioCustom.checked = true;
+            }
+          });
+        }
+
+        // Remove QR image
+        if (btnRemove) {
+          btnRemove.addEventListener('click', () => {
+            if (confirm('Bạn có muốn xóa ảnh mã QR tùy chỉnh này và quay về dùng VietQR tự động?')) {
+              setCustomQrImage('');
+              const radioDynamic = document.querySelector('input[name="cfg-qr-mode"][value="dynamic"]');
+              if (radioDynamic) radioDynamic.checked = true;
+            }
+          });
+        }
+
+        // Process image with canvas downscaling (~500px, 0.88 JPEG to stay ultralight ~25KB)
+        function processQrFile(file) {
+          if (!file.type.startsWith('image/')) {
+            alert('Vui lòng chọn một file ảnh hợp lệ (PNG, JPG, WebP)!');
+            return;
+          }
+
+          const reader = new FileReader();
+          reader.onload = function (evt) {
+            const img = new Image();
+            img.onload = function () {
+              const canvas = document.createElement('canvas');
+              const maxDim = 500;
+              let width = img.width;
+              let height = img.height;
+
+              if (width > maxDim || height > maxDim) {
+                if (width > height) {
+                  height = Math.round((height * maxDim) / width);
+                  width = maxDim;
+                } else {
+                  width = Math.round((width * maxDim) / height);
+                  height = maxDim;
+                }
+              }
+
+              canvas.width = width;
+              canvas.height = height;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+
+              const compressedBase64 = canvas.toDataURL('image/jpeg', 0.88);
+              setCustomQrImage(compressedBase64);
+
+              // Auto switch mode to custom
+              const radioCustom = document.querySelector('input[name="cfg-qr-mode"][value="custom"]');
+              if (radioCustom) radioCustom.checked = true;
+
+              alert('🎉 Đã tải ảnh mã QR lên thành công! Hãy nhấn "Lưu Biểu Giá Động & Cấu Hình QR" để áp dụng cho website.');
+            };
+            img.src = evt.target.result;
+          };
+          reader.readAsDataURL(file);
+        }
+
+        function setCustomQrImage(imgUrl) {
+          currentCustomQrBase64 = imgUrl;
+          if (imgUrl) {
+            if (previewImg) {
+              previewImg.src = imgUrl;
+              previewImg.classList.remove('hidden');
+            }
+            if (placeholder) placeholder.classList.add('hidden');
+            if (btnRemove) btnRemove.classList.remove('hidden');
+            if (statusBadge) {
+              statusBadge.textContent = 'Đang dùng ảnh QR tùy chỉnh';
+              statusBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+            }
+          } else {
+            if (previewImg) {
+              previewImg.src = '';
+              previewImg.classList.add('hidden');
+            }
+            if (placeholder) placeholder.classList.remove('hidden');
+            if (btnRemove) btnRemove.classList.add('hidden');
+            if (statusBadge) {
+              statusBadge.textContent = 'Đang dùng VietQR tự động';
+              statusBadge.className = 'text-[10px] font-mono px-2 py-0.5 rounded bg-slate-800 text-slate-400';
+            }
+            if (urlInput) urlInput.value = '';
+          }
+        }
+
+        window._setAdminCustomQrPreview = setCustomQrImage;
+      }
+
+      function populatePricingForm() {
+        const p = currentConfig.pricing || window.TT_DEFAULT_CONFIG.pricing;
+        const b = currentConfig.banking || window.TT_DEFAULT_CONFIG.banking;
+
+        const val = (id, v) => { const el = document.getElementById(id); if (el) el.value = v; };
+
+        val('cfg-rate-pla', p.materialRates?.pla_plus || p.rates?.['fdm_pla'] || 1200);
+        val('cfg-rate-petg', p.materialRates?.petg || p.rates?.['fdm_petg'] || 1500);
+        val('cfg-rate-resin', p.materialRates?.resin_std_8k || p.rates?.['sla_resin'] || 2400);
+        val('cfg-rate-sls', p.materialRates?.sls_pa12 || p.rates?.['sls_nylon'] || 5500);
+
+        val('cfg-mach-fdm', p.machineHourlyFee || p.machineRatePerHour?.['fdm'] || 15000);
+        val('cfg-mach-sla', p.machineRatePerHour?.['sla'] || 35000);
+
+        val('cfg-mult-012', p.layerMultipliers?.['0.12'] || 1.30);
+        val('cfg-mult-020', p.layerMultipliers?.['0.20'] || 1.00);
+
+        val('cfg-addon-nfc', p.addonFees?.nfcChip || p.addons?.['nfc_chip'] || 35000);
+        val('cfg-addon-cad', p.addonFees?.cadDesign || p.addons?.['cad_edit'] || 150000);
+
+        val('cfg-bank-id', b.bankId || 'MB');
+        val('cfg-bank-acc', b.accountNo || '0349657529');
+        val('cfg-bank-name', b.accountName || 'NGUYEN VAN TRUONG');
+
+        // Populate QR mode radio
+        const qrMode = b.qrMode || (b.customQrImage ? 'custom' : 'dynamic');
+        const modeRadio = document.querySelector(`input[name="cfg-qr-mode"][value="${qrMode}"]`);
+        if (modeRadio) modeRadio.checked = true;
+
+        // Populate Custom QR Preview
+        if (window._setAdminCustomQrPreview) {
+          window._setAdminCustomQrPreview(b.customQrImage || '');
+        }
+      }
+
+      function collectPricingAndBanking() {
+        if (!currentConfig.pricing) currentConfig.pricing = JSON.parse(JSON.stringify(window.TT_DEFAULT_CONFIG.pricing));
+        if (!currentConfig.pricing.materialRates) currentConfig.pricing.materialRates = {};
+        if (!currentConfig.pricing.layerMultipliers) currentConfig.pricing.layerMultipliers = {};
+        if (!currentConfig.pricing.addonFees) currentConfig.pricing.addonFees = {};
+        if (!currentConfig.banking) currentConfig.banking = JSON.parse(JSON.stringify(window.TT_DEFAULT_CONFIG.banking));
+
+        const num = (id, def) => parseFloat(document.getElementById(id)?.value) || def;
+
+        const plaRate = num('cfg-rate-pla', 1200);
+        const petgRate = num('cfg-rate-petg', 1500);
+        const resinRate = num('cfg-rate-resin', 2400);
+        const slsRate = num('cfg-rate-sls', 5500);
+
+        currentConfig.pricing.materialRates.pla_plus = plaRate;
+        currentConfig.pricing.materialRates.petg = petgRate;
+        currentConfig.pricing.materialRates.resin_std_8k = resinRate;
+        currentConfig.pricing.materialRates.sls_pa12 = slsRate;
+
+        currentConfig.pricing.rates = currentConfig.pricing.rates || {};
+        currentConfig.pricing.rates['fdm_pla'] = plaRate;
+        currentConfig.pricing.rates['fdm_petg'] = petgRate;
+        currentConfig.pricing.rates['sla_resin'] = resinRate;
+        currentConfig.pricing.rates['sls_nylon'] = slsRate;
+
+        const fdmMach = num('cfg-mach-fdm', 15000);
+        const slaMach = num('cfg-mach-sla', 35000);
+        currentConfig.pricing.machineHourlyFee = fdmMach;
+        currentConfig.pricing.machineRatePerHour = currentConfig.pricing.machineRatePerHour || {};
+        currentConfig.pricing.machineRatePerHour['fdm'] = fdmMach;
+        currentConfig.pricing.machineRatePerHour['sla'] = slaMach;
+
+        currentConfig.pricing.layerMultipliers['0.12'] = num('cfg-mult-012', 1.30);
+        currentConfig.pricing.layerMultipliers['0.20'] = num('cfg-mult-020', 1.00);
+
+        const nfcFee = num('cfg-addon-nfc', 35000);
+        const cadFee = num('cfg-addon-cad', 150000);
+        currentConfig.pricing.addonFees.nfcChip = nfcFee;
+        currentConfig.pricing.addonFees.cadDesign = cadFee;
+        currentConfig.pricing.addons = currentConfig.pricing.addons || {};
+        currentConfig.pricing.addons['nfc_chip'] = nfcFee;
+        currentConfig.pricing.addons['cad_edit'] = cadFee;
+
+        currentConfig.banking.bankId = document.getElementById('cfg-bank-id')?.value || 'MB';
+        currentConfig.banking.accountNo = document.getElementById('cfg-bank-acc')?.value.trim() || '0349657529';
+        currentConfig.banking.accountName = document.getElementById('cfg-bank-name')?.value.trim().toUpperCase() || 'NGUYEN VAN TRUONG';
+
+        const selectedMode = document.querySelector('input[name="cfg-qr-mode"]:checked')?.value || 'dynamic';
+        currentConfig.banking.qrMode = selectedMode;
+        if (currentCustomQrBase64) {
+          currentConfig.banking.customQrImage = currentCustomQrBase64;
+        }
+      }
+
+      const btnSavePricing = document.getElementById('btn-save-pricing');
+      if (btnSavePricing) {
+        btnSavePricing.addEventListener('click', () => {
+          collectPricingAndBanking();
+          window.TTStore.saveConfig(currentConfig);
+          updateCodePreview();
+          alert('🎉 ĐÃ CẬP NHẬT BIỂU GIÁ ĐỘNG & MÃ QR THANH TOÁN!\n\nThông số và ảnh mã QR đã được lưu và đồng bộ lập tức sang trang thanh toán của khách hàng.');
+        });
+      }
+
+      // =========================================================================
+      // TAB 5: SHOP INFO & CODE EXPORT
+      // =========================================================================
+      function populateShopForm() {
+        const s = currentConfig.shopInfo || window.TT_DEFAULT_CONFIG.shopInfo;
+        const setVal = (id, v) => { const el = document.getElementById(id); if (el) el.value = v || ''; };
+
+        setVal('cfg-brand-name', s.brandName);
+        setVal('cfg-slogan', s.slogan);
+        setVal('cfg-hotline', s.hotline);
+        setVal('cfg-zalo', s.zaloPhone);
+        setVal('cfg-shopee', s.shopeeUrl);
+        setVal('cfg-tiktok', s.tiktokUrl);
+
+        renderProductEditor();
+        updateCodePreview();
+      }
+
+      function renderProductEditor() {
+        const list = document.getElementById('admin-product-list');
+        if (!list) return;
+
+        list.innerHTML = (currentConfig.products || []).map((p, idx) => `
+          <div class="p-4 rounded-2xl bg-slate-950 border border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-xs font-mono">
+            <div class="flex items-center gap-3">
+              <span class="w-6 h-6 rounded-lg bg-cyan-500/20 text-cyan-300 flex items-center justify-center font-bold text-[10px]">${idx + 1}</span>
+              <div>
+                <input type="text" data-prod-idx="${idx}" data-field="title" value="${p.title}" class="font-bold text-white bg-transparent border-b border-slate-700 focus:border-cyan-400 focus:outline-none w-64 sm:w-80">
+                <span class="text-[10px] text-slate-500 block mt-0.5">${p.category}</span>
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+              <div class="flex items-center gap-1.5">
+                <span class="text-slate-400">Giá:</span>
+                <input type="number" data-prod-idx="${idx}" data-field="price" step="5000" value="${p.price}" class="w-28 px-2 py-1 rounded bg-slate-900 border border-slate-700 text-cyan-300 font-bold focus:border-cyan-400 focus:outline-none">
+                <span class="text-slate-500">đ</span>
+              </div>
+            </div>
+          </div>
+        `).join('');
+
+        list.querySelectorAll('input').forEach(inp => {
+          inp.addEventListener('change', (e) => {
+            const idx = parseInt(e.target.getAttribute('data-prod-idx'));
+            const field = e.target.getAttribute('data-field');
+            if (field === 'price') {
+              currentConfig.products[idx].price = parseInt(e.target.value) || 0;
+            } else {
+              currentConfig.products[idx][field] = e.target.value;
+            }
+            updateCodePreview();
+          });
+        });
+      }
+
+      function collectShopInfo() {
+        if (!currentConfig.shopInfo) currentConfig.shopInfo = {};
+        currentConfig.shopInfo.brandName = document.getElementById('cfg-brand-name')?.value || 'T&T 3D Studio';
+        currentConfig.shopInfo.slogan = document.getElementById('cfg-slogan')?.value || '';
+        currentConfig.shopInfo.hotline = document.getElementById('cfg-hotline')?.value || '';
+        currentConfig.shopInfo.zaloPhone = document.getElementById('cfg-zalo')?.value || '';
+        currentConfig.shopInfo.shopeeUrl = document.getElementById('cfg-shopee')?.value || '';
+        currentConfig.shopInfo.tiktokUrl = document.getElementById('cfg-tiktok')?.value || '';
+      }
+
+      function updateCodePreview() {
+        collectShopInfo();
+        collectPricingAndBanking();
+        const str = `/**
+ * T&T 3D STUDIO - CENTRAL CONFIGURATION FILE
+ * Cập nhật lần cuối: ${new Date().toLocaleString('vi-VN')}
+ */
+
+const TT_DEFAULT_CONFIG = ${JSON.stringify(currentConfig, null, 2)};
+
+window.TT_CONFIG = (function () {
+  try {
+    const saved = localStorage.getItem('TT_STUDIO_CONFIG');
+    if (saved) return JSON.parse(saved);
+  } catch (e) {}
+  return TT_DEFAULT_CONFIG;
+})();`;
+        const preview = document.getElementById('config-code-preview');
+        if (preview) preview.value = str;
+      }
+
+      // Save All to LocalStorage
+      document.getElementById('btn-save-all').addEventListener('click', () => {
+        collectShopInfo();
+        collectPricingAndBanking();
+        window.TTStore.saveConfig(currentConfig);
+        updateCodePreview();
+        alert('🎉 ĐÃ LƯU TOÀN BỘ CẤU HÌNH THÀNH CÔNG!\n\nThông tin đã được đồng bộ sang website chính.');
+      });
+
+      // Copy code button
+      document.getElementById('btn-copy-code').addEventListener('click', () => {
+        const code = document.getElementById('config-code-preview').value;
+        copyAdminText(code, () => {
+          alert('Đã sao chép toàn bộ mã cấu hình! Bạn có thể dán vào file js/config.js');
+        });
+      });
+
+      // Download config.js
+      document.getElementById('btn-download-config').addEventListener('click', () => {
+        const code = document.getElementById('config-code-preview').value;
+        const blob = new Blob([code], { type: 'text/javascript' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'config.js';
+        a.click();
+        URL.revokeObjectURL(url);
+      });
+
+      // Reset to default
+      document.getElementById('btn-reset-default').addEventListener('click', () => {
+        if (confirm('Bạn có chắc chắn muốn xóa dữ liệu đã sửa và khôi phục cài đặt gốc?')) {
+          localStorage.removeItem('TT_STUDIO_CONFIG');
+          currentConfig = JSON.parse(JSON.stringify(window.TT_DEFAULT_CONFIG));
+          window.TTStore.saveConfig(currentConfig);
+          initDashboard();
+          alert('Đã khôi phục cài đặt mặc định!');
+        }
+      });
+
+      // Manual Order Modal
+      const manualModal = document.getElementById('manual-order-modal');
+      const btnManual = document.getElementById('btn-create-order-manual');
+      const manualClose = document.getElementById('manual-order-close');
+      const manualForm = document.getElementById('manual-order-form');
+
+      if (btnManual) btnManual.addEventListener('click', () => manualModal.classList.remove('hidden') || manualModal.classList.add('flex'));
+      if (manualClose) manualClose.addEventListener('click', () => manualModal.classList.add('hidden') || manualModal.classList.remove('flex'));
+
+      if (manualForm) {
+        manualForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const randNum = Math.floor(1000 + Math.random() * 9000);
+          const newOrder = {
+            id: `TT3D-${randNum}`,
+            createdAt: new Date().toISOString().substring(0, 16),
+            stage: 'new',
+            customerName: document.getElementById('mo-name').value.trim(),
+            phone: document.getElementById('mo-phone').value.trim(),
+            address: document.getElementById('mo-address').value.trim(),
+            productName: document.getElementById('mo-product').value.trim(),
+            color: 'Trắng Sứ',
+            spoolId: 'SPL-01',
+            weightGrams: parseInt(document.getElementById('mo-weight').value) || 45,
+            material: 'PLA+ Matte',
+            assignedPrinter: null,
+            estTimeHours: 2.0,
+            statusPayment: 'pending',
+            totalPrice: parseInt(document.getElementById('mo-price').value) || 129000,
+            notes: 'Đơn tạo thủ công tại xưởng'
+          };
+
+          window.TTStore.addOrder(newOrder);
+          manualModal.classList.add('hidden');
+          manualModal.classList.remove('flex');
+          renderKanbanBoard();
+          alert(`Đã tạo đơn ${newOrder.id} thành công!`);
+        });
+      }
+
+      // Theme toggle in admin
+      const isLightAdmin = localStorage.getItem('tt_theme') === 'light';
+      if (isLightAdmin) document.body.classList.add('light-theme');
+      const adminThemeBtn = document.querySelector('.theme-toggle-btn');
+      if (adminThemeBtn) {
+        adminThemeBtn.querySelector('i').className = isLightAdmin ? 'fa-solid fa-moon text-slate-700' : 'fa-solid fa-sun text-amber-400';
+        adminThemeBtn.addEventListener('click', () => {
+          const isL = document.body.classList.toggle('light-theme');
+          localStorage.setItem('tt_theme', isL ? 'light' : 'dark');
+          adminThemeBtn.querySelector('i').className = isL ? 'fa-solid fa-moon text-slate-700' : 'fa-solid fa-sun text-amber-400';
+        });
+      }
+
+      // Initialize all dashboard components
+      function initDashboard() {
+        currentConfig = window.TTStore.getConfig();
+        setupKanbanDropZones();
+        renderKanbanBoard();
+        renderSpoolInventory();
+        renderTechnicianTab();
+        setupCustomQrUploader();
+        populatePricingForm();
+        populateShopForm();
+      }
+
+      // Refresh kanban button
+      const btnRefreshKanban = document.getElementById('btn-refresh-kanban');
+      if (btnRefreshKanban) btnRefreshKanban.addEventListener('click', renderKanbanBoard);
+
+      // Auto unlock if session exists
+      if (sessionStorage.getItem('TT_ADMIN_AUTH') === 'true') {
+        pinModal.classList.add('hidden');
+        adminApp.classList.remove('hidden');
+        initDashboard();
+      }
+
+    })();
+  </script>
+</body>
+</html>
