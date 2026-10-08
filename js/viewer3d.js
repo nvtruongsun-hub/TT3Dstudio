@@ -125,10 +125,14 @@
       renderer.setSize(parent.clientWidth, parent.clientHeight);
     });
 
-    // Animation Loop
+    // Animation Loop with IntersectionObserver (Prevents CPU/GPU waste offscreen)
     let clock = new THREE.Clock();
+    let heroAnimId = null;
+    let isHeroVisible = true;
+
     function animate() {
-      requestAnimationFrame(animate);
+      if (!isHeroVisible) return;
+      heroAnimId = requestAnimationFrame(animate);
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
 
@@ -147,7 +151,24 @@
 
       renderer.render(scene, camera);
     }
-    animate();
+
+    if ('IntersectionObserver' in window) {
+      const heroObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isHeroVisible = entry.isIntersecting;
+          if (isHeroVisible) {
+            clock.start();
+            animate();
+          } else if (heroAnimId) {
+            cancelAnimationFrame(heroAnimId);
+            heroAnimId = null;
+          }
+        });
+      }, { threshold: 0.05 });
+      heroObserver.observe(canvas);
+    } else {
+      animate();
+    }
   }
 
   // ==========================================
@@ -176,7 +197,7 @@
     }
   };
 
-  function initModelViewer() {
+  function initModelViewer(initialModelKey = 'nfc_wifi') {
     const canvas = document.getElementById('viewer-canvas');
     if (!canvas) return;
 
@@ -243,8 +264,8 @@
     // 3D Print Bed Grid
     createPrintBed(scene);
 
-    // Initial Model: Smart WiFi NFC Stand
-    loadSampleModel('nfc_wifi');
+    // Initial Model
+    loadSampleModel(initialModelKey || 'nfc_wifi');
 
     // Setup Event Listeners
     setupViewerControls();
@@ -258,9 +279,13 @@
       renderer.setSize(container.clientWidth, container.clientHeight);
     });
 
-    // Render loop
+    // Render loop with IntersectionObserver
+    let viewerAnimId = null;
+    let isViewerVisible = true;
+
     function renderLoop() {
-      requestAnimationFrame(renderLoop);
+      if (!isViewerVisible) return;
+      viewerAnimId = requestAnimationFrame(renderLoop);
       if (ViewerState.controls) ViewerState.controls.update();
 
       // Slicing animation if active
@@ -272,7 +297,23 @@
 
       renderer.render(scene, camera);
     }
-    renderLoop();
+
+    if ('IntersectionObserver' in window) {
+      const viewerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          isViewerVisible = entry.isIntersecting;
+          if (isViewerVisible) {
+            renderLoop();
+          } else if (viewerAnimId) {
+            cancelAnimationFrame(viewerAnimId);
+            viewerAnimId = null;
+          }
+        });
+      }, { threshold: 0.05 });
+      viewerObserver.observe(canvas);
+    } else {
+      renderLoop();
+    }
   }
 
   // Create 3D Print Bed Grid
@@ -925,10 +966,60 @@
     }
   }
 
+  let isViewerInitialized = false;
+
+  function ensureViewerLoaded(modelKeyToLoad = 'nfc_wifi') {
+    const cover = document.getElementById('viewer-lazy-cover');
+    if (cover) {
+      cover.classList.add('hidden');
+    }
+    if (!isViewerInitialized) {
+      isViewerInitialized = true;
+      initModelViewer(modelKeyToLoad);
+    } else if (modelKeyToLoad) {
+      loadSampleModel(modelKeyToLoad);
+    }
+  }
+
+  window.ensure3DViewerLoaded = ensureViewerLoaded;
+
   // Init on DOM ready
   window.addEventListener('DOMContentLoaded', () => {
     initHero3D();
-    initModelViewer();
+
+    // Hook lazy cover activation
+    const cover = document.getElementById('viewer-lazy-cover');
+    const activateBtn = document.getElementById('btn-activate-viewer');
+    if (cover) {
+      cover.addEventListener('click', () => {
+        ensureViewerLoaded();
+      });
+    }
+    if (activateBtn) {
+      activateBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        ensureViewerLoaded();
+      });
+    }
+
+    // Hook [data-model] across the page
+    document.querySelectorAll('[data-model]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const type = btn.getAttribute('data-model');
+        ensureViewerLoaded(type);
+      });
+    });
+
+    // Hook dropzone click/dragover
+    const dropZone = document.getElementById('viewer-dropzone');
+    if (dropZone) {
+      dropZone.addEventListener('click', () => {
+        ensureViewerLoaded();
+      });
+      dropZone.addEventListener('dragover', () => {
+        ensureViewerLoaded();
+      });
+    }
   });
 
 })();

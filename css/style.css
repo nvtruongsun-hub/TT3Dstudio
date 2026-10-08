@@ -1197,3 +1197,115 @@ body.light-theme .spool-progress-bar {
 .product-img-fade.loaded {
   opacity: 1 !important;
 }
+
+/* ==========================================================================
+   3D VIEWER LAZY-LOAD COVER & SINGLE PRODUCT BADGE
+   ========================================================================== */
+.viewer-lazy-cover {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(16, 25, 45, 0.95) 0%, rgba(7, 9, 14, 0.98) 100%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 20;
+  padding: 24px;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  cursor: pointer;
+}
+
+body.light-theme .viewer-lazy-cover {
+  background: radial-gradient(circle at center, rgba(240, 244, 250, 0.96) 0%, rgba(226, 232, 240, 0.98) 100%);
+}
+
+.viewer-lazy-cover.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.card-badge-single {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  padding: 6px 12px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 5;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* ==========================================================================
+   MOBILE STICKY BOTTOM BAR (HIGH CONVERSION)
+   ========================================================================== */
+.mobile-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: rgba(7, 9, 14, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  z-index: 49;
+  padding: 0 8px;
+}
+
+body.light-theme .mobile-sticky-bar {
+  background: rgba(255, 255, 255, 0.94);
+  border-top-color: rgba(0, 0, 0, 0.08);
+}
+
+.mobile-sticky-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #94a3b8;
+  text-decoration: none;
+  flex: 1;
+  padding: 6px 0;
+  transition: color 0.2s;
+  position: relative;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+body.light-theme .mobile-sticky-btn {
+  color: #64748b;
+}
+
+.mobile-sticky-btn:hover,
+.mobile-sticky-btn.active {
+  color: #00f0ff;
+}
+
+body.light-theme .mobile-sticky-btn:hover,
+body.light-theme .mobile-sticky-btn.active {
+  color: #0284c7;
+}
+
+.mobile-sticky-btn i {
+  font-size: 17px;
+}
+
+@media (max-width: 1023px) {
+  body {
+    padding-bottom: 70px;
+  }
+}

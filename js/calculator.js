@@ -494,10 +494,16 @@
   function getQuoteSummaryString() {
     const quote = window.lastCalculatedQuote || calculateQuote();
     const elTotal = document.getElementById('calc-total-price')?.textContent || '';
+    const cloudLink = document.getElementById('calc-cloud-link')?.value.trim() || '';
+
+    let linkStr = '';
+    if (cloudLink) {
+      linkStr = `\n- Link file/bản vẽ: ${cloudLink}`;
+    }
 
     return `🔥 YÊU CẦU BÁO GIÁ IN 3D - T&T 3D STUDIO 🔥
 ----------------------------------------
-- File/Mẫu: ${quote.syncedModelName || 'File khách tự thiết kế'}
+- File/Mẫu: ${quote.syncedModelName || 'File khách tự thiết kế'}${linkStr}
 - Công nghệ: ${quote.techName}
 - Vật liệu: ${quote.matName}
 - Trọng lượng ước tính: ${quote.weight}g
