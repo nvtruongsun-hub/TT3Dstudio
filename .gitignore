@@ -14,3 +14,10 @@ $RECYCLE.BIN/
 # Temporary / Log files
 *.log
 *.tmp
+*.backup.html
+
+# Dependencies & Build Output
+node_modules/
+.next/
+out/
+
