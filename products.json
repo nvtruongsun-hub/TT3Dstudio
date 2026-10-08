@@ -1,0 +1,74 @@
+[
+  {
+    "id": "prod-1",
+    "title": "Đế WiFi 1 Chạm Thông Minh TapConnect™",
+    "category": "smart-nfc",
+    "type": "nfc",
+    "price": 109000,
+    "originalPrice": 149000,
+    "badge": "⚡ NTAG215",
+    "image": "assets/images/product-nfc-wifi.jpg",
+    "modelKey": "nfc_wifi",
+    "desc": "Khách đến quán cafe, homestay chỉ cần chạm nhẹ smartphone là kết nối WiFi tự động không cần hỏi mật khẩu. Nhựa PLA Matte cao cấp, đúc chip NFC chìm không dùng pin."
+  },
+  {
+    "id": "prod-2",
+    "title": "Bình Hoa Dập Ly Origami Watertight",
+    "category": "decor-light",
+    "type": "standard",
+    "price": 125000,
+    "originalPrice": 165000,
+    "badge": "💧 Watertight 100%",
+    "image": "assets/images/product-pleated-vase.jpg",
+    "modelKey": "pleated_vase",
+    "desc": "Tạo hình nếp gấp dập ly hiện đại như gốm sứ Bắc Âu. Ứng dụng kỹ thuật ép lớp kín khít chống rò rỉ nước tuyệt đối, cắm được cả hoa tươi và cỏ lau khô pampas."
+  },
+  {
+    "id": "prod-3",
+    "title": "Kệ Đa Năng BedSide & Desk Organizer Pro",
+    "category": "desk-setup",
+    "type": "standard",
+    "price": 199000,
+    "originalPrice": 260000,
+    "badge": "⚡ 5-in-1 Dock",
+    "image": "assets/images/product-desk-dock.jpg",
+    "modelKey": "nfc_wifi",
+    "desc": "Tổ chức bàn làm việc gọn gàng chuẩn Pinterest: Tích hợp dock đứng điện thoại, khe sạc Apple Watch, hốc AirTag chống thất lạc, khay kính mắt và rãnh bút ký."
+  },
+  {
+    "id": "prod-4",
+    "title": "Đèn Bàn Xoắn Kem Swirl Soft-Serve™",
+    "category": "decor-light",
+    "type": "standard",
+    "price": 320000,
+    "originalPrice": 420000,
+    "badge": "✨ LED 3000K Warm",
+    "image": "assets/images/product-soft-serve-lamp.jpg",
+    "modelKey": "soft_lamp",
+    "desc": "Lấy cảm hứng từ những vòng xoắn ốc kem bồng bềnh Crème Atelier phong cách Pháp. Chóa đèn tán xạ ánh sáng dịu êm chống chói mắt, kèm bóng LED ánh vàng ấm."
+  },
+  {
+    "id": "prod-5",
+    "title": "Hệ Bảng Treo Tường Module Hexa Pegboard",
+    "category": "desk-setup",
+    "type": "standard",
+    "price": 145000,
+    "originalPrice": 195000,
+    "badge": "🧩 Modular System",
+    "image": "assets/images/product-pegboard.jpg",
+    "modelKey": "nfc_wifi",
+    "desc": "Tự do sáng tạo phối màu Nordic pastel: Tặng kèm 2 móc khóa nam châm, 1 khay đựng điện thoại và 1 ống cắm bút mini. Lắp đặt dán tường siêu dính không cần khoan."
+  },
+  {
+    "id": "prod-6",
+    "title": "Bảng Tên & Chữ Cái Monogram 3D Signature",
+    "category": "desk-setup",
+    "type": "monogram",
+    "price": 135000,
+    "originalPrice": 180000,
+    "badge": "🎁 Monogram Custom",
+    "image": "assets/images/product-monogram.jpg",
+    "modelKey": "monogram",
+    "desc": "Chọn chữ cái A-Z và in tên calligraphy sắc sảo kèm linh vật dễ thương (khủng long, phi hành gia). Thích hợp làm quà sinh nhật, decor bàn học và phòng ngủ."
+  }
+]

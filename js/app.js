@@ -137,47 +137,47 @@
 
     if (!modal) return;
 
-    document.querySelectorAll('[data-order-trigger]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const card = btn.closest('[data-product-item]');
-        if (!card) return;
+    document.addEventListener('click', (e) => {
+      const btn = e.target.closest('[data-order-trigger]');
+      if (!btn) return;
+      e.preventDefault();
+      const card = btn.closest('[data-product-item]');
+      if (!card) return;
 
-        const title = card.getAttribute('data-title') || 'Sản phẩm T&T 3D';
-        const priceStr = card.getAttribute('data-price') || '129,000 đ';
-        const priceNum = parseInt(priceStr.replace(/\D/g, '')) || 129000;
-        const img = card.querySelector('img')?.src || '';
-        const prodType = card.getAttribute('data-type') || 'standard';
-        const prodCategory = card.getAttribute('data-product-category') || '';
+      const title = card.getAttribute('data-title') || 'Sản phẩm T&T 3D';
+      const priceStr = card.getAttribute('data-price') || '129,000 đ';
+      const priceNum = parseInt(priceStr.replace(/\D/g, '')) || 129000;
+      const img = card.querySelector('img')?.src || '';
+      const prodType = card.getAttribute('data-type') || 'standard';
+      const prodCategory = card.getAttribute('data-product-category') || '';
 
-        currentSelectedProduct = {
-          id: 'prod_' + Math.random().toString(36).substr(2, 6),
-          title,
-          price: priceNum,
-          img,
-          type: prodType,
-          category: prodCategory
-        };
+      currentSelectedProduct = {
+        id: 'prod_' + Math.random().toString(36).substr(2, 6),
+        title,
+        price: priceNum,
+        img,
+        type: prodType,
+        category: prodCategory
+      };
 
-        if (modalProdTitle) modalProdTitle.textContent = title;
-        if (modalProdPrice) modalProdPrice.textContent = `${priceNum.toLocaleString('vi-VN')} đ`;
-        if (modalProdImg) modalProdImg.src = img;
+      if (modalProdTitle) modalProdTitle.textContent = title;
+      if (modalProdPrice) modalProdPrice.textContent = `${priceNum.toLocaleString('vi-VN')} đ`;
+      if (modalProdImg) modalProdImg.src = img;
 
-        // Populate Customization Fields depending on product type
-        if (customOptionsContainer) {
-          if (prodType === 'nfc') {
-            renderNfcCustomizer(customOptionsContainer);
-          } else if (prodType === 'monogram') {
-            renderMonogramCustomizer(customOptionsContainer);
-          } else {
-            renderStandardCustomizer(customOptionsContainer);
-          }
+      // Populate Customization Fields depending on product type
+      if (customOptionsContainer) {
+        if (prodType === 'nfc') {
+          renderNfcCustomizer(customOptionsContainer);
+        } else if (prodType === 'monogram') {
+          renderMonogramCustomizer(customOptionsContainer);
+        } else {
+          renderStandardCustomizer(customOptionsContainer);
         }
+      }
 
-        modal.classList.remove('hidden');
-        modal.classList.add('flex');
-        document.body.style.overflow = 'hidden';
-      });
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
     });
 
     const closeModal = () => {
@@ -778,6 +778,70 @@
     });
   }
 
+  // 12. Mobile Sticky Bottom Bar Scroll Spy (PHẦN 2: Mobile UX)
+  function initMobileScrollSpy() {
+    const bar = document.getElementById('mobile-sticky-bar');
+    if (!bar) return;
+
+    const spyLinks = bar.querySelectorAll('[data-spy-target]');
+    if (!spyLinks.length) return;
+
+    const targetSections = [];
+    spyLinks.forEach(link => {
+      const targetId = link.getAttribute('data-spy-target');
+      const el = document.getElementById(targetId);
+      if (el) {
+        targetSections.push({ id: targetId, link: link, element: el });
+      }
+    });
+
+    if (!targetSections.length) return;
+
+    let ticking = false;
+    function updateActiveTab() {
+      const scrollY = window.scrollY || window.pageYOffset;
+      const offsetThreshold = scrollY + 220;
+      let currentId = null;
+
+      for (let i = targetSections.length - 1; i >= 0; i--) {
+        const item = targetSections[i];
+        if (offsetThreshold >= item.element.offsetTop) {
+          currentId = item.id;
+          break;
+        }
+      }
+
+      if (!currentId && targetSections.length > 0) {
+        currentId = targetSections[0].id;
+      }
+
+      targetSections.forEach(item => {
+        if (item.id === currentId) {
+          item.link.classList.add('active');
+        } else {
+          item.link.classList.remove('active');
+        }
+      });
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', () => {
+      if (!ticking) {
+        requestAnimationFrame(updateActiveTab);
+        ticking = true;
+      }
+    }, { passive: true });
+
+    spyLinks.forEach(link => {
+      link.addEventListener('click', () => {
+        spyLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    updateActiveTab();
+  }
+
   window.addEventListener('DOMContentLoaded', () => {
     initThemeToggle();
     syncConfigToPage();
@@ -790,6 +854,7 @@
     initFAQ();
     initContactForm();
     initScrollToTop();
+    initMobileScrollSpy();
   });
 
 })();
