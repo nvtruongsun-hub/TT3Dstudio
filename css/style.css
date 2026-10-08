@@ -456,6 +456,7 @@ body.light-theme .text-sky-400 {
 }
 
 body.light-theme .text-secondary,
+body.light-theme .text-\[\#e27d58\],
 body.light-theme .text-orange-400,
 body.light-theme .text-orange-300 {
   color: #c2410c !important; /* Warm terracotta / burnt orange */
