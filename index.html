@@ -2093,34 +2093,32 @@
     </div>
   </div>
 
-  <!-- Mobile Sticky Bottom Navigation Bar (High Conversion on Mobile) -->
-  <div class="mobile-sticky-bar lg:hidden">
-    <a href="#store" class="mobile-sticky-btn">
+  <!-- Mobile Sticky Bottom Navigation Bar (PHẦN 2: 4 Tabs & Scroll Spy) -->
+  <nav id="mobile-sticky-bar" class="mobile-sticky-bar" aria-label="Mobile Navigation">
+    <a href="#store" class="mobile-sticky-btn active" data-spy-target="store">
       <i class="fa-solid fa-store"></i>
-      <span>Sản Phẩm</span>
+      <span>Cửa Hàng</span>
     </a>
-    <a href="#calculator" class="mobile-sticky-btn">
-      <i class="fa-solid fa-calculator text-cyan-400"></i>
+    <a href="#viewer-section" class="mobile-sticky-btn" data-spy-target="viewer-section">
+      <i class="fa-solid fa-cube"></i>
+      <span>Xem Mẫu 3D</span>
+    </a>
+    <a href="#calculator" class="mobile-sticky-btn" data-spy-target="calculator">
+      <i class="fa-solid fa-calculator"></i>
       <span>Báo Giá In</span>
     </a>
-    <button data-open-cart class="mobile-sticky-btn">
-      <div class="relative">
-        <i class="fa-solid fa-cart-shopping"></i>
-        <span class="cart-badge-count cart-badge hidden">0</span>
-      </div>
-      <span>Giỏ Hàng</span>
-    </button>
-    <a href="https://zalo.me/0986888333" target="_blank" class="mobile-sticky-btn text-blue-400">
+    <a href="https://zalo.me/0986888333?text=Ch%C3%A0o%20T%26T%203D%20Studio%2C%20m%C3%ACnh%20c%E1%BA%A7n%20t%C6%B0%20v%E1%BA%A5n%20s%E1%BA%A3n%20ph%E1%BA%A9m%20v%C3%A0%20in%203D" target="_blank" class="mobile-sticky-btn mobile-sticky-cta">
       <i class="fa-solid fa-comment-dots"></i>
-      <span>Zalo Xưởng</span>
+      <span>Tư Vấn Zalo</span>
     </a>
-  </div>
+  </nav>
 
   <!-- Scripts -->
   <script src="js/config.js"></script>
   <script src="js/viewer3d.js"></script>
   <script src="js/calculator.js"></script>
   <script src="js/cart.js"></script>
+  <script src="js/products-manager.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
