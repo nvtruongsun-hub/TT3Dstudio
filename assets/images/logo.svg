@@ -1,171 +1,257 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 520" width="100%" height="100%">
   <defs>
-    <!-- Soft Ambient Ground Shadow -->
-    <radialGradient id="ambientShadow" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.18" />
-      <stop offset="50%" stop-color="#ff6b00" stop-opacity="0.08" />
-      <stop offset="100%" stop-color="#000000" stop-opacity="0" />
-    </radialGradient>
-
-    <!-- Cyan Top Facet Gradients -->
-    <linearGradient id="cyanTopLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0284c7" />
-    </linearGradient>
-
-    <linearGradient id="cyanTopRight" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="60%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0369a1" />
-    </linearGradient>
-
-    <!-- Side Facet Gradients (Cyan to Ocean Teal) -->
-    <linearGradient id="cyanSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0891b2" />
-    </linearGradient>
-
-    <linearGradient id="cyanSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7" />
-      <stop offset="100%" stop-color="#0f172a" />
-    </linearGradient>
-
-    <!-- Warm Sunset Coral Gradients for Stems -->
-    <linearGradient id="sunsetStemLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="25%" stop-color="#fb923c" />
-      <stop offset="60%" stop-color="#ff6b00" />
-      <stop offset="100%" stop-color="#ea580c" />
-    </linearGradient>
-
-    <linearGradient id="sunsetStemRight" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7" />
-      <stop offset="30%" stop-color="#f97316" />
-      <stop offset="70%" stop-color="#ea580c" />
-      <stop offset="100%" stop-color="#c2410c" />
-    </linearGradient>
-
-    <!-- Ampersand 3D Gradients -->
-    <linearGradient id="ampersandTop" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="100%" stop-color="#00f0ff" />
-    </linearGradient>
-
-    <linearGradient id="ampersandBody" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" />
-      <stop offset="45%" stop-color="#0284c7" />
-      <stop offset="70%" stop-color="#fb923c" />
-      <stop offset="100%" stop-color="#ff6b00" />
-    </linearGradient>
-
-    <linearGradient id="ampersandBottom" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff8f3d" />
-      <stop offset="60%" stop-color="#ff6b00" />
-      <stop offset="100%" stop-color="#e11d48" />
-    </linearGradient>
-
-    <!-- Drop Shadow Filter -->
-    <filter id="softGlow" x="-20%" y="-20%" width="140%" height="140%">
-      <feGaussianBlur stdDeviation="8" result="blur" />
-      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    <!-- Soft Realistic Ambient Drop Shadows -->
+    <filter id="tactileShadow" x="-25%" y="-25%" width="150%" height="150%">
+      <feDropShadow dx="3" dy="12" stdDeviation="14" flood-color="#000000" flood-opacity="0.32" />
+      <feDropShadow dx="1" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.22" />
     </filter>
+
+    <filter id="goldGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feDropShadow dx="2" dy="10" stdDeviation="12" flood-color="#b8860b" flood-opacity="0.28" />
+      <feDropShadow dx="1" dy="3" stdDeviation="3" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+
+    <!-- LEFT "T": Nordic Sage / Forest Ceramic Gradients -->
+    <linearGradient id="sageMatte" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#558679" />
+      <stop offset="30%" stop-color="#467366" />
+      <stop offset="70%" stop-color="#3b6256" />
+      <stop offset="100%" stop-color="#2c4d43" />
+    </linearGradient>
+
+    <linearGradient id="sageBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45" />
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.1" />
+      <stop offset="85%" stop-color="#000000" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45" />
+    </linearGradient>
+
+    <!-- RIGHT "T": Warm Terracotta / Tuscan Clay Gradients -->
+    <linearGradient id="terracottaMatte" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e27d58" />
+      <stop offset="30%" stop-color="#d06842" />
+      <stop offset="70%" stop-color="#be5833" />
+      <stop offset="100%" stop-color="#9d4220" />
+    </linearGradient>
+
+    <linearGradient id="terracottaBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.45" />
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.1" />
+      <stop offset="85%" stop-color="#000000" stop-opacity="0.1" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.45" />
+    </linearGradient>
+
+    <!-- CENTER "&": Radiant Brushed Champagne Gold / Brass Gradients -->
+    <linearGradient id="champagneGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8db" />
+      <stop offset="20%" stop-color="#ecd189" />
+      <stop offset="45%" stop-color="#d4af37" />
+      <stop offset="70%" stop-color="#c1992e" />
+      <stop offset="85%" stop-color="#ecd189" />
+      <stop offset="100%" stop-color="#9a7318" />
+    </linearGradient>
+
+    <linearGradient id="goldSpecular" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.75" />
+      <stop offset="35%" stop-color="#fef3c7" stop-opacity="0.3" />
+      <stop offset="70%" stop-color="#78350f" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#451a03" stop-opacity="0.6" />
+    </linearGradient>
+
+    <radialGradient id="goldRadialSheen" cx="45%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5" />
+      <stop offset="50%" stop-color="#d4af37" stop-opacity="0" />
+      <stop offset="100%" stop-color="#78350f" stop-opacity="0.3" />
+    </radialGradient>
   </defs>
 
-  <!-- Ambient Ground Shadow -->
-  <ellipse cx="256" cy="360" rx="170" ry="46" fill="url(#ambientShadow)" />
-
   <!-- ===================================================================
-       ISOMETRIC MONOGRAM: TWO "T" PRISMS & INTERLOCKING AMPERSAND "&"
+       1. SCULPTURAL MONOGRAM: SAGE T + CHAMPAGNE GOLD & + TERRACOTTA T
        =================================================================== -->
-  <g id="isometric-monogram" transform="translate(0, -10)">
+  <g id="brand-monogram" transform="translate(0, 15)">
 
-    <!-- BACK LEFT T-STEM (Sunset orange-coral vertical column) -->
-    <g id="left-t-stem">
-      <!-- Front-Left Face -->
-      <path d="M 172 170 L 212 192 L 212 284 L 172 262 Z" fill="url(#sunsetStemLeft)" />
-      <!-- Front-Right Face -->
-      <path d="M 212 192 L 232 180 L 232 272 L 212 284 Z" fill="#c2410c" />
-    </g>
+    <!-- LEFT LETTER "T" (Nordic Sage Ceramic) -->
+    <g id="left-t" filter="url(#tactileShadow)">
+      <!-- Combined 'T' geometry with smooth micro-rounded edges -->
+      <path d="M 90 84 
+               C 90 75 97 68 106 68 
+               L 262 68 
+               C 271 68 278 75 278 84 
+               L 278 116 
+               C 278 125 271 132 262 132 
+               L 204 132 
+               L 204 322 
+               C 204 331 197 338 188 338 
+               L 156 338 
+               C 147 338 140 331 140 322 
+               L 140 132 
+               L 106 132 
+               C 97 132 90 125 90 116 
+               Z" 
+            fill="url(#sageMatte)" />
 
-    <!-- BACK RIGHT T-STEM (Sunset orange-coral vertical column) -->
-    <g id="right-t-stem">
-      <!-- Front-Left Face -->
-      <path d="M 280 180 L 300 192 L 300 284 L 280 272 Z" fill="#ea580c" />
-      <!-- Front-Right Face -->
-      <path d="M 300 192 L 340 170 L 340 262 L 300 284 Z" fill="url(#sunsetStemRight)" />
-    </g>
-
-    <!-- LEFT "T" CROSSBAR (Prism angled up to center peak) -->
-    <g id="left-t-crossbar">
-      <!-- Top Surface -->
-      <polygon points="130,172 214,124 250,144 166,192" fill="url(#cyanTopLeft)" />
-      <!-- Left Outer Face -->
-      <polygon points="130,172 166,192 166,220 130,200" fill="url(#cyanSideLeft)" />
-      <!-- Front Underside / Inner Face -->
-      <polygon points="166,192 250,144 250,172 166,220" fill="url(#cyanSideRight)" />
-    </g>
-
-    <!-- RIGHT "T" CROSSBAR (Prism angled up to center peak) -->
-    <g id="right-t-crossbar">
-      <!-- Top Surface -->
-      <polygon points="262,144 298,124 382,172 346,192" fill="url(#cyanTopRight)" />
-      <!-- Right Outer Face -->
-      <polygon points="346,192 382,172 382,200 346,220" fill="url(#cyanSideRight)" />
-      <!-- Front Underside / Inner Face -->
-      <polygon points="262,144 346,192 346,220 262,172" fill="url(#cyanSideLeft)" />
-    </g>
-
-    <!-- INTERLOCKING CENTRAL AMPERSAND "&" (Smooth 3D Torus Ribbon) -->
-    <g id="ampersand-interlock">
-      <!-- Bottom Outer Ribbon Loop (Warm Coral) -->
-      <path d="M 226 250 C 206 270 206 312 238 328 C 274 344 316 318 316 286 C 316 262 296 244 274 234 Z" 
-            fill="url(#ampersandBottom)" />
+      <!-- Ceramic Chamfer & Light Bevel Overlay -->
+      <path d="M 90 84 
+               C 90 75 97 68 106 68 
+               L 262 68 
+               C 271 68 278 75 278 84 
+               L 278 116 
+               C 278 125 271 132 262 132 
+               L 204 132 
+               L 204 322 
+               C 204 331 197 338 188 338 
+               L 156 338 
+               C 147 338 140 331 140 322 
+               L 140 132 
+               L 106 132 
+               C 97 132 90 125 90 116 
+               Z" 
+            fill="url(#sageBevel)" />
       
-      <!-- Bottom Inner Cutout (Shadow depth) -->
-      <path d="M 238 274 C 230 286 232 304 246 312 C 262 320 284 310 286 294 C 288 280 274 268 258 264 Z" 
-            fill="#991b1b" opacity="0.35" />
-
-      <!-- Upper Loop (Electric Cyan to Coral transition) -->
-      <path d="M 274 234 C 256 226 234 204 234 180 C 234 154 254 138 274 150 C 294 162 300 188 284 212 L 324 254 C 334 264 340 276 340 282 L 308 300 L 274 234 Z" 
-            fill="url(#ampersandBody)" />
-
-      <!-- Top Loop Highlight Cap -->
-      <ellipse cx="266" cy="172" rx="18" ry="24" transform="rotate(-25 266 172)" fill="url(#ampersandTop)" />
-      <ellipse cx="266" cy="172" rx="8" ry="12" transform="rotate(-25 266 172)" fill="#0369a1" opacity="0.8" />
+      <!-- Top edge micro-reflection highlight -->
+      <line x1="106" y1="70" x2="262" y2="70" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.65" />
     </g>
 
-    <!-- High-Precision Chamfer Highlights -->
-    <line x1="130" y1="172" x2="214" y2="124" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
-    <line x1="298" y1="124" x2="382" y2="172" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" opacity="0.6" />
-    <line x1="166" y1="192" x2="250" y2="144" stroke="#e0f2fe" stroke-width="1.8" opacity="0.5" />
-    <line x1="262" y1="144" x2="346" y2="192" stroke="#e0f2fe" stroke-width="1.8" opacity="0.5" />
+    <!-- RIGHT LETTER "T" (Architectural Terracotta Clay) -->
+    <g id="right-t" filter="url(#tactileShadow)">
+      <!-- Combined 'T' geometry with smooth micro-rounded edges -->
+      <path d="M 322 84 
+               C 322 75 329 68 338 68 
+               L 494 68 
+               C 503 68 510 75 510 84 
+               L 510 116 
+               C 510 125 503 132 494 132 
+               L 436 132 
+               L 436 322 
+               C 436 331 429 338 420 338 
+               L 388 338 
+               C 379 338 372 331 372 322 
+               L 372 132 
+               L 338 132 
+               C 329 132 322 125 322 116 
+               Z" 
+            fill="url(#terracottaMatte)" />
+
+      <!-- Clay Chamfer & Light Bevel Overlay -->
+      <path d="M 322 84 
+               C 322 75 329 68 338 68 
+               L 494 68 
+               C 503 68 510 75 510 84 
+               L 510 116 
+               C 510 125 503 132 494 132 
+               L 436 132 
+               L 436 322 
+               C 436 331 429 338 420 338 
+               L 388 338 
+               C 379 338 372 331 372 322 
+               L 372 132 
+               L 338 132 
+               C 329 132 322 125 322 116 
+               Z" 
+            fill="url(#terracottaBevel)" />
+
+      <!-- Top edge micro-reflection highlight -->
+      <line x1="338" y1="70" x2="494" y2="70" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+    </g>
+
+    <!-- CENTER AMPERSAND "&" (Brushed Champagne Gold & Beveled Brass) -->
+    <g id="center-ampersand" filter="url(#goldGlow)">
+      <!-- Outer Ampersand Body with Precision Curvature -->
+      <path d="M 314 266 
+               C 334 246 348 226 348 198 
+               C 348 162 324 138 290 138 
+               C 260 138 240 158 240 188 
+               C 240 216 260 240 282 258 
+               L 252 292 
+               C 230 274 214 248 214 216 
+               C 214 200 220 186 226 174 
+               C 224 172 218 174 212 178 
+               C 198 192 190 214 190 238 
+               C 190 292 232 342 292 342 
+               C 328 342 358 322 368 290 
+               L 388 310 
+               C 394 316 404 316 408 310 
+               L 418 296 
+               C 422 290 420 280 412 274 
+               L 366 238 
+               C 356 230 344 234 340 244 
+               L 336 254 
+               C 328 274 314 286 292 286 
+               C 270 286 254 274 254 256 
+               C 254 242 264 230 278 218 
+               Z 
+               M 292 168 
+               C 308 168 318 180 318 196 
+               C 318 212 308 226 292 238 
+               C 280 224 270 210 270 196 
+               C 270 180 280 168 292 168 
+               Z" 
+            fill="url(#champagneGold)" />
+
+      <!-- Metallic Bevel & Radial Sheen -->
+      <path d="M 314 266 
+               C 334 246 348 226 348 198 
+               C 348 162 324 138 290 138 
+               C 260 138 240 158 240 188 
+               C 240 216 260 240 282 258 
+               L 252 292 
+               C 230 274 214 248 214 216 
+               C 214 200 220 186 226 174 
+               C 224 172 218 174 212 178 
+               C 198 192 190 214 190 238 
+               C 190 292 232 342 292 342 
+               C 328 342 358 322 368 290 
+               L 388 310 
+               C 394 316 404 316 408 310 
+               L 418 296 
+               C 422 290 420 280 412 274 
+               L 366 238 
+               C 356 230 344 234 340 244 
+               L 336 254 
+               C 328 274 314 286 292 286 
+               C 270 286 254 274 254 256 
+               C 254 242 264 230 278 218 
+               Z 
+               M 292 168 
+               C 308 168 318 180 318 196 
+               C 318 212 308 226 292 238 
+               C 280 224 270 210 270 196 
+               C 270 180 280 168 292 168 
+               Z" 
+            fill="url(#goldSpecular)" 
+            stroke="url(#goldSpecular)" 
+            stroke-width="1.2" />
+
+      <!-- Radial Brushed Metallic Sheen Circle -->
+      <circle cx="292" cy="240" r="90" fill="url(#goldRadialSheen)" pointer-events="none" />
+    </g>
+
   </g>
 
   <!-- ===================================================================
-       MODERN SLEEK GEOMETRIC TYPOGRAPHY: "T&T 3D STUDIO"
+       2. REFINED GEOMETRIC TYPOGRAPHY: T&T 3D STUDIO
        =================================================================== -->
-  <g id="brand-typography" transform="translate(0, 10)">
-    <!-- Primary Bold Monogram Text: T&T -->
-    <text x="256" y="420" 
+  <g id="brand-typography" transform="translate(0, 30)">
+    <!-- Primary Brand Wordmark: T&T 3D STUDIO -->
+    <text x="300" y="440" 
           text-anchor="middle" 
-          font-family="'Plus Jakarta Sans', 'Space Grotesk', -apple-system, sans-serif" 
+          font-family="'Plus Jakarta Sans', 'Inter', -apple-system, sans-serif" 
           font-weight="800" 
-          font-size="46" 
-          letter-spacing="2" 
-          fill="#ffffff">
-      T<tspan fill="#00f0ff">&amp;</tspan>T
+          font-size="34" 
+          letter-spacing="5" 
+          fill="#f8fafc">
+      T&amp;T 3D STUDIO
     </text>
 
-    <!-- Subtitle: 3D STUDIO -->
-    <text x="256" y="460" 
+    <!-- Refined Sub-Badge / Tagline -->
+    <text x="300" y="472" 
           text-anchor="middle" 
-          font-family="'Plus Jakarta Sans', 'Space Grotesk', -apple-system, sans-serif" 
-          font-weight="700" 
-          font-size="20" 
-          letter-spacing="8" 
-          fill="#ff6b00">
-      3D STUDIO
+          font-family="'JetBrains Mono', monospace" 
+          font-weight="500" 
+          font-size="12" 
+          letter-spacing="6" 
+          fill="#d4af37">
+      BESPOKE 3D CRAFTS &amp; DECOR
     </text>
   </g>
 </svg>

@@ -1,83 +1,81 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 460 320" width="100%" height="100%">
   <defs>
-    <!-- Cyan Top Facet Gradients -->
-    <linearGradient id="favCyanTopLeft" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="50%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0284c7" />
+    <!-- Ambient Drop Shadows -->
+    <filter id="favTactileShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="8" stdDeviation="8" flood-color="#000000" flood-opacity="0.38" />
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.25" />
+    </filter>
+
+    <filter id="favGoldGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="2" dy="6" stdDeviation="6" flood-color="#b8860b" flood-opacity="0.35" />
+      <feDropShadow dx="1" dy="2" stdDeviation="2" flood-color="#000000" flood-opacity="0.4" />
+    </filter>
+
+    <!-- LEFT "T": Nordic Sage / Forest Ceramic Gradients -->
+    <linearGradient id="favSageMatte" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#558679" />
+      <stop offset="35%" stop-color="#467366" />
+      <stop offset="70%" stop-color="#3b6256" />
+      <stop offset="100%" stop-color="#2c4d43" />
     </linearGradient>
 
-    <linearGradient id="favCyanTopRight" x1="100%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="60%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0369a1" />
+    <linearGradient id="favSageBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.08" />
+      <stop offset="85%" stop-color="#000000" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </linearGradient>
 
-    <!-- Side Facet Gradients -->
-    <linearGradient id="favCyanSideLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" />
-      <stop offset="100%" stop-color="#0891b2" />
+    <!-- RIGHT "T": Warm Terracotta Clay Gradients -->
+    <linearGradient id="favTerracottaMatte" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#e27d58" />
+      <stop offset="35%" stop-color="#d06842" />
+      <stop offset="70%" stop-color="#be5833" />
+      <stop offset="100%" stop-color="#9d4220" />
     </linearGradient>
 
-    <linearGradient id="favCyanSideRight" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7" />
-      <stop offset="100%" stop-color="#0f172a" />
+    <linearGradient id="favTerracottaBevel" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.4" />
+      <stop offset="15%" stop-color="#ffffff" stop-opacity="0.08" />
+      <stop offset="85%" stop-color="#000000" stop-opacity="0.08" />
+      <stop offset="100%" stop-color="#000000" stop-opacity="0.4" />
     </linearGradient>
 
-    <!-- Warm Sunset Coral Gradients for Stems -->
-    <linearGradient id="favSunsetStemLeft" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#38bdf8" />
-      <stop offset="30%" stop-color="#fb923c" />
-      <stop offset="70%" stop-color="#ff6b00" />
-      <stop offset="100%" stop-color="#ea580c" />
+    <!-- CENTER "&": Brushed Champagne Gold / Brass Gradients -->
+    <linearGradient id="favChampagneGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fff8db" />
+      <stop offset="25%" stop-color="#ecd189" />
+      <stop offset="50%" stop-color="#d4af37" />
+      <stop offset="75%" stop-color="#c1992e" />
+      <stop offset="100%" stop-color="#9a7318" />
     </linearGradient>
 
-    <linearGradient id="favSunsetStemRight" x1="0%" y1="0%" x2="0%" y2="100%">
-      <stop offset="0%" stop-color="#0284c7" />
-      <stop offset="30%" stop-color="#f97316" />
-      <stop offset="70%" stop-color="#ea580c" />
-      <stop offset="100%" stop-color="#c2410c" />
-    </linearGradient>
-
-    <!-- Ampersand 3D Gradients -->
-    <linearGradient id="favAmpersandBody" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#00f0ff" />
-      <stop offset="45%" stop-color="#0284c7" />
-      <stop offset="70%" stop-color="#fb923c" />
-      <stop offset="100%" stop-color="#ff6b00" />
-    </linearGradient>
-
-    <linearGradient id="favAmpersandBottom" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#ff8f3d" />
-      <stop offset="60%" stop-color="#ff6b00" />
-      <stop offset="100%" stop-color="#e11d48" />
+    <linearGradient id="favGoldSpecular" x1="30%" y1="0%" x2="70%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8" />
+      <stop offset="50%" stop-color="#78350f" stop-opacity="0.2" />
+      <stop offset="100%" stop-color="#451a03" stop-opacity="0.6" />
     </linearGradient>
   </defs>
 
-  <g transform="translate(0, -12) scale(0.96) translate(5, 5)">
-    <!-- LEFT T-STEM -->
-    <path d="M 62 80 L 102 102 L 102 194 L 62 172 Z" fill="url(#favSunsetStemLeft)" />
-    <path d="M 102 102 L 122 90 L 122 182 L 102 194 Z" fill="#c2410c" />
+  <g transform="translate(-75, -45)">
+    <!-- LEFT LETTER "T" -->
+    <g filter="url(#favTactileShadow)">
+      <path d="M 90 84 C 90 75 97 68 106 68 L 262 68 C 271 68 278 75 278 84 L 278 116 C 278 125 271 132 262 132 L 204 132 L 204 322 C 204 331 197 338 188 338 L 156 338 C 147 338 140 331 140 322 L 140 132 L 106 132 C 97 132 90 125 90 116 Z" fill="url(#favSageMatte)" />
+      <path d="M 90 84 C 90 75 97 68 106 68 L 262 68 C 271 68 278 75 278 84 L 278 116 C 278 125 271 132 262 132 L 204 132 L 204 322 C 204 331 197 338 188 338 L 156 338 C 147 338 140 331 140 322 L 140 132 L 106 132 C 97 132 90 125 90 116 Z" fill="url(#favSageBevel)" />
+      <line x1="106" y1="70" x2="262" y2="70" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.65" />
+    </g>
 
-    <!-- RIGHT T-STEM -->
-    <path d="M 148 90 L 168 102 L 168 194 L 148 182 Z" fill="#ea580c" />
-    <path d="M 168 102 L 208 80 L 208 172 L 168 194 Z" fill="url(#favSunsetStemRight)" />
+    <!-- RIGHT LETTER "T" -->
+    <g filter="url(#favTactileShadow)">
+      <path d="M 322 84 C 322 75 329 68 338 68 L 494 68 C 503 68 510 75 510 84 L 510 116 C 510 125 503 132 494 132 L 436 132 L 436 322 C 436 331 429 338 420 338 L 388 338 C 379 338 372 331 372 322 L 372 132 L 338 132 C 329 132 322 125 322 116 Z" fill="url(#favTerracottaMatte)" />
+      <path d="M 322 84 C 322 75 329 68 338 68 L 494 68 C 503 68 510 75 510 84 L 510 116 C 510 125 503 132 494 132 L 436 132 L 436 322 C 436 331 429 338 420 338 L 388 338 C 379 338 372 331 372 322 L 372 132 L 338 132 C 329 132 322 125 322 116 Z" fill="url(#favTerracottaBevel)" />
+      <line x1="338" y1="70" x2="494" y2="70" stroke="#ffffff" stroke-width="2" stroke-linecap="round" opacity="0.6" />
+    </g>
 
-    <!-- LEFT "T" CROSSBAR -->
-    <polygon points="20,82 104,34 140,54 56,102" fill="url(#favCyanTopLeft)" />
-    <polygon points="20,82 56,102 56,130 20,110" fill="url(#favCyanSideLeft)" />
-    <polygon points="56,102 140,54 140,82 56,130" fill="url(#favCyanSideRight)" />
-
-    <!-- RIGHT "T" CROSSBAR -->
-    <polygon points="152,54 188,34 272,82 236,102" fill="url(#favCyanTopRight)" />
-    <polygon points="236,102 272,82 272,110 236,130" fill="url(#favCyanSideRight)" />
-    <polygon points="152,54 236,102 236,130 152,82" fill="url(#favCyanSideLeft)" />
-
-    <!-- INTERLOCKING AMPERSAND "&" -->
-    <path d="M 116 160 C 96 180 96 222 128 238 C 164 254 206 228 206 196 C 206 172 186 154 164 144 Z" fill="url(#favAmpersandBottom)" />
-    <path d="M 128 184 C 120 196 122 214 136 222 C 152 230 174 220 176 204 C 178 190 164 178 148 174 Z" fill="#991b1b" opacity="0.35" />
-    <path d="M 164 144 C 146 136 124 114 124 90 C 124 64 144 48 164 60 C 184 72 190 98 174 122 L 214 164 C 224 174 230 186 230 192 L 198 210 L 164 144 Z" fill="url(#favAmpersandBody)" />
-    <ellipse cx="156" cy="82" rx="18" ry="24" transform="rotate(-25 156 82)" fill="#38bdf8" />
-    <ellipse cx="156" cy="82" rx="8" ry="12" transform="rotate(-25 156 82)" fill="#0369a1" opacity="0.8" />
+    <!-- CENTER AMPERSAND "&" -->
+    <g filter="url(#favGoldGlow)">
+      <path d="M 314 266 C 334 246 348 226 348 198 C 348 162 324 138 290 138 C 260 138 240 158 240 188 C 240 216 260 240 282 258 L 252 292 C 230 274 214 248 214 216 C 214 200 220 186 226 174 C 224 172 218 174 212 178 C 198 192 190 214 190 238 C 190 292 232 342 292 342 C 328 342 358 322 368 290 L 388 310 C 394 316 404 316 408 310 L 418 296 C 422 290 420 280 412 274 L 366 238 C 356 230 344 234 340 244 L 336 254 C 328 274 314 286 292 286 C 270 286 254 274 254 256 C 254 242 264 230 278 218 Z M 292 168 C 308 168 318 180 318 196 C 318 212 308 226 292 238 C 280 224 270 210 270 196 C 270 180 280 168 292 168 Z" fill="url(#favChampagneGold)" />
+      <path d="M 314 266 C 334 246 348 226 348 198 C 348 162 324 138 290 138 C 260 138 240 158 240 188 C 240 216 260 240 282 258 L 252 292 C 230 274 214 248 214 216 C 214 200 220 186 226 174 C 224 172 218 174 212 178 C 198 192 190 214 190 238 C 190 292 232 342 292 342 C 328 342 358 322 368 290 L 388 310 C 394 316 404 316 408 310 L 418 296 C 422 290 420 280 412 274 L 366 238 C 356 230 344 234 340 244 L 336 254 C 328 274 314 286 292 286 C 270 286 254 274 254 256 C 254 242 264 230 278 218 Z M 292 168 C 308 168 318 180 318 196 C 318 212 308 226 292 238 C 280 224 270 210 270 196 C 270 180 280 168 292 168 Z" fill="url(#favGoldSpecular)" stroke="url(#favGoldSpecular)" stroke-width="1.2" />
+    </g>
   </g>
 </svg>
