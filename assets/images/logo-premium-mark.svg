@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-labelledby="title desc">
+  <title id="title">T&amp;T Studio mark</title>
+  <desc id="desc">Biểu tượng khối lập phương tối giản, gợi liên tưởng đến thiết kế và in 3D.</desc>
+  <g fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M48 8 86 30v44L48 96 10 74V30L48 8Z" stroke="#34483E" stroke-width="3.5"/>
+    <path d="m10 30 38 22 38-22M48 52v44" stroke="#34483E" stroke-width="3.5"/>
+    <path d="m10 30 38 22" stroke="#B66D50" stroke-width="3.5"/>
+  </g>
+</svg>

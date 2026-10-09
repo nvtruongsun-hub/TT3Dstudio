@@ -4,8 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>T&T 3D Studio | Bảng Điều Khiển Quản Trị (Admin Portal)</title>
-  <link rel="icon" type="image/svg+xml" href="assets/images/favicon.svg">
-  <link rel="alternate icon" type="image/png" href="assets/images/favicon.png">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo-premium-mark.svg">
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -26,13 +25,13 @@
               400: '#2dd4bf',
               500: '#14b8a6',
               600: '#0d9488',
-              cyan: '#00f0ff',
-              accent: '#ff6b00'
+              cyan: '#FF5C00',
+              accent: '#FF5C00'
             },
             dark: {
-              950: '#07090e',
-              900: '#0b0f19',
-              850: '#101726',
+              950: '#0B0C0E',
+              900: '#14161C',
+              850: '#1D2028',
               800: '#172033',
               700: '#1e293b',
               600: '#334155'
@@ -52,22 +51,22 @@
 
   <style>
     :root {
-      --bg-dark: #07090e;
-      --card-dark: #0f172a;
-      --border-dark: #1e293b;
-      --primary: #00f0ff;
-      --accent: #ff6b00;
+      --bg-dark: #0B0C0E;
+      --card-dark: #14161C;
+      --border-dark: rgba(255, 255, 255, 0.08);
+      --primary: #FF5C00;
+      --accent: #FF5C00;
     }
 
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: var(--bg-dark);
-      color: #f1f5f9;
+      color: #EDEDED;
       min-height: 100vh;
     }
 
     .glass-card {
-      background: rgba(15, 23, 42, 0.82);
+      background: rgba(20, 22, 28, 0.85);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
       border: 1px solid rgba(255, 255, 255, 0.08);
@@ -79,22 +78,23 @@
     }
 
     .sidebar-link.active {
-      background: linear-gradient(90deg, rgba(0, 240, 255, 0.15) 0%, rgba(0, 240, 255, 0.03) 100%);
-      border-left: 3px solid #00f0ff;
-      color: #00f0ff;
+      background: linear-gradient(90deg, rgba(255, 92, 0, 0.15) 0%, rgba(255, 92, 0, 0.03) 100%);
+      border-left: 3px solid #FF5C00;
+      color: #FF5C00;
       font-weight: 700;
     }
 
     .btn-cyan-primary {
-      background: linear-gradient(135deg, #00f0ff 0%, #0284c7 100%);
-      color: #07090e;
+      background: #FF5C00;
+      color: #FFFFFF;
       font-weight: 700;
       transition: all 0.2s ease;
-      box-shadow: 0 4px 16px rgba(0, 240, 255, 0.25);
+      box-shadow: 0 4px 16px rgba(255, 92, 0, 0.25);
     }
 
     .btn-cyan-primary:hover {
-      box-shadow: 0 6px 20px rgba(0, 240, 255, 0.4);
+      background: #E05200;
+      box-shadow: 0 6px 20px rgba(255, 92, 0, 0.4);
       transform: translateY(-1px);
     }
 
@@ -169,13 +169,8 @@
       <!-- Brand Logo Header -->
       <div class="p-5 border-b border-slate-800/80 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <div class="h-10 w-auto flex items-center justify-center shrink-0">
-            <img src="assets/images/logo-3d-transparent.png" onerror="this.src='assets/images/favicon.png';" alt="Logo" class="h-9 w-auto object-contain">
-          </div>
-          <div>
-            <h1 class="text-sm font-extrabold text-white tracking-wide">T&amp;T <span class="text-[#e27d58]">3D Studio</span></h1>
-            <p class="text-[10px] font-mono text-cyan-400">Admin Portal v2.6</p>
-          </div>
+          <img src="assets/images/logo-premium-dark.svg" alt="T&amp;T 3D Studio" class="w-[158px] h-auto object-contain object-left shrink-0">
+          <span class="text-[9px] font-mono tracking-wide text-slate-400">ADMIN</span>
         </div>
 
         <!-- Mobile Menu Toggle Button -->
