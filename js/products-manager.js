@@ -1,6 +1,7 @@
 /**
- * T&T 3D Studio - Products Catalog & Store Renderer Manager
- * Hỗ trợ Serverless Catalog qua localStorage & products.json
+ * T&T 3D Studio - Modern Minimalist Products Catalog & Store Renderer Manager
+ * Benchmark: Bambu Lab & Grovemade E-Commerce Standards
+ * (Sheet 3: ID-13, ID-14, ID-15, ID-16, ID-18, ID-19, ID-34, ID-35)
  */
 
 (function () {
@@ -9,7 +10,7 @@
   const STORAGE_KEY = 'tt_products';
   const DEFAULT_ZALO_PHONE = '0986888333';
 
-  // Danh mục sản phẩm mặc định chuẩn Modern Minimalist Studio
+  // Danh mục 6 sản phẩm chủ lực chuẩn Modern Industrial Craft
   const DEFAULT_PRODUCTS = [
     {
       id: 'prod-1',
@@ -21,7 +22,28 @@
       badge: '⚡ NTAG215',
       image: 'assets/images/product-nfc-wifi.jpg',
       modelKey: 'nfc_wifi',
-      desc: 'Khách đến quán cafe, homestay chỉ cần chạm nhẹ smartphone là kết nối WiFi tự động không cần hỏi mật khẩu. Nhựa PLA Matte cao cấp, đúc chip NFC chìm không dùng pin.'
+      desc: 'Chạm smartphone kết nối WiFi & mở Menu tự động không cần hỏi mật khẩu. Nhựa Bio-PLA Matte cao cấp đúc chìm chip NFC chống nước tuyệt đối, không dùng pin.',
+      headlineBenefit: 'Tăng trải nghiệm khách gọi món & kết nối chỉ với 1 cú chạm điện thoại',
+      specLine: '📐 82 x 64 x 95 mm | 90g | Bio-PLA Matte',
+      specs: {
+        dimensions: '82 x 64 x 95 mm',
+        weight: '90g',
+        layer: '0.16mm (Lớp in siêu mịn)',
+        material: 'Bio-PLA Matte nguyên sinh',
+        nfc: 'Chip NTAG215 đúc chìm (iOS & Android)',
+        warranty: '12 tháng đổi mới 1-1'
+      },
+      colors: [
+        { id: 'obsidian', name: 'Đen Obsidian', hex: '#26282B' },
+        { id: 'white', name: 'Trắng Sứ Nordic', hex: '#F5F2EB' },
+        { id: 'terracotta', name: 'Cam Đất Mờ', hex: '#C85A32' },
+        { id: 'walnut', name: 'Gỗ Walnut Sẫm', hex: '#4A3525' }
+      ],
+      materials: [
+        { id: 'pla_plus', name: 'PLA+ Nguyên Sinh', label: 'PLA+ Nguyên Sinh (Mờ mịn)', priceModifier: 0, desc: 'Bề mặt mờ nhám siêu mịn, chống bám vân tay' },
+        { id: 'wood_pla', name: 'Wood Composite', label: 'Wood Composite (Mộc ấm cúng)', priceModifier: 20000, desc: 'Chứa 30% bột gỗ tự nhiên, cảm giác thớ gỗ thật' },
+        { id: 'petg', name: 'PETG Ngoài Trời', label: 'PETG Chịu Nhiệt Ngoài Trời', priceModifier: 15000, desc: 'Chịu nhiệt và nắng mưa bàn cafe ngoài trời' }
+      ]
     },
     {
       id: 'prod-2',
@@ -33,7 +55,26 @@
       badge: '💧 Watertight 100%',
       image: 'assets/images/product-pleated-vase.jpg',
       modelKey: 'pleated_vase',
-      desc: 'Tạo hình nếp gấp dập ly hiện đại như gốm sứ Bắc Âu. Ứng dụng kỹ thuật ép lớp kín khít chống rò rỉ nước tuyệt đối, cắm được cả hoa tươi và cỏ lau khô pampas.'
+      desc: 'Nếp gấp dập ly hiện đại lấy cảm hứng từ gốm sứ Bắc Âu. Ứng dụng kỹ thuật ép lớp kín khít chống rò rỉ nước tuyệt đối, an toàn cắm hoa tươi và cỏ lau khô.',
+      headlineBenefit: 'Độ kín nước 100%, chống rơi vỡ an toàn cho gia đình có trẻ nhỏ',
+      specLine: '📐 110 x 110 x 220 mm | 160g | Bio-PLA Watertight',
+      specs: {
+        dimensions: '110 x 110 x 220 mm',
+        weight: '160g',
+        layer: '0.24mm Watertight Extrusion',
+        material: 'Bio-PLA Sinh Học Từ Ngô',
+        nfc: 'Không tích hợp',
+        warranty: 'Cam kết kín nước tuyệt đối'
+      },
+      colors: [
+        { id: 'terracotta', name: 'Đất Nung Thô', hex: '#C85A32' },
+        { id: 'white', name: 'Trắng Ngà Tối Giản', hex: '#EFEBE2' },
+        { id: 'slate', name: 'Xám Xi Măng', hex: '#6D727B' }
+      ],
+      materials: [
+        { id: 'pla_matte', name: 'PLA+ Sinh Học', label: 'PLA+ Sinh Học Từ Ngô', priceModifier: 0, desc: 'Phân hủy sinh học, không mùi nhựa độc hại' },
+        { id: 'petg_water', name: 'PETG Ép Nước', label: 'PETG Ép Nước Gia Cường', priceModifier: 15000, desc: 'Thích hợp cắm hoa tươi thay nước thường xuyên' }
+      ]
     },
     {
       id: 'prod-3',
@@ -44,8 +85,27 @@
       originalPrice: 260000,
       badge: '⚡ 5-in-1 Dock',
       image: 'assets/images/product-desk-dock.jpg',
-      modelKey: 'nfc_wifi',
-      desc: 'Tổ chức bàn làm việc gọn gàng chuẩn Pinterest: Tích hợp dock đứng điện thoại, khe sạc Apple Watch, hốc AirTag chống thất lạc, khay kính mắt và rãnh bút ký.'
+      modelKey: 'desk_dock',
+      desc: 'Tổ chức bàn làm việc chuẩn Pinterest: Tích hợp dock đứng iPhone góc 60°, khe sạc Apple Watch, hốc AirTag chống thất lạc, khay kính mắt và rãnh bút ký.',
+      headlineBenefit: 'Góc nghiêng 60° chuẩn công thái học cho cuộc gọi video & StandBy mode',
+      specLine: '📐 190 x 115 x 35 mm | 210g | Bio-PLA Silk-Matte',
+      specs: {
+        dimensions: '190 x 115 x 35 mm',
+        weight: '210g',
+        layer: '0.16mm Bề mặt nhám mờ Silk-Matte',
+        material: 'PLA+ Đầm Chắc Chống Trượt',
+        nfc: 'Thẻ NFC phím tắt Pomodoro / Focus',
+        warranty: '12 tháng chính hãng'
+      },
+      colors: [
+        { id: 'graphite', name: 'Xám Than Chì', hex: '#2B2D31' },
+        { id: 'terracotta', name: 'Cam Gốm Terracotta', hex: '#C85A32' },
+        { id: 'white', name: 'Trắng Bắc Âu', hex: '#F3EFE8' }
+      ],
+      materials: [
+        { id: 'pla_heavy', name: 'PLA+ Đầm Chắc', label: 'PLA+ Đầm Chắc Chống Trượt', priceModifier: 0, desc: 'Phân bổ trọng lượng đầm đáy, kèm mút chống xước bàn' },
+        { id: 'petg_tough', name: 'PETG Kỹ Thuật', label: 'PETG Kỹ Thuật Bền Cao', priceModifier: 20000, desc: 'Chống va đập và chịu lực tì tay chắc chắn' }
+      ]
     },
     {
       id: 'prod-4',
@@ -57,7 +117,26 @@
       badge: '✨ LED 3000K Warm',
       image: 'assets/images/product-soft-serve-lamp.jpg',
       modelKey: 'soft_lamp',
-      desc: 'Lấy cảm hứng từ những vòng xoắn ốc kem bồng bềnh Crème Atelier phong cách Pháp. Chóa đèn tán xạ ánh sáng dịu êm chống chói mắt, kèm bóng LED ánh vàng ấm.'
+      desc: 'Lấy cảm hứng từ vòng xoắn ốc kem bồng bềnh Crème Atelier phong cách Pháp. Chóa đèn tán xạ ánh sáng dịu êm không chói mắt, kèm bóng LED ánh vàng ấm 3000K.',
+      headlineBenefit: 'Ánh sáng tán xạ êm dịu, tạo góc thư giãn Scandinavian cho phòng ngủ',
+      specLine: '📐 160 x 160 x 210 mm | 240g | Spiral Vase Mode',
+      specs: {
+        dimensions: '160 x 160 x 210 mm',
+        weight: '240g',
+        layer: '0.20mm Spiral Vase Mode (Liền khối)',
+        material: 'PLA+ Tán Xạ Quang Học',
+        nfc: 'Không tích hợp',
+        warranty: '12 tháng hệ thống điện & LED'
+      },
+      colors: [
+        { id: 'cream', name: 'Kem Sữa (Warm Cream)', hex: '#F7EFE2' },
+        { id: 'terracotta', name: 'Đất Nung Terracotta', hex: '#BD5338' },
+        { id: 'sage', name: 'Xanh Rêu Mộc', hex: '#5B684E' }
+      ],
+      materials: [
+        { id: 'pla_optic', name: 'PLA+ Quang Học', label: 'PLA+ Tán Xạ Quang Học', priceModifier: 0, desc: 'Độ dày thành tính toán quang sai giúp ánh sáng tán xạ êm dịu' },
+        { id: 'petg_trans', name: 'PETG Trong Mờ', label: 'PETG Trong Mờ Chịu Nhiệt', priceModifier: 30000, desc: 'Chịu nhiệt đèn LED hoạt động liên tục nhiều ngày' }
+      ]
     },
     {
       id: 'prod-5',
@@ -68,8 +147,27 @@
       originalPrice: 195000,
       badge: '🧩 Modular System',
       image: 'assets/images/product-pegboard.jpg',
-      modelKey: 'nfc_wifi',
-      desc: 'Tự do sáng tạo phối màu Nordic pastel: Tặng kèm 2 móc khóa nam châm, 1 khay đựng điện thoại và 1 ống cắm bút mini. Lắp đặt dán tường siêu dính không cần khoan.'
+      modelKey: 'pegboard',
+      desc: 'Tự do sáng tạo mở rộng không gian bàn làm việc: Tặng kèm 2 móc khóa nam châm, 1 khay đựng smartphone và 1 ống cắm bút mini. Lắp đặt dán tường siêu dính không cần khoan.',
+      headlineBenefit: 'Mở rộng không gian làm việc theo module, tải trọng 3kg dán tường',
+      specLine: '📐 200 x 175 x 12 mm | 140g | Modular Interlock',
+      specs: {
+        dimensions: '200 x 175 x 12 mm',
+        weight: '140g',
+        layer: '0.20mm Cấu trúc lục giác tổ ong',
+        material: 'Bio-PLA Gia Cường Độ Cứng',
+        nfc: 'Tùy chọn gắn thẻ NFC ở module trung tâm',
+        warranty: 'Bảo hành dính keo 6 tháng'
+      },
+      colors: [
+        { id: 'white', name: 'Trắng Sứ Nordic', hex: '#F8FAFC' },
+        { id: 'gray', name: 'Xám Xi Măng', hex: '#94A3B8' },
+        { id: 'sage', name: 'Xanh Olive Mộc', hex: '#606C38' }
+      ],
+      materials: [
+        { id: 'pla_std', name: 'PLA+ Chịu Lực', label: 'PLA+ Chịu Lực Treo Đồ', priceModifier: 0, desc: 'Khả năng chịu tải lên tới 3kg mỗi tấm module' },
+        { id: 'petg_stiff', name: 'PETG Siêu Bền', label: 'PETG Siêu Cứng', priceModifier: 25000, desc: 'Kháng ẩm mốc hoàn toàn cho tường phòng tắm, bếp' }
+      ]
     },
     {
       id: 'prod-6',
@@ -81,237 +179,417 @@
       badge: '🎁 Monogram Custom',
       image: 'assets/images/product-monogram.jpg',
       modelKey: 'monogram',
-      desc: 'Chọn chữ cái A-Z và in tên calligraphy sắc sảo kèm linh vật dễ thương (khủng long, phi hành gia). Thích hợp làm quà sinh nhật, decor bàn học và phòng ngủ.'
+      desc: 'Khắc tên và chữ cái Typography nghệ thuật kèm linh vật mini (phi hành gia, khủng long). Tặng kèm chân đế để bàn hoặc móc khóa tiện lợi.',
+      headlineBenefit: 'Cá nhân hóa độc bản theo tên riêng, quà tặng ý nghĩa cho bạn bè & đồng nghiệp',
+      specLine: '📐 120 x 85 x 42 mm | 110g | Custom Monogram',
+      specs: {
+        dimensions: '120 x 85 x 42 mm (Tùy chữ cái)',
+        weight: '110g',
+        layer: '0.12mm Hoàn thiện sắc nét',
+        material: 'Bio-PLA 2 Lớp Màu Phối Tương Phản',
+        nfc: 'Có thể tích hợp chip NFC danh thiếp số',
+        warranty: 'Bảo hành hoàn tiền nếu sai tên'
+      },
+      colors: [
+        { id: 'orange', name: 'Cam Safety Orange', hex: '#FF5C00' },
+        { id: 'black', name: 'Đen Obsidian Mờ', hex: '#1E293B' },
+        { id: 'white', name: 'Trắng Sứ Nordic', hex: '#F8FAFC' }
+      ],
+      materials: [
+        { id: 'pla_dual', name: 'PLA+ 2 Màu Tương Phản', label: 'PLA+ Đúc 2 Màu Liền Khối', priceModifier: 0, desc: 'Chữ nổi sắc nét không bị nhòe màu' }
+      ]
     }
   ];
 
   let currentCategoryFilter = 'all';
 
-  // Lấy số điện thoại Zalo của xưởng
-  function getZaloPhone() {
-    const cfg = (window.TTStore && window.TTStore.getConfig()) || window.TT_DEFAULT_CONFIG;
-    const phone = (cfg && cfg.shopInfo && cfg.shopInfo.zaloPhone) || DEFAULT_ZALO_PHONE;
-    return phone.replace(/\D/g, '');
-  }
-
-  // Định dạng tiền tệ VND
   function formatMoney(amount) {
     const num = typeof amount === 'number' ? amount : parseInt(String(amount).replace(/\D/g, '')) || 0;
     return num.toLocaleString('vi-VN') + ' đ';
   }
 
-  // Đọc danh sách sản phẩm từ LocalStorage / JSON / Default
-  async function getStoredProducts() {
+  function getStoredProducts() {
     try {
       const localData = localStorage.getItem(STORAGE_KEY);
       if (localData) {
         const parsed = JSON.parse(localData);
         if (Array.isArray(parsed) && parsed.length > 0) {
-          return parsed;
-        }
-      }
-
-      // Thử fetch products.json nếu có
-      const resp = await fetch('products.json');
-      if (resp.ok) {
-        const json = await resp.json();
-        if (Array.isArray(json) && json.length > 0) {
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(json));
-          return json;
+          // Merge with specs & colors from default catalog to ensure rich visual data
+          return DEFAULT_PRODUCTS.map(def => {
+            const found = parsed.find(p => p.id === def.id || p.modelKey === def.modelKey);
+            return found ? { ...def, ...found } : def;
+          });
         }
       }
     } catch (e) {
-      console.warn('Cannot load remote products.json, using fallback default catalog:', e);
+      console.warn('LocalStorage error in products manager:', e);
     }
-
-    // Fallback mặc định
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(DEFAULT_PRODUCTS));
     return DEFAULT_PRODUCTS;
   }
 
-  // Render sản phẩm ra giao diện store (Modern Minimalist Studio Card)
-  async function renderStoreProducts(filter = currentCategoryFilter) {
+  // Render Product Card compliant with Bambu Lab / Grovemade benchmark
+  function renderStoreProducts(filter = currentCategoryFilter) {
     currentCategoryFilter = filter;
     const grid = document.getElementById('store-product-grid');
     if (!grid) return;
 
-    const products = await getStoredProducts();
+    const products = getStoredProducts();
     const filtered = filter === 'all' 
       ? products 
       : products.filter(p => p.category === filter);
 
     if (filtered.length === 0) {
       grid.innerHTML = `
-        <div class="col-span-full py-16 text-center text-slate-400 space-y-3">
-          <div class="w-16 h-16 mx-auto rounded-2xl bg-slate-800/80 flex items-center justify-center text-2xl text-slate-500">
+        <div class="col-span-full py-20 text-center space-y-3">
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-surface-elevated flex items-center justify-center text-2xl text-secondary-color">
             <i class="fa-solid fa-box-open"></i>
           </div>
-          <p class="text-sm">Chưa có sản phẩm nào trong danh mục này.</p>
+          <p class="text-sm font-medium text-secondary-color">Chưa có sản phẩm nào trong danh mục này.</p>
         </div>
       `;
       return;
     }
 
-    const zaloPhone = getZaloPhone();
-
     grid.innerHTML = filtered.map(item => {
       const priceFormatted = formatMoney(item.price);
       const originalPriceFormatted = item.originalPrice ? formatMoney(item.originalPrice) : '';
-      const badgeHtml = item.badge ? `
-        <span class="card-badge-single bg-cyan-950/80 border border-cyan-400/40 text-cyan-300 backdrop-blur-md">
-          ${item.badge}
-        </span>
-      ` : '';
-
-      // Link Zalo tự động kèm chính xác tên và giá sản phẩm
-      const zaloMessage = `Chào T&T 3D Studio, mình muốn đặt mua sản phẩm: ${item.title} (Giá: ${priceFormatted}). Vui lòng tư vấn giúp mình nhé!`;
-      const zaloUrl = `https://zalo.me/${zaloPhone}?text=${encodeURIComponent(zaloMessage)}`;
+      const swatches = item.colors || [
+        { id: 'black', name: 'Đen Obsidian', hex: '#26282B' },
+        { id: 'white', name: 'Trắng Sứ', hex: '#F5F2EB' },
+        { id: 'orange', name: 'Cam Đất', hex: '#C85A32' }
+      ];
 
       const modelKey = item.modelKey || 'nfc_wifi';
+      const specLine = item.specLine || '📐 Tiêu chuẩn xưởng • Bio-PLA';
 
       return `
-        <div data-product-category="${item.category || 'smart-nfc'}" 
-             data-product-item 
-             data-type="${item.type || 'standard'}" 
-             data-title="${item.title}" 
-             data-price="${priceFormatted}" 
-             class="studio-product-card rounded-2xl glass-panel border border-slate-800/80 hover:border-cyan-400/60 transition-all duration-300 overflow-hidden flex flex-col group bg-slate-900/40">
-          
-          <!-- Image Box with hover zoom & subtle 3D Inspector trigger button -->
-          <div class="relative aspect-[4/3] overflow-hidden img-skeleton bg-slate-950/60 cursor-pointer" data-lightbox-trigger>
-            <img src="${item.image || 'assets/images/logo.jpg'}" 
-                 width="800" 
+        <article class="studio-product-card group" data-product-id="${item.id}" onclick="window.openProductDetailModal('${item.id}')">
+          <!-- Image Box with hover zoom & subtle 3D launcher -->
+          <div class="product-image-box">
+            <img src="${item.image}" 
+                 width="600" 
                  height="600" 
                  loading="lazy" 
                  decoding="async" 
-                 onload="this.classList.add('loaded')" 
-                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1586953208448-b95a79798f07?auto=format&fit=crop&w=800&q=80'; this.classList.add('loaded');" 
                  alt="${item.title}" 
-                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 product-img-fade">
+                 id="img-${item.id}">
             
-            ${badgeHtml}
+            <!-- Frosted micro badge (top-left) -->
+            ${item.badge ? `
+              <span class="card-micro-badge">
+                ${item.badge}
+              </span>
+            ` : ''}
 
-            <!-- 1 nút icon 3D nhỏ tinh tế ở góc ảnh để cuộn/mở viewer 3D -->
+            <!-- 3D Launcher Pill (top-right) -->
             <button type="button" 
-                    data-action-open-3d="${modelKey}" 
-                    title="Xem tương tác 3D 360°" 
-                    class="absolute top-3.5 right-3.5 w-8 h-8 rounded-xl bg-slate-950/80 hover:bg-cyan-500 text-slate-300 hover:text-slate-950 border border-white/10 hover:border-cyan-400 backdrop-blur-md flex items-center justify-center transition-all duration-200 z-10 shadow-lg">
+                    class="card-3d-launcher" 
+                    onclick="event.stopPropagation(); window.open3DViewerById('${item.id}')" 
+                    title="Soi 3D tương tác 360°" 
+                    aria-label="Soi 3D">
               <i class="fa-solid fa-cube text-xs"></i>
+              <span>Soi 3D</span>
             </button>
           </div>
 
-          <!-- Card Content -->
-          <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between space-y-4">
-            <div class="space-y-2">
-              <div class="flex items-center justify-between text-[11px] font-mono text-cyan-400 uppercase tracking-wider">
-                <span>${item.category === 'smart-nfc' ? 'Smart NFC' : (item.category === 'decor-light' ? 'Lifestyle Decor' : 'Desk Setup')}</span>
-                <span class="text-emerald-400 font-sans font-medium text-[10px]">Sẵn hàng 24h</span>
+          <!-- Card Content Body -->
+          <div class="p-5 flex flex-col flex-1 justify-between gap-4">
+            <div class="space-y-2.5">
+              
+              <!-- Color Swatches Row (Interactive) -->
+              <div class="flex items-center justify-between" onclick="event.stopPropagation()">
+                <div class="swatch-group">
+                  ${swatches.map((c, idx) => `
+                    <button type="button" 
+                            class="swatch-dot ${idx === 0 ? 'active' : ''}" 
+                            style="background-color: ${c.hex};" 
+                            title="${c.name}" 
+                            onclick="window.selectCardSwatch('${item.id}', '${c.id}', '${c.name}', this)"></button>
+                  `).join('')}
+                </div>
+                <span class="text-[11px] font-medium text-secondary-color truncate max-w-[120px]" id="swatch-name-${item.id}">
+                  ${swatches[0].name}
+                </span>
               </div>
-              <h3 class="font-display font-bold text-base sm:text-lg text-white group-hover:text-cyan-400 transition-colors line-clamp-1">
+
+              <!-- Product Title -->
+              <h3 class="heading-3 line-clamp-1 group-hover:text-[#FF5C00] transition-colors">
                 ${item.title}
               </h3>
-              <p class="text-xs text-slate-400 leading-relaxed line-clamp-2">
-                ${item.desc || 'Sản phẩm in 3D công nghệ cao, hoàn thiện thủ công tỉ mỉ.'}
+
+              <!-- 1-Line Headline Benefit -->
+              <p class="text-xs text-secondary-color line-clamp-2 leading-relaxed">
+                ${item.headlineBenefit || item.desc}
               </p>
-            </div>
 
-            <div class="space-y-3 pt-3 border-t border-slate-800/80">
-              <div class="flex items-baseline justify-between">
-                <div>
-                  <span class="text-xl sm:text-2xl font-display font-extrabold text-white">${priceFormatted}</span>
-                  ${originalPriceFormatted ? `<span class="text-xs text-slate-500 line-through ml-2">${originalPriceFormatted}</span>` : ''}
-                </div>
-              </div>
-
-              <!-- Action Buttons -->
-              <div class="space-y-2">
-                <div class="grid grid-cols-2 gap-2">
-                  <!-- Nút Đặt Mua Web (Mở Cart / Form Customizer) -->
-                  <button data-order-trigger class="btn-cyan-glow text-slate-950 font-display font-bold py-2.5 px-3 rounded-xl text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-md">
-                    <i class="fa-solid fa-cart-plus"></i> Đặt Mua
-                  </button>
-                  <!-- Nút Xem 3D dạng link phụ -->
-                  <a href="#viewer-section" data-model="${modelKey}" class="py-2.5 px-3 rounded-xl border border-slate-700 hover:border-cyan-400 bg-slate-900/80 text-slate-300 hover:text-white text-xs font-medium text-center flex items-center justify-center gap-1.5 transition-colors">
-                    <i class="fa-solid fa-cube text-cyan-400"></i> Xem 3D
-                  </a>
-                </div>
-
-                <!-- 1 nút chính Đặt Zalo: Tự động kích hoạt link có chứa chính xác tên và giá sản phẩm -->
-                <a href="${zaloUrl}" target="_blank" class="w-full py-2.5 px-3 rounded-xl border border-blue-500/40 bg-blue-950/30 hover:bg-blue-600 hover:border-blue-500 text-blue-300 hover:text-white text-xs font-bold font-display uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-md">
-                  <i class="fa-solid fa-comment-dots text-sm"></i>
-                  <span>Đặt Nhanh Qua Zalo</span>
-                </a>
+              <!-- Technical Spec Line (JetBrains Mono) -->
+              <div class="text-spec pt-1">
+                ${specLine}
               </div>
             </div>
 
+            <!-- Price & Single CTA Button Row -->
+            <div class="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between gap-3 mt-auto">
+              <div>
+                <div class="price-display leading-none">${priceFormatted}</div>
+                ${originalPriceFormatted ? `<div class="text-[11px] text-muted line-through mt-0.5">${originalPriceFormatted}</div>` : ''}
+              </div>
+
+              <!-- 1 SINGLE PRIMARY CTA BUTTON (Bambu Lab Standard) -->
+              <button type="button" 
+                      class="btn-primary text-xs !py-2.5 !px-4" 
+                      onclick="event.stopPropagation(); window.quickAddToCart('${item.id}')"
+                      title="Thêm ngay vào giỏ hàng">
+                <i class="fa-solid fa-bag-shopping text-xs"></i>
+                <span>Thêm vào giỏ</span>
+              </button>
+            </div>
           </div>
-
-        </div>
+        </article>
       `;
     }).join('');
-
-    // Gắn sự kiện cho nút icon 3D nhỏ tinh tế ở góc ảnh
-    grid.querySelectorAll('[data-action-open-3d]').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const modelKey = btn.getAttribute('data-action-open-3d');
-        if (typeof window.ensure3DViewerLoaded === 'function') {
-          window.ensure3DViewerLoaded(modelKey);
-        }
-        const viewerSection = document.getElementById('viewer-section');
-        if (viewerSection) {
-          viewerSection.scrollIntoView({ behavior: 'smooth' });
-        }
-      });
-    });
-
-    // Cập nhật lại các trình nghe sự kiện modal đặt hàng trong app.js
-    if (window.initProductOrderTriggers) {
-      window.initProductOrderTriggers();
-    }
   }
 
-  // Khởi tạo bộ lọc sản phẩm (Filter buttons)
-  function initFilterButtons() {
-    const filterBtns = document.querySelectorAll('[data-product-filter]');
-    filterBtns.forEach(btn => {
-      btn.addEventListener('click', () => {
-        filterBtns.forEach(b => {
-          b.classList.remove('bg-primary/20', 'border-primary', 'text-cyan-300', 'font-bold');
-          b.classList.add('border-white/10', 'text-slate-400');
-        });
-        btn.classList.add('bg-primary/20', 'border-primary', 'text-cyan-300', 'font-bold');
-        btn.classList.remove('border-white/10', 'text-slate-400');
+  // Swatch Click handler on card
+  window.selectCardSwatch = function (prodId, swatchId, swatchName, dotEl) {
+    const parentGroup = dotEl.parentElement;
+    parentGroup.querySelectorAll('.swatch-dot').forEach(d => d.classList.remove('active'));
+    dotEl.classList.add('active');
 
-        const category = btn.getAttribute('data-product-filter') || 'all';
-        renderStoreProducts(category);
-      });
-    });
-  }
+    window.cardSelectedColors = window.cardSelectedColors || {};
+    window.cardSelectedColors[prodId] = swatchId;
 
-  // Lắng nghe thay đổi từ trang quản trị Admin qua localStorage
-  window.addEventListener('storage', (e) => {
-    if (e.key === STORAGE_KEY) {
-      renderStoreProducts(currentCategoryFilter);
-    }
-  });
-
-  window.addEventListener('tt_products_updated', () => {
-    renderStoreProducts(currentCategoryFilter);
-  });
-
-  // Export APIs
-  window.TTProducts = {
-    getProducts: getStoredProducts,
-    renderStoreProducts: renderStoreProducts,
-    DEFAULT_PRODUCTS: DEFAULT_PRODUCTS,
-    STORAGE_KEY: STORAGE_KEY
+    const nameLabel = document.getElementById(`swatch-name-${prodId}`);
+    if (nameLabel) nameLabel.textContent = swatchName;
   };
 
-  // Khởi chạy khi DOM sẵn sàng
-  window.addEventListener('DOMContentLoaded', () => {
+  // Quick Add to Cart from Card button
+  window.quickAddToCart = function (prodId) {
+    const products = getStoredProducts();
+    const item = products.find(p => p.id === prodId);
+    if (!item) return;
+
+    const defaultColor = (item.colors && item.colors[0]) || { id: 'default', name: 'Tiêu chuẩn', hex: '#26282B' };
+    const defaultMat = (item.materials && item.materials[0]) || { id: 'pla_plus', name: 'PLA+ Nguyên Sinh', label: 'PLA+ Nguyên Sinh', priceModifier: 0 };
+
+    if (window.TTStore && typeof window.TTStore.addToCart === 'function') {
+      window.TTStore.addToCart({
+        id: `${item.id}-${defaultColor.id}-${defaultMat.id}`,
+        title: item.title,
+        price: item.price,
+        qty: 1,
+        image: item.image,
+        color: defaultColor,
+        material: defaultMat,
+        customText: null,
+        category: item.category
+      });
+      if (window.TTCart && typeof window.TTCart.openCart === 'function') {
+        window.TTCart.openCart();
+      }
+      if (window.showToast) {
+        window.showToast(`Đã thêm "${item.title}" vào giỏ hàng!`);
+      }
+    }
+  };
+
+  // Open Product Detail Modal
+  window.openProductDetailModal = function (prodId) {
+    const products = getStoredProducts();
+    const item = products.find(p => p.id === prodId);
+    if (!item) return;
+
+    const modal = document.getElementById('order-modal');
+    if (!modal) return;
+
+    // Fill modal data
+    const imgEl = document.getElementById('order-prod-img');
+    const titleEl = document.getElementById('order-prod-title');
+    const priceEl = document.getElementById('order-prod-price');
+    const descEl = document.getElementById('order-prod-desc');
+    const specsEl = document.getElementById('order-prod-specs-box');
+    const swatchesEl = document.getElementById('order-swatches-box');
+    const matsEl = document.getElementById('order-materials-box');
+    const customInput = document.getElementById('order-custom-text-input');
+
+    if (imgEl) imgEl.src = item.image;
+    if (titleEl) titleEl.textContent = item.title;
+    if (priceEl) priceEl.textContent = formatMoney(item.price);
+    if (descEl) descEl.textContent = item.desc;
+    if (customInput) customInput.value = '';
+
+    // Active state tracking
+    window.modalActiveProduct = item;
+    window.modalSelectedColor = (item.colors && item.colors[0]) || { id: 'default', name: 'Mặc định', hex: '#26282B' };
+    window.modalSelectedMat = (item.materials && item.materials[0]) || { id: 'pla_plus', name: 'PLA+ Nguyên Sinh', label: 'PLA+ Nguyên Sinh', priceModifier: 0 };
+    window.modalQty = 1;
+
+    // Specs
+    if (specsEl && item.specs) {
+      specsEl.innerHTML = `
+        <div class="grid grid-cols-2 gap-2 text-xs">
+          <div><span class="text-secondary-color">Kích thước:</span> <strong class="text-primary-color font-mono">${item.specs.dimensions}</strong></div>
+          <div><span class="text-secondary-color">Trọng lượng:</span> <strong class="text-primary-color font-mono">${item.specs.weight}</strong></div>
+          <div><span class="text-secondary-color">Độ mịn lớp:</span> <strong class="text-primary-color font-mono">${item.specs.layer}</strong></div>
+          <div><span class="text-secondary-color">Bảo hành:</span> <strong class="text-primary-color font-mono">${item.specs.warranty}</strong></div>
+          ${item.specs.nfc ? `<div class="col-span-2 pt-1 border-t border-[var(--border-subtle)]"><span class="text-secondary-color">NFC:</span> <strong class="text-[#FF5C00] font-mono">${item.specs.nfc}</strong></div>` : ''}
+        </div>
+      `;
+    }
+
+    // Render Modal Swatches
+    if (swatchesEl && item.colors) {
+      swatchesEl.innerHTML = `
+        <div class="text-xs font-semibold text-secondary-color mb-2">Chọn màu sắc: <span id="modal-color-name" class="text-primary-color font-bold">${window.modalSelectedColor.name}</span></div>
+        <div class="flex flex-wrap gap-2">
+          ${item.colors.map((c, i) => `
+            <button type="button" 
+                    class="modal-color-btn px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-all ${i === 0 ? 'border-[#FF5C00] bg-[rgba(255,92,0,0.12)] text-primary-color' : 'border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-secondary-color'}" 
+                    onclick="window.selectModalColor('${c.id}', '${c.name}', this)">
+              <span class="w-3.5 h-3.5 rounded-full border border-black/20" style="background-color: ${c.hex}"></span>
+              <span>${c.name}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    // Render Modal Materials
+    if (matsEl && item.materials) {
+      matsEl.innerHTML = `
+        <div class="text-xs font-semibold text-secondary-color mb-2">Vật liệu in:</div>
+        <div class="space-y-2">
+          ${item.materials.map((m, i) => `
+            <button type="button" 
+                    class="modal-mat-btn w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between ${i === 0 ? 'border-[#FF5C00] bg-[var(--bg-surface-elevated)]' : 'border-[var(--border-subtle)] bg-[var(--bg-surface)]'}" 
+                    onclick="window.selectModalMaterial('${m.id}', this)">
+              <div>
+                <div class="text-xs font-bold text-primary-color">${m.label}</div>
+                <div class="text-[11px] text-secondary-color mt-0.5">${m.desc}</div>
+              </div>
+              ${m.priceModifier > 0 ? `<span class="text-xs font-mono font-bold text-[#FF5C00] ml-2">+${formatMoney(m.priceModifier)}</span>` : ''}
+            </button>
+          `).join('')}
+        </div>
+      `;
+    }
+
+    window.updateModalPriceSummary();
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  };
+
+  window.selectModalColor = function (colorId, colorName, btn) {
+    if (!window.modalActiveProduct) return;
+    window.modalSelectedColor = window.modalActiveProduct.colors.find(c => c.id === colorId);
+    const label = document.getElementById('modal-color-name');
+    if (label) label.textContent = colorName;
+
+    document.querySelectorAll('.modal-color-btn').forEach(b => {
+      b.classList.remove('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color');
+      b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
+    });
+    btn.classList.add('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color');
+    btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
+  };
+
+  window.selectModalMaterial = function (matId, btn) {
+    if (!window.modalActiveProduct) return;
+    window.modalSelectedMat = window.modalActiveProduct.materials.find(m => m.id === matId);
+
+    document.querySelectorAll('.modal-mat-btn').forEach(b => {
+      b.classList.remove('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]');
+      b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
+    });
+    btn.classList.add('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]');
+    btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
+
+    window.updateModalPriceSummary();
+  };
+
+  window.updateModalPriceSummary = function () {
+    if (!window.modalActiveProduct) return;
+    const base = window.modalActiveProduct.price;
+    const modifier = (window.modalSelectedMat && window.modalSelectedMat.priceModifier) || 0;
+    const unitPrice = base + modifier;
+    const total = unitPrice * (window.modalQty || 1);
+
+    const priceEl = document.getElementById('order-prod-price');
+    const submitBtnLabel = document.getElementById('modal-submit-price-label');
+
+    if (priceEl) priceEl.textContent = formatMoney(unitPrice);
+    if (submitBtnLabel) submitBtnLabel.textContent = `Thêm Vào Giỏ • ${formatMoney(total)}`;
+  };
+
+  window.changeModalQty = function (delta) {
+    window.modalQty = Math.max(1, (window.modalQty || 1) + delta);
+    const qtyVal = document.getElementById('modal-qty-val');
+    if (qtyVal) qtyVal.textContent = window.modalQty;
+    window.updateModalPriceSummary();
+  };
+
+  window.submitModalAddToCart = function () {
+    if (!window.modalActiveProduct) return;
+    const customInput = document.getElementById('order-custom-text-input');
+    const customText = customInput ? customInput.value.trim() : null;
+
+    const unitPrice = window.modalActiveProduct.price + (window.modalSelectedMat?.priceModifier || 0);
+
+    if (window.TTStore && typeof window.TTStore.addToCart === 'function') {
+      window.TTStore.addToCart({
+        id: `${window.modalActiveProduct.id}-${window.modalSelectedColor.id}-${window.modalSelectedMat.id}-${customText || 'none'}`,
+        title: window.modalActiveProduct.title,
+        price: unitPrice,
+        qty: window.modalQty || 1,
+        image: window.modalActiveProduct.image,
+        color: window.modalSelectedColor,
+        material: window.modalSelectedMat,
+        customText: customText || null,
+        category: window.modalActiveProduct.category
+      });
+
+      window.closeProductDetailModal();
+      if (window.TTCart && typeof window.TTCart.openCart === 'function') {
+        window.TTCart.openCart();
+      }
+      if (window.showToast) {
+        window.showToast(`Đã thêm ${window.modalQty} sản phẩm vào giỏ hàng!`);
+      }
+    }
+  };
+
+  window.closeProductDetailModal = function () {
+    const modal = document.getElementById('order-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  };
+
+  // Expose global methods
+  window.renderStoreProducts = renderStoreProducts;
+  window.getStoredProducts = getStoredProducts;
+
+  // Init on DOM ready
+  document.addEventListener('DOMContentLoaded', () => {
     renderStoreProducts('all');
-    initFilterButtons();
+
+    // Close order modal when clicking backdrop
+    const orderModal = document.getElementById('order-modal');
+    if (orderModal) {
+      orderModal.addEventListener('click', (e) => {
+        if (e.target === orderModal) {
+          window.closeProductDetailModal();
+        }
+      });
+    }
+
+    // Accessible Escape key listener
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        window.closeProductDetailModal();
+      }
+    });
   });
 
 })();
