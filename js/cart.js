@@ -261,14 +261,14 @@
       return `${idx + 1}. ${item.title}\n   ${details ? '(' + details + ')\n   ' : ''}SL: ${item.qty} x ${formatMoney(item.price)} = ${formatMoney(item.price * item.qty)}`;
     }).join('\n\n');
 
-    const message = `🛍️ ĐẶT HÀNG T&T 3D STUDIO 🛍️
+    const message = `🛍️ ĐẶT HÀNG T&T 3D LABS 🛍️
 ----------------------------------------
 ${itemListStr}
 ----------------------------------------
 ${currentDiscountPercent > 0 ? `Giảm giá: ${currentDiscountPercent}%\n` : ''}👉 TỔNG TIỀN ĐƠN HÀNG: ${formatMoney(grandTotal)}
 (Đơn hàng trên 300K được Miễn Phí Vận Chuyển)
 ----------------------------------------
-Xin chào Studio, mình muốn đặt các món trên. Vui lòng hướng dẫn gửi địa chỉ nhận hàng nhé!`;
+Xin chào Shop, mình muốn đặt các món trên. Vui lòng hướng dẫn gửi địa chỉ nhận hàng nhé!`;
 
     const cleanZalo = '0986888333';
     window.open(`https://zalo.me/${cleanZalo}?text=${encodeURIComponent(message)}`, '_blank');

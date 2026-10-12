@@ -5,11 +5,11 @@
 
 const TT_DEFAULT_CONFIG = {
   shopInfo: {
-    brandName: "T&T 3D Studio",
+    brandName: "T&T 3D Labs",
     slogan: "Smart Living & Aesthetic 3D Crafts",
     hotline: "0986.888.333",
     zaloPhone: "0986888333",
-    email: "contact@tt3dstudio.vn",
+    email: "contact@tt3dlabs.vn",
     address: "Số 175 Tây Sơn, Phường Trung Liệt, Quận Đống Đa, Hà Nội",
     workingHours: "Thứ 2 - Chủ Nhật: 08:00 - 21:00 (Dàn máy in chạy 24/7)",
     shopeeUrl: "https://shopee.vn",

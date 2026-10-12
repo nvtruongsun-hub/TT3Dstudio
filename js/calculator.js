@@ -211,7 +211,7 @@
     const notesInput = document.getElementById('config-custom-notes');
     const customNotes = notesInput ? notesInput.value.trim() : 'Không';
 
-    const message = `🔥 YÊU CẦU BÁO GIÁ IN 3D - T&T 3D STUDIO 🔥
+    const message = `🔥 YÊU CẦU BÁO GIÁ IN 3D - T&T 3D LABS 🔥
 ----------------------------------------
 - Hình thức: ${configStep1Choice === 'upload' ? 'Đã có file 3D (' + data.fileName + ')' : 'Chưa có file (Gửi ảnh ý tưởng để xưởng dựng CAD)'}
 - Vật liệu chọn: ${data.material.name}
@@ -222,7 +222,7 @@
 ${data.discountPercent > 0 ? `- Ưu đãi: Giảm ${data.discountPercent}%\n` : ''}👉 TỔNG TIỀN DỰ KIẾN: ${formatMoney(data.totalPrice)}
 - Ghi chú: ${customNotes}
 ----------------------------------------
-Xin chào Kỹ thuật viên T&T 3D Studio, mình muốn kiểm tra file và nhận báo giá chính xác!`;
+Xin chào Kỹ thuật viên T&T 3D Labs, mình muốn kiểm tra file và nhận báo giá chính xác!`;
 
     const cleanZalo = '0986888333';
     window.open(`https://zalo.me/${cleanZalo}?text=${encodeURIComponent(message)}`, '_blank');
