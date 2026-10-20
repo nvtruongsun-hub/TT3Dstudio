@@ -771,7 +771,7 @@ body {
 #checkout-modal {
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.25s ease, visibility 0.25s ease;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 #checkout-modal.active {
@@ -782,11 +782,79 @@ body {
 
 #checkout-modal > div {
   transform: scale(0.96);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 #checkout-modal.active > div {
   transform: scale(1);
+}
+
+/* --- 13.1 TRANSLUCENT TACTILE PRODUCT DETAIL & DIRECT ORDER MODAL --- */
+#order-modal {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.22s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#order-modal.active,
+#order-modal.flex {
+  opacity: 1;
+  visibility: visible;
+}
+
+#order-modal #order-modal-container {
+  transform: scale(0.97) translateY(8px);
+  transition: transform 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#order-modal.active #order-modal-container,
+#order-modal.flex #order-modal-container {
+  transform: scale(1) translateY(0);
+}
+
+.glass-panel-luxe {
+  background: var(--bg-surface);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.light .glass-panel-luxe {
+  box-shadow: 0 30px 70px -15px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.04);
+}
+
+.tactile-chip-active {
+  border-color: #FF5C00 !important;
+  background: rgba(255, 92, 0, 0.12) !important;
+  box-shadow: 0 0 0 2px rgba(255, 92, 0, 0.3);
+}
+
+.btn-primary-accessible {
+  background: linear-gradient(135deg, #D84315 0%, #BF360C 100%);
+  color: #FFFFFF !important;
+  font-weight: 700;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease;
+}
+
+.btn-primary-accessible:hover {
+  filter: brightness(1.08);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px -4px rgba(216, 67, 21, 0.45);
+}
+
+.btn-primary-accessible:active {
+  transform: scale(0.98);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #order-modal,
+  #order-modal #order-modal-container,
+  #checkout-modal,
+  #checkout-modal > div {
+    transition: none !important;
+    transform: none !important;
+  }
 }
 
 /* --- 14. RESPONSIVE MOBILE BOTTOM APP DOCK (Apple / Nomad / Linear Benchmark) --- */
