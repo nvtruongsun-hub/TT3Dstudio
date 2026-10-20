@@ -96,11 +96,11 @@ $cartJs = Get-Content -Raw -Encoding UTF8 'js/cart.js'
 
 $hasZaloPrefill = $calcJs.Contains('window.sendZaloConfigQuote')
 $hasAddConfigCart = $calcJs.Contains('window.addConfigQuoteToCart')
-$hasVietQRTrigger = $cartJs.Contains('triggerVietQRModal')
+$hasDirectCheckout = $cartJs.Contains('triggerCheckout')
 $hasDropzone = $html.Contains('id="config-dropzone"')
 $hasSlider = $html.Contains('id="config-qty-slider"')
 
-if ($hasZaloPrefill -and $hasAddConfigCart -and $hasVietQRTrigger -and $hasDropzone -and $hasSlider) {
+if ($hasZaloPrefill -and $hasAddConfigCart -and $hasDirectCheckout -and $hasDropzone -and $hasSlider) {
     Write-Host "  [PASS] Calculator & Cart persistent interaction across tabs fully verified" -ForegroundColor Green
 } else {
     Write-Host "  [FAIL] Missing calculator/cart components" -ForegroundColor Red
