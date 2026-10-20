@@ -1,0 +1,95 @@
+/* ==========================================================================
+   T&T 3D Labs - Admin Studio OS Design System
+   Benchmark: Linear, Raycast, Vercel Dashboard Standards
+   Scope: Scoped strictly to Admin UI components
+   ========================================================================== */
+
+/* Custom Scrollbar for Admin */
+.admin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.admin-scroll::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.6);
+}
+.admin-scroll::-webkit-scrollbar-thumb {
+  background: rgba(51, 65, 85, 0.8);
+  border-radius: 9999px;
+}
+.admin-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(100, 116, 139, 1);
+}
+
+/* Glassmorphism Surface */
+.admin-card {
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  border-radius: 1rem;
+}
+
+.admin-card-elevated {
+  background: rgba(30, 41, 59, 0.5);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+/* Image Upload Dropzone */
+.image-dropzone {
+  border: 2px dashed rgba(71, 85, 105, 0.8);
+  border-radius: 0.875rem;
+  background: rgba(15, 23, 42, 0.5);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.image-dropzone:hover,
+.image-dropzone.dragover {
+  border-color: #FF5C00;
+  background: rgba(255, 92, 0, 0.05);
+}
+
+/* Preset Art Card */
+.preset-art-card {
+  position: relative;
+  border-radius: 0.75rem;
+  overflow: hidden;
+  border: 1px solid rgba(51, 65, 85, 0.6);
+  background: #0B0C0E;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.preset-art-card:hover {
+  border-color: #FF5C00;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px -4px rgba(255, 92, 0, 0.2);
+}
+.preset-art-card.selected {
+  border-color: #FF5C00;
+  box-shadow: 0 0 0 2px #FF5C00;
+}
+
+/* Tab indicator */
+.sidebar-link.active {
+  background: rgba(255, 92, 0, 0.12);
+  color: #FFFFFF;
+  border-color: rgba(255, 92, 0, 0.4);
+}
+.sidebar-link.active i {
+  color: #FF5C00;
+}
+
+/* Status Badges */
+.badge-active {
+  background: rgba(16, 185, 129, 0.12);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #34d399;
+}
+.badge-draft {
+  background: rgba(245, 158, 11, 0.12);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+.badge-archived {
+  background: rgba(100, 116, 139, 0.12);
+  border: 1px solid rgba(100, 116, 139, 0.3);
+  color: #94a3b8;
+}

@@ -8,8 +8,34 @@
     "originalPrice": 149000,
     "badge": "⚡ NTAG215",
     "image": "assets/images/product-nfc-wifi.jpg",
+    "imageAlt": "Đế WiFi NFC 1-chạm thông minh cho quán cafe homestay",
+    "imageSource": "preset",
+    "presetId": "art-nfc-01",
     "modelKey": "nfc_wifi",
-    "desc": "Khách đến quán cafe, homestay chỉ cần chạm nhẹ smartphone là kết nối WiFi tự động không cần hỏi mật khẩu. Nhựa PLA Matte cao cấp, đúc chip NFC chìm không dùng pin."
+    "desc": "Chạm smartphone kết nối WiFi & mở Menu tự động không cần hỏi mật khẩu. Nhựa Bio-PLA Matte cao cấp đúc chìm chip NFC chống nước tuyệt đối, không dùng pin.",
+    "headlineBenefit": "Tăng trải nghiệm khách gọi món & kết nối chỉ với 1 cú chạm điện thoại",
+    "specLine": "📐 82 x 64 x 95 mm | 90g | Bio-PLA Matte",
+    "specs": {
+      "dimensions": "82 x 64 x 95 mm",
+      "weight": "90g",
+      "layer": "0.16mm (Lớp in siêu mịn)",
+      "material": "Bio-PLA Matte nguyên sinh",
+      "nfc": "Chip NTAG215 đúc chìm (iOS & Android)",
+      "warranty": "12 tháng đổi mới 1-1"
+    },
+    "colors": [
+      { "id": "obsidian", "name": "Đen Obsidian", "hex": "#26282B" },
+      { "id": "white", "name": "Trắng Sứ Nordic", "hex": "#F5F2EB" },
+      { "id": "terracotta", "name": "Cam Đất Mờ", "hex": "#C85A32" },
+      { "id": "walnut", "name": "Gỗ Walnut Sẫm", "hex": "#4A3525" }
+    ],
+    "materials": [
+      { "id": "pla_plus", "name": "PLA+ Nguyên Sinh", "label": "PLA+ Nguyên Sinh (Mờ mịn)", "priceModifier": 0, "desc": "Bề mặt mờ nhám siêu mịn, chống bám vân tay" },
+      { "id": "wood_pla", "name": "Wood Composite", "label": "Wood Composite (Mộc ấm cúng)", "priceModifier": 20000, "desc": "Chứa 30% bột gỗ tự nhiên, cảm giác thớ gỗ thật" },
+      { "id": "petg", "name": "PETG Ngoài Trời", "label": "PETG Chịu Nhiệt Ngoài Trời", "priceModifier": 15000, "desc": "Chịu nhiệt và nắng mưa bàn cafe ngoài trời" }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-20T20:00:00.000Z"
   },
   {
     "id": "prod-2",
@@ -20,8 +46,32 @@
     "originalPrice": 165000,
     "badge": "💧 Watertight 100%",
     "image": "assets/images/product-pleated-vase.jpg",
+    "imageAlt": "Bình hoa dập ly Origami kín nước in 3D phong cách Bắc Âu",
+    "imageSource": "preset",
+    "presetId": "art-vase-01",
     "modelKey": "pleated_vase",
-    "desc": "Tạo hình nếp gấp dập ly hiện đại như gốm sứ Bắc Âu. Ứng dụng kỹ thuật ép lớp kín khít chống rò rỉ nước tuyệt đối, cắm được cả hoa tươi và cỏ lau khô pampas."
+    "desc": "Nếp gấp dập ly hiện đại lấy cảm hứng từ gốm sứ Bắc Âu. Ứng dụng kỹ thuật ép lớp kín khít chống rò rỉ nước tuyệt đối, an toàn cắm hoa tươi và cỏ lau khô.",
+    "headlineBenefit": "Độ kín nước 100%, chống rơi vỡ an toàn cho gia đình có trẻ nhỏ",
+    "specLine": "📐 110 x 110 x 220 mm | 160g | Bio-PLA Watertight",
+    "specs": {
+      "dimensions": "110 x 110 x 220 mm",
+      "weight": "160g",
+      "layer": "0.24mm Watertight Extrusion",
+      "material": "Bio-PLA Sinh Học Từ Ngô",
+      "nfc": "Không tích hợp",
+      "warranty": "Cam kết kín nước tuyệt đối"
+    },
+    "colors": [
+      { "id": "terracotta", "name": "Đất Nung Thô", "hex": "#C85A32" },
+      { "id": "white", "name": "Trắng Ngà Tối Giản", "hex": "#EFEBE2" },
+      { "id": "slate", "name": "Xám Xi Măng", "hex": "#6D727B" }
+    ],
+    "materials": [
+      { "id": "pla_matte", "name": "PLA+ Sinh Học", "label": "PLA+ Sinh Học Từ Ngô", "priceModifier": 0, "desc": "Phân hủy sinh học, không mùi nhựa độc hại" },
+      { "id": "petg_water", "name": "PETG Ép Nước", "label": "PETG Ép Nước Gia Cường", "priceModifier": 15000, "desc": "Thích hợp cắm hoa tươi thay nước thường xuyên" }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-20T20:00:00.000Z"
   },
   {
     "id": "prod-3",
@@ -32,8 +82,32 @@
     "originalPrice": 260000,
     "badge": "⚡ 5-in-1 Dock",
     "image": "assets/images/product-desk-dock.jpg",
-    "modelKey": "nfc_wifi",
-    "desc": "Tổ chức bàn làm việc gọn gàng chuẩn Pinterest: Tích hợp dock đứng điện thoại, khe sạc Apple Watch, hốc AirTag chống thất lạc, khay kính mắt và rãnh bút ký."
+    "imageAlt": "Khay kệ đa năng 5-trong-1 để bàn làm việc hiện đại",
+    "imageSource": "preset",
+    "presetId": "art-dock-01",
+    "modelKey": "desk_dock",
+    "desc": "Tổ chức bàn làm việc chuẩn Pinterest: Tích hợp dock đứng điện thoại góc 60 độ, khe sạc Apple Watch, hốc AirTag chống thất lạc và khay để bút ký.",
+    "headlineBenefit": "Tối ưu không gian làm việc, tích hợp khe đi dây sạc công thái học",
+    "specLine": "📐 210 x 140 x 45 mm | 220g | Bio-PLA Composite",
+    "specs": {
+      "dimensions": "210 x 140 x 45 mm",
+      "weight": "220g",
+      "layer": "0.20mm High Precision",
+      "material": "Bio-PLA Composite Đầm Chắc",
+      "nfc": "Tùy chọn gắn chip NFC danh thiếp",
+      "warranty": "Bảo hành 12 tháng kết cấu"
+    },
+    "colors": [
+      { "id": "obsidian", "name": "Đen Obsidian", "hex": "#1E293B" },
+      { "id": "walnut", "name": "Gỗ Walnut", "hex": "#4A3525" },
+      { "id": "white", "name": "Trắng Bắc Âu", "hex": "#F8FAFC" }
+    ],
+    "materials": [
+      { "id": "pla_matte", "name": "PLA+ Matte Siêu Mịn", "label": "PLA+ Matte Siêu Mịn", "priceModifier": 0, "desc": "Bề mặt chống xước nhẹ, sang trọng" },
+      { "id": "wood_pla", "name": "Wood Composite", "label": "Wood Composite (Bột Gỗ Thật)", "priceModifier": 30000, "desc": "Mùi gỗ tự nhiên thoang thoảng" }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-20T20:00:00.000Z"
   },
   {
     "id": "prod-4",
@@ -44,8 +118,31 @@
     "originalPrice": 420000,
     "badge": "✨ LED 3000K Warm",
     "image": "assets/images/product-soft-serve-lamp.jpg",
+    "imageAlt": "Đèn bàn decor xoắn kem phong cách Scandinavian ánh sáng ấm",
+    "imageSource": "preset",
+    "presetId": "art-lamp-01",
     "modelKey": "soft_lamp",
-    "desc": "Lấy cảm hứng từ những vòng xoắn ốc kem bồng bềnh Crème Atelier phong cách Pháp. Chóa đèn tán xạ ánh sáng dịu êm chống chói mắt, kèm bóng LED ánh vàng ấm."
+    "desc": "Lấy cảm hứng từ vòng xoắn ốc kem bồng bềnh Crème Atelier phong cách Pháp. Chóa đèn tán xạ ánh sáng dịu êm chống chói mắt, kèm bóng LED ánh vàng ấm 3000K.",
+    "headlineBenefit": "Ánh sáng dịu nhẹ chống mỏi mắt ban đêm, điểm nhấn decor Scandinavian",
+    "specLine": "📐 140 x 140 x 190 mm | 210g | Translucent PLA",
+    "specs": {
+      "dimensions": "140 x 140 x 190 mm",
+      "weight": "210g",
+      "layer": "0.16mm Tán xạ quang học",
+      "material": "PLA Quang Học Bán Trong Suốt",
+      "nfc": "Không tích hợp",
+      "warranty": "Bảo hành bóng LED & chao đèn 12 tháng"
+    },
+    "colors": [
+      { "id": "cream", "name": "Vàng Bơ Mịn", "hex": "#FFF3B0" },
+      { "id": "white", "name": "Trắng Sữa Xuyên Sáng", "hex": "#FAF9F6" },
+      { "id": "peach", "name": "Hồng Cam Pastel", "hex": "#FFD6BA" }
+    ],
+    "materials": [
+      { "id": "pla_trans", "name": "PLA Xuyên Sáng Tự Nhiên", "label": "PLA Xuyên Sáng Tự Nhiên", "priceModifier": 0, "desc": "Tán sáng đều không thấy tim bóng LED" }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-20T20:00:00.000Z"
   },
   {
     "id": "prod-5",
@@ -56,8 +153,32 @@
     "originalPrice": 195000,
     "badge": "🧩 Modular System",
     "image": "assets/images/product-pegboard.jpg",
-    "modelKey": "nfc_wifi",
-    "desc": "Tự do sáng tạo phối màu Nordic pastel: Tặng kèm 2 móc khóa nam châm, 1 khay đựng điện thoại và 1 ống cắm bút mini. Lắp đặt dán tường siêu dính không cần khoan."
+    "imageAlt": "Hệ bảng pegboard lục giác treo tường đa năng dán tường",
+    "imageSource": "preset",
+    "presetId": "art-pegboard-01",
+    "modelKey": "pegboard",
+    "desc": "Tự do sáng tạo mở rộng không gian bàn làm việc: Tặng kèm 2 móc khóa nam châm, 1 khay đựng smartphone và 1 ống cắm bút mini. Lắp đặt dán tường siêu dính không cần khoan.",
+    "headlineBenefit": "Mở rộng không gian làm việc theo module, tải trọng 3kg dán tường",
+    "specLine": "📐 200 x 175 x 12 mm | 140g | Modular Interlock",
+    "specs": {
+      "dimensions": "200 x 175 x 12 mm",
+      "weight": "140g",
+      "layer": "0.20mm Cấu trúc lục giác tổ ong",
+      "material": "Bio-PLA Gia Cường Độ Cứng",
+      "nfc": "Tùy chọn gắn thẻ NFC ở module trung tâm",
+      "warranty": "Bảo hành dính keo 6 tháng"
+    },
+    "colors": [
+      { "id": "white", "name": "Trắng Sứ Nordic", "hex": "#F8FAFC" },
+      { "id": "gray", "name": "Xám Xi Măng", "hex": "#94A3B8" },
+      { "id": "sage", "name": "Xanh Olive Mộc", "hex": "#606C38" }
+    ],
+    "materials": [
+      { "id": "pla_std", "name": "PLA+ Chịu Lực", "label": "PLA+ Chịu Lực Treo Đồ", "priceModifier": 0, "desc": "Khả năng chịu tải lên tới 3kg mỗi tấm module" },
+      { "id": "petg_stiff", "name": "PETG Siêu Bền", "label": "PETG Siêu Cứng", "priceModifier": 25000, "desc": "Kháng ẩm mốc hoàn toàn cho tường phòng tắm, bếp" }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-20T20:00:00.000Z"
   },
   {
     "id": "prod-6",
@@ -68,7 +189,30 @@
     "originalPrice": 180000,
     "badge": "🎁 Monogram Custom",
     "image": "assets/images/product-monogram.jpg",
+    "imageAlt": "Bảng chữ cái Monogram in 3D cá nhân hóa khắc tên riêng",
+    "imageSource": "preset",
+    "presetId": "art-monogram-01",
     "modelKey": "monogram",
-    "desc": "Chọn chữ cái A-Z và in tên calligraphy sắc sảo kèm linh vật dễ thương (khủng long, phi hành gia). Thích hợp làm quà sinh nhật, decor bàn học và phòng ngủ."
+    "desc": "Khắc tên và chữ cái Typography nghệ thuật kèm linh vật mini (phi hành gia, khủng long). Tặng kèm chân đế để bàn hoặc móc khóa tiện lợi.",
+    "headlineBenefit": "Cá nhân hóa độc bản theo tên riêng, quà tặng ý nghĩa cho bạn bè & đồng nghiệp",
+    "specLine": "📐 120 x 85 x 42 mm | 110g | Custom Monogram",
+    "specs": {
+      "dimensions": "120 x 85 x 42 mm (Tùy chữ cái)",
+      "weight": "110g",
+      "layer": "0.12mm Hoàn thiện sắc nét",
+      "material": "Bio-PLA 2 Lớp Màu Phối Tương Phản",
+      "nfc": "Có thể tích hợp chip NFC danh thiếp số",
+      "warranty": "Bảo hành hoàn tiền nếu sai tên"
+    },
+    "colors": [
+      { "id": "orange", "name": "Cam Safety Orange", "hex": "#FF5C00" },
+      { "id": "black", "name": "Đen Obsidian Mờ", "hex": "#1E293B" },
+      { "id": "white", "name": "Trắng Sứ Nordic", "hex": "#F8FAFC" }
+    ],
+    "materials": [
+      { "id": "pla_dual", "name": "PLA+ 2 Màu Tương Phản", "label": "PLA+ Đúc 2 Màu Liền Khối", "priceModifier": 0, "desc": "Chữ nổi sắc nét không bị nhòe màu" }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-20T20:00:00.000Z"
   }
 ]

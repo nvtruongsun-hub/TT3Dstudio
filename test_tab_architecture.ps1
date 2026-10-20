@@ -43,7 +43,7 @@ $tests = @(
     @{ Name = 'R3.7: 3D Action bar supports adding model to cart'; Pass = $viewerJs.Contains('window.addActive3DModelToCart') },
     @{ Name = 'R3.8: Calculator state & dropzone IDs intact in view-configurator'; Pass = ($html.Contains('id="config-dropzone"') -and $html.Contains('id="config-file-input"') -and $html.Contains('id="config-qty-slider"')) },
     @{ Name = 'R3.9: Calculator Zalo prefill and cart buttons functional'; Pass = ($calcJs.Contains('window.sendZaloConfigQuote') -and $calcJs.Contains('window.addConfigQuoteToCart')) },
-    @{ Name = 'R3.10: Slide-over cart and VietQR modal present and accessible'; Pass = ($html.Contains('id="cart-slide-drawer"') -and $html.Contains('id="vietqr-modal"') -and $html.Contains('id="order-modal"')) },
+    @{ Name = 'R3.10: Slide-over cart and Direct Checkout modal present and accessible'; Pass = ($html.Contains('id="cart-slide-drawer"') -and $html.Contains('id="checkout-modal"') -and $html.Contains('id="order-modal"')) },
     @{ Name = 'R3.11: Theme switcher works across tabs'; Pass = ($appJs.Contains('initThemeSwitcher') -and $html.Contains('theme-toggle-btn')) }
 )
 

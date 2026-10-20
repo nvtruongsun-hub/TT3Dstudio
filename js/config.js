@@ -17,15 +17,13 @@ const TT_DEFAULT_CONFIG = {
     facebookUrl: "https://facebook.com"
   },
 
-  // Cấu hình tài khoản nhận thanh toán VietQR NAPAS & Mã QR Tùy Chỉnh
-  banking: {
-    bankId: "MB", // Ngân hàng Quân Đội (MB Bank)
-    bankName: "MB Bank (Ngân hàng Quân Đội)",
-    accountNo: "0349657529", // Số tài khoản MB Bank của chủ xưởng
-    accountName: "NGUYEN VAN TRUONG",
-    branch: "Hà Nội",
-    qrMode: "dynamic", // 'dynamic' (mã VietQR tự động theo số tiền & mã đơn) hoặc 'custom' (ảnh QR của shop tải lên)
-    customQrImage: ""  // Base64 Data URL hoặc link ảnh QR của chủ shop
+  // Cấu hình đặt hàng & thanh toán trực tiếp (Không dùng VietQR tự động)
+  checkout: {
+    mode: 'manual', // 'manual' (xác thực trực tiếp qua Zalo/Hotline hoặc COD)
+    orderEndpoint: null,
+    paymentMethods: ['cod', 'zalo'],
+    zaloHandoffPhone: "0986888333",
+    allowCustomerNotes: true
   },
 
   // Cấu hình biểu giá động (Dynamic Pricing Engine)

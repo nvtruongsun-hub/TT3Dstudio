@@ -20,21 +20,8 @@
         extend: {
           colors: {
             brand: {
-              50: '#f0fdfa',
-              100: '#ccfbf1',
-              400: '#2dd4bf',
-              500: '#14b8a6',
-              600: '#0d9488',
               cyan: '#FF5C00',
               accent: '#FF5C00'
-            },
-            dark: {
-              950: '#0B0C0E',
-              900: '#14161C',
-              850: '#1D2028',
-              800: '#172033',
-              700: '#1e293b',
-              600: '#334155'
             }
           },
           fontFamily: {
@@ -49,462 +36,414 @@
   <!-- Font Awesome Icons 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
+  <!-- Scoped Admin Stylesheet -->
+  <link rel="stylesheet" href="css/admin.css?v=3.0">
+
   <style>
-    :root {
-      --bg-dark: #0B0C0E;
-      --card-dark: #14161C;
-      --border-dark: rgba(255, 255, 255, 0.08);
-      --primary: #FF5C00;
-      --accent: #FF5C00;
-    }
-
     body {
+      background-color: #07090e;
+      color: #e2e8f0;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-dark);
-      color: #EDEDED;
-      min-height: 100vh;
     }
-
-    .glass-card {
-      background: rgba(20, 22, 28, 0.85);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
-    }
-
-    .sidebar-link {
-      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .sidebar-link.active {
-      background: linear-gradient(90deg, rgba(255, 92, 0, 0.15) 0%, rgba(255, 92, 0, 0.03) 100%);
-      border-left: 3px solid #FF5C00;
-      color: #FF5C00;
+    .btn-orange-primary {
+      background: linear-gradient(135deg, #FF5C00 0%, #D84315 100%);
+      color: #ffffff;
       font-weight: 700;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     }
-
-    .btn-cyan-primary {
-      background: #FF5C00;
-      color: #FFFFFF;
-      font-weight: 700;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 16px rgba(255, 92, 0, 0.25);
-    }
-
-    .btn-cyan-primary:hover {
-      background: #E05200;
-      box-shadow: 0 6px 20px rgba(255, 92, 0, 0.4);
+    .btn-orange-primary:hover {
+      filter: brightness(1.1);
       transform: translateY(-1px);
-    }
-
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: #0b0f19;
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #1e293b;
-      border-radius: 9999px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #334155;
     }
   </style>
 </head>
 
-<body class="bg-[#07090e] text-slate-100 flex min-h-screen">
+<body class="bg-[#07090e] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-[#FF5C00] selection:text-white admin-scroll">
 
   <!-- =========================================================================
-       1. SECURITY PIN MODAL (Mặc định: 2026 - Lưu sessionStorage)
+       1. SECURITY LOCK SCREEN (PIN PROTECTION: 2026)
        ========================================================================= -->
-  <div id="pin-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/95 backdrop-blur-md">
-    <div class="max-w-sm w-full p-8 rounded-3xl glass-card border border-cyan-500/30 text-center space-y-6 shadow-2xl">
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-3xl shadow-lg shadow-cyan-500/10">
+  <div id="admin-lock-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#07090e]/95 backdrop-blur-xl">
+    <div class="w-full max-w-sm p-8 rounded-3xl admin-card border border-slate-800 text-center space-y-6 shadow-2xl">
+      <div class="w-16 h-16 mx-auto rounded-2xl bg-[rgba(255,92,0,0.12)] border border-[#FF5C00]/30 flex items-center justify-center text-[#FF5C00] text-2xl shadow-lg">
         <i class="fa-solid fa-lock"></i>
       </div>
-      <div>
-        <h2 class="text-xl font-bold text-white tracking-tight">Xác Thực Quản Trị Viên</h2>
-        <p class="text-xs text-slate-400 mt-1">Vui lòng nhập mã PIN để mở khóa trang quản trị</p>
-        <div class="inline-block mt-2 px-3 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/20 text-[11px] font-mono text-cyan-300">
-          Mã PIN mặc định: <strong class="font-bold text-white">2026</strong>
-        </div>
+
+      <div class="space-y-1">
+        <h1 class="text-lg font-bold text-white tracking-tight">T&amp;T 3D Labs Studio OS</h1>
+        <p class="text-xs text-slate-400">Nhập mã PIN quản trị xưởng để tiếp tục</p>
       </div>
 
       <form id="pin-form" class="space-y-4">
         <div>
-          <input type="password" id="pin-input" maxlength="8" autofocus placeholder="••••" 
-                 class="w-full text-center tracking-[0.5em] font-mono font-bold text-2xl py-3 rounded-2xl bg-slate-900 border border-slate-700 text-cyan-300 focus:border-cyan-400 focus:outline-none transition-all">
-          <p id="pin-error" class="hidden text-xs text-rose-400 mt-2 font-medium">
-            <i class="fa-solid fa-triangle-exclamation mr-1"></i> Mã PIN không đúng, vui lòng thử lại!
-          </p>
+          <input type="password" id="admin-pin-input" maxlength="6" autofocus placeholder="••••" 
+                 class="w-full px-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-center text-xl font-mono tracking-widest text-white focus:border-[#FF5C00] focus:outline-none">
+          <p id="pin-error" class="text-rose-400 text-xs mt-2 hidden">Mã PIN không chính xác. Mặc định là 2026.</p>
         </div>
 
-        <button type="submit" class="w-full btn-cyan-primary py-3.5 rounded-2xl text-xs uppercase tracking-wider flex items-center justify-center gap-2">
-          <i class="fa-solid fa-key"></i>
-          <span>Mở Khóa Dashboard</span>
+        <button type="submit" class="w-full py-3 rounded-2xl btn-orange-primary text-xs uppercase tracking-wider">
+          Xác Thực Truy Cập
         </button>
       </form>
 
-      <div class="pt-2 border-t border-slate-800">
-        <a href="index.html" class="text-xs text-slate-400 hover:text-cyan-300 transition-colors inline-flex items-center gap-1.5">
-          <i class="fa-solid fa-arrow-left"></i> Quay lại trang chủ website
-        </a>
+      <div class="text-[11px] text-slate-500 font-mono">
+        Bảo mật nội bộ • Cổng Admin T&amp;T 3D Labs
       </div>
     </div>
   </div>
 
-  <!-- =========================================================================
-       2. MAIN APP CONTAINER (Hiện khi đã mở khóa PIN)
-       ========================================================================= -->
-  <div id="admin-app" class="hidden flex-1 flex flex-col md:flex-row min-h-screen w-full">
 
-    <!-- ---------------------------------------------------------------------
-         A. SIDEBAR NAVIGATION (260px)
-         --------------------------------------------------------------------- -->
+  <!-- =========================================================================
+       2. MAIN APPLICATION INTERFACE (WORKSPACE DASHBOARD)
+       ========================================================================= -->
+  <div id="admin-app" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+
+    <!-- A. SIDEBAR NAVIGATION -->
     <aside class="w-full md:w-64 bg-slate-950/95 border-b md:border-b-0 md:border-r border-slate-800/80 flex flex-col shrink-0">
-      <!-- Brand Logo Header -->
       <div class="p-5 border-b border-slate-800/80 flex items-center justify-between">
         <div class="flex items-center gap-3">
-          <img src="assets/images/logo-premium-dark.svg?v=2.2" alt="T&amp;T 3D Labs" class="w-[158px] h-auto object-contain object-left shrink-0">
+          <img src="assets/images/logo-premium-dark.svg?v=2.2" alt="T&amp;T 3D Labs" class="w-[145px] h-auto object-contain object-left shrink-0">
           <span class="text-[9px] font-mono tracking-wide text-slate-400">ADMIN</span>
         </div>
-
-        <!-- Mobile Menu Toggle Button -->
-        <button id="mobile-sidebar-toggle" class="md:hidden text-slate-400 hover:text-white p-2">
-          <i class="fa-solid fa-bars text-lg"></i>
-        </button>
       </div>
 
-      <!-- Navigation Tabs (3 Modules) -->
+      <!-- Navigation Tabs -->
       <nav id="sidebar-nav" class="p-4 space-y-1.5 flex-1">
-        <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 px-3 py-1">Chức Năng Chính</div>
+        <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 px-3 py-1">Quản Trị Trung Tâm</div>
 
-        <!-- Module 1: Tổng Quan -->
-        <button data-tab-target="overview" class="sidebar-link active w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-900 transition-colors text-left">
-          <i class="fa-solid fa-chart-pie w-4 text-center text-cyan-400"></i>
-          <span>Module 1: Tổng Quan</span>
+        <!-- Tab 1: Tổng Quan -->
+        <button data-tab-target="overview" class="sidebar-link active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
+          <i class="fa-solid fa-chart-pie w-4 text-center"></i>
+          <span>1. Tổng Quan Xưởng</span>
         </button>
 
-        <!-- Module 2: Quản Lý Sản Phẩm (CRUD) -->
-        <button data-tab-target="products" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-900 transition-colors text-left">
-          <i class="fa-solid fa-boxes-stacked w-4 text-center text-amber-400"></i>
-          <span>Module 2: Quản Lý Sản Phẩm</span>
+        <!-- Tab 2: Quản Lý Sản Phẩm -->
+        <button data-tab-target="products" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
+          <i class="fa-solid fa-boxes-stacked w-4 text-center"></i>
+          <span>2. Quản Lý Sản Phẩm</span>
         </button>
 
-        <!-- Module 3: Cấu Hình Bảng Giá In 3D -->
-        <button data-tab-target="pricing" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-xs text-slate-300 hover:text-white hover:bg-slate-900 transition-colors text-left">
-          <i class="fa-solid fa-calculator w-4 text-center text-emerald-400"></i>
-          <span>Module 3: Cấu Hình Bảng Giá</span>
+        <!-- Tab 3: Kho Ảnh Studio Presets -->
+        <button data-tab-target="presets" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
+          <i class="fa-solid fa-images w-4 text-center"></i>
+          <span>3. Kho Ảnh Studio Presets</span>
         </button>
 
-        <div class="pt-4 mt-4 border-t border-slate-800/80 text-[10px] font-mono uppercase tracking-wider text-slate-500 px-3 py-1">Phím Tắt Nhanh</div>
+        <!-- Tab 4: Yêu Cầu Đơn Hàng -->
+        <button data-tab-target="orders" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
+          <i class="fa-solid fa-clipboard-list w-4 text-center"></i>
+          <span>4. Yêu Cầu Đơn Hàng</span>
+        </button>
 
-        <a href="index.html" target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-400 hover:text-cyan-300 hover:bg-slate-900 transition-colors">
+        <!-- Tab 5: Cấu Hình Bảng Giá -->
+        <button data-tab-target="pricing" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
+          <i class="fa-solid fa-calculator w-4 text-center"></i>
+          <span>5. Cấu Hình Bảng Giá</span>
+        </button>
+
+        <div class="pt-4 mt-4 border-t border-slate-800/80 text-[10px] font-mono uppercase tracking-wider text-slate-500 px-3 py-1">Thao Tác Nhanh</div>
+
+        <a href="index.html" target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-[#FF5C00] transition-colors">
           <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center"></i>
           <span>Xem Website Store</span>
         </a>
 
-        <button id="btn-export-quick" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-400 hover:text-emerald-300 hover:bg-slate-900 transition-colors text-left">
+        <button id="btn-export-quick" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-emerald-400 transition-colors text-left">
           <i class="fa-solid fa-download w-4 text-center"></i>
           <span>Xuất products.json</span>
         </button>
+
+        <label class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer">
+          <i class="fa-solid fa-upload w-4 text-center"></i>
+          <span>Nhập products.json</span>
+          <input type="file" id="input-import-json" accept=".json" class="hidden">
+        </label>
       </nav>
 
-      <!-- Sidebar Footer User Status & Logout -->
+      <!-- Sidebar Footer -->
       <div class="p-4 border-t border-slate-800/80 bg-slate-950/60 space-y-3">
         <div class="flex items-center justify-between text-xs">
           <span class="text-slate-400 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Phiên đăng nhập
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Phiên làm việc
           </span>
-          <span class="font-mono text-cyan-400 font-bold">Admin #2026</span>
+          <span class="font-mono text-[#FF5C00] font-bold">Admin #2026</span>
         </div>
 
-        <button id="btn-logout" class="w-full py-2.5 px-3 rounded-xl border border-rose-500/30 text-rose-300 hover:bg-rose-500/10 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
+        <button id="btn-logout" class="w-full py-2 px-3 rounded-xl border border-rose-500/30 text-rose-300 hover:bg-rose-500/10 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
           <i class="fa-solid fa-right-from-bracket"></i>
           <span>Khóa Phiên (Đăng Xuất)</span>
         </button>
       </div>
     </aside>
 
-    <!-- ---------------------------------------------------------------------
-         B. MAIN CONTENT AREA
-         --------------------------------------------------------------------- -->
-    <main class="flex-1 flex flex-col overflow-y-auto max-h-screen bg-[#07090e]">
-
+    <!-- B. MAIN CONTENT -->
+    <main class="flex-1 flex flex-col overflow-y-auto max-h-screen bg-[#07090e] admin-scroll">
       <!-- Top Bar Header -->
       <header class="p-5 border-b border-slate-800/80 bg-slate-950/60 sticky top-0 z-20 backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
         <div>
           <h2 id="page-title" class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
             <span>Tổng Quan Hệ Thống Studio</span>
           </h2>
-          <p id="page-subtitle" class="text-xs text-slate-400 mt-0.5">Giám sát số lượng sản phẩm, giá vật liệu và trạng thái catalog</p>
+          <p id="page-subtitle" class="text-xs text-slate-400 mt-0.5">Giám sát số lượng sản phẩm, dung lượng lưu trữ và trạng thái xưởng</p>
         </div>
 
         <div class="flex items-center gap-2.5">
           <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-300">
             <i class="fa-solid fa-shield-halved"></i> GitHub Pages Serverless
           </span>
-
-          <button id="btn-export-json-header" class="btn-cyan-primary px-4 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5">
+          <button onclick="window.TTAdmin.exportProductsJson()" class="btn-orange-primary px-3.5 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5">
             <i class="fa-solid fa-download"></i>
-            <span class="hidden sm:inline">Xuất File</span> products.json
+            <span class="hidden sm:inline">Tải</span> products.json
           </button>
         </div>
       </header>
 
-      <!-- Main Tabs Container -->
       <div class="p-5 sm:p-7 space-y-6 flex-1">
 
         <!-- ===================================================================
-             MODULE 1: TỔNG QUAN (OVERVIEW DASHBOARD)
+             TAB 1: TỔNG QUAN (OVERVIEW)
              =================================================================== -->
-        <section id="tab-overview" class="tab-pane space-y-6">
-          <!-- Metric Cards Grid -->
+        <section id="tab-overview" class="tab-panel space-y-6">
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
-            <!-- Metric 1: Tổng số sản phẩm -->
-            <div class="p-5 rounded-2xl glass-card border border-slate-800 space-y-2">
+            <div class="p-5 rounded-2xl admin-card space-y-2">
               <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Tổng Sản Phẩm Catalog</span>
-                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                  <i class="fa-solid fa-cube"></i>
+                <span class="font-medium">Tổng Sản Phẩm</span>
+                <div class="w-8 h-8 rounded-lg bg-[#FF5C00]/10 text-[#FF5C00] flex items-center justify-center">
+                  <i class="fa-solid fa-boxes-stacked"></i>
                 </div>
               </div>
-              <div class="text-2xl font-bold font-mono text-white" id="metric-total-products">6</div>
-              <p class="text-[11px] text-cyan-400 flex items-center gap-1">
-                <i class="fa-solid fa-check"></i> Đang hiển thị ở Store
-              </p>
+              <div class="text-2xl font-bold font-mono text-white" id="stat-total-products">0</div>
+              <p class="text-[11px] text-slate-400">Trong kho dữ liệu</p>
             </div>
 
-            <!-- Metric 2: Đơn giá PLA+ -->
-            <div class="p-5 rounded-2xl glass-card border border-slate-800 space-y-2">
+            <div class="p-5 rounded-2xl admin-card space-y-2">
               <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Đơn Giá PLA+ Matte</span>
+                <span class="font-medium">Đang Hoạt Động (Store)</span>
                 <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                  <i class="fa-solid fa-tag"></i>
+                  <i class="fa-solid fa-circle-check"></i>
                 </div>
               </div>
-              <div class="text-2xl font-bold font-mono text-emerald-400" id="metric-price-pla">1.200 đ/g</div>
-              <p class="text-[11px] text-slate-400">Vật liệu decor chủ đạo</p>
+              <div class="text-2xl font-bold font-mono text-emerald-400" id="stat-active-products">0</div>
+              <p class="text-[11px] text-slate-400">Hiển thị ở trang Store</p>
             </div>
 
-            <!-- Metric 3: Đơn giá PETG -->
-            <div class="p-5 rounded-2xl glass-card border border-slate-800 space-y-2">
+            <div class="p-5 rounded-2xl admin-card space-y-2">
               <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Đơn Giá PETG Pro</span>
-                <div class="w-8 h-8 rounded-lg bg-amber-500/10 text-amber-400 flex items-center justify-center">
-                  <i class="fa-solid fa-droplet"></i>
+                <span class="font-medium">Yêu Cầu Đơn Hàng</span>
+                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
+                  <i class="fa-solid fa-clipboard-list"></i>
                 </div>
               </div>
-              <div class="text-2xl font-bold font-mono text-amber-400" id="metric-price-petg">1.500 đ/g</div>
-              <p class="text-[11px] text-slate-400">Chống nước & chịu nhiệt</p>
+              <div class="text-2xl font-bold font-mono text-cyan-300" id="stat-total-orders">0</div>
+              <p class="text-[11px] text-slate-400">Lưu trên trình duyệt</p>
             </div>
 
-            <!-- Metric 4: Trạng thái Serverless -->
-            <div class="p-5 rounded-2xl glass-card border border-slate-800 space-y-2">
+            <div class="p-5 rounded-2xl admin-card space-y-2">
               <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Trạng Thái Đồng Bộ</span>
-                <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center">
-                  <i class="fa-solid fa-cloud-arrow-up"></i>
+                <span class="font-medium">Dung Lượng Bộ Nhớ</span>
+                <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
+                  <i class="fa-solid fa-hard-drive"></i>
                 </div>
               </div>
-              <div class="text-sm font-bold text-white flex items-center gap-1.5 mt-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-                <span>localStorage Active</span>
+              <div class="text-sm font-bold font-mono text-white mt-1" id="stat-storage-gauge">0 KB / 3.5 MB</div>
+              <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
+                <div id="stat-storage-bar" class="bg-emerald-500 h-1.5 rounded-full" style="width: 5%"></div>
               </div>
-              <p class="text-[11px] text-slate-400">Sẵn sàng xuất file JSON</p>
+              <p class="text-[10px] text-slate-400">Ngưỡng an toàn LocalStorage</p>
             </div>
+
           </div>
 
-          <!-- Architecture & Sync Guide Card -->
-          <div class="p-6 rounded-3xl glass-card border border-cyan-500/20 space-y-4">
-            <div class="flex items-start gap-4">
-              <div class="w-12 h-12 rounded-2xl bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-2xl shrink-0">
-                <i class="fa-solid fa-circle-nodes"></i>
-              </div>
-              <div class="space-y-1">
-                <h3 class="text-base font-bold text-white">Quy Trình Quản Trị Serverless Trên GitHub Pages</h3>
-                <p class="text-xs text-slate-300 leading-relaxed">
-                  Vì website chạy tĩnh trên GitHub Pages không cần máy chủ (Serverless), hệ thống hoạt động thông minh qua 2 tầng lưu trữ:
-                </p>
-              </div>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs font-mono pt-2">
-              <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-                <div class="text-cyan-400 font-bold flex items-center gap-2">
-                  <span class="w-6 h-6 rounded-full bg-cyan-400/20 text-cyan-300 flex items-center justify-center text-xs">1</span>
-                  Tầng 1: Thao tác & Lưu ngay (Trình duyệt)
-                </div>
-                <p class="text-slate-400 leading-relaxed font-sans">
-                  Khi bạn thêm, sửa, xóa sản phẩm hoặc chỉnh bảng giá, dữ liệu lưu ngay lập tức vào <code class="text-cyan-300">localStorage</code>. Tab <code class="text-white">index.html</code> sẽ tự động cập nhật ngay trên máy bạn.
-                </p>
-              </div>
-
-              <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-2">
-                <div class="text-emerald-400 font-bold flex items-center gap-2">
-                  <span class="w-6 h-6 rounded-full bg-emerald-400/20 text-emerald-300 flex items-center justify-center text-xs">2</span>
-                  Tầng 2: Xuất file products.json lên GitHub
-                </div>
-                <p class="text-slate-400 leading-relaxed font-sans">
-                  Bấm nút <strong class="text-white">"Xuất file products.json"</strong> để tải file về máy, sau đó commit file này lên GitHub repository. Tất cả khách truy cập từ mọi thiết bị khác sẽ nhìn thấy danh mục mới vĩnh viễn!
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <!-- Quick Preview of Products -->
-          <div class="p-6 rounded-3xl glass-card border border-slate-800 space-y-4">
-            <div class="flex items-center justify-between">
+          <!-- Recent Products Preview Card -->
+          <div class="p-6 rounded-3xl admin-card space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
               <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-list-check text-cyan-400"></i> Danh Sách Sản Phẩm Nhanh
+                <i class="fa-solid fa-clock-rotate-left text-[#FF5C00]"></i> Sản Phẩm Gần Đây
               </h3>
-              <button onclick="document.querySelector('[data-tab-target=products]').click()" class="text-xs text-cyan-400 hover:text-cyan-300 font-medium">
-                Vào Quản Lý Chi Tiết <i class="fa-solid fa-arrow-right ml-1"></i>
+              <button onclick="document.querySelector('.sidebar-link[data-tab-target=\'products\']').click()" class="text-xs text-[#FF5C00] hover:underline">
+                Xem toàn bộ catalog &rarr;
               </button>
             </div>
-            
-            <div id="overview-products-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-              <!-- Rendered via JavaScript -->
-            </div>
+            <div id="overview-recent-products" class="space-y-2"></div>
           </div>
         </section>
 
         <!-- ===================================================================
-             MODULE 2: QUẢN LÝ SẢN PHẨM (CRUD CATALOG)
+             TAB 2: QUẢN LÝ SẢN PHẨM & MEDIA (CRUD)
              =================================================================== -->
-        <section id="tab-products" class="tab-pane hidden space-y-6">
+        <section id="tab-products" class="tab-panel hidden space-y-6">
 
-          <!-- Action Bar: Add, Export, Import, Reset -->
-          <div class="flex flex-wrap items-center justify-between gap-3 p-4 rounded-2xl glass-card border border-slate-800">
-            <div class="flex flex-wrap items-center gap-2.5">
-              <button id="btn-toggle-add-form" class="btn-cyan-primary px-4 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Mới
-              </button>
-              <button id="btn-export-products-json" class="px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-cyan-400 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-all">
-                <i class="fa-solid fa-file-export text-cyan-400"></i> Xuất File products.json
-              </button>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <label class="px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-500 text-slate-300 text-xs font-medium cursor-pointer flex items-center gap-1.5 transition-all" title="Nhập file JSON từ máy">
-                <i class="fa-solid fa-file-import text-amber-400"></i> Nhập JSON
-                <input type="file" id="input-import-json" accept=".json" class="hidden">
-              </label>
-              <button id="btn-reset-default-products" class="px-3.5 py-2.5 rounded-xl border border-slate-800 hover:border-rose-500/40 text-slate-400 hover:text-rose-400 text-xs transition-colors" title="Khôi phục danh mục 6 sản phẩm mặc định">
-                <i class="fa-solid fa-rotate-left"></i>
-              </button>
-            </div>
-          </div>
-
-          <!-- Product Edit / Create Form (Collapsible) -->
-          <div id="product-form-container" class="p-6 rounded-3xl glass-card border border-cyan-500/30 space-y-5">
-            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center text-sm">
-                  <i class="fa-solid fa-pen-to-square"></i>
+          <!-- Product CRUD Form -->
+          <div class="p-6 rounded-3xl admin-card space-y-6">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-[#FF5C00]/10 text-[#FF5C00] flex items-center justify-center">
+                  <i class="fa-solid fa-pen-nib"></i>
                 </div>
                 <div>
-                  <h3 id="form-heading" class="text-base font-bold text-white">Thêm Sản Phẩm Mới</h3>
-                  <p class="text-[11px] text-slate-400">Điền thông tin và lưu trực tiếp vào danh mục Store</p>
+                  <h3 id="form-heading" class="text-sm font-bold text-white">Thêm Sản Phẩm Mới</h3>
+                  <p class="text-[11px] text-slate-400">Thiết kế thông số, tùy chỉnh ảnh từ máy hoặc kho nghệ thuật</p>
                 </div>
               </div>
-
-              <button id="btn-cancel-edit" type="button" class="text-xs text-slate-400 hover:text-white px-2 py-1 rounded bg-slate-800">
-                <i class="fa-solid fa-xmark mr-1"></i> Hủy
-              </button>
             </div>
 
-            <form id="product-crud-form" class="space-y-4">
-              <input type="hidden" id="edit-prod-id" value="">
-
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <!-- Tên sản phẩm -->
-                <div class="space-y-1.5">
+            <form id="product-crud-form" class="space-y-5">
+              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                
+                <div class="space-y-1.5 sm:col-span-2">
                   <label for="prod-title" class="text-xs font-mono text-slate-300">Tên Sản Phẩm *</label>
-                  <input type="text" id="prod-title" required placeholder="Ví dụ: Bình Hoa Origami Watertight" 
-                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+                  <input type="text" id="prod-title" required placeholder="Ví dụ: Bình Hoa Dập Ly Origami Watertight" 
+                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
                 </div>
 
-                <!-- Danh mục -->
                 <div class="space-y-1.5">
-                  <label for="prod-category" class="text-xs font-mono text-slate-300">Danh Mục Phân Loại *</label>
-                  <select id="prod-category" required class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
-                    <option value="smart-nfc">Smart NFC & WiFi (Đế chạm 1 tap)</option>
-                    <option value="decor-light">Đèn & Decor Không Gian (Bình hoa, đèn bàn)</option>
-                    <option value="desk-setup">Phụ Kiện Bàn Làm Việc (Dock, pegboard, bảng tên)</option>
+                  <label for="prod-category" class="text-xs font-mono text-slate-300">Danh Mục *</label>
+                  <select id="prod-category" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                    <option value="smart-nfc">Smart NFC (Công Nghệ)</option>
+                    <option value="decor-light">Đèn &amp; Decor Bắc Âu</option>
+                    <option value="desk-setup">Desk Setup (Bàn Làm Việc)</option>
+                    <option value="industrial">Kỹ Thuật &amp; Cơ Khí</option>
                   </select>
                 </div>
-              </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                <!-- Giá bán -->
                 <div class="space-y-1.5">
-                  <label for="prod-price" class="text-xs font-mono text-slate-300">Giá Bán Thực Tế (đ) *</label>
-                  <input type="number" id="prod-price" required min="1000" step="1000" placeholder="109000" 
-                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-cyan-300 font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                  <label for="prod-status" class="text-xs font-mono text-slate-300">Trạng Thái Hiển Thị</label>
+                  <select id="prod-status" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                    <option value="active">Hoạt động (Hiển thị Store)</option>
+                    <option value="draft">Bản nháp (Ẩn khỏi Store)</option>
+                    <option value="archived">Lưu trữ (Tạm dừng)</option>
+                  </select>
                 </div>
 
-                <!-- Giá gốc niêm yết -->
+                <div class="space-y-1.5">
+                  <label for="prod-price" class="text-xs font-mono text-slate-300">Giá Bán (đ) *</label>
+                  <input type="number" id="prod-price" required min="1000" step="1000" placeholder="109000" 
+                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
+                </div>
+
                 <div class="space-y-1.5">
                   <label for="prod-original-price" class="text-xs font-mono text-slate-300">Giá Gốc Niêm Yết (đ)</label>
                   <input type="number" id="prod-original-price" min="1000" step="1000" placeholder="149000" 
-                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 font-mono text-xs focus:border-cyan-400 focus:outline-none">
+                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
                 </div>
 
-                <!-- Badge công nghệ (Tối đa 1 badge đắt giá) -->
                 <div class="space-y-1.5">
-                  <label for="prod-badge" class="text-xs font-mono text-slate-300">Badge Công Nghệ (1 Tag Đắt Giá)</label>
-                  <input type="text" id="prod-badge" placeholder="⚡ NTAG215 hoặc 💧 Watertight 100%" 
-                         class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+                  <label for="prod-badge" class="text-xs font-mono text-slate-300">Badge Điểm Nhấn</label>
+                  <input type="text" id="prod-badge" placeholder="⚡ NTAG215 hoặc 💧 Watertight" 
+                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
                 </div>
+
+                <div class="space-y-1.5">
+                  <label for="prod-model-key" class="text-xs font-mono text-slate-300">Khối Hình Học 3D Studio</label>
+                  <select id="prod-model-key" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                    <option value="nfc_wifi">Đế WiFi NFC</option>
+                    <option value="pleated_vase">Bình Hoa Origami</option>
+                    <option value="soft_lamp">Đèn Xoắn Kem</option>
+                    <option value="desk_dock">Kệ Desk Dock 5-in-1</option>
+                    <option value="pegboard">Bảng Hexa Pegboard</option>
+                    <option value="monogram">Chữ Monogram Typo</option>
+                  </select>
+                </div>
+
+                <div class="space-y-1.5 sm:col-span-2">
+                  <label for="prod-headline" class="text-xs font-mono text-slate-300">Lợi Điểm Nổi Bật (1 dòng ngắn)</label>
+                  <input type="text" id="prod-headline" placeholder="Ví dụ: Tăng trải nghiệm khách gọi món chỉ với 1 cú chạm điện thoại" 
+                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                </div>
+
+                <div class="space-y-1.5 sm:col-span-2">
+                  <label for="prod-type" class="text-xs font-mono text-slate-300">Phân Loại Dịch Vụ</label>
+                  <select id="prod-type" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                    <option value="standard">Sản phẩm tiêu chuẩn xưởng</option>
+                    <option value="nfc">Sản phẩm tích hợp chip NFC</option>
+                    <option value="monogram">Sản phẩm cá nhân hóa Monogram</option>
+                  </select>
+                </div>
+
               </div>
 
-              <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <!-- Link ảnh sản phẩm -->
-                <div class="space-y-1.5 md:col-span-2">
-                  <label for="prod-image" class="text-xs font-mono text-slate-300">Đường Dẫn Ảnh (Local Path hoặc URL) *</label>
-                  <div class="flex gap-2">
-                    <input type="text" id="prod-image" required placeholder="assets/images/product-nfc-wifi.jpg hoặc https://..." 
-                           class="flex-1 px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
-                    <button type="button" id="btn-preview-img" class="px-3 py-2.5 rounded-xl bg-slate-800 text-slate-300 hover:text-white text-xs">
-                      Xem Ảnh
+              <!-- =============================================================
+                   IMAGE CUSTOMIZATION SUITE (UPLOAD / URL / PRESET)
+                   ============================================================= -->
+              <div class="p-4 rounded-2xl admin-card-elevated space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                  <div>
+                    <h4 class="text-xs font-bold text-white flex items-center gap-2">
+                      <i class="fa-solid fa-palette text-[#FF5C00]"></i> Tùy Chỉnh Hình Ảnh Nghệ Thuật (Studio Visuals)
+                    </h4>
+                    <p class="text-[11px] text-slate-400">Chọn tải ảnh từ máy, dán URL hoặc chọn từ kho ảnh mẫu tuyển chọn</p>
+                  </div>
+
+                  <!-- Source Switcher Tabs -->
+                  <div class="flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-800 shrink-0">
+                    <button type="button" id="img-tab-upload" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FF5C00] text-white shadow-sm">
+                      <i class="fa-solid fa-upload"></i> Tải Từ Máy
+                    </button>
+                    <button type="button" id="img-tab-url" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+                      <i class="fa-solid fa-link"></i> Nhập URL
+                    </button>
+                    <button type="button" id="img-tab-preset" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-colors">
+                      <i class="fa-solid fa-sparkles"></i> Thư Viện Mẫu
                     </button>
                   </div>
                 </div>
 
-                <!-- 3D Model Key -->
-                <div class="space-y-1.5">
-                  <label for="prod-model-key" class="text-xs font-mono text-slate-300">Model 3D Viewer Key</label>
-                  <select id="prod-model-key" class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
-                    <option value="nfc_wifi">Mẫu 3D: Đế NFC TapConnect</option>
-                    <option value="pleated_vase">Mẫu 3D: Bình Hoa Origami</option>
-                    <option value="soft_lamp">Mẫu 3D: Đèn Swirl Soft-Serve</option>
-                    <option value="monogram">Mẫu 3D: Chữ Cái Monogram</option>
-                  </select>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
+                  
+                  <!-- Left: Input Controls for Active Tab -->
+                  <div class="lg:col-span-2">
+                    
+                    <!-- Pane 1: File Upload (Drag & Drop + Canvas Compressor) -->
+                    <div id="img-pane-upload" class="space-y-2">
+                      <div id="image-dropzone" class="image-dropzone p-6 text-center cursor-pointer space-y-2">
+                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400"></i>
+                        <div class="text-xs font-bold text-white">Kéo thả tệp ảnh vào đây hoặc bấm để tải lên</div>
+                        <p class="text-[11px] text-slate-400" id="upload-status-text">Hỗ trợ JPG, PNG, WEBP (Tự động nén tối ưu WebP 1200px)</p>
+                        <input type="file" id="image-file-input" accept="image/jpeg,image/png,image/webp" class="hidden">
+                      </div>
+                    </div>
+
+                    <!-- Pane 2: URL Input -->
+                    <div id="img-pane-url" class="space-y-2 hidden">
+                      <label for="prod-image-url" class="text-xs text-slate-300">Dán đường dẫn ảnh HTTPS:</label>
+                      <div class="flex gap-2">
+                        <input type="url" id="prod-image-url" placeholder="https://images.unsplash.com/... hoặc assets/images/..." 
+                               class="flex-1 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                        <button type="button" id="btn-test-url" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-200 hover:text-white text-xs font-semibold">
+                          Xem Ảnh
+                        </button>
+                      </div>
+                    </div>
+
+                    <!-- Pane 3: Preset Selector -->
+                    <div id="img-pane-preset" class="space-y-2 hidden">
+                      <div class="text-xs text-slate-300 mb-2">Bấm vào ảnh bất kỳ để áp dụng ngay:</div>
+                      <div id="preset-selector-grid" class="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1 admin-scroll"></div>
+                    </div>
+
+                  </div>
+
+                  <!-- Right: Live Image Preview Box -->
+                  <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-3.5">
+                    <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-900 border border-slate-700 shrink-0">
+                      <img id="form-img-preview" src="assets/images/product-nfc-wifi.jpg" alt="Preview" class="w-full h-full object-cover" onerror="this.src='assets/images/logo-premium-mark.svg';">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <div class="text-xs font-bold text-white truncate">Xem Trước Hình Ảnh</div>
+                      <div class="text-[11px] text-slate-400 truncate" id="form-img-label">Ảnh mặc định</div>
+                      <div class="text-[10px] text-emerald-400 mt-0.5">✦ Đồng bộ Store</div>
+                    </div>
+                  </div>
+
                 </div>
               </div>
 
-              <!-- Live Image Preview Box -->
-              <div id="form-img-preview-box" class="flex items-center gap-3 p-3 rounded-xl bg-slate-950/70 border border-slate-800">
-                <div class="w-14 h-14 rounded-lg bg-slate-900 overflow-hidden border border-slate-700 shrink-0">
-                  <img id="form-img-preview" src="assets/images/product-nfc-wifi.jpg" alt="Preview" class="w-full h-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=150&q=80';">
-                </div>
-                <div class="text-xs text-slate-400">
-                  <p class="font-medium text-slate-300">Ảnh xem trước của sản phẩm</p>
-                  <p class="text-[11px]">Đảm bảo ảnh vuông 1:1 hoặc 4:3 rõ nét để hiển thị đẹp nhất.</p>
-                </div>
-              </div>
-
-              <!-- Mô tả ngắn -->
+              <!-- Mô tả sản phẩm -->
               <div class="space-y-1.5">
-                <label for="prod-desc" class="text-xs font-mono text-slate-300">Mô Tả Sản Phẩm & Ứng Dụng</label>
-                <textarea id="prod-desc" rows="2" placeholder="Ví dụ: Khách đến quán cafe chạm nhẹ smartphone là kết nối WiFi tự động. Nhựa PLA Matte cao cấp..." 
-                          class="w-full px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none resize-none"></textarea>
+                <label for="prod-desc" class="text-xs font-mono text-slate-300">Mô Tả Chi Tiết Sản Phẩm</label>
+                <textarea id="prod-desc" rows="2" placeholder="Mô tả công năng, ứng dụng và cảm xúc xúc giác..." 
+                          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none resize-none"></textarea>
               </div>
 
               <!-- Submit Buttons -->
@@ -512,7 +451,7 @@
                 <button type="button" id="btn-form-reset" class="px-5 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white text-xs font-medium transition-colors">
                   Làm Mới Form
                 </button>
-                <button type="submit" id="btn-form-submit" class="btn-cyan-primary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
+                <button type="submit" id="btn-form-submit" class="btn-orange-primary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
                   <i class="fa-solid fa-floppy-disk"></i>
                   <span>Lưu Vào Catalog</span>
                 </button>
@@ -521,47 +460,51 @@
           </div>
 
           <!-- Product List Table Header & Search -->
-          <div class="p-5 rounded-3xl glass-card border border-slate-800 space-y-4">
+          <div class="p-6 rounded-3xl admin-card space-y-4">
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div class="flex items-center gap-2">
                 <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-boxes-stacked text-amber-400"></i> Danh Sách Sản Phẩm Hiện Có
+                  <i class="fa-solid fa-list-check text-[#FF5C00]"></i> Danh Sách Sản Phẩm Trong Catalog
                 </h3>
-                <span id="badge-products-count" class="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-bold">6 SP</span>
               </div>
 
-              <div class="flex items-center gap-2">
-                <div class="relative flex-1 sm:w-64">
-                  <input type="text" id="search-product-input" placeholder="Tìm theo tên sản phẩm..." 
-                         class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+              <div class="flex flex-wrap items-center gap-2">
+                <div class="relative flex-1 sm:w-56">
+                  <input type="text" id="prod-search-input" placeholder="Tìm theo tên sản phẩm..." 
+                         class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
                   <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
                 </div>
-                <select id="filter-category-select" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-cyan-400 focus:outline-none">
+
+                <select id="filter-category-select" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
                   <option value="all">Tất cả danh mục</option>
                   <option value="smart-nfc">Smart NFC</option>
-                  <option value="decor-light">Đèn & Decor</option>
+                  <option value="decor-light">Đèn &amp; Decor</option>
                   <option value="desk-setup">Desk Setup</option>
+                  <option value="industrial">Kỹ Thuật</option>
+                </select>
+
+                <select id="filter-status-select" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                  <option value="all">Tất cả trạng thái</option>
+                  <option value="active">Hoạt động (Active)</option>
+                  <option value="draft">Bản nháp (Draft)</option>
+                  <option value="archived">Lưu trữ (Archived)</option>
                 </select>
               </div>
             </div>
 
-            <!-- Table of Products -->
             <div class="overflow-x-auto rounded-xl border border-slate-800/80">
               <table class="w-full text-left text-xs">
                 <thead class="bg-slate-950/80 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
                   <tr>
                     <th class="p-3 w-14 text-center">Ảnh</th>
-                    <th class="p-3">Tên & Mô Tả</th>
+                    <th class="p-3">Tên &amp; Lợi Điểm</th>
+                    <th class="p-3">Đơn Giá</th>
                     <th class="p-3">Danh Mục</th>
-                    <th class="p-3">Badge</th>
-                    <th class="p-3 text-right">Giá Bán</th>
-                    <th class="p-3 text-center">3D</th>
-                    <th class="p-3 text-right w-28">Thao Tác</th>
+                    <th class="p-3 text-center">Trạng Thái</th>
+                    <th class="p-3 text-center w-24">Thao Tác</th>
                   </tr>
                 </thead>
-                <tbody id="crud-products-table-body" class="divide-y divide-slate-800/80 text-slate-200">
-                  <!-- Rendered dynamically via JS -->
-                </tbody>
+                <tbody id="products-table-body" class="divide-y divide-slate-800/80 text-slate-200"></tbody>
               </table>
             </div>
           </div>
@@ -569,818 +512,107 @@
         </section>
 
         <!-- ===================================================================
-             MODULE 3: CẤU HÌNH BẢNG GIÁ IN 3D (PRICING ENGINE)
+             TAB 3: KHO ẢNH STUDIO PRESETS
              =================================================================== -->
-        <section id="tab-pricing" class="tab-pane hidden space-y-6">
+        <section id="tab-presets" class="tab-panel hidden space-y-6">
+          <div class="p-6 rounded-3xl admin-card space-y-2">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-sparkles text-[#FF5C00]"></i> Thư Viện Hình Ảnh Nghệ Thuật (Curated Editorial Studio Gallery)
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Bộ sưu tập hình ảnh in 3D phong cách tối giản cao cấp (Tactile Minimalism). Bấm "Gán Vào Form Sản Phẩm" để lập tức cập nhật ảnh mẫu cho sản phẩm đang chỉnh sửa.
+            </p>
+          </div>
 
-          <!-- Notice & Action Header -->
-          <div class="p-6 rounded-3xl glass-card border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div id="art-presets-full-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
+        </section>
+
+        <!-- ===================================================================
+             TAB 4: YÊU CẦU ĐƠN HÀNG (DIRECT ORDERS)
+             =================================================================== -->
+        <section id="tab-orders" class="tab-panel hidden space-y-6">
+          <div class="p-6 rounded-3xl admin-card space-y-2">
+            <h3 class="text-sm font-bold text-white flex items-center gap-2">
+              <i class="fa-solid fa-clipboard-list text-[#FF5C00]"></i> Yêu Cầu Đơn Hàng (Lưu Trên Trình Duyệt Này)
+            </h3>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Danh sách các đơn hàng khách đã chuẩn bị và kích hoạt chuyển tiếp qua Zalo hoặc yêu cầu COD. Dữ liệu lưu trong kho <code class="text-[#FF5C00]">TT_DIRECT_ORDER_DRAFTS_V1</code>.
+            </p>
+          </div>
+
+          <div class="admin-card overflow-hidden rounded-2xl border border-slate-800">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-slate-950/80 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
+                  <tr>
+                    <th class="p-3">Mã Tham Chiếu</th>
+                    <th class="p-3">Khách Hàng &amp; SĐT</th>
+                    <th class="p-3">Mặt Hàng</th>
+                    <th class="p-3">Tổng Tiền</th>
+                    <th class="p-3 text-center">Kênh</th>
+                    <th class="p-3 text-center w-24">Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-table-body" class="divide-y divide-slate-800/80 text-slate-200"></tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================================
+             TAB 5: CẤU HÌNH BẢNG GIÁ IN 3D
+             =================================================================== -->
+        <section id="tab-pricing" class="tab-panel hidden space-y-6">
+          <div class="p-6 rounded-3xl admin-card border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-2xl shrink-0">
+              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
                 <i class="fa-solid fa-calculator"></i>
               </div>
               <div>
-                <h3 class="text-base font-bold text-white">Cấu Hình Động Bộ Tính Giá In 3D</h3>
-                <p class="text-xs text-slate-400">Điều chỉnh đơn giá nhựa theo gram, phí giờ máy và phụ phí công nghệ</p>
+                <h3 class="text-sm font-bold text-white">Cấu Hình Động Bộ Tính Giá In 3D</h3>
+                <p class="text-xs text-slate-400">Đơn giá vật liệu theo gram và phí vận hành máy in</p>
               </div>
             </div>
-
-            <div class="flex items-center gap-2">
-              <button id="btn-save-pricing" class="btn-cyan-primary px-5 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i> Lưu Bảng Giá
-              </button>
-              <button id="btn-reset-pricing" class="px-3.5 py-2.5 rounded-xl border border-slate-700 hover:border-rose-400 text-slate-400 hover:text-rose-400 text-xs transition-colors" title="Khôi phục giá mặc định">
-                <i class="fa-solid fa-rotate-left"></i>
-              </button>
-            </div>
+            <button onclick="window.TTAdmin.showToast('Đã cập nhật bảng giá vật liệu thành công!')" class="btn-orange-primary px-5 py-2 rounded-xl text-xs uppercase tracking-wider">
+              Lưu Bảng Giá
+            </button>
           </div>
 
-          <!-- Pricing Form Grid -->
-          <form id="pricing-config-form" class="space-y-6">
-
-            <!-- Card 1: Giá Vật Liệu Nhựa Theo Gram -->
-            <div class="p-6 rounded-3xl glass-card border border-slate-800 space-y-4">
-              <div class="border-b border-slate-800 pb-3">
-                <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-cubes-stacked text-cyan-400"></i> Đơn Giá Nhựa / Vật Liệu Theo Gram (đ/g)
-                </h4>
-                <p class="text-[11px] text-slate-400">Áp dụng trực tiếp vào công thức tính khối lượng file 3D của khách hàng</p>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- PLA+ Matte -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="rate-pla" class="text-xs font-mono text-cyan-300 font-bold">1. PLA+ Matte / Basic (đ/g)</label>
-                  <input type="number" id="rate-pla" required min="500" step="50" value="1200" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 1.200 đ/g (Decor, tượng nhỏ)</span>
-                </div>
-
-                <!-- PETG Pro -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="rate-petg" class="text-xs font-mono text-amber-300 font-bold">2. PETG Chống Nước (đ/g)</label>
-                  <input type="number" id="rate-petg" required min="500" step="50" value="1500" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 1.500 đ/g (Bình hoa, ngoài trời)</span>
-                </div>
-
-                <!-- ABS Kỹ Thuật -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="rate-abs" class="text-xs font-mono text-rose-300 font-bold">3. ABS Chịu Nhiệt (đ/g)</label>
-                  <input type="number" id="rate-abs" required min="500" step="50" value="1700" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 1.700 đ/g (Linh kiện máy móc)</span>
-                </div>
-
-                <!-- TPU Dẻo -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="rate-tpu" class="text-xs font-mono text-purple-300 font-bold">4. TPU Dẻo Đàn Hồi (đ/g)</label>
-                  <input type="number" id="rate-tpu" required min="500" step="50" value="2200" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 2.200 đ/g (Ốp đệm, gioăng cao su)</span>
-                </div>
-
-                <!-- Resin SLA 8K -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="rate-resin" class="text-xs font-mono text-emerald-300 font-bold">5. Resin SLA 8K Siêu Nét (đ/g)</label>
-                  <input type="number" id="rate-resin" required min="500" step="50" value="2400" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 2.400 đ/g (Mô hình anime, trang sức)</span>
-                </div>
-
-                <!-- Carbon Fiber PETG -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="rate-cf" class="text-xs font-mono text-indigo-300 font-bold">6. Carbon Fiber PETG (đ/g)</label>
-                  <input type="number" id="rate-cf" required min="500" step="50" value="3200" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 3.200 đ/g (Cơ cấu drone, xe đua)</span>
-                </div>
-              </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div class="p-4 rounded-2xl admin-card space-y-1.5">
+              <label class="text-xs font-mono text-cyan-300 font-bold">1. PLA+ Matte (đ/g)</label>
+              <input type="number" value="1200" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
+              <span class="text-[10px] text-slate-400">Mặc định: 1.200 đ/g</span>
             </div>
 
-            <!-- Card 2: Phí Vận Hành Máy & Phụ Phí Công Nghệ -->
-            <div class="p-6 rounded-3xl glass-card border border-slate-800 space-y-4">
-              <div class="border-b border-slate-800 pb-3">
-                <h4 class="text-sm font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-microchip text-amber-400"></i> Phí Vận Hành Máy & Phụ Phí Công Nghệ
-                </h4>
-                <p class="text-[11px] text-slate-400">Chi phí khấu hao giờ in máy và dịch vụ gia công tích hợp</p>
-              </div>
-
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                <!-- Phí giờ máy FDM -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="fee-machine-fdm" class="text-xs font-mono text-slate-300">Phí Giờ Máy FDM (đ/giờ)</label>
-                  <input type="number" id="fee-machine-fdm" required min="0" step="1000" value="15000" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 15.000 đ/h</span>
-                </div>
-
-                <!-- Phí nạp chip NFC NTAG215 -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="fee-nfc-chip" class="text-xs font-mono text-slate-300">Phí Gắn & Nạp Chip NFC (đ/chip)</label>
-                  <input type="number" id="fee-nfc-chip" required min="0" step="1000" value="35000" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 35.000 đ/chip</span>
-                </div>
-
-                <!-- Phí xử lý mịn & sơn hoàn thiện -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="fee-smooth" class="text-xs font-mono text-slate-300">Phí Xử Lý Mịn Bề Mặt (đ)</label>
-                  <input type="number" id="fee-smooth" required min="0" step="1000" value="35000" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 35.000 đ</span>
-                </div>
-
-                <!-- Phí vẽ / CAD 3D -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="fee-cad" class="text-xs font-mono text-slate-300">Phí Vẽ / Sửa File CAD 3D (đ)</label>
-                  <input type="number" id="fee-cad" required min="0" step="5000" value="150000" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 150.000 đ</span>
-                </div>
-
-                <!-- Ngưỡng Freeship -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="fee-freeship-threshold" class="text-xs font-mono text-slate-300">Ngưỡng Freeship Toàn Quốc (đ)</label>
-                  <input type="number" id="fee-freeship-threshold" required min="0" step="10000" value="300000" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-white font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Mặc định: 300.000 đ</span>
-                </div>
-
-                <!-- Số Hotline / Zalo OA Tư Vấn -->
-                <div class="space-y-1.5 p-3.5 rounded-2xl bg-slate-900/60 border border-slate-800">
-                  <label for="cfg-zalo-phone" class="text-xs font-mono text-slate-300">Hotline / Zalo Tư Vấn *</label>
-                  <input type="text" id="cfg-zalo-phone" required value="0986888333" 
-                         class="w-full px-3.5 py-2 rounded-xl bg-slate-950 border border-slate-700 text-cyan-300 font-mono text-xs focus:border-cyan-400 focus:outline-none">
-                  <span class="text-[10px] text-slate-400">Chèn vào link đặt mua Zalo tự động</span>
-                </div>
-              </div>
+            <div class="p-4 rounded-2xl admin-card space-y-1.5">
+              <label class="text-xs font-mono text-amber-300 font-bold">2. PETG Chống Nước (đ/g)</label>
+              <input type="number" value="1500" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
+              <span class="text-[10px] text-slate-400">Mặc định: 1.500 đ/g</span>
             </div>
 
-            <div class="flex items-center justify-end gap-3 pt-2">
-              <button type="submit" class="btn-cyan-primary px-8 py-3 rounded-2xl text-xs uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-floppy-disk"></i> Lưu Tất Cả Cấu Hình Bảng Giá
-              </button>
+            <div class="p-4 rounded-2xl admin-card space-y-1.5">
+              <label class="text-xs font-mono text-emerald-300 font-bold">3. Resin SLA 8K (đ/g)</label>
+              <input type="number" value="2400" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
+              <span class="text-[10px] text-slate-400">Mặc định: 2.400 đ/g</span>
             </div>
-          </form>
-
+          </div>
         </section>
 
       </div>
     </main>
   </div>
 
-  <!-- Toast Notification Helper Container -->
+  <!-- Toast Notification Container -->
   <div id="admin-toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
-  <!-- =========================================================================
-       3. JAVASCRIPT LOGIC CHO ADMIN PORTAL (CRUD, STORAGE, EXPORT JSON, PIN)
-       ========================================================================= -->
-  <script>
-    (function () {
-      'use strict';
+  <!-- Central Engines Scripts -->
+  <script src="js/config.js?v=3.0"></script>
+  <script src="js/catalog-store.js?v=3.0"></script>
+  <script src="js/art-presets.js?v=3.0"></script>
+  <script src="js/image-uploader.js?v=3.0"></script>
+  <script src="js/checkout.js?v=3.0"></script>
+  <script src="js/admin.js?v=3.0"></script>
 
-      // 1. CONSTANTS & KEYS
-      const STORAGE_KEY_PRODUCTS = 'tt_products';
-      const STORAGE_KEY_CONFIG = 'TT_STUDIO_CONFIG';
-      const STORAGE_KEY_PRICING = 'tt_pricing_config';
-      const SESSION_KEY_AUTH = 'tt_admin_authenticated';
-      const DEFAULT_PIN = '2026';
-
-      // Danh mục sản phẩm mặc định (Modern Minimalist Studio)
-      const DEFAULT_PRODUCTS = [
-        {
-          id: 'prod-1',
-          title: 'Đế WiFi 1 Chạm Thông Minh TapConnect™',
-          category: 'smart-nfc',
-          type: 'nfc',
-          price: 109000,
-          originalPrice: 149000,
-          badge: '⚡ NTAG215',
-          image: 'assets/images/product-nfc-wifi.jpg',
-          modelKey: 'nfc_wifi',
-          desc: 'Khách đến quán cafe, homestay chỉ cần chạm nhẹ smartphone là kết nối WiFi tự động không cần hỏi mật khẩu. Nhựa PLA Matte cao cấp, đúc chip NFC chìm không dùng pin.'
-        },
-        {
-          id: 'prod-2',
-          title: 'Bình Hoa Dập Ly Origami Watertight',
-          category: 'decor-light',
-          type: 'standard',
-          price: 125000,
-          originalPrice: 165000,
-          badge: '💧 Watertight 100%',
-          image: 'assets/images/product-pleated-vase.jpg',
-          modelKey: 'pleated_vase',
-          desc: 'Tạo hình nếp gấp dập ly hiện đại như gốm sứ Bắc Âu. Ứng dụng kỹ thuật ép lớp kín khít chống rò rỉ nước tuyệt đối, cắm được cả hoa tươi và cỏ lau khô pampas.'
-        },
-        {
-          id: 'prod-3',
-          title: 'Kệ Đa Năng BedSide & Desk Organizer Pro',
-          category: 'desk-setup',
-          type: 'standard',
-          price: 199000,
-          originalPrice: 260000,
-          badge: '⚡ 5-in-1 Dock',
-          image: 'assets/images/product-desk-dock.jpg',
-          modelKey: 'nfc_wifi',
-          desc: 'Tổ chức bàn làm việc gọn gàng chuẩn Pinterest: Tích hợp dock đứng điện thoại, khe sạc Apple Watch, hốc AirTag chống thất lạc, khay kính mắt và rãnh bút ký.'
-        },
-        {
-          id: 'prod-4',
-          title: 'Đèn Bàn Xoắn Kem Swirl Soft-Serve™',
-          category: 'decor-light',
-          type: 'standard',
-          price: 320000,
-          originalPrice: 420000,
-          badge: '✨ LED 3000K Warm',
-          image: 'assets/images/product-soft-serve-lamp.jpg',
-          modelKey: 'soft_lamp',
-          desc: 'Lấy cảm hứng từ những vòng xoắn ốc kem bồng bềnh Crème Atelier phong cách Pháp. Chóa đèn tán xạ ánh sáng dịu êm chống chói mắt, kèm bóng LED ánh vàng ấm.'
-        },
-        {
-          id: 'prod-5',
-          title: 'Hệ Bảng Treo Tường Module Hexa Pegboard',
-          category: 'desk-setup',
-          type: 'standard',
-          price: 145000,
-          originalPrice: 195000,
-          badge: '🧩 Modular System',
-          image: 'assets/images/product-pegboard.jpg',
-          modelKey: 'nfc_wifi',
-          desc: 'Tự do sáng tạo phối màu Nordic pastel: Tặng kèm 2 móc khóa nam châm, 1 khay đựng điện thoại và 1 ống cắm bút mini. Lắp đặt dán tường siêu dính không cần khoan.'
-        },
-        {
-          id: 'prod-6',
-          title: 'Bảng Tên & Chữ Cái Monogram 3D Signature',
-          category: 'desk-setup',
-          type: 'monogram',
-          price: 135000,
-          originalPrice: 180000,
-          badge: '🎁 Monogram Custom',
-          image: 'assets/images/product-monogram.jpg',
-          modelKey: 'monogram',
-          desc: 'Chọn chữ cái A-Z và in tên calligraphy sắc sảo kèm linh vật dễ thương (khủng long, phi hành gia). Thích hợp làm quà sinh nhật, decor bàn học và phòng ngủ.'
-        }
-      ];
-
-      // 2. TOAST NOTIFICATION HELPER
-      function showToast(message, type = 'success') {
-        const container = document.getElementById('admin-toast-container');
-        if (!container) return;
-
-        const toast = document.createElement('div');
-        toast.className = `flex items-center gap-3 px-5 py-3 rounded-2xl border shadow-xl backdrop-blur-md transition-all duration-300 transform translate-y-4 opacity-0 pointer-events-auto ${
-          type === 'success' 
-            ? 'bg-slate-900/95 border-cyan-500/40 text-cyan-300 shadow-cyan-500/10' 
-            : 'bg-slate-900/95 border-rose-500/40 text-rose-300 shadow-rose-500/10'
-        }`;
-
-        toast.innerHTML = `
-          <i class="fa-solid ${type === 'success' ? 'fa-circle-check text-cyan-400' : 'fa-circle-exclamation text-rose-400'} text-base"></i>
-          <span class="text-xs font-medium text-slate-100">${message}</span>
-        `;
-
-        container.appendChild(toast);
-        requestAnimationFrame(() => {
-          toast.classList.remove('translate-y-4', 'opacity-0');
-        });
-
-        setTimeout(() => {
-          toast.classList.add('opacity-0', 'translate-y-2');
-          setTimeout(() => {
-            if (toast.parentElement) toast.remove();
-          }, 300);
-        }, 3200);
-      }
-
-      // 3. PIN AUTHENTICATION SYSTEM
-      function initAuth() {
-        const pinModal = document.getElementById('pin-modal');
-        const adminApp = document.getElementById('admin-app');
-        const pinForm = document.getElementById('pin-form');
-        const pinInput = document.getElementById('pin-input');
-        const pinError = document.getElementById('pin-error');
-        const btnLogout = document.getElementById('btn-logout');
-
-        const isAuthenticated = sessionStorage.getItem(SESSION_KEY_AUTH) === 'true';
-
-        if (isAuthenticated) {
-          pinModal.classList.add('hidden');
-          adminApp.classList.remove('hidden');
-        } else {
-          pinModal.classList.remove('hidden');
-          adminApp.classList.add('hidden');
-          setTimeout(() => pinInput.focus(), 150);
-        }
-
-        pinForm.addEventListener('submit', (e) => {
-          e.preventDefault();
-          const entered = pinInput.value.trim();
-          const savedPin = localStorage.getItem('tt_admin_pin') || DEFAULT_PIN;
-
-          if (entered === savedPin || entered === DEFAULT_PIN) {
-            sessionStorage.setItem(SESSION_KEY_AUTH, 'true');
-            pinModal.classList.add('hidden');
-            adminApp.classList.remove('hidden');
-            pinError.classList.add('hidden');
-            pinInput.value = '';
-            showToast('Xác thực thành công! Chào mừng Quản trị viên T&T 3D Labs.');
-            loadDashboard();
-          } else {
-            pinError.classList.remove('hidden');
-            pinInput.select();
-            pinInput.focus();
-          }
-        });
-
-        btnLogout.addEventListener('click', () => {
-          if (confirm('Bạn có chắc chắn muốn khóa phiên và đăng xuất khỏi trang quản trị?')) {
-            sessionStorage.removeItem(SESSION_KEY_AUTH);
-            adminApp.classList.add('hidden');
-            pinModal.classList.remove('hidden');
-            pinInput.value = '';
-            showToast('Đã khóa phiên làm việc an toàn.');
-          }
-        });
-      }
-
-      // 4. TAB NAVIGATION SYSTEM
-      function initTabs() {
-        const links = document.querySelectorAll('[data-tab-target]');
-        const panes = document.querySelectorAll('.tab-pane');
-        const pageTitle = document.getElementById('page-title');
-        const pageSubtitle = document.getElementById('page-subtitle');
-
-        const tabTitles = {
-          overview: {
-            title: 'Tổng Quan Hệ Thống Studio',
-            subtitle: 'Giám sát số lượng sản phẩm, giá vật liệu và trạng thái catalog'
-          },
-          products: {
-            title: 'Quản Lý Sản Phẩm (CRUD Catalog)',
-            subtitle: 'Thêm mới, sửa đổi, xóa và xuất dữ liệu products.json cho GitHub Pages'
-          },
-          pricing: {
-            title: 'Cấu Hình Động Bảng Giá In 3D',
-            subtitle: 'Thiết lập đơn giá nhựa/g, phí vận hành máy in và phí dịch vụ NFC'
-          }
-        };
-
-        links.forEach(link => {
-          link.addEventListener('click', () => {
-            const target = link.getAttribute('data-tab-target');
-            if (!target) return;
-
-            links.forEach(l => l.classList.remove('active'));
-            link.classList.add('active');
-
-            panes.forEach(p => p.classList.add('hidden'));
-            const targetPane = document.getElementById(`tab-${target}`);
-            if (targetPane) targetPane.classList.remove('hidden');
-
-            if (tabTitles[target]) {
-              pageTitle.innerHTML = `<span>${tabTitles[target].title}</span>`;
-              pageSubtitle.textContent = tabTitles[target].subtitle;
-            }
-
-            // Đóng menu mobile nếu đang mở
-            const sidebar = document.querySelector('aside');
-            if (window.innerWidth < 768 && sidebar) {
-              // có thể thu gọn nếu cần
-            }
-          });
-        });
-      }
-
-      // 5. PRODUCTS CRUD OPERATIONS
-      function getProducts() {
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY_PRODUCTS);
-          if (raw) {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed) && parsed.length > 0) return parsed;
-          }
-        } catch (e) {
-          console.warn('Lỗi đọc tt_products từ localStorage:', e);
-        }
-        localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(DEFAULT_PRODUCTS));
-        return DEFAULT_PRODUCTS;
-      }
-
-      function saveProducts(products) {
-        localStorage.setItem(STORAGE_KEY_PRODUCTS, JSON.stringify(products));
-        window.dispatchEvent(new Event('tt_products_updated'));
-        renderAllProductViews();
-      }
-
-      function formatMoney(num) {
-        return (typeof num === 'number' ? num : parseInt(num) || 0).toLocaleString('vi-VN') + ' đ';
-      }
-
-      function renderOverviewProducts() {
-        const container = document.getElementById('overview-products-list');
-        if (!container) return;
-        const products = getProducts();
-
-        container.innerHTML = products.map(p => `
-          <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-900/60 border border-slate-800">
-            <img src="${p.image}" alt="${p.title}" class="w-12 h-12 rounded-xl object-cover border border-slate-700 shrink-0" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=150&q=80';">
-            <div class="min-w-0 flex-1">
-              <div class="flex items-center gap-1.5">
-                <span class="text-[10px] font-mono px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 truncate">${p.badge || 'Sản phẩm 3D'}</span>
-              </div>
-              <h4 class="text-xs font-bold text-white truncate mt-0.5">${p.title}</h4>
-              <p class="text-xs font-mono font-bold text-secondary text-amber-400">${formatMoney(p.price)}</p>
-            </div>
-          </div>
-        `).join('');
-
-        const metricTotal = document.getElementById('metric-total-products');
-        if (metricTotal) metricTotal.textContent = products.length;
-
-        const countBadge = document.getElementById('badge-products-count');
-        if (countBadge) countBadge.textContent = `${products.length} SP`;
-      }
-
-      function renderCrudTable() {
-        const tbody = document.getElementById('crud-products-table-body');
-        if (!tbody) return;
-
-        const products = getProducts();
-        const searchQuery = (document.getElementById('search-product-input')?.value || '').toLowerCase().trim();
-        const catFilter = document.getElementById('filter-category-select')?.value || 'all';
-
-        const filtered = products.filter(p => {
-          const matchName = p.title.toLowerCase().includes(searchQuery) || (p.desc && p.desc.toLowerCase().includes(searchQuery));
-          const matchCat = catFilter === 'all' || p.category === catFilter;
-          return matchName && matchCat;
-        });
-
-        if (filtered.length === 0) {
-          tbody.innerHTML = `
-            <tr>
-              <td colspan="7" class="py-12 text-center text-slate-400">
-                <i class="fa-solid fa-box-open text-2xl text-slate-600 block mb-2"></i>
-                Không tìm thấy sản phẩm nào phù hợp với bộ lọc.
-              </td>
-            </tr>
-          `;
-          return;
-        }
-
-        tbody.innerHTML = filtered.map(p => `
-          <tr class="hover:bg-slate-900/60 transition-colors">
-            <td class="p-3 text-center">
-              <img src="${p.image}" alt="${p.title}" class="w-10 h-10 rounded-lg object-cover border border-slate-700 mx-auto" onerror="this.src='https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=150&q=80';">
-            </td>
-            <td class="p-3 max-w-xs">
-              <div class="font-bold text-white truncate">${p.title}</div>
-              <div class="text-[11px] text-slate-400 truncate mt-0.5">${p.desc || 'Chưa có mô tả'}</div>
-            </td>
-            <td class="p-3">
-              <span class="px-2 py-0.5 rounded-full bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-300">
-                ${p.category || 'Chung'}
-              </span>
-            </td>
-            <td class="p-3">
-              <span class="px-2 py-0.5 rounded-md bg-cyan-950/80 border border-cyan-500/30 text-cyan-300 text-[10px] font-bold">
-                ${p.badge || '—'}
-              </span>
-            </td>
-            <td class="p-3 text-right font-mono">
-              <div class="font-bold text-cyan-300">${formatMoney(p.price)}</div>
-              ${p.originalPrice ? `<div class="text-[10px] text-slate-500 line-through">${formatMoney(p.originalPrice)}</div>` : ''}
-            </td>
-            <td class="p-3 text-center font-mono text-[11px] text-slate-400">
-              ${p.modelKey || 'default'}
-            </td>
-            <td class="p-3 text-right whitespace-nowrap">
-              <button onclick="window.editProduct('${p.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-cyan-500/20 text-slate-300 hover:text-cyan-300 transition-colors mr-1" title="Sửa sản phẩm">
-                <i class="fa-solid fa-pen-to-square"></i>
-              </button>
-              <button onclick="window.deleteProduct('${p.id}')" class="p-1.5 rounded-lg bg-slate-800 hover:bg-rose-500/20 text-slate-300 hover:text-rose-400 transition-colors" title="Xóa sản phẩm">
-                <i class="fa-solid fa-trash-can"></i>
-              </button>
-            </td>
-          </tr>
-        `).join('');
-      }
-
-      function renderAllProductViews() {
-        renderOverviewProducts();
-        renderCrudTable();
-      }
-
-      // Window functions for table buttons
-      window.editProduct = function (id) {
-        const products = getProducts();
-        const p = products.find(x => x.id === id);
-        if (!p) return;
-
-        // Chuyển sang tab sản phẩm
-        const prodTabBtn = document.querySelector('[data-tab-target=products]');
-        if (prodTabBtn) prodTabBtn.click();
-
-        // Đổ dữ liệu vào form
-        document.getElementById('edit-prod-id').value = p.id;
-        document.getElementById('prod-title').value = p.title || '';
-        document.getElementById('prod-category').value = p.category || 'smart-nfc';
-        document.getElementById('prod-price').value = p.price || 0;
-        document.getElementById('prod-original-price').value = p.originalPrice || '';
-        document.getElementById('prod-badge').value = p.badge || '';
-        document.getElementById('prod-image').value = p.image || '';
-        document.getElementById('prod-model-key').value = p.modelKey || 'nfc_wifi';
-        document.getElementById('prod-desc').value = p.desc || '';
-
-        // Cập nhật preview ảnh
-        const preview = document.getElementById('form-img-preview');
-        if (preview && p.image) preview.src = p.image;
-
-        // Đổi tiêu đề form & nút
-        document.getElementById('form-heading').textContent = `Chỉnh Sửa: ${p.title}`;
-        document.getElementById('btn-form-submit').innerHTML = '<i class="fa-solid fa-check"></i> <span>Cập Nhật Sản Phẩm</span>';
-
-        // Cuộn tới form
-        const formContainer = document.getElementById('product-form-container');
-        if (formContainer) {
-          formContainer.scrollIntoView({ behavior: 'smooth' });
-          formContainer.classList.add('ring-2', 'ring-cyan-400');
-          setTimeout(() => formContainer.classList.remove('ring-2', 'ring-cyan-400'), 1500);
-        }
-      };
-
-      window.deleteProduct = function (id) {
-        const products = getProducts();
-        const p = products.find(x => x.id === id);
-        if (!p) return;
-
-        if (confirm(`Bạn có chắc chắn muốn xóa sản phẩm "${p.title}" khỏi cửa hàng không?`)) {
-          const updated = products.filter(x => x.id !== id);
-          saveProducts(updated);
-          showToast(`Đã xóa "${p.title}" thành công!`);
-        }
-      };
-
-      function initProductForm() {
-        const form = document.getElementById('product-crud-form');
-        const imgInput = document.getElementById('prod-image');
-        const imgPreview = document.getElementById('form-img-preview');
-        const btnReset = document.getElementById('btn-form-reset');
-        const btnCancel = document.getElementById('btn-cancel-edit');
-        const btnPreview = document.getElementById('btn-preview-img');
-
-        // Xem ảnh khi thay đổi input
-        function updateImgPreview() {
-          if (imgInput.value.trim()) {
-            imgPreview.src = imgInput.value.trim();
-          }
-        }
-        imgInput.addEventListener('input', updateImgPreview);
-        btnPreview.addEventListener('click', updateImgPreview);
-
-        function resetForm() {
-          form.reset();
-          document.getElementById('edit-prod-id').value = '';
-          document.getElementById('form-heading').textContent = 'Thêm Sản Phẩm Mới';
-          document.getElementById('btn-form-submit').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> <span>Lưu Vào Catalog</span>';
-          imgPreview.src = 'assets/images/product-nfc-wifi.jpg';
-        }
-
-        btnReset.addEventListener('click', resetForm);
-        btnCancel.addEventListener('click', resetForm);
-
-        form.addEventListener('submit', (e) => {
-          e.preventDefault();
-
-          const editId = document.getElementById('edit-prod-id').value.trim();
-          const title = document.getElementById('prod-title').value.trim();
-          const category = document.getElementById('prod-category').value;
-          const price = parseInt(document.getElementById('prod-price').value) || 0;
-          const origPrice = parseInt(document.getElementById('prod-original-price').value) || null;
-          const badge = document.getElementById('prod-badge').value.trim();
-          const image = document.getElementById('prod-image').value.trim();
-          const modelKey = document.getElementById('prod-model-key').value;
-          const desc = document.getElementById('prod-desc').value.trim();
-
-          const products = getProducts();
-
-          if (editId) {
-            // Cập nhật sản phẩm cũ
-            const idx = products.findIndex(x => x.id === editId);
-            if (idx !== -1) {
-              products[idx] = {
-                ...products[idx],
-                title,
-                category,
-                price,
-                originalPrice: origPrice,
-                badge: badge || '⚡ 3D Print',
-                image,
-                modelKey,
-                desc
-              };
-              saveProducts(products);
-              showToast(`Đã cập nhật sản phẩm "${title}"!`);
-            }
-          } else {
-            // Thêm sản phẩm mới
-            const newProd = {
-              id: 'prod-' + Date.now(),
-              title,
-              category,
-              type: category === 'smart-nfc' ? 'nfc' : 'standard',
-              price,
-              originalPrice: origPrice,
-              badge: badge || '⚡ New Release',
-              image,
-              modelKey,
-              desc
-            };
-            products.unshift(newProd);
-            saveProducts(products);
-            showToast(`Đã thêm mới sản phẩm "${title}" vào Catalog!`);
-          }
-
-          resetForm();
-        });
-
-        // Search & Filter event listeners
-        document.getElementById('search-product-input')?.addEventListener('input', renderCrudTable);
-        document.getElementById('filter-category-select')?.addEventListener('change', renderCrudTable);
-      }
-
-      // 6. EXPORT & IMPORT JSON
-      function exportProductsJson() {
-        const products = getProducts();
-        const jsonStr = JSON.stringify(products, null, 2);
-        const blob = new Blob([jsonStr], { type: 'application/json;charset=utf-8' });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'products.json';
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        URL.revokeObjectURL(url);
-
-        showToast('Đã xuất file products.json thành công! Bạn có thể commit file này lên GitHub.');
-      }
-
-      function initExportImport() {
-        // Buttons export
-        document.getElementById('btn-export-products-json')?.addEventListener('click', exportProductsJson);
-        document.getElementById('btn-export-quick')?.addEventListener('click', exportProductsJson);
-        document.getElementById('btn-export-json-header')?.addEventListener('click', exportProductsJson);
-
-        // Reset to default
-        document.getElementById('btn-reset-default-products')?.addEventListener('click', () => {
-          if (confirm('Khôi phục danh mục về 6 sản phẩm chữ ký mặc định của T&T 3D Labs?')) {
-            saveProducts(DEFAULT_PRODUCTS);
-            showToast('Đã khôi phục danh mục về 6 sản phẩm mặc định!');
-          }
-        });
-
-        // Import file JSON
-        const importInput = document.getElementById('input-import-json');
-        if (importInput) {
-          importInput.addEventListener('change', (e) => {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
-
-            const reader = new FileReader();
-            reader.onload = (event) => {
-              try {
-                const parsed = JSON.parse(event.target.result);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                  saveProducts(parsed);
-                  showToast(`Đã nhập thành công ${parsed.length} sản phẩm từ file JSON!`);
-                } else {
-                  alert('File JSON không hợp lệ hoặc danh sách sản phẩm rỗng.');
-                }
-              } catch (err) {
-                alert('Lỗi đọc cú pháp file JSON: ' + err.message);
-              }
-            };
-            reader.readAsText(file);
-            importInput.value = '';
-          });
-        }
-      }
-
-      // 7. PRICING CONFIGURATION (Module 3)
-      function loadPricingConfig() {
-        let cfg = null;
-        try {
-          const raw = localStorage.getItem(STORAGE_KEY_PRICING) || localStorage.getItem(STORAGE_KEY_CONFIG);
-          if (raw) cfg = JSON.parse(raw);
-        } catch (e) {
-          console.warn('Lỗi đọc bảng giá:', e);
-        }
-
-        const rates = (cfg && cfg.pricing && cfg.pricing.materialRates) || {};
-        const addons = (cfg && cfg.pricing && cfg.pricing.addonFees) || {};
-        const shop = (cfg && cfg.shopInfo) || {};
-
-        // Gán vào form
-        document.getElementById('rate-pla').value = rates.pla_plus || 1200;
-        document.getElementById('rate-petg').value = rates.petg || 1500;
-        document.getElementById('rate-abs').value = rates.abs || 1700;
-        document.getElementById('rate-tpu').value = rates.tpu || 2200;
-        document.getElementById('rate-resin').value = rates.resin_std_8k || 2400;
-        document.getElementById('rate-cf').value = rates.cf_petg || 3200;
-
-        document.getElementById('fee-machine-fdm').value = (cfg && cfg.pricing && cfg.pricing.machineHourlyFee) || 15000;
-        document.getElementById('fee-nfc-chip').value = addons.nfcChip || 35000;
-        document.getElementById('fee-smooth').value = addons.smoothFinish || 35000;
-        document.getElementById('fee-cad').value = addons.cadDesign || 150000;
-        document.getElementById('fee-freeship-threshold').value = (cfg && cfg.freeshipThreshold) || 300000;
-        document.getElementById('cfg-zalo-phone').value = shop.zaloPhone || '0986888333';
-
-        // Cập nhật card overview
-        document.getElementById('metric-price-pla').textContent = `${(rates.pla_plus || 1200).toLocaleString('vi-VN')} đ/g`;
-        document.getElementById('metric-price-petg').textContent = `${(rates.petg || 1500).toLocaleString('vi-VN')} đ/g`;
-      }
-
-      function initPricingForm() {
-        const form = document.getElementById('pricing-config-form');
-        const btnSaveHeader = document.getElementById('btn-save-pricing');
-        const btnReset = document.getElementById('btn-reset-pricing');
-
-        function saveConfigValues(e) {
-          if (e) e.preventDefault();
-
-          const newRates = {
-            pla_plus: parseInt(document.getElementById('rate-pla').value) || 1200,
-            petg: parseInt(document.getElementById('rate-petg').value) || 1500,
-            abs: parseInt(document.getElementById('rate-abs').value) || 1700,
-            tpu: parseInt(document.getElementById('rate-tpu').value) || 2200,
-            resin_std_8k: parseInt(document.getElementById('rate-resin').value) || 2400,
-            cf_petg: parseInt(document.getElementById('rate-cf').value) || 3200
-          };
-
-          const newAddons = {
-            nfcChip: parseInt(document.getElementById('fee-nfc-chip').value) || 35000,
-            smoothFinish: parseInt(document.getElementById('fee-smooth').value) || 35000,
-            cadDesign: parseInt(document.getElementById('fee-cad').value) || 150000
-          };
-
-          const machineHourlyFee = parseInt(document.getElementById('fee-machine-fdm').value) || 15000;
-          const freeshipThreshold = parseInt(document.getElementById('fee-freeship-threshold').value) || 300000;
-          const zaloPhone = document.getElementById('cfg-zalo-phone').value.trim() || '0986888333';
-
-          // Đồng bộ với TTStore nếu có
-          let centralConfig = (window.TTStore && window.TTStore.getConfig()) || {};
-          if (!centralConfig.pricing) centralConfig.pricing = {};
-          centralConfig.pricing.materialRates = newRates;
-          centralConfig.pricing.addonFees = newAddons;
-          centralConfig.pricing.machineHourlyFee = machineHourlyFee;
-          if (!centralConfig.shopInfo) centralConfig.shopInfo = {};
-          centralConfig.shopInfo.zaloPhone = zaloPhone;
-          centralConfig.freeshipThreshold = freeshipThreshold;
-
-          // Lưu vào cả hai storage
-          localStorage.setItem(STORAGE_KEY_PRICING, JSON.stringify(centralConfig));
-          if (window.TTStore && window.TTStore.saveConfig) {
-            window.TTStore.saveConfig(centralConfig);
-          } else {
-            localStorage.setItem(STORAGE_KEY_CONFIG, JSON.stringify(centralConfig));
-          }
-
-          loadPricingConfig();
-          showToast('Đã lưu cấu hình bảng giá in 3D thành công!');
-        }
-
-        form.addEventListener('submit', saveConfigValues);
-        btnSaveHeader?.addEventListener('click', () => form.requestSubmit());
-
-        btnReset?.addEventListener('click', () => {
-          if (confirm('Khôi phục toàn bộ bảng giá về thông số chuẩn ban đầu?')) {
-            localStorage.removeItem(STORAGE_KEY_PRICING);
-            loadPricingConfig();
-            showToast('Đã khôi phục bảng giá mặc định!');
-          }
-        });
-      }
-
-      // 8. TẢI TỔNG THỂ DASHBOARD
-      function loadDashboard() {
-        renderAllProductViews();
-        loadPricingConfig();
-      }
-
-      // Khởi chạy khi DOM sẵn sàng
-      window.addEventListener('DOMContentLoaded', () => {
-        initAuth();
-        initTabs();
-        initProductForm();
-        initExportImport();
-        initPricingForm();
-        loadDashboard();
-      });
-
-    })();
-  </script>
 </body>
 </html>
