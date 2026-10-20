@@ -163,8 +163,19 @@
     const item = products.find(p => p.id === prodId);
     if (!item) return;
 
-    const defaultColor = (item.colors && item.colors[0]) || { id: 'default', name: 'Tiêu chuẩn', hex: '#26282B' };
-    const defaultMat = (item.materials && item.materials[0]) || { id: 'pla_plus', name: 'PLA+ Nguyên Sinh', label: 'PLA+ Nguyên Sinh', priceModifier: 0 };
+    const cardPreSelectedColorId = window.cardSelectedColors ? window.cardSelectedColors[prodId] : null;
+    let selectedColor = null;
+    if (Array.isArray(item.colors) && item.colors.length > 0) {
+      if (cardPreSelectedColorId) {
+        selectedColor = item.colors.find(c => c.id === cardPreSelectedColorId) || item.colors[0];
+      } else {
+        selectedColor = item.colors[0];
+      }
+    } else {
+      selectedColor = { id: 'default', name: 'Tiêu chuẩn', hex: '#26282B' };
+    }
+
+    const defaultMat = (item.materials && item.materials[0]) || { id: 'pla_matte', name: 'PLA Matte', label: 'PLA Matte', priceModifier: 0 };
 
     if (window.TTCart && typeof window.TTCart.addToCart === 'function') {
       window.TTCart.addToCart({
@@ -173,9 +184,9 @@
         price: item.price + (defaultMat.priceModifier || 0),
         qty: 1,
         image: item.image,
-        color: defaultColor,
-        colorId: defaultColor.id,
-        colorName: defaultColor.name,
+        color: selectedColor,
+        colorId: selectedColor.id,
+        colorName: selectedColor.name,
         material: defaultMat,
         materialId: defaultMat.id,
         materialName: defaultMat.label || defaultMat.name,
@@ -184,7 +195,7 @@
       });
       window.TTCart.openCart();
       if (window.showToast) {
-        window.showToast(`Đã thêm "${item.title}" vào giỏ hàng!`);
+        window.showToast(`Đã thêm "${item.title}" (${selectedColor.name}) vào giỏ hàng!`);
       }
     }
   };
@@ -198,54 +209,99 @@
     const modal = document.getElementById('order-modal');
     if (!modal) return;
 
-    // Fill modal data
+    // Active state tracking
+    window.modalActiveProduct = item;
+    window.modalQty = 1;
+
+    // Kiểm tra màu đã chọn trước trên card
+    const cardPreSelectedColorId = window.cardSelectedColors ? window.cardSelectedColors[prodId] : null;
+    let initialColor = null;
+    if (Array.isArray(item.colors) && item.colors.length > 0) {
+      if (cardPreSelectedColorId) {
+        initialColor = item.colors.find(c => c.id === cardPreSelectedColorId) || item.colors[0];
+      } else {
+        initialColor = item.colors[0];
+      }
+    } else {
+      initialColor = { id: 'c_default', name: 'Đen Mờ Nhám', hex: '#1E2022' };
+    }
+    window.modalSelectedColor = initialColor;
+
+    // Vật liệu mặc định
+    const initialMat = (Array.isArray(item.materials) && item.materials.length > 0)
+      ? item.materials[0]
+      : { id: 'pla_matte', name: 'PLA Matte', label: 'PLA Matte Thẩm Mỹ', desc: 'Bề mặt mờ mịn cao cấp', priceModifier: 0 };
+    window.modalSelectedMat = initialMat;
+
+    // Fill Visuals
     const imgEl = document.getElementById('order-prod-img');
+    const badgeEl = document.getElementById('order-prod-badge');
     const titleEl = document.getElementById('order-prod-title');
-    const priceEl = document.getElementById('order-prod-price');
     const descEl = document.getElementById('order-prod-desc');
     const specsEl = document.getElementById('order-prod-specs-box');
     const swatchesEl = document.getElementById('order-swatches-box');
     const matsEl = document.getElementById('order-materials-box');
     const customInput = document.getElementById('order-custom-text-input');
+    const customCount = document.getElementById('order-custom-text-count');
+    const qtyVal = document.getElementById('modal-qty-val');
 
     if (imgEl) {
       imgEl.src = item.image || 'assets/images/logo-premium-mark.svg';
       imgEl.onerror = () => { imgEl.src = 'assets/images/logo-premium-mark.svg'; };
     }
+    if (badgeEl) {
+      badgeEl.textContent = item.badge || '✦ Studio Craft';
+    }
     if (titleEl) titleEl.textContent = item.title;
-    if (priceEl) priceEl.textContent = formatMoney(item.price);
-    if (descEl) descEl.textContent = item.desc;
-    if (customInput) customInput.value = '';
+    if (descEl) descEl.textContent = item.desc || item.headlineBenefit || '';
+    if (customInput) {
+      customInput.value = '';
+      customInput.oninput = () => {
+        if (customCount) customCount.textContent = `${customInput.value.length}/100`;
+      };
+    }
+    if (customCount) customCount.textContent = '0/100';
+    if (qtyVal) qtyVal.textContent = '1';
 
-    // Active state tracking
-    window.modalActiveProduct = item;
-    window.modalSelectedColor = (item.colors && item.colors[0]) || { id: 'default', name: 'Mặc định', hex: '#26282B' };
-    window.modalSelectedMat = (item.materials && item.materials[0]) || { id: 'pla_plus', name: 'PLA+ Nguyên Sinh', label: 'PLA+ Nguyên Sinh', priceModifier: 0 };
-    window.modalQty = 1;
+    // Technical Specs Grid (Semantic <dl>)
+    if (specsEl) {
+      const sp = item.specs || {};
+      const specsList = [
+        { label: 'Kích thước', val: sp.dimensions || 'Tiêu chuẩn xưởng' },
+        { label: 'Trọng lượng', val: sp.weight || 'Tiêu chuẩn xưởng' },
+        { label: 'Độ mịn lớp', val: sp.layer || '0.16mm High-Detail' },
+        { label: 'Bảo hành', val: sp.warranty || 'Đổi mới 1-1' }
+      ];
 
-    // Specs
-    if (specsEl && item.specs) {
-      specsEl.innerHTML = `
-        <div class="grid grid-cols-2 gap-2 text-xs">
-          <div><span class="text-secondary-color">Kích thước:</span> <strong class="text-primary-color font-mono">${item.specs.dimensions || 'N/A'}</strong></div>
-          <div><span class="text-secondary-color">Trọng lượng:</span> <strong class="text-primary-color font-mono">${item.specs.weight || 'N/A'}</strong></div>
-          <div><span class="text-secondary-color">Độ mịn lớp:</span> <strong class="text-primary-color font-mono">${item.specs.layer || '0.16mm'}</strong></div>
-          <div><span class="text-secondary-color">Bảo hành:</span> <strong class="text-primary-color font-mono">${item.specs.warranty || 'Đổi mới 1-1'}</strong></div>
-          ${item.specs.nfc ? `<div class="col-span-2 pt-1 border-t border-[var(--border-subtle)]"><span class="text-secondary-color">NFC:</span> <strong class="text-[#FF5C00] font-mono">${item.specs.nfc}</strong></div>` : ''}
+      if (sp.nfc) {
+        specsList.push({ label: 'Chip NFC', val: sp.nfc, isAccent: true });
+      }
+
+      specsEl.innerHTML = specsList.map(s => `
+        <div class="space-y-0.5">
+          <dt class="text-[11px] uppercase tracking-wider text-secondary-color font-medium">${s.label}</dt>
+          <dd class="font-mono font-semibold ${s.isAccent ? 'text-[#FF5C00]' : 'text-primary-color'} truncate">${s.val}</dd>
         </div>
-      `;
+      `).join('');
     }
 
     // Render Modal Swatches
-    if (swatchesEl && item.colors) {
+    if (swatchesEl) {
+      const colors = (Array.isArray(item.colors) && item.colors.length > 0)
+        ? item.colors
+        : [initialColor];
+
       swatchesEl.innerHTML = `
-        <div class="text-xs font-semibold text-secondary-color mb-2">Chọn màu sắc: <span id="modal-color-name" class="text-primary-color font-bold">${window.modalSelectedColor.name}</span></div>
-        <div class="flex flex-wrap gap-2">
-          ${item.colors.map((c, i) => `
+        <div class="flex items-center justify-between text-xs font-semibold text-secondary-color mb-1.5">
+          <span>Chọn màu sắc:</span>
+          <span id="modal-color-name" class="text-primary-color font-bold">${initialColor.name}</span>
+        </div>
+        <div class="flex flex-wrap gap-2.5">
+          ${colors.map((c) => `
             <button type="button" 
-                    class="modal-color-btn px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-all ${i === 0 ? 'border-[#FF5C00] bg-[rgba(255,92,0,0.12)] text-primary-color' : 'border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-secondary-color'}" 
+                    class="modal-color-btn px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-all ${c.id === initialColor.id ? 'border-[#FF5C00] bg-[rgba(255,92,0,0.12)] text-primary-color ring-2 ring-[#FF5C00]/30' : 'border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-secondary-color hover:border-slate-500'}" 
                     onclick="window.selectModalColor('${c.id}', '${c.name}', this)">
-              <span class="w-3.5 h-3.5 rounded-full border border-black/20" style="background-color: ${c.hex}"></span>
+              <span class="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0" style="background-color: ${c.hex}"></span>
               <span>${c.name}</span>
             </button>
           `).join('')}
@@ -254,19 +310,26 @@
     }
 
     // Render Modal Materials
-    if (matsEl && item.materials) {
+    if (matsEl) {
+      const materials = (Array.isArray(item.materials) && item.materials.length > 0)
+        ? item.materials
+        : [initialMat];
+
       matsEl.innerHTML = `
-        <div class="text-xs font-semibold text-secondary-color mb-2">Vật liệu in:</div>
+        <div class="text-xs font-semibold text-secondary-color mb-1.5">Vật liệu in:</div>
         <div class="space-y-2">
-          ${item.materials.map((m, i) => `
+          ${materials.map((m, i) => `
             <button type="button" 
-                    class="modal-mat-btn w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between ${i === 0 ? 'border-[#FF5C00] bg-[var(--bg-surface-elevated)]' : 'border-[var(--border-subtle)] bg-[var(--bg-surface)]'}" 
+                    class="modal-mat-btn w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between ${i === 0 ? 'border-[#FF5C00] bg-[var(--bg-surface-elevated)] ring-1 ring-[#FF5C00]/40' : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-slate-600'}" 
                     onclick="window.selectModalMaterial('${m.id}', this)">
               <div>
-                <div class="text-xs font-bold text-primary-color">${m.label || m.name}</div>
+                <div class="text-xs font-bold text-primary-color flex items-center gap-2">
+                  <span>${m.label || m.name}</span>
+                  ${i === 0 ? '<span class="text-[10px] font-mono font-normal px-2 py-0.5 rounded-full bg-[#FF5C00]/15 text-[#FF5C00]">Khuyên dùng</span>' : ''}
+                </div>
                 <div class="text-[11px] text-secondary-color mt-0.5">${m.desc || ''}</div>
               </div>
-              ${m.priceModifier > 0 ? `<span class="text-xs font-mono font-bold text-[#FF5C00] ml-2">+${formatMoney(m.priceModifier)}</span>` : ''}
+              ${m.priceModifier > 0 ? `<span class="text-xs font-mono font-bold text-[#FF5C00] ml-3 shrink-0">+${formatMoney(m.priceModifier)}</span>` : ''}
             </button>
           `).join('')}
         </div>
@@ -275,7 +338,7 @@
 
     window.updateModalPriceSummary();
     modal.classList.remove('hidden');
-    modal.classList.add('flex');
+    modal.classList.add('flex', 'active');
   };
 
   window.selectModalColor = function (colorId, colorName, btn) {
@@ -285,10 +348,10 @@
     if (label) label.textContent = colorName;
 
     document.querySelectorAll('.modal-color-btn').forEach(b => {
-      b.classList.remove('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color');
+      b.classList.remove('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
       b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
     });
-    btn.classList.add('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color');
+    btn.classList.add('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
     btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
   };
 
@@ -297,10 +360,10 @@
     window.modalSelectedMat = window.modalActiveProduct.materials.find(m => m.id === matId) || { id: matId, name: 'Tiêu chuẩn', priceModifier: 0 };
 
     document.querySelectorAll('.modal-mat-btn').forEach(b => {
-      b.classList.remove('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]');
+      b.classList.remove('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
       b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
     });
-    btn.classList.add('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]');
+    btn.classList.add('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
     btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
 
     window.updateModalPriceSummary();
@@ -311,51 +374,106 @@
     const base = window.modalActiveProduct.price;
     const modifier = (window.modalSelectedMat && window.modalSelectedMat.priceModifier) || 0;
     const unitPrice = base + modifier;
-    const total = unitPrice * (window.modalQty || 1);
+    const qty = Math.min(99, Math.max(1, window.modalQty || 1));
+    const total = unitPrice * qty;
 
     const priceEl = document.getElementById('order-prod-price');
-    const submitBtnLabel = document.getElementById('modal-submit-price-label');
+    const subtotalEl = document.getElementById('modal-summary-subtotal');
+    const directBtnLabel = document.getElementById('modal-submit-direct-label');
+    const shippingNoteEl = document.getElementById('modal-summary-shipping-note');
 
     if (priceEl) priceEl.textContent = formatMoney(unitPrice);
-    if (submitBtnLabel) submitBtnLabel.textContent = `Thêm Vào Giỏ • ${formatMoney(total)}`;
+    if (subtotalEl) subtotalEl.textContent = formatMoney(total);
+    if (directBtnLabel) directBtnLabel.textContent = `Đặt Hàng Ngay • ${formatMoney(total)}`;
+
+    if (shippingNoteEl) {
+      if (total >= 300000) {
+        shippingNoteEl.textContent = '(🎉 Đủ điều kiện Freeship!)';
+        shippingNoteEl.className = 'text-[10px] text-emerald-400 font-mono font-bold';
+      } else {
+        shippingNoteEl.textContent = `(Freeship đơn ≥ 300K)`;
+        shippingNoteEl.className = 'text-[10px] text-slate-400 font-mono';
+      }
+    }
   };
 
   window.changeModalQty = function (delta) {
-    window.modalQty = Math.max(1, (window.modalQty || 1) + delta);
+    window.modalQty = Math.min(99, Math.max(1, (window.modalQty || 1) + delta));
     const qtyVal = document.getElementById('modal-qty-val');
     if (qtyVal) qtyVal.textContent = window.modalQty;
     window.updateModalPriceSummary();
   };
 
-  window.submitModalAddToCart = function () {
-    if (!window.modalActiveProduct) return;
-    const customInput = document.getElementById('order-custom-text-input');
-    const customText = customInput ? customInput.value.trim() : null;
+  /**
+   * Tạo dòng sản phẩm đã cấu hình (Contract chung duy nhất cho Giỏ Hàng và Mua Ngay)
+   */
+  function buildConfiguredLine() {
+    const prod = window.modalActiveProduct;
+    if (!prod || prod.status !== 'active') {
+      if (window.showToast) window.showToast('Sản phẩm không khả dụng.', 'error');
+      return null;
+    }
 
-    const unitPrice = window.modalActiveProduct.price + (window.modalSelectedMat?.priceModifier || 0);
+    const selectedColor = window.modalSelectedColor || ((prod.colors && prod.colors[0]) || { id: 'default', name: 'Tiêu chuẩn' });
+    const selectedMat = window.modalSelectedMat || ((prod.materials && prod.materials[0]) || { id: 'default', name: 'Tiêu chuẩn', priceModifier: 0 });
+    const qty = Math.min(99, Math.max(1, parseInt(window.modalQty, 10) || 1));
+
+    const customInput = document.getElementById('order-custom-text-input');
+    const customText = customInput ? customInput.value.trim().normalize('NFC').slice(0, 100) : null;
+
+    const unitPrice = prod.price + (selectedMat.priceModifier || 0);
+
+    return {
+      id: prod.id,
+      title: prod.title,
+      price: unitPrice,
+      qty: qty,
+      image: prod.image,
+      category: prod.category,
+      color: selectedColor,
+      colorId: selectedColor.id,
+      colorName: selectedColor.name,
+      material: selectedMat,
+      materialId: selectedMat.id,
+      materialName: selectedMat.label || selectedMat.name,
+      customText: customText || null
+    };
+  }
+
+  // Action 1: Thêm Vào Giỏ
+  window.submitModalAddToCart = function () {
+    const line = buildConfiguredLine();
+    if (!line) return;
 
     if (window.TTCart && typeof window.TTCart.addToCart === 'function') {
-      window.TTCart.addToCart({
-        id: window.modalActiveProduct.id,
-        title: window.modalActiveProduct.title,
-        price: unitPrice,
-        qty: window.modalQty || 1,
-        image: window.modalActiveProduct.image,
-        color: window.modalSelectedColor,
-        colorId: window.modalSelectedColor?.id,
-        colorName: window.modalSelectedColor?.name,
-        material: window.modalSelectedMat,
-        materialId: window.modalSelectedMat?.id,
-        materialName: window.modalSelectedMat?.label || window.modalSelectedMat?.name,
-        customText: customText || null,
-        category: window.modalActiveProduct.category
-      });
-
+      window.TTCart.addToCart(line);
       window.closeProductDetailModal();
       window.TTCart.openCart();
       if (window.showToast) {
-        window.showToast(`Đã thêm ${window.modalQty} sản phẩm vào giỏ hàng!`);
+        window.showToast(`Đã thêm "${line.title}" vào giỏ hàng!`);
       }
+    }
+  };
+
+  // Action 2: Đặt Hàng Ngay (Direct Checkout - Không động tới Giỏ Hàng)
+  window.submitModalDirectCheckout = function () {
+    const line = buildConfiguredLine();
+    if (!line) return;
+
+    window.closeProductDetailModal();
+
+    if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
+      window.TTCheckout.openCheckout([line], 0, { source: 'direct' });
+    }
+  };
+
+  // Soi 3D từ Modal
+  window.open3DFromModal = function () {
+    if (!window.modalActiveProduct) return;
+    const prodId = window.modalActiveProduct.id;
+    window.closeProductDetailModal();
+    if (window.open3DViewerById) {
+      window.open3DViewerById(prodId);
     }
   };
 
@@ -363,7 +481,7 @@
     const modal = document.getElementById('order-modal');
     if (modal) {
       modal.classList.add('hidden');
-      modal.classList.remove('flex');
+      modal.classList.remove('flex', 'active');
     }
   };
 

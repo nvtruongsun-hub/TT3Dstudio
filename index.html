@@ -58,23 +58,23 @@
   </script>
 
   <!-- Modern Design System Stylesheet -->
-  <link rel="stylesheet" href="css/style.css?v=3.0">
+  <link rel="stylesheet" href="css/style.css?v=3.1">
 
   <!-- Three.js + OrbitControls (PBR Studio 3D Viewer) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
 
   <!-- Central Config & Data Engines -->
-  <script src="js/config.js?v=3.0"></script>
-  <script src="js/catalog-store.js?v=3.0"></script>
-  <script src="js/art-presets.js?v=3.0"></script>
-  <script src="js/image-uploader.js?v=3.0"></script>
-  <script src="js/checkout.js?v=3.0" defer></script>
-  <script src="js/cart.js?v=3.0" defer></script>
-  <script src="js/products-manager.js?v=3.0" defer></script>
-  <script src="js/viewer3d.js?v=3.0" defer></script>
-  <script src="js/calculator.js?v=3.0" defer></script>
-  <script src="js/app.js?v=3.0" defer></script>
+  <script src="js/config.js?v=3.1"></script>
+  <script src="js/catalog-store.js?v=3.1"></script>
+  <script src="js/art-presets.js?v=3.1"></script>
+  <script src="js/image-uploader.js?v=3.1"></script>
+  <script src="js/checkout.js?v=3.1" defer></script>
+  <script src="js/cart.js?v=3.1" defer></script>
+  <script src="js/products-manager.js?v=3.1" defer></script>
+  <script src="js/viewer3d.js?v=3.1" defer></script>
+  <script src="js/calculator.js?v=3.1" defer></script>
+  <script src="js/app.js?v=3.1" defer></script>
 </head>
 
 <body class="bg-canvas text-primary-color flex flex-col min-h-screen">
@@ -1437,67 +1437,163 @@
   </div>
 
 
-  <!-- PRODUCT DETAILS & CONFIGURATION MODAL -->
-  <div id="order-modal" class="fixed inset-0 z-[130] hidden items-center justify-center p-4 bg-black/75 backdrop-blur-md">
-    <div class="w-full max-w-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] rounded-2xl overflow-hidden shadow-modal max-h-[90vh] flex flex-col">
+  <!-- =========================================================================
+       15. TRANSLUCENT TACTILE PRODUCT DETAIL & DIRECT ORDER MODAL
+       Bố cục 2 cột sang trọng (Desktop) & Trượt êm ái (Mobile)
+       Chuẩn tiếp cận W3C Dialog & Accessibility
+       ========================================================================= -->
+  <div id="order-modal" 
+       class="fixed inset-0 z-[130] hidden items-center justify-center p-3 sm:p-5 bg-black/75 backdrop-blur-md" 
+       role="dialog" 
+       aria-modal="true" 
+       aria-labelledby="order-prod-title">
+    <div id="order-modal-container" 
+         class="w-full max-w-4xl max-h-[92vh] sm:max-h-[88vh] glass-panel-luxe rounded-2xl sm:rounded-3xl overflow-hidden flex flex-col relative">
       
-      <!-- Modal Header -->
-      <div class="p-4 sm:p-5 border-b border-[var(--border-subtle)] flex items-center justify-between">
-        <h3 class="text-sm font-bold text-primary-color">Chi Tiết Sản Phẩm &amp; Đặt Hàng</h3>
-        <button type="button" onclick="window.closeProductDetailModal()" class="w-8 h-8 rounded-lg bg-[var(--bg-surface-elevated)] text-secondary-color hover:text-primary-color flex items-center justify-center">
-          <i class="fa-solid fa-xmark"></i>
+      <!-- Modal Header (Compact & Floating Close Button) -->
+      <div class="px-5 py-3.5 sm:px-6 sm:py-4 border-b border-[var(--border-subtle)] flex items-center justify-between shrink-0 bg-[var(--bg-surface)]/60">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2 h-2 rounded-full bg-[#FF5C00] animate-pulse"></span>
+          <span class="text-xs font-mono font-bold tracking-wider text-secondary-color uppercase">T&amp;T 3D Labs Studio Configurator</span>
+        </div>
+        <button type="button" 
+                id="order-modal-close-btn"
+                onclick="window.closeProductDetailModal()" 
+                class="w-8 h-8 rounded-xl bg-[var(--bg-surface-elevated)] text-secondary-color hover:text-primary-color flex items-center justify-center transition-colors"
+                aria-label="Đóng bảng cấu hình sản phẩm">
+          <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <!-- Modal Body (Scrollable) -->
-      <div class="p-5 sm:p-6 overflow-y-auto space-y-6">
-        <div class="flex flex-col sm:flex-row gap-5 items-start">
-          <img id="order-prod-img" src="" alt="Product" class="w-full sm:w-44 aspect-square object-cover rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] shrink-0">
-          <div class="space-y-2 flex-1 min-w-0">
-            <h4 id="order-prod-title" class="heading-2 line-clamp-2">Tên sản phẩm</h4>
-            <div id="order-prod-price" class="price-display">0 đ</div>
+      <!-- Modal Body (Two-Column on Desktop >= 960px, Scrollable) -->
+      <div class="p-5 sm:p-7 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
+        
+        <!-- Left Column: Product Showcase Visual (5 cols) -->
+        <div class="md:col-span-5 flex flex-col gap-4">
+          <div class="relative w-full aspect-square rounded-2xl overflow-hidden bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] group">
+            <img id="order-prod-img" 
+                 src="" 
+                 alt="Product Showcase" 
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                 onerror="this.src='assets/images/logo-premium-mark.svg';">
+            
+            <div id="order-prod-badge-container" class="absolute top-3 left-3 flex flex-col gap-1.5 pointer-events-none">
+              <span id="order-prod-badge" class="px-2.5 py-1 rounded-full text-[11px] font-bold font-mono bg-black/60 backdrop-blur-md text-[#FF5C00] border border-white/10">
+                ✦ Studio Craft
+              </span>
+            </div>
+
+            <button type="button" 
+                    id="order-modal-3d-btn"
+                    onclick="window.open3DFromModal()"
+                    class="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-black/70 backdrop-blur-md border border-white/10 text-xs font-medium text-white hover:border-[#FF5C00] hover:text-[#FF5C00] transition-colors flex items-center gap-1.5"
+                    title="Mở không gian 3D tương tác">
+              <i class="fa-solid fa-cube text-xs"></i>
+              <span>Soi 3D</span>
+            </button>
+          </div>
+
+          <!-- Technical Spec Sheet (Semantic <dl>) -->
+          <div class="p-4 rounded-xl bg-[var(--bg-surface-elevated)]/80 border border-[var(--border-subtle)]">
+            <h5 class="text-[11px] font-mono uppercase tracking-wider text-secondary-color font-bold mb-3 flex items-center gap-1.5">
+              <i class="fa-solid fa-microchip text-[#FF5C00]"></i>
+              <span>Thông Số Kỹ Thuật Xưởng</span>
+            </h5>
+            <dl id="order-prod-specs-box" class="grid grid-cols-2 gap-3 text-xs">
+              <!-- Dynamically rendered -->
+            </dl>
+          </div>
+        </div>
+
+        <!-- Right Column: Interactive Configuration (7 cols) -->
+        <div class="md:col-span-7 space-y-5">
+          <!-- Title & Price Block -->
+          <div class="space-y-2 border-b border-[var(--border-subtle)] pb-4">
+            <h4 id="order-prod-title" class="text-lg sm:text-xl font-extrabold text-primary-color tracking-tight leading-snug">
+              Tên sản phẩm
+            </h4>
+            <div class="flex items-baseline gap-3">
+              <span id="order-prod-price" class="text-2xl font-black font-mono text-[#FF5C00]">0 đ</span>
+              <span id="order-prod-unit-label" class="text-xs text-secondary-color font-mono">/ 1 sản phẩm tiêu chuẩn</span>
+            </div>
             <p id="order-prod-desc" class="text-xs text-secondary-color leading-relaxed"></p>
           </div>
-        </div>
 
-        <!-- Technical Specs Box -->
-        <div id="order-prod-specs-box" class="p-4 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] space-y-2">
-        </div>
+          <!-- Color Swatches Selector -->
+          <div id="order-swatches-box" class="space-y-2">
+            <!-- Dynamically rendered with tactile circles -->
+          </div>
 
-        <!-- Swatches Selector Box -->
-        <div id="order-swatches-box" class="space-y-2">
-        </div>
+          <!-- Material Selection Box -->
+          <div id="order-materials-box" class="space-y-2">
+            <!-- Dynamically rendered with clean card radio buttons -->
+          </div>
 
-        <!-- Material Selection Options -->
-        <div id="order-materials-box" class="space-y-2">
-        </div>
+          <!-- Custom Engraving Input -->
+          <div class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label for="order-custom-text-input" class="text-xs font-semibold text-secondary-color flex items-center gap-1.5">
+                <i class="fa-solid fa-pen-nib text-[#FF5C00]"></i>
+                <span>Cá nhân hóa (Khắc tên / Cài link WiFi NFC):</span>
+              </label>
+              <span class="text-[10px] text-muted font-mono" id="order-custom-text-count">0/100</span>
+            </div>
+            <input type="text" 
+                   id="order-custom-text-input" 
+                   maxlength="100"
+                   placeholder="Ví dụ: WiFi: Kafe_5G / Pass: 88888888 hoặc Tên: 'Quân &amp; Trang'" 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-primary-color focus:border-[#FF5C00] focus:outline-none transition-colors">
+          </div>
 
-        <!-- Custom Engraving Input -->
-        <div class="space-y-1.5">
-          <label class="text-xs font-semibold text-secondary-color">Cá nhân hóa (Khắc tên / Cài đặt link WiFi NFC):</label>
-          <input type="text" id="order-custom-text-input" placeholder="Ví dụ: WiFi: Kafe_5G / Pass: 88888888 hoặc Tên: 'Quân &amp; Trang'" class="w-full px-4 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-primary-color focus:border-[#FF5C00] focus:outline-none">
-        </div>
-
-        <!-- Quantity Stepper -->
-        <div class="flex items-center justify-between pt-2 border-t border-[var(--border-subtle)]">
-          <span class="text-xs font-semibold text-secondary-color">Số lượng:</span>
-          <div class="flex items-center border border-[var(--border-subtle)] rounded-xl bg-[var(--bg-surface-elevated)]">
-            <button type="button" onclick="window.changeModalQty(-1)" class="px-3 py-1 text-sm text-secondary-color hover:text-primary-color">-</button>
-            <span id="modal-qty-val" class="px-3 py-1 font-mono font-bold text-sm text-primary-color">1</span>
-            <button type="button" onclick="window.changeModalQty(1)" class="px-3 py-1 text-sm text-secondary-color hover:text-primary-color">+</button>
+          <!-- Quantity Stepper -->
+          <div class="flex items-center justify-between pt-3 border-t border-[var(--border-subtle)]">
+            <div>
+              <span class="text-xs font-semibold text-secondary-color block">Số lượng đặt in:</span>
+              <span class="text-[11px] text-muted">Đơn giá tự động nhân theo số lượng</span>
+            </div>
+            <div class="flex items-center border border-[var(--border-subtle)] rounded-xl bg-[var(--bg-surface-elevated)] overflow-hidden">
+              <button type="button" 
+                      onclick="window.changeModalQty(-1)" 
+                      class="w-9 h-9 flex items-center justify-center text-sm text-secondary-color hover:text-primary-color hover:bg-black/10 active:scale-95 transition-all"
+                      aria-label="Giảm số lượng">-</button>
+              <span id="modal-qty-val" class="w-10 text-center font-mono font-bold text-sm text-primary-color select-none">1</span>
+              <button type="button" 
+                      onclick="window.changeModalQty(1)" 
+                      class="w-9 h-9 flex items-center justify-center text-sm text-secondary-color hover:text-primary-color hover:bg-black/10 active:scale-95 transition-all"
+                      aria-label="Tăng số lượng">+</button>
+            </div>
           </div>
         </div>
+
       </div>
 
-      <!-- Modal Footer -->
-      <div class="p-4 sm:p-5 border-t border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] flex items-center justify-end gap-3">
-        <button type="button" onclick="window.closeProductDetailModal()" class="btn-secondary text-xs !py-2.5">
-          Hủy bỏ
-        </button>
-        <button type="button" onclick="window.submitModalAddToCart()" class="btn-primary text-xs !py-2.5 !font-bold flex items-center gap-2">
-          <i class="fa-solid fa-bag-shopping"></i>
-          <span id="modal-submit-price-label">Thêm Vào Giỏ</span>
-        </button>
+      <!-- Modal Footer (Dual-Action Sticky Dock with Subtotal) -->
+      <div class="px-5 py-4 sm:px-6 sm:py-4 border-t border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 backdrop-blur-md flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+        <div class="text-left w-full sm:w-auto">
+          <span class="text-[11px] text-secondary-color block">Tạm tính cấu hình:</span>
+          <div class="flex items-baseline gap-2">
+            <span id="modal-summary-subtotal" class="text-lg font-black font-mono text-[#FF5C00]">0 đ</span>
+            <span id="modal-summary-shipping-note" class="text-[10px] text-emerald-400 font-mono">(Freeship đơn ≥ 300K)</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+          <button type="button" 
+                  id="modal-btn-add-cart"
+                  onclick="window.submitModalAddToCart()" 
+                  class="btn-secondary text-xs !py-3 !px-4 flex-1 sm:flex-none flex items-center justify-center gap-2 font-semibold">
+            <i class="fa-solid fa-bag-shopping text-xs"></i>
+            <span id="modal-submit-cart-label">Thêm Vào Giỏ</span>
+          </button>
+          
+          <button type="button" 
+                  id="modal-btn-direct-checkout"
+                  onclick="window.submitModalDirectCheckout()" 
+                  class="btn-primary-accessible text-xs !py-3 !px-5 rounded-xl flex-1 sm:flex-none flex items-center justify-center gap-2 shadow-lg">
+            <i class="fa-solid fa-bolt text-xs text-amber-300"></i>
+            <span id="modal-submit-direct-label">Đặt Hàng Ngay</span>
+          </button>
+        </div>
       </div>
 
     </div>

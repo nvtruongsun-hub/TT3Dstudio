@@ -152,9 +152,21 @@
   // Render giao diện giỏ hàng
   function renderCartUI() {
     const totalCount = cart.reduce((acc, i) => acc + i.qty, 0);
-    const subtotal = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
-    const discountAmount = Math.round(subtotal * (currentDiscountPercent / 100));
-    const grandTotal = Math.max(0, subtotal - discountAmount);
+    const subtotalRaw = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
+    
+    // Đồng bộ tính toán với TTCheckout
+    const totals = (window.TTCheckout && typeof window.TTCheckout.calculateOrderTotals === 'function')
+      ? window.TTCheckout.calculateOrderTotals(cart, currentDiscountPercent)
+      : {
+          subtotal: subtotalRaw,
+          discountedSubtotal: Math.max(0, subtotalRaw - Math.round(subtotalRaw * (currentDiscountPercent / 100))),
+          shippingFee: subtotalRaw >= FREESHIP_THRESHOLD ? 0 : 25000,
+          finalTotal: subtotalRaw
+        };
+
+    const subtotal = totals.subtotal;
+    const discountedTotal = totals.discountedSubtotal;
+    const grandTotal = totals.finalTotal;
 
     // Cập nhật số đếm trên Header & Mobile Dock
     document.querySelectorAll('.cart-badge-count').forEach(badge => {
@@ -169,18 +181,18 @@
     const titleEl = document.getElementById('cart-drawer-title');
     if (titleEl) titleEl.textContent = `Giỏ Hàng (${totalCount})`;
 
-    // Thanh tiến độ Freeship
+    // Thanh tiến độ Freeship (Xét theo tiền hàng sau giảm giá)
     const freeshipText = document.getElementById('cart-freeship-text');
     const freeshipBar = document.getElementById('cart-freeship-bar');
     if (freeshipText && freeshipBar) {
-      if (subtotal >= FREESHIP_THRESHOLD) {
+      if (discountedTotal >= FREESHIP_THRESHOLD) {
         freeshipText.innerHTML = `🎉 <strong>Chúc mừng!</strong> Đơn hàng đủ điều kiện <strong>Miễn Phí Vận Chuyển</strong>.`;
         freeshipBar.style.width = '100%';
         freeshipBar.classList.add('bg-emerald-500');
         freeshipBar.classList.remove('bg-[#FF5C00]');
       } else {
-        const remaining = FREESHIP_THRESHOLD - subtotal;
-        const percent = Math.min(100, Math.round((subtotal / FREESHIP_THRESHOLD) * 100));
+        const remaining = FREESHIP_THRESHOLD - discountedTotal;
+        const percent = Math.min(100, Math.round((discountedTotal / FREESHIP_THRESHOLD) * 100));
         freeshipText.innerHTML = `Mua thêm <strong class="text-[#FF5C00] font-mono">${formatMoney(remaining)}</strong> để nhận <strong>Freeship</strong>`;
         freeshipBar.style.width = `${percent}%`;
         freeshipBar.classList.remove('bg-emerald-500');
@@ -278,7 +290,7 @@
     }
     closeCart();
     if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
-      window.TTCheckout.openCheckout(cart, currentDiscountPercent);
+      window.TTCheckout.openCheckout(cart, currentDiscountPercent, { source: 'cart' });
     }
   }
 

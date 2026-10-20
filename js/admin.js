@@ -393,6 +393,7 @@
         }
 
         const finalImage = currentImageDataUrl || 'assets/images/product-nfc-wifi.jpg';
+        const existingProd = currentEditingProductId ? window.TTCatalogStore.getProductByIdSync(currentEditingProductId) : null;
 
         const productData = {
           id: currentEditingProductId || ('prod-' + Date.now()),
@@ -404,10 +405,16 @@
           badge: badge || '✦ 3D Print',
           image: finalImage,
           imageSource: activeImageSource,
-          modelKey: modelKey || 'nfc_wifi',
+          modelKey: modelKey || (existingProd ? existingProd.modelKey : 'nfc_wifi'),
           desc,
           headlineBenefit,
-          status: status || 'active'
+          status: status || 'active',
+          ...(existingProd ? {
+            specs: existingProd.specs,
+            colors: existingProd.colors,
+            materials: existingProd.materials,
+            specLine: existingProd.specLine
+          } : {})
         };
 
         try {
