@@ -246,7 +246,7 @@
           ${p.originalPrice ? `<div class="text-[10px] text-slate-500 line-through">${formatMoney(p.originalPrice)}</div>` : ''}
         </td>
         <td class="p-3 text-xs text-slate-400">
-          <span class="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono">${p.category}</span>
+          <span class="px-2 py-0.5 rounded-full bg-slate-800 text-[10px] font-mono">${(window.TTCatalogStore && window.TTCatalogStore.CATEGORY_REGISTRY && window.TTCatalogStore.CATEGORY_REGISTRY[p.category]) ? window.TTCatalogStore.CATEGORY_REGISTRY[p.category].shortName : p.category}</span>
         </td>
         <td class="p-3 text-center">
           <span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-medium ${p.status === 'active' ? 'badge-active' : (p.status === 'draft' ? 'badge-draft' : 'badge-archived')}">
@@ -405,7 +405,7 @@
           badge: badge || '✦ 3D Print',
           image: finalImage,
           imageSource: activeImageSource,
-          modelKey: modelKey || (existingProd ? existingProd.modelKey : 'nfc_wifi'),
+          modelKey: modelKey ? modelKey : (existingProd ? existingProd.modelKey : null),
           desc,
           headlineBenefit,
           status: status || 'active',
@@ -471,13 +471,13 @@
     activeImageSource = p.imageSource || 'url';
 
     document.getElementById('prod-title').value = p.title || '';
-    document.getElementById('prod-category').value = p.category || 'desk-setup';
+    document.getElementById('prod-category').value = p.category || 'Trang_Diem_Vanity';
     document.getElementById('prod-type').value = p.type || 'standard';
     document.getElementById('prod-price').value = p.price || '';
     document.getElementById('prod-original-price').value = p.originalPrice || '';
     document.getElementById('prod-badge').value = p.badge || '';
     document.getElementById('prod-status').value = p.status || 'active';
-    document.getElementById('prod-model-key').value = p.modelKey || 'nfc_wifi';
+    document.getElementById('prod-model-key').value = p.modelKey || '';
     document.getElementById('prod-headline').value = p.headlineBenefit || '';
     document.getElementById('prod-desc').value = p.desc || '';
 

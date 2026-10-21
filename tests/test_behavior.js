@@ -76,6 +76,7 @@ function createMockBrowser(storage) {
     removeEventListener: () => {},
     dispatchEvent: () => {},
     CustomEvent: class CustomEvent { constructor(type, detail) { this.type = type; this.detail = detail; } },
+    URLSearchParams: URLSearchParams,
     document: doc,
     fetch: async () => ({ ok: true, json: async () => defaultCatalog }),
     console: { log: () => {}, warn: () => {}, error: () => {} },
@@ -92,7 +93,7 @@ const checkoutCode = fs.readFileSync(path.join(__dirname, '../js/checkout.js'), 
 
 async function runTests() {
   // -------------------------------------------------------------
-  // CASE 1: Old Cache Enrichment
+  // CASE 1: Old Cache Enrichment & Seed Ingestion
   // -------------------------------------------------------------
   await it('Case 1: Old cache prod-1 with custom image & weight 101g restores missing specs/colors/materials', async () => {
     const storage = createMockStorage();
@@ -111,8 +112,9 @@ async function runTests() {
 
     await win.TTCatalogStore.initCatalog();
     const prods = win.TTCatalogStore.getProductsSync(false);
-    assert.strictEqual(prods.length, 1, 'Should keep 1 product');
-    const p1 = prods[0];
+    assert.strictEqual(prods.length, 56, 'Should keep 1 legacy product + 55 new seeds (total 56)');
+    const p1 = win.TTCatalogStore.getProductByIdSync('prod-1');
+    assert.ok(p1, 'prod-1 must exist in store');
     assert.strictEqual(p1.id, 'prod-1');
     assert.strictEqual(p1.image, 'data:image/webp;base64,custom_uploaded_image_data', 'Must preserve custom image');
     assert.strictEqual(p1.specs.weight, '101g', 'Must preserve custom 101g weight');
@@ -133,16 +135,17 @@ async function runTests() {
     vm.runInContext(catalogStoreCode, win);
 
     await win.TTCatalogStore.initCatalog();
+    const targetProd = defaultCatalog[0];
     await win.TTCatalogStore.upsertProduct({
-      id: 'prod-1',
-      title: 'Đế Chạm WiFi NFC Studio Edition 2026'
+      id: targetProd.id,
+      title: 'Khay đĩa lụa mềm Studio Edition 2026'
     });
 
-    const updated = win.TTCatalogStore.getProductByIdSync('prod-1');
-    assert.strictEqual(updated.title, 'Đế Chạm WiFi NFC Studio Edition 2026');
+    const updated = win.TTCatalogStore.getProductByIdSync(targetProd.id);
+    assert.strictEqual(updated.title, 'Khay đĩa lụa mềm Studio Edition 2026');
     assert.ok(Array.isArray(updated.colors) && updated.colors.length >= 3, 'Must retain colors');
     assert.ok(Array.isArray(updated.materials) && updated.materials.length >= 2, 'Must retain materials');
-    assert.ok(updated.specs && updated.specs.dimensions, 'Must retain specs');
+    assert.ok(updated.specs && (updated.specs.weight || updated.specs.layer || updated.specs.dimensions), 'Must retain specs');
   });
 
   // -------------------------------------------------------------
@@ -308,6 +311,107 @@ async function runTests() {
     assert.ok(!escaped.includes('<script>'), 'Must escape <script>');
     assert.ok(escaped.includes('&lt;script&gt;'), 'Must convert to &lt;script&gt;');
     assert.ok(!escaped.includes('"quotes"'), 'Must escape double quotes');
+  });
+
+  // -------------------------------------------------------------
+  // CASE 11: Catalog Baseline Contract (55 Items, 11 per Category)
+  // -------------------------------------------------------------
+  await it('Case 11: Catalog contains exactly 55 unique IDs across 5 categories (11 items each)', async () => {
+    assert.strictEqual(defaultCatalog.length, 55, 'Catalog must contain exactly 55 products');
+    const ids = new Set(defaultCatalog.map(p => p.id));
+    assert.strictEqual(ids.size, 55, 'All 55 product IDs must be unique');
+
+    const expectedCats = ['Trang_Diem_Vanity', 'Decor_Den_Noi_That', 'Do_Choi_Moc_Khoa', 'Hop_De_Ban_Tien_Ich', 'Ca_Nhan_Hoa_NFC'];
+    expectedCats.forEach(cat => {
+      const inCat = defaultCatalog.filter(p => p.category === cat);
+      assert.strictEqual(inCat.length, 11, `Category ${cat} must contain exactly 11 products`);
+    });
+  });
+
+  // -------------------------------------------------------------
+  // CASE 12: Hero Selection Accuracy (Codex Directive Ranking)
+  // -------------------------------------------------------------
+  await it('Case 12: Hero selection identifies exact 5 Hero IDs approved by Codex Master Controller', async () => {
+    const expectedHeroes = {
+      Trang_Diem_Vanity: '1646129',
+      Decor_Den_Noi_That: '1438306',
+      Do_Choi_Moc_Khoa: '1702306',
+      Hop_De_Ban_Tien_Ich: '1971424',
+      Ca_Nhan_Hoa_NFC: '1836100'
+    };
+
+    const win = createMockBrowser();
+    vm.createContext(win);
+    vm.runInContext(catalogStoreCode, win);
+    await win.TTCatalogStore.initCatalog();
+
+    Object.entries(expectedHeroes).forEach(([catId, expectedModelId]) => {
+      const hero = win.TTCatalogStore.getCategoryHeroSync(catId);
+      assert.ok(hero, `Hero for category ${catId} must exist`);
+      assert.strictEqual(String(hero.modelId || hero.id), expectedModelId, `Hero for ${catId} must be Model ID ${expectedModelId}`);
+      assert.strictEqual(hero.isHero, true, `Hero item must have isHero === true`);
+    });
+  });
+
+  // -------------------------------------------------------------
+  // CASE 13: Media Pipeline Verification (55/55 Thumbnails Exist)
+  // -------------------------------------------------------------
+  await it('Case 13: All 55 product images exist on disk in assets/images/products/ and are readable', async () => {
+    defaultCatalog.forEach(p => {
+      const imgPath = path.join(__dirname, '..', p.image);
+      assert.ok(fs.existsSync(imgPath), `Thumbnail must exist on disk: ${p.image}`);
+      const stats = fs.statSync(imgPath);
+      assert.ok(stats.size > 0, `Thumbnail file must not be empty: ${p.image}`);
+    });
+  });
+
+  // -------------------------------------------------------------
+  // CASE 14: Router Query Hash Contract (Case Sensitive Cat ID)
+  // -------------------------------------------------------------
+  await it('Case 14: parseStoreHash preserves case of Category ID and defaults invalid categories to all', async () => {
+    const appCode = fs.readFileSync(path.join(__dirname, '../js/app.js'), 'utf-8');
+    const win = createMockBrowser();
+    vm.createContext(win);
+    vm.runInContext(appCode, win);
+
+    assert.ok(typeof win.parseStoreHash === 'function', 'parseStoreHash must be globally exposed');
+
+    // Test 1: Valid category preserves exact casing
+    const res1 = win.parseStoreHash('#store?cat=Trang_Diem_Vanity');
+    assert.strictEqual(res1.path, 'store', 'Path must be store');
+    assert.strictEqual(res1.category, 'Trang_Diem_Vanity', 'Category ID casing must be preserved');
+
+    // Test 2: Invalid category falls back to all
+    const res2 = win.parseStoreHash('#store?cat=INVALID_CATEGORY');
+    assert.strictEqual(res2.category, 'all', 'Invalid category must fall back to all');
+
+    // Test 3: No query param falls back to all
+    const res3 = win.parseStoreHash('#store');
+    assert.strictEqual(res3.category, 'all', 'No cat param must default to all');
+  });
+
+  // -------------------------------------------------------------
+  // CASE 15: Tombstone Preservation Across Inits
+  // -------------------------------------------------------------
+  await it('Case 15: Deleted seed records tombstone and is not resurrected on next catalog init', async () => {
+    const storage = createMockStorage();
+    const win = createMockBrowser(storage);
+    vm.createContext(win);
+    vm.runInContext(catalogStoreCode, win);
+
+    await win.TTCatalogStore.initCatalog();
+    assert.strictEqual(win.TTCatalogStore.getProductsSync(false).length, 55, 'Initial load has 55 items');
+
+    // Delete one seed
+    const idToDelete = defaultCatalog[0].id;
+    await win.TTCatalogStore.deleteProduct(idToDelete);
+    assert.strictEqual(win.TTCatalogStore.getProductsSync(false).length, 54, 'Store has 54 items after deletion');
+
+    // Re-initialize with same storage and incoming catalog
+    await win.TTCatalogStore.initCatalog();
+    const reloaded = win.TTCatalogStore.getProductsSync(false);
+    assert.strictEqual(reloaded.length, 54, 'Deleted seed must NOT be resurrected on re-init');
+    assert.strictEqual(win.TTCatalogStore.getProductByIdSync(idToDelete), null, 'Deleted seed remains absent');
   });
 
   console.log('\n==========================================================');

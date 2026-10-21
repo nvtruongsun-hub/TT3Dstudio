@@ -316,40 +316,66 @@
       <section id="store-catalog" class="py-16 lg:py-24 bg-canvas hairline-b">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
           
-          <!-- Store Header & Segmented Filter Dock -->
-          <div class="flex flex-col md:flex-row md:items-end justify-between gap-6">
-            <div class="space-y-2">
-              <div class="micro-badge inline-block bg-[rgba(255,92,0,0.12)] text-[#FF5C00]">
-                BỘ SƯU TẬP 2026
+          <!-- Store Header & Controls (Search + Segmented Filter Bar) -->
+          <div class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div class="space-y-2">
+                <div class="micro-badge inline-block bg-[rgba(255,92,0,0.12)] text-[#FF5C00]">
+                  ✦ MAKERWORLD 2026 CURATION • 55 THIẾT KẾ XU THẾ
+                </div>
+                <h2 class="heading-1">
+                  Hệ Sinh Thái Danh Mục In 3D Độc Bản
+                </h2>
+                <p class="text-xs sm:text-sm text-secondary-color max-w-xl">
+                  Khám phá 5 dòng sản phẩm tuyển chọn công nghệ cao: mỗi danh mục nổi bật với 1 sản phẩm đặc biệt (Hero Spotlight) cùng các thiết kế thẩm mỹ hoàn thiện sắc sảo.
+                </p>
               </div>
-              <h2 class="heading-1">
-                Sản Phẩm Thiết Kế &amp; Phụ Kiện Thủ Công
-              </h2>
-              <p class="text-xs sm:text-sm text-secondary-color max-w-lg">
-                Mỗi chi tiết đều được tối ưu hóa đường đùn nhựa FDM chuẩn xác, hoàn thiện bề mặt mờ nhám chống bám vân tay.
-              </p>
+
+              <!-- Quick Search Input -->
+              <div class="relative w-full sm:w-72 lg:w-80 shrink-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-secondary-color text-xs pointer-events-none"></i>
+                <input type="text" 
+                       id="store-search-input" 
+                       placeholder="Tìm theo tên hoặc Model ID..." 
+                       aria-label="Tìm kiếm sản phẩm"
+                       class="w-full pl-9 pr-8 py-2.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] focus:border-[#FF5C00] focus:ring-1 focus:ring-[#FF5C00]/30 text-xs text-primary-color placeholder-secondary-color outline-none transition-all">
+                <button type="button" 
+                        id="store-search-clear" 
+                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-secondary-color hover:text-primary-color text-xs" 
+                        title="Xóa tìm kiếm">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
             </div>
 
-            <!-- Segmented Filter Controls -->
-            <div id="store-category-filters" class="segmented-dock overflow-x-auto max-w-full">
-              <button type="button" class="segmented-pill active" data-category="all">
-                Tất Cả
-              </button>
-              <button type="button" class="segmented-pill" data-category="smart-nfc">
-                Đế WiFi NFC
-              </button>
-              <button type="button" class="segmented-pill" data-category="decor-light">
-                Đèn &amp; Bình Hoa
-              </button>
-              <button type="button" class="segmented-pill" data-category="desk-setup">
-                Desk Setup Pro
-              </button>
+            <!-- Segmented Category Filter Bar (Horizontal Scroll on Mobile) -->
+            <div class="overflow-x-auto pb-1 scrollbar-none">
+              <div id="store-category-filters" class="segmented-dock inline-flex items-center min-w-max">
+                <button type="button" class="segmented-pill active" data-category="all" aria-pressed="true">
+                  <i class="fa-solid fa-shapes mr-1.5 text-xs text-[#FF5C00]"></i> Tất Cả (55 Mẫu)
+                </button>
+                <button type="button" class="segmented-pill" data-category="Trang_Diem_Vanity" aria-pressed="false">
+                  <i class="fa-solid fa-wand-magic-sparkles mr-1.5 text-xs text-rose-500"></i> Trang Điểm &amp; Nơ
+                </button>
+                <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false">
+                  <i class="fa-solid fa-lightbulb mr-1.5 text-xs text-amber-500"></i> Đèn &amp; Bình Hoa
+                </button>
+                <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false">
+                  <i class="fa-solid fa-gamepad mr-1.5 text-xs text-sky-500"></i> Khớp Động &amp; Fidget
+                </button>
+                <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false">
+                  <i class="fa-solid fa-gears mr-1.5 text-xs text-emerald-500"></i> Hộp Bàn &amp; Bánh Răng
+                </button>
+                <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false">
+                  <i class="fa-solid fa-fingerprint mr-1.5 text-xs text-purple-500"></i> Cá Nhân Hóa &amp; NFC
+                </button>
+              </div>
             </div>
           </div>
 
-          <!-- Products Grid (Rendered Dynamically via products-manager.js) -->
-          <div id="store-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            <!-- Rendered by window.renderStoreProducts() -->
+          <!-- Dynamic Catalog Showcase Container (Category Hub / Single Category / Search) -->
+          <div id="store-product-grid" class="space-y-14">
+            <!-- Rendered Dynamically by products-manager.js -->
           </div>
 
         </div>
