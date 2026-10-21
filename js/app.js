@@ -10,6 +10,37 @@
   // --- 1. GLOBAL WORKSPACE ROUTER & STATE ENGINE ---
   const WORKSPACE_VIEWS = ['view-store', 'view-studio3d', 'view-configurator', 'view-standards'];
 
+  const ALLOWED_CATEGORIES = new Set([
+    'Trang_Diem_Vanity',
+    'Decor_Den_Noi_That',
+    'Do_Choi_Moc_Khoa',
+    'Hop_De_Ban_Tien_Ich',
+    'Ca_Nhan_Hoa_NFC'
+  ]);
+
+  /**
+   * Phân tách URL hash thành route path và category query (Codex Directive)
+   * Không lowercase toàn bộ hash vì ID danh mục có chữ hoa
+   */
+  function parseStoreHash(hash, allowedCategories = ALLOWED_CATEGORIES) {
+    const raw = String(hash || '#store').replace(/^#/, '');
+    const separator = raw.indexOf('?');
+
+    const path = (
+      separator < 0 ? raw : raw.slice(0, separator)
+    ).toLowerCase();
+
+    const query = separator < 0 ? '' : raw.slice(separator + 1);
+    const params = new URLSearchParams(query);
+    const requested = params.get('cat');
+
+    return {
+      path,
+      category: (allowedCategories && allowedCategories.has(requested)) ? requested : 'all'
+    };
+  }
+  window.parseStoreHash = parseStoreHash;
+
   const VIEW_HASH_MAP = {
     'view-store': '#store',
     'view-studio3d': '#studio3d',
@@ -119,15 +150,90 @@
   window.switchWorkspace = switchWorkspace;
   window.getActiveWorkspace = () => currentActiveView;
 
+  /**
+   * Chuyển danh mục sản phẩm mượt mà và đồng bộ URL hash duy nhất (Codex Directive)
+   * @param {string} category - Category ID hoặc 'all'
+   * @param {boolean} pushHistory - Có ghi vào browser history không
+   */
+  window.navigateToCategory = function (category, pushHistory = true) {
+    const validCat = ALLOWED_CATEGORIES.has(category) ? category : 'all';
+    const targetHash = validCat === 'all' ? '#store' : `#store?cat=${validCat}`;
+
+    // Luôn đảm bảo đang ở view-store
+    switchWorkspace('view-store', false, false);
+
+    // Cập nhật trạng thái pills
+    document.querySelectorAll('#view-store .segmented-pill').forEach(pill => {
+      const pCat = pill.dataset.category || 'all';
+      if (pCat === validCat) {
+        pill.classList.add('active');
+        pill.setAttribute('aria-pressed', 'true');
+      } else {
+        pill.classList.remove('active');
+        pill.setAttribute('aria-pressed', 'false');
+      }
+    });
+
+    // Render store
+    if (typeof window.renderStoreProducts === 'function') {
+      window.renderStoreProducts(validCat);
+    }
+
+    // Đồng bộ URL hash
+    if (pushHistory && history.pushState && window.location.hash !== targetHash) {
+      history.pushState({ viewId: 'view-store', category: validCat }, '', targetHash);
+    }
+  };
+
   // Initialize router navigation listeners
   function initRouter() {
     function navigateToHash(hash, pushState = true) {
       const normalizedHash = (!hash || hash === '#') ? '#store' : hash;
-      const targetView = HASH_VIEW_MAP[normalizedHash] || 'view-store';
-      const targetId = normalizedHash.replace(/^#/, '');
+      const parsed = parseStoreHash(normalizedHash, ALLOWED_CATEGORIES);
+      const routePath = parsed.path ? '#' + parsed.path : '#store';
+      const targetView = HASH_VIEW_MAP[routePath] || 'view-store';
+      const targetId = parsed.path;
       const targetEl = targetId ? document.getElementById(targetId) : null;
       const isSubAnchor = targetEl && !['store', 'studio3d', 'calculator', 'standards'].includes(targetId);
 
+      // A. Nếu đích là STORE (hỗ trợ hash query ?cat=...)
+      if (targetView === 'view-store') {
+        switchWorkspace('view-store', false, false);
+
+        // Đồng bộ category render
+        if (typeof window.renderStoreProducts === 'function') {
+          window.renderStoreProducts(parsed.category);
+        }
+
+        // Cập nhật giao diện Pills
+        document.querySelectorAll('#view-store .segmented-pill').forEach(pill => {
+          const pCat = pill.dataset.category || 'all';
+          if (pCat === parsed.category) {
+            pill.classList.add('active');
+            pill.setAttribute('aria-pressed', 'true');
+          } else {
+            pill.classList.remove('active');
+            pill.setAttribute('aria-pressed', 'false');
+          }
+        });
+
+        const targetHash = parsed.category === 'all'
+          ? (routePath === '#store-catalog' ? '#store-catalog' : '#store')
+          : `#store?cat=${parsed.category}`;
+
+        if (pushState && history.pushState && window.location.hash !== targetHash) {
+          history.pushState({ viewId: 'view-store', category: parsed.category }, '', targetHash);
+        }
+
+        if (isSubAnchor && targetEl) {
+          setTimeout(() => {
+            targetEl.scrollIntoView({ behavior: 'smooth' });
+          }, 60);
+        }
+        return;
+      }
+
+      // B. Nếu đích là các View khác (Studio3D, Configurator, Standards)
       if (isSubAnchor) {
         switchWorkspace(targetView, false, false);
         if (pushState && history.pushState && window.location.hash !== hash) {
@@ -153,13 +259,17 @@
         return;
       }
 
-      // In-page internal hash links (e.g. href="#calculator", href="#studio3d", href="#store")
+      // In-page internal hash links
       const anchor = e.target.closest('a[href^="#"]');
       if (anchor) {
         const href = anchor.getAttribute('href');
-        if (href && HASH_VIEW_MAP[href]) {
-          e.preventDefault();
-          navigateToHash(href, true);
+        if (href) {
+          const parsed = parseStoreHash(href, ALLOWED_CATEGORIES);
+          const routePath = parsed.path ? '#' + parsed.path : '#store';
+          if (HASH_VIEW_MAP[routePath] || routePath === '#store') {
+            e.preventDefault();
+            navigateToHash(href, true);
+          }
         }
       }
     });
@@ -169,7 +279,8 @@
     function handleHistoryChange() {
       if (isHandlingHistory) return;
       isHandlingHistory = true;
-      const hash = window.location.hash.toLowerCase();
+      // KHÔNG toLowerCase() toàn bộ hash để bảo tồn chữ hoa trong category ID
+      const hash = window.location.hash;
       navigateToHash(hash, false);
       setTimeout(() => { isHandlingHistory = false; }, 50);
     }
@@ -177,9 +288,9 @@
     window.addEventListener('popstate', handleHistoryChange);
     window.addEventListener('hashchange', handleHistoryChange);
 
-    // Initial direct URL routing on page load
-    const initialHash = window.location.hash.toLowerCase();
-    if (initialHash && HASH_VIEW_MAP[initialHash]) {
+    // Initial direct URL routing on page load (KHÔNG toLowerCase)
+    const initialHash = window.location.hash;
+    if (initialHash) {
       navigateToHash(initialHash, false);
     } else {
       switchWorkspace('view-store', false, true);
@@ -279,12 +390,12 @@
   // --- 5. SEGMENTED FILTER CONTROLS FOR STORE (ID-13) ---
   function initSegmentedFilters() {
     document.querySelectorAll('#view-store .segmented-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        document.querySelectorAll('#view-store .segmented-pill').forEach(p => p.classList.remove('active'));
-        pill.classList.add('active');
-
+      pill.addEventListener('click', (e) => {
+        e.preventDefault();
         const category = pill.dataset.category || 'all';
-        if (window.renderStoreProducts) {
+        if (typeof window.navigateToCategory === 'function') {
+          window.navigateToCategory(category, true);
+        } else if (typeof window.renderStoreProducts === 'function') {
           window.renderStoreProducts(category);
         }
       });

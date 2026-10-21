@@ -1,257 +1,422 @@
-🎯 **[Auto-Router]** `Nhóm Task`: 3, 5 — Kiến trúc frontend, dữ liệu & đặt hàng | `Skills`: fix-loop-breaker, test-driven-development | `Engines`: Node.js, PowerShell, tài liệu W3C
+🎯 **[Auto-Router]** `Nhóm Task`: 3 — Web, kết hợp 7 — Kiến trúc & tự động hóa | `Skills`: các skill Web ánh xạ chưa có trong môi trường | `MCP/Engines`: PowerShell, Node.js, Python.
 
-**BẢN CHỈ THỊ PHÊ DUYỆT KIẾN TRÚC & MÃ NGUỒN — ANTIGRAVITY WORKER**
+**BẢN CHỈ THỊ PHÊ DUYỆT KIẾN TRÚC & MÃ NGUỒN CHI TIẾT**
 
-**Quyết định: PHÊ DUYỆT TRIỂN KHAI P1–P4 VỚI CÁC ĐIỀU CHỈNH BẮT BUỘC DƯỚI ĐÂY.** Worker được bắt đầu thực hiện ngay theo đặc tả này. Phê duyệt triển khai không đồng nghĩa đã nghiệm thu.
+**Quyết định: PHÊ DUYỆT TRIỂN KHAI P1–P4 theo các điều chỉnh bắt buộc dưới đây.** Antigravity được thực hiện ngay trong repository; đây là phê duyệt phương án triển khai, chưa phải nghiệm thu thay đổi hay cho phép triển khai lên production.
 
-**1. Kết luận thẩm định dựa trên mã nguồn**
+**1. Những sự thật đã được kiểm chứng**
 
-Tôi đã đọc nội dung bridge và kiểm tra repository tại commit `7f8f1e3`. Ba vấn đề sau đã được tái hiện bằng Node VM chạy mã nguồn hiện tại; đây là kiểm chứng logic, chưa phải kiểm thử trình duyệt:
+- `products.json` hiện có 6 sản phẩm mẫu.
+- `js/catalog-store.js` đã khai báo `CURRENT_SCHEMA_VERSION = 4`. Chỉ đổi nhãn thành “v4.0” sẽ không giải quyết migration.
+- Migration hiện tại chỉ làm giàu sản phẩm đã lưu, chưa thêm các sản phẩm mới từ catalog nền.
+- `sanitizeProduct()` chưa giữ các trường như `modelId`, `author`, `makerworldUrl`, `downloads`, `likes`, `prints`, `isHero`.
+- Router trong `js/app.js` đang đối chiếu toàn bộ hash, chưa hiểu `#store?cat=...`.
+- Card và một số vùng trong modal đang chèn dữ liệu trực tiếp vào HTML và inline handler. Không được coi bảo vệ XSS hiện tại là đã bao phủ renderer.
+- Viewer đang tìm sản phẩm bằng `modelKey`, có nhánh dự phòng lấy sản phẩm đầu tiên. Điều này có thể chọn sai sản phẩm khi mở rộng catalog.
 
-| Vấn đề | Kết quả thực tế | Kết luận |
-|---|---|---|
-| Cache sản phẩm phiên bản cũ | Không tải dữ liệu chuẩn; còn **0 màu, 0 vật liệu**, thiếu kích thước | Chẩn đoán stale cache có cơ sở |
-| Admin chỉ cập nhật một phần sản phẩm | Từ **4 màu, 3 vật liệu, 6 trường thông số** trở thành **0/0/0** | Có thêm nguyên nhân làm dữ liệu tiếp tục bị mất |
-| Checkout nhận sản phẩm A trong tham số | Hiển thị **387.000đ**, nhưng tạo nháp cho sản phẩm B trong giỏ với **400.000đ** | Luồng mua ngay sẽ sai đơn nếu chỉ nối thêm nút |
+Nguồn dữ liệu phù hợp đã tìm thấy:
 
-Các vị trí cần sửa:
+```text
+..\01. khoi nghiep in 3d\makerworld_multisheet_data.json
+```
 
-- `js/catalog-store.js:98`: đọc cache mà không enrichment.
-- `js/catalog-store.js:171`: chuẩn hóa patch trước khi hợp nhất, khiến trường bị bỏ qua trở thành giá trị rỗng rồi ghi đè dữ liệu cũ.
-- `js/admin.js`: form cập nhật không gửi `specs`, `colors`, `materials`.
-- `js/checkout.js:178`: hiển thị danh sách được truyền vào.
-- `js/checkout.js:281`: khi xác nhận lại đọc giỏ hàng toàn cục.
+Nguồn này có **55 Model ID duy nhất, 5 nhóm × 11 mẫu**. Cả 55 đều có file ảnh tương ứng trong thư mục thumbnail đã nêu. File `makerworld_catalog_data.json` chỉ có 30 mẫu, không dùng làm nguồn cho đợt nhập này.
 
-**Điều chỉnh đề xuất Antigravity:** duyệt enrichment từ dữ liệu đúng sản phẩm; loại bỏ phương án tự gán ba màu, hai vật liệu hoặc thông số thương mại chung. Catalog hiện có sáu sản phẩm và cả sáu đều có màu, vật liệu trong `products.json`; trước hết phải khôi phục đúng dữ liệu này.
+Kiểm thử nền đã chạy: **10/10 ca hành vi đạt**, **26/26 kiểm tra cấu trúc đạt**, bộ mô phỏng luồng đạt; kiểm tra cú pháp hai file catalog và renderer đạt. Chưa kiểm tra giao diện thực tế trên trình duyệt.
 
-**2. Phạm vi và thứ tự triển khai**
+**2. Phạm vi kiến trúc được duyệt**
 
-Thực hiện theo thứ tự: **test tái hiện → sửa cập nhật dữ liệu → migration → checkout độc lập → giao diện → nghiệm thu → commit/push**.
+Giữ kiến trúc HTML/CSS/JavaScript đang phục vụ `index.html`. Không chuyển sang Next.js hoặc đưa framework mới vào đợt này.
 
-| File | Trách nhiệm được duyệt |
+Phân trách nhiệm rõ ràng:
+
+| Thành phần | Trách nhiệm |
 |---|---|
-| `js/catalog-store.js` | Chuẩn hóa, migration, cập nhật một phần, đồng bộ tab |
-| `js/products-manager.js` | Cấu hình sản phẩm, tạo dòng hàng chung, hai CTA |
-| `js/checkout.js` | Checkout context, tóm tắt, tính tiền và tạo nháp từ cùng nguồn |
-| `js/cart.js` | Truyền nguồn checkout giỏ hàng; dùng chung cách tính tổng |
-| `index.html` | Bố cục modal, CTA, trạng thái và nội dung đặt hàng |
-| `css/style.css` | Tokens, kính mờ, responsive, chuyển động, accessibility |
-| `js/admin.js` | Chỉ sửa khi cần tương thích contract cập nhật |
-| `tests/…` | Kiểm thử hồi quy cho dữ liệu và checkout |
+| Script nhập dữ liệu | Chuẩn hóa nguồn, kiểm tra ảnh, sinh catalog và manifest |
+| `catalog-store.js` | Validation, lưu trữ, migration, CRUD, đồng bộ |
+| `products-manager.js` | Hero, grid, tìm kiếm, modal và thao tác sản phẩm |
+| `app.js` | Workspace, hash route và lịch sử điều hướng |
+| `checkout.js` | Một nguồn tính tiền và phí vận chuyển |
+| `viewer3d.js` | Hiển thị mô hình phù hợp và giữ đúng Product ID |
 
-Repository có cả giao diện HTML/JS và một ứng dụng Next.js trong `src/`. **Chỉ thị này áp dụng cho luồng `index.html` và `js/*` được bridge mô tả.** Worker phải xác nhận URL nghiệm thu đang phục vụ đúng giao diện này; không sửa nhầm `ProductModal.tsx` rồi kết luận đã xử lý `#order-modal`.
+Không để renderer tự ghi `localStorage`, hoặc tạo thêm bộ tính phí vận chuyển trong card/Hero.
 
-Giữ nguyên thay đổi có sẵn của người dùng trong `CODEX_BRIDGE.md` và trạng thái xóa `codex_response.md`.
-
-**3. P2 — Thiết kế dữ liệu và migration bắt buộc**
-
-Giữ khóa `tt_products` và dạng mảng để tương thích Admin hiện tại. Thêm phiên bản schema dạng số, chẳng hạn `schemaVersion: 4`; phiên bản dữ liệu catalog và phiên bản schema phải được phân biệt.
-
-Chuỗi xử lý thống nhất:
+Luồng được duyệt:
 
 ```text
-Đọc raw → kiểm tra cấu trúc → nhận diện dữ liệu cũ
-        → bổ sung từ bản chuẩn cùng product.id
-        → chuẩn hóa và kiểm tra → công bố dữ liệu
+Nguồn JSON + thumbnail
+        ↓
+Importer → validation → products.json + manifest
+        ↓
+CatalogStore → migration bảo toàn dữ liệu Admin
+        ↓
+Route/state → Hero + grid + modal
+        ↓
+Cart hoặc Direct Checkout hiện có
 ```
 
-Áp dụng cùng quy tắc cho khởi tạo, import, cập nhật và `storage` event.
+**3. P1 — Dữ liệu, định danh và thumbnail**
 
-Các nguyên tắc hợp nhất:
-
-- Khớp chính xác `product.id`; không lấy thông số của sản phẩm cùng loại để thay thế.
-- Giữ dữ liệu người dùng hợp lệ: tên, giá, ảnh upload, mô tả, trạng thái và tùy chọn đã chỉnh.
-- `specs` được bổ sung **từng trường thiếu**. Ví dụ trọng lượng tùy chỉnh `101g` phải được giữ trong khi kích thước được khôi phục.
-- Với bản ghi cũ, khôi phục `colors`/`materials` thiếu hoặc rỗng từ sản phẩm chuẩn tương ứng.
-- Mảng tùy chọn hợp lệ đã tùy chỉnh được giữ nguyên; không tự nối lại tùy chọn người dùng đã bỏ.
-- Không thêm lại sản phẩm đã xóa. `tt_products = []` vẫn biểu thị danh mục rỗng.
-- Sản phẩm tự tạo không có bản chuẩn: hiển thị trạng thái thiếu cấu hình và hướng dẫn liên hệ; không chế tạo lựa chọn bán hàng.
-- Sau migration, chạy lần thứ hai phải cho cùng kết quả: không đổi ảnh, không nhân đôi tùy chọn, không phát sinh ghi storage vô hạn.
-
-**Sửa `upsertProduct()` trước khi migration**, theo nguyên tắc:
-
-```js
-// Contract xử lý, Worker triển khai và kiểm thử các helper tương ứng:
-const existing = findExistingById(patch.id);
-const merged = mergeProvidedFields(existing, patch);
-const clean = normalizeAndValidateProduct(merged);
-```
-
-`mergeProvidedFields()` phải phân biệt:
-
-- Không có thuộc tính trong patch: giữ giá trị cũ.
-- Có thuộc tính với giá trị hợp lệ: cập nhật.
-- Có giá trị xóa được schema cho phép: thực hiện xóa.
-- Có giá trị sai: trả lỗi rõ ràng.
-
-Không dùng `sanitizeProduct(patch)` rồi spread lên sản phẩm cũ. Với `specs`, chỉ hợp nhất các khóa được phép; không đưa một thư viện deep-merge tổng quát vào dự án.
-
-**Xử lý lỗi lưu trữ:**
-
-- JSON hỏng: giữ nguyên raw để có thể khôi phục, không tự ghi đè.
-- Fetch thất bại: không lưu `[]` đè catalog và không đánh dấu migration hoàn tất.
-- Ghi storage thất bại: vẫn có thể dùng dữ liệu đã phục hồi trong bộ nhớ, nhưng phải báo chưa lưu được.
-- Trong lúc fetch migration, nếu Admin/tab khác cập nhật dữ liệu, phải đọc lại dữ liệu mới trước khi ghi; không ghi kết quả xây từ snapshot cũ đè lên chỉnh sửa mới.
-- `storage` event không được ghi ngược liên tục gây vòng lặp giữa các tab.
-
-Fallback trong renderer chỉ xử lý **trạng thái hiển thị**. Quy tắc dữ liệu đặt tại catalog store; không duy trì hai bộ mặc định khác nhau.
-
-**4. P1 — Một cấu hình sản phẩm, hai hành động**
-
-Trong `products-manager.js`, tạo một hàm chung:
-
-```js
-buildConfiguredLine()
-```
-
-Hàm này đọc cấu hình hiện tại, kiểm tra hợp lệ và trả về một dòng hàng có contract tương thích `TTCart`:
-
-```js
-{
-  id, title, image, category,
-  colorId, colorName,
-  materialId, materialName,
-  customText,
-  qty,
-  price // đơn giá đã gồm phụ phí vật liệu, đơn vị VND
-}
-```
-
-Điều kiện bắt buộc:
-
-- Sản phẩm còn tồn tại và đang được bán.
-- Màu/vật liệu thực sự thuộc sản phẩm.
-- Số lượng là số nguyên trong giới hạn cho phép; giai đoạn này dùng `1–99`.
-- Đơn giá, phụ phí và tổng tiền hợp lệ, không âm, không vượt giới hạn số nguyên an toàn.
-- Nội dung khắc tên trim, chuẩn hóa Unicode NFC, giới hạn rõ ràng.
-- Không tự thay một lựa chọn không hợp lệ bằng lựa chọn mặc định rồi tiếp tục đặt hàng.
-
-Hai nút gọi cùng hàm:
+Tạo script, ví dụ:
 
 ```text
-Thêm vào giỏ → buildConfiguredLine → TTCart.addToCart → toast
-Đặt hàng ngay → buildConfiguredLine → checkout context trực tiếp
+scripts/import_makerworld_catalog.py
 ```
 
-**Mua ngay không thêm vào giỏ, không xóa giỏ, không mở drawer.** Đóng checkout trực tiếp phải giữ nguyên giỏ hàng trước đó.
+Script nhận đường dẫn nguồn và thư mục ảnh qua tham số; không hardcode đường dẫn máy cá nhân vào mã chạy trên trình duyệt.
 
-Sửa các trạng thái liên quan cùng lúc:
-
-- Mở sản phẩm khác phải reset số lượng cả trong state lẫn DOM.
-- Màu đã chọn trên card phải được truyền đúng vào modal và quick add khi còn hợp lệ.
-- Giá hiển thị cập nhật theo vật liệu.
-- Hiển thị riêng **đơn giá** và **tạm tính theo số lượng**.
-- Hai CTA luôn phản ánh cùng cấu hình.
-
-**5. Checkout context là nguồn dữ liệu duy nhất**
-
-Giữ API tương thích bằng cách bổ sung tham số thứ ba:
+Giữ nguyên năm category ID:
 
 ```js
-TTCheckout.openCheckout(items, discountPercent = 0, options = {})
+const CATEGORY_IDS = [
+  'Trang_Diem_Vanity',
+  'Decor_Den_Noi_That',
+  'Do_Choi_Moc_Khoa',
+  'Hop_De_Ban_Tien_Ich',
+  'Ca_Nhan_Hoa_NFC'
+];
 ```
 
-Ví dụ luồng mua ngay:
+Tạo registry dùng chung cho Store và Admin, chứa `id`, nhãn ngắn, tiêu đề và màu nhấn. Không sao chép các danh sách khác nhau vào nhiều file.
+
+**Định danh sản phẩm mới:**
 
 ```js
-TTCheckout.openCheckout([line], 0, {
-  source: 'direct'
+id: `mw-cn-${String(source.id)}`
+modelId: String(source.id)
+```
+
+Không sử dụng số thứ tự dòng làm ID. Không gán lại `prod-1`…`prod-6` cho những mẫu mới có tên gần giống.
+
+Hợp đồng ánh xạ dữ liệu:
+
+| Trường đích | Nguồn/quy tắc |
+|---|---|
+| `title` | `title_vi` |
+| `originalTitle` | `title_orig` |
+| `category` | Key nhóm |
+| `price` | `price_vnd`, số nguyên VND |
+| `author` | `designer` |
+| `makerworldUrl` | `url` |
+| `downloads`, `likes`, `prints` | Giữ riêng, số nguyên không âm |
+| `weightGrams` | `weight_g` |
+| `printTimeSeconds` | `time_sec` |
+| `materialRecommendation` | `material_rec` |
+| `headlineBenefit` | `use_case` |
+| `desc` | `selection_reason` |
+| `videoScript` | `viral_idea` |
+| `productionNotes` | `action` |
+| `image` | `assets/images/products/thumb_{modelId}.png` |
+| `imageSource` | `preset` |
+| `imageAlt` | Tên Việt hóa |
+| `licenseName` | `license_name` |
+| `commercialStatus` | `commercial_status`, giữ nguyên |
+| `isHero` | Kết quả chọn Hero |
+| `modelKey` | `null` nếu chưa có mô hình phù hợp |
+
+Giữ các trường tương thích hiện có: `type`, `originalPrice`, `badge`, `specs`, `colors`, `materials`, `status`, `updatedAt`.
+
+Các quyết định bắt buộc:
+
+- `specs.weight` và thời gian hiển thị phải được suy ra từ số liệu gốc.
+- Thiếu kích thước, độ dày lớp in hoặc bảo hành thì để thiếu; không tự tạo thông số.
+- Không suy diễn mọi sản phẩm trong nhóm NFC đều có chip NFC.
+- Tách vật liệu/màu **được đề xuất** khỏi biến thể **xưởng thực sự cung cấp**. Các biến thể bán cần cấu hình rõ trong file override theo `modelId`.
+- Không tự đặt phụ phí vật liệu hoặc giá gạch ngang.
+- Lưu metadata chi phí nguồn trong đối tượng riêng nếu cần; không nhầm thành phụ phí khách phải trả.
+
+Nguồn thực tế có 50 mẫu `Chua_ro`, 4 mẫu `Can_mua_giay_phep`, 1 mẫu `Da_xac_minh`. Bảo toàn những trạng thái này trong dữ liệu và Admin; không tự đổi thành đã xác minh quyền thương mại.
+
+Importer phải hỗ trợ `--dry-run`, kiểm tra:
+
+1. Đúng 55 bản ghi, 55 ID duy nhất.
+2. Mỗi category đúng 11 bản ghi.
+3. Giá và số liệu hợp lệ.
+4. Đủ 55 thumbnail, file đọc được.
+5. Đường dẫn đích nằm trong `assets/images/products/`.
+6. Không có lỗi trước khi ghi catalog chính.
+
+Chỉ sao chép **55 ảnh tương ứng**, không sao chép toàn bộ 82 ảnh. Không xóa hoặc di chuyển thư mục nguồn.
+
+Sinh manifest chứa revision catalog, danh sách ID, kết quả kiểm tra và hash ảnh. Chạy lại với cùng đầu vào phải cho cùng kết quả; không dùng thời gian chạy để làm thay đổi toàn bộ `updatedAt`.
+
+**4. Quy tắc chọn Hero và giao diện Category Hub**
+
+Điểm tuyển chọn được tính từ ba tiêu chí nguồn, mỗi tiêu chí tối đa 5:
+
+```js
+selectionScore =
+  100 * (aestheticScore + uniquenessScore + feasibilityScore) / 15;
+```
+
+Giữ giá trị chính xác trong dữ liệu; làm tròn khi hiển thị. “100 điểm” phải được diễn đạt là **điểm tuyển chọn nội bộ**, không phải đánh giá của người mua.
+
+Chọn Hero theo thứ tự:
+
+```text
+Điểm tuyển chọn giảm dần
+→ prints giảm dần
+→ downloads giảm dần
+→ likes giảm dần
+→ modelId tăng dần
+```
+
+Theo dữ liệu hiện tại, kết quả chuẩn là:
+
+| Danh mục | Hero Model ID |
+|---|---:|
+| `Trang_Diem_Vanity` | `1646129` |
+| `Decor_Den_Noi_That` | `1438306` |
+| `Do_Choi_Moc_Khoa` | `1702306` |
+| `Hop_De_Ban_Tien_Ich` | `1971424` |
+| `Ca_Nhan_Hoa_NFC` | `1836100` |
+
+Không gắn cùng một badge “100 điểm” cho cả 55 mẫu. Không đổi nhãn lượt tải thành lượt in.
+
+**Chế độ Tất cả:**
+
+- Hiển thị 5 khối danh mục.
+- Mỗi khối gồm tiêu đề, 1 Hero lớn, lưới 10 mẫu còn lại và “Xem tất cả”.
+- Hero được tính trong tổng 11 mẫu; không render thêm bản sao trong lưới cùng khối.
+
+**Chế độ một danh mục:**
+
+- Hiển thị Hero và lưới 10 mẫu còn lại.
+- Tổng cộng đúng 11 Product ID duy nhất trên catalog mặc định.
+- Có nút quay lại “Tất cả” và chuyển nhanh giữa các nhóm.
+
+Số lượng trên giao diện phải tính từ catalog active thực tế. Khi Admin ẩn hoặc thêm sản phẩm, không tiếp tục hardcode “11 mẫu”.
+
+CTA Hero dùng **“Đặt hàng ngay”**, mở modal cấu hình sản phẩm hiện có. Chưa có quy trình giao hỏa tốc thì không dùng lời hứa “Đặt hàng hỏa tốc”.
+
+Thiết kế dùng token màu, typography và khoảng cách đang có. Áp dụng:
+
+- Hai cột cho Hero trên desktop, một cột trên mobile.
+- Pills cuộn ngang trên màn hình hẹp.
+- Chuyển cảnh bằng opacity/transform khoảng 160–220 ms.
+- Tôn trọng `prefers-reduced-motion`.
+- Không trì hoãn phản hồi bấm nút để chờ animation.
+- Có loading, empty và error state riêng.
+- Nút có focus rõ, thao tác bàn phím và trạng thái `aria-pressed`.
+
+Tìm kiếm phải kết hợp category, hỗ trợ tiếng Việt không dấu, tìm theo tên và Model ID. Khi có từ khóa, ưu tiên danh sách kết quả và số lượng phù hợp; không giữ các Hero không khớp.
+
+**5. P3 — Migration bảo toàn dữ liệu Admin**
+
+Tách rõ ba khái niệm:
+
+```text
+Phiên bản phát hành giao diện: v4.0
+Phiên bản cấu trúc dữ liệu: schemaVersion
+Phiên bản bộ sản phẩm nền: catalogRevision
+```
+
+Đợt thay đổi cấu trúc này dùng `schemaVersion = 5`; migration bộ 55 mẫu phải dựa vào một `catalogRevision` riêng. Không kiểm tra mỗi `tt_schema_version === "4"` rồi bỏ qua.
+
+Giữ `tt_products` là mảng để tương thích. Thêm metadata lưu revision và tombstone bằng key riêng, ví dụ `tt_catalog_meta`.
+
+Thuật toán phải là hàm thuần, có thể kiểm thử độc lập:
+
+```js
+buildMigration({
+  storedProducts,
+  previousDefaults,
+  incomingDefaults,
+  metadata
 });
+// → { products, metadata, changed, report }
 ```
 
-Luồng giỏ hàng truyền `source: 'cart'` cùng mức giảm giá tương ứng. Không tự áp coupon của giỏ sang mua ngay.
+Quy tắc merge:
 
-Trong `checkout.js`, lưu context riêng:
+1. **Storage chưa tồn tại:** nạp đủ 55 mẫu mặc định.
+2. **Storage là `[]`:** giữ catalog rỗng theo hợp đồng hiện có; không tự phục hồi.
+3. **JSON hỏng hoặc sai kiểu:** giữ nguyên dữ liệu thô, báo trạng thái cần khôi phục; không ghi đè bằng `[]`.
+4. **Có dữ liệu cũ:** giữ sản phẩm Admin, bổ sung seed mới chưa tồn tại và chưa bị tombstone.
+5. **Trùng ID:** bảo toàn dữ liệu tùy chỉnh; chỉ bổ sung trường thực sự thiếu.
+6. **Cùng revision đã migration:** không tự nhập lại các seed bị Admin xóa.
+7. **Chạy lần hai:** không trùng sản phẩm, không ghi storage nếu dữ liệu không đổi.
+
+Phải merge trên **bản ghi thô trước khi sanitize**. Nếu sanitize trước, giá trị mặc định như ảnh, category hoặc mảng rỗng có thể che mất trạng thái “chưa được cung cấp”.
+
+Bảo toàn toàn bộ cụm ảnh:
+
+```text
+image + imageSource + presetId + imageAlt
+```
+
+Ảnh dạng `data:image/...` cũ vẫn được bảo toàn, kể cả khi bản ghi chưa có `imageSource: "upload"`.
+
+Giữ giá, tiêu đề, trạng thái, thông số riêng, màu và vật liệu Admin đã sửa. Nếu không xác định được một giá trị là mặc định hay chỉnh tay, ưu tiên giữ dữ liệu đã lưu.
+
+Sáu sản phẩm cũ không được tự động ghép với mẫu MakerWorld mới. Lưu baseline cũ thành fixture để làm giàu dữ liệu legacy và kiểm thử. Nếu cần hiển thị chúng, dùng nhóm “Bộ sưu tập đã lưu”; không ép vào năm nhóm mới bằng suy đoán.
+
+**Tiêu chí 55 sản phẩm áp dụng cho catalog mặc định sạch.** Trình duyệt có sản phẩm tùy chỉnh có thể chứa nhiều hơn 55 bản ghi; không xóa dữ liệu để đạt một con số kiểm thử.
+
+Về ghi storage:
+
+- Ghi danh sách thành công trước khi đánh dấu migration hoàn tất.
+- Ghi marker thất bại thì không báo migration đã hoàn tất.
+- Retry phải idempotent; không gọi hai lần `setItem()` là một giao dịch nguyên tử.
+- Khi quota đầy, giữ catalog cũ và thông báo rõ.
+- Không nhân đôi toàn bộ ảnh base64 vào nhiều key backup.
+- Đồng bộ tab qua `storage`, không ghi ngược gây vòng lặp.
+- Khi phát hiện catalog thay đổi ở tab khác trong lúc chỉnh sửa, không âm thầm ghi đè bản mới hơn.
+
+Mở rộng sanitizer và validation cho toàn bộ metadata đã duyệt. Các API hiện có của `TTCatalogStore` và event `tt_products_updated` phải tiếp tục hoạt động.
+
+Cập nhật cả `admin.html` và `js/admin.js`: dropdown category, bộ lọc, bảo toàn metadata khi sửa một trường, import/export và tombstone khi xóa seed.
+
+**6. Router — một nơi sở hữu lịch sử điều hướng**
+
+`app.js` chịu trách nhiệm đọc/ghi hash. `products-manager.js` nhận state để render.
+
+Hợp đồng URL:
+
+```text
+#store
+#store?cat=Trang_Diem_Vanity
+#store?cat=Decor_Den_Noi_That
+```
+
+Tách phần route và query trước khi tra bảng:
 
 ```js
-{
-  source: 'direct' | 'cart',
-  items: /* snapshot đã kiểm tra, không giữ tham chiếu tới cart */,
-  discountPercent,
-  clientRequestId,
-  state: 'editing' | 'submitting' | 'handoff_ready'
+function parseStoreHash(hash, allowedCategories) {
+  const raw = String(hash || '#store').replace(/^#/, '');
+  const separator = raw.indexOf('?');
+
+  const path = (
+    separator < 0 ? raw : raw.slice(0, separator)
+  ).toLowerCase();
+
+  const query = separator < 0 ? '' : raw.slice(separator + 1);
+  const params = new URLSearchParams(query);
+  const requested = params.get('cat');
+
+  return {
+    path,
+    category: allowedCategories.has(requested) ? requested : 'all'
+  };
 }
 ```
 
-**Tóm tắt, tổng tiền, nội dung tin nhắn và bản ghi nháp đều phải đọc context này.** Loại bỏ việc `submitCheckout()` đọc lại `TTCart.getItems()` và `getDiscountPercent()`.
+Không lowercase toàn bộ hash vì category ID đang có chữ hoa.
 
-Các yêu cầu khác:
+Yêu cầu triển khai:
 
-- Tóm tắt hiển thị tên, màu, vật liệu, khắc tên, số lượng, đơn giá và thành tiền.
-- Trước xác nhận, kiểm tra lại sản phẩm, tùy chọn và giá hiện hành. Có thay đổi thì cập nhật tóm tắt và yêu cầu người mua xem lại.
-- Chống nhấn đúp; một lần xác nhận không tạo nhiều nháp.
-- Mở phiên checkout mới phải reset trạng thái kết quả, nút sao chép và ghi chú cũ.
-- Thông tin khách hàng chỉ tự điền theo lựa chọn ghi nhớ hiện có.
-- Sửa regex điện thoại hiện tại: chuẩn hóa đầu vào, kiểm tra toàn chuỗi và thống nhất định dạng lưu.
-- Render dữ liệu sản phẩm/khách bằng `textContent`, `.value`, DOM API; bỏ nội suy dữ liệu vào HTML và inline `onclick` tại các phần sửa.
+- Click pill hoặc “Xem tất cả” tạo tối đa một history entry.
+- `pushState()` không tự phát `hashchange`; router phải áp dụng state ngay sau khi ghi URL.
+- Reload, Back và Forward khôi phục đúng danh mục.
+- Init bất đồng bộ không được render `'all'` đè lên danh mục trong URL.
+- Early return khi đang ở Store không được ngăn cập nhật category.
+- Giữ các alias route và bốn workspace hiện có.
+- Bỏ listener filter cũ hoặc nối vào dispatcher mới; không để hai listener cùng xử lý.
 
-Dùng `calculateOrderTotals()` làm nguồn tính tiền chung cho drawer và checkout. Hiện drawer xét freeship trước giảm giá, checkout xét sau giảm giá. Chốt sử dụng quy tắc hiện có của checkout: **miễn phí từ 300.000đ tiền hàng sau giảm giá**, nếu chưa có chính sách khác đã được cấu hình.
+Giữ hàm `renderStoreProducts(filter)` làm wrapper tương thích nếu các nơi khác đang gọi.
 
-**6. Ngữ nghĩa Zalo và COD phải đúng khả năng hệ thống**
+**7. Modal, checkout, XSS và viewer**
 
-Cấu hình hiện tại có `orderEndpoint: null`; mã checkout đang tạo nháp cục bộ và nội dung chuyển tiếp, chưa gửi đơn tới hệ thống nhận đơn.
+Giữ modal hai cột và hai hành động:
 
-Vì vậy:
+```js
+TTCart.addToCart(configuredLine);
 
-- Duyệt luồng **soạn yêu cầu → sao chép → mở Zalo → người mua gửi**.
-- Trạng thái sau khi soạn là “Yêu cầu đã sẵn sàng chuyển tiếp”, không phải “Đặt hàng thành công”.
-- Với COD, ghi rõ phương thức mong muốn và yêu cầu gửi cho xưởng xác nhận.
-- Không cam kết “hoàn tất trong 10 giây” hoặc “xưởng đã nhận đơn” khi chưa có bằng chứng giao nhận.
-- Lấy số Zalo từ cấu hình hiện hành; bỏ phụ thuộc duy nhất vào số hardcode.
-- Không giả định `?text=` luôn được Zalo hỗ trợ: phải có nút sao chép và nội dung có thể chọn thủ công.
-- Không đặt toàn bộ địa chỉ và dữ liệu khách vào URL khi không cần thiết.
+TTCheckout.openCheckout(
+  [configuredLine],
+  0,
+  { source: 'direct' }
+);
+```
 
-Nếu bổ sung endpoint nhận đơn, đó là một thay đổi kiến trúc riêng: server phải kiểm tra giá, chống trùng yêu cầu và trả mã xác nhận. Không cần bổ sung backend để hoàn thành phạm vi mua ngay qua chuyển tiếp hiện tại.
+Direct Checkout không thêm sản phẩm vào giỏ. Màu, vật liệu, số lượng và nội dung cá nhân hóa phải đi cùng một cấu hình.
 
-**7. P3 — Chốt thiết kế “trong trẻo, mượt mà, dễ chịu”**
+Thống nhất nguồn tạo dòng hàng bằng cách tái sử dụng hoặc trích xuất `buildConfiguredLine()`. Sản phẩm cần nhập tên, số điện thoại hoặc cấu hình QR/NFC phải mở modal trước; không quick-add cấu hình rỗng.
 
-Duyệt hướng kính mờ tiết chế, giữ nhận diện cam và typography hiện có. Các thông số blur/easing là lựa chọn thiết kế của dự án, không gọi là “chuẩn phòng thí nghiệm” hay quy định Apple.
+Giữ công thức tiền hiện tại:
 
-- Desktop từ khoảng `960px`: modal hai cột, rộng tối đa khoảng `1040px`; ảnh lớn bên trái, cấu hình bên phải.
-- Mobile: một cột, giới hạn theo `100dvh`, nội dung cuộn và footer CTA có khoảng đệm safe area.
-- Tiêu đề dài được xuống dòng đầy đủ; nút đóng không đè tiêu đề.
-- Footer gồm “Thêm vào giỏ”, “Đặt hàng ngay” và tạm tính rõ ràng; không che trường cuối khi bàn phím mở.
-- Thông số dùng bố cục `<dl>`; nhãn phụ tối thiểu khoảng `12px`, nội dung chính `14–16px`.
-- Màu dùng swatch kèm tên và trạng thái chọn; vật liệu dùng thẻ có mô tả/phụ phí từ dữ liệu thật.
-- Blur chỉ áp dụng có chọn lọc cho modal, navigation hoặc drawer; card dùng bề mặt nhẹ để tránh nhiều lớp blur trên mobile.
-- Có nền đủ đặc khi không hỗ trợ `backdrop-filter`.
-- Chuyển động chủ yếu bằng `opacity`/`transform`, khoảng `160–280ms`; không animate blur hoặc dùng `transition: all`.
-- Ring lựa chọn tĩnh, press nhẹ; không cần glow/ripple liên tục.
+```text
+Đơn giá = giá cơ bản + phụ phí vật liệu
+Tiền hàng = tổng đơn giá × số lượng
+Miễn ship khi tiền hàng sau giảm giá ≥ 300.000đ
+Phí ship dưới ngưỡng = 25.000đ
+Giỏ rỗng = 0đ phí ship
+```
 
-**Điểm cần sửa trong gradient đề xuất:** chữ trắng trên `#FF5C00` chỉ khoảng **3,10:1**, trên `#E64A19` khoảng **3,92:1**. CTA chữ nhỏ phải đổi sang chữ tối phù hợp hoặc nền cam đậm hơn để đạt tối thiểu **4,5:1**. [W3C về tương phản](https://www.w3.org/WAI/WCAG22/Understanding/contrast-minimum.html)
+Không suy ra công thức ship theo trọng lượng trong đợt này.
 
-Modal phải có tên truy cập, focus ban đầu, giữ Tab bên trong, Escape đóng đúng lớp đang mở và trả focus hợp lý. Khi chuyển từ sản phẩm sang checkout, không để hai modal đồng thời nhận tương tác. [W3C Dialog Pattern](https://www.w3.org/WAI/ARIA/apg/patterns/dialog-modal/)
+**Yêu cầu renderer an toàn:**
 
-Chốt vùng bấm chính tối thiểu `44 × 44px` theo mục tiêu thiết kế dự án; hỗ trợ `prefers-reduced-motion`. [W3C Target Size](https://www.w3.org/WAI/WCAG22/Understanding/target-size-minimum.html), [Reduced Motion](https://www.w3.org/WAI/WCAG22/Techniques/css/C39)
+- Dùng `textContent` cho dữ liệu văn bản.
+- Dùng `createElement()` và event delegation cho tương tác.
+- Không nội suy tên, ID, màu hoặc vật liệu vào inline JavaScript.
+- Chỉ chấp nhận màu hex đúng định dạng trước khi gán style.
+- Kiểm tra scheme URL ảnh và liên kết; từ chối `javascript:`.
+- Chỉ giữ data URL ảnh raster hợp lệ cho upload.
+- Khi ảnh dự phòng cũng thất bại, dừng handler để tránh lặp.
 
-Không tự thêm NTAG213, Resin 8K, badge “100% nguyên sinh”, miễn phí đổi trả hay bảo hành chung. Ví dụ sản phẩm NFC hiện ghi **NTAG215**; nội dung phải theo dữ liệu sản phẩm được xác nhận.
+Phải kiểm tra cả Hero, card, modal, Admin và phần hiển thị giỏ hàng có nhận dữ liệu sản phẩm.
 
-**8. P4 — Cổng nghiệm thu và bàn giao**
+**Yêu cầu viewer:**
 
-Worker viết test hành vi trước, chứng minh bản cũ thất bại đúng nguyên nhân rồi mới sửa. Tối thiểu gồm:
+- Không gán `nfc_wifi` làm model mặc định cho cả 55 sản phẩm.
+- Sản phẩm chưa có mô hình phù hợp dùng `modelKey: null`; ẩn “Soi 3D” tương ứng.
+- Theo dõi `activeProductId`, không dùng `modelKey` để quyết định sản phẩm mua.
+- Loại bỏ nhánh lấy `products[0]` khi xác định sản phẩm để đặt hàng.
+- Giữ chức năng và mô hình 3D cũ đang hoạt động.
 
-| Ca nghiệm thu | Kết quả bắt buộc |
+**8. P4 — Kiểm thử và cổng nghiệm thu**
+
+Các bộ test cũ phải chạy lại. Khi baseline đổi, chuyển dữ liệu legacy thành fixture; không xóa assertion bảo toàn ảnh hoặc thông số để làm test xanh.
+
+Bổ sung tối thiểu:
+
+| Nhóm | Ca bắt buộc |
 |---|---|
-| Cache cũ `prod-1`, ảnh riêng, trọng lượng `101g` | Khôi phục lựa chọn/thông số thiếu; giữ ảnh và `101g` |
-| Admin chỉ sửa tiêu đề | Giữ nguyên màu, vật liệu và thông số |
-| Danh mục `[]`, sản phẩm đã xóa | Không tự phục hồi |
-| JSON hỏng, fetch lỗi, quota đầy | Không ghi đè mất dữ liệu |
-| Migration hai lần, đồng bộ hai tab | Không nhân bản, không vòng lặp, không mất chỉnh sửa mới |
-| Giỏ có B, mua ngay A | Summary, nháp, tin nhắn chỉ chứa A; giỏ B nguyên vẹn |
-| A: `109.000 + 20.000`, số lượng 3 | Đơn giá `129.000`, tiền hàng `387.000`, phí giao `0` |
-| Tiền hàng `310.000`, giảm 10% | Còn `279.000`, phí `25.000`, tổng `304.000` |
-| Nhấn xác nhận hai lần | Một yêu cầu/nháp trong cùng phiên |
-| Tên/khắc chứa dấu nháy hoặc markup | Hiển thị nguyên văn, không thực thi mã |
+| Dữ liệu | 55 ID duy nhất; 11/category; 5 Hero; đủ ảnh |
+| Metadata | Không mất trường qua init, sửa, lưu, export/import |
+| Migration | Cache cũ nhận seed mới, giữ ảnh và thông số riêng |
+| Migration | `[]`, JSON hỏng, fetch lỗi, quota lỗi, marker lỗi |
+| Migration | Chạy hai lần không đổi; seed đã xóa không tái xuất hiện |
+| Router | Deep link, reload, Back/Forward, category lạ, init chậm |
+| Hiển thị | Hero không trùng grid; số lượng theo active thực tế |
+| Checkout | Direct A giữ nguyên giỏ B; cấu hình và phí ship đúng |
+| XSS | Payload trong title, ID, specs, màu, vật liệu và URL |
+| Viewer | Nút mua giữ đúng Product ID; mẫu thiếu model không mở sai |
 
-Chạy lại kiểm tra cú pháp và hai script PowerShell. **Baseline tôi đã chạy:** 11 file JS qua kiểm tra cú pháp; `test_e2e_simulation.ps1` qua 6 nhóm kiểm tra; `test_tab_architecture.ps1` qua **26/26**. Chúng kiểm tra cấu trúc bằng chuỗi, không thay thế các test hành vi trên.
+Lệnh kiểm tra nền:
 
-Kiểm thử trình duyệt thực tế ở chiều rộng `360`, `390`, `768`, `1440px`, cả sáng/tối; kiểm tra bàn phím, tiêu đề dài, nội dung khắc dài, ảnh lỗi, bàn phím mobile và console/network. Chạy qua HTTP cùng origin. Lưu ảnh trước/sau và log thực tế.
+```powershell
+node tests/test_behavior.js
 
-Sau khi toàn bộ điều kiện đạt:
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test_e2e_simulation.ps1
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\test_tab_architecture.ps1
 
-1. Rà soát diff, chỉ stage file thuộc nhiệm vụ.
-2. Commit với mô tả đúng phạm vi cuối cùng.
-3. Push `main` theo P4 đã đề xuất sau khi xác nhận đúng remote, không force-push và không đưa thay đổi riêng của người dùng vào commit.
-4. Bàn giao commit SHA, danh sách file, log test, ảnh nghiệm thu và giới hạn còn lại.
+node --check js/catalog-store.js
+node --check js/products-manager.js
+node --check js/app.js
+node --check js/admin.js
+node --check js/viewer3d.js
+```
 
-**Trạng thái hiện tại:** đã hoàn thành thẩm định và ban hành chỉ thị; chưa sửa mã sản phẩm, chưa nghiệm thu giao diện và chưa commit/push. Antigravity thực thi theo thứ tự trên.
+Hai script PowerShell hiện chủ yếu kiểm tra chuỗi và cấu trúc mã. Phải bổ sung kiểm tra trình duyệt thực tế cho lọc, lịch sử, modal và checkout.
+
+Kiểm tra tối thiểu tại chiều rộng 360, 768 và 1440 px, cả giao diện sáng/tối: không tràn ngang trang, không CTA bị che, không lỗi console phát sinh do thay đổi, không thiếu thumbnail.
+
+**9. Thứ tự thi công và báo cáo bàn giao**
+
+Antigravity thực hiện tuần tự:
+
+1. Ghi nhận diff hiện có; không ghi đè công việc người dùng.
+2. Tạo registry, importer, manifest và fixture legacy.
+3. Hoàn thành validation, sanitizer và migration.
+4. Hoàn thành router cùng state filter.
+5. Dựng Hero/grid và cập nhật Admin.
+6. Tích hợp modal, checkout, bảo vệ renderer và viewer.
+7. Chạy kiểm thử, kiểm tra trình duyệt và gửi log thực tế.
+
+Đồng bộ phiên bản asset giữa `index.html` và `admin.html`, tránh một trang dùng engine cũ.
+
+Báo cáo bàn giao phải có danh sách file thay đổi, manifest 55 mẫu, bảng Hero, kết quả migration, từng lệnh kiểm thử với exit code, ảnh giao diện thực tế và các giới hạn còn lại.
+
+**Cho phép triển khai ngay theo chỉ thị này. Chỉ được báo hoàn tất khi dữ liệu, migration, điều hướng và hành vi mua hàng đều có bằng chứng kiểm chứng.**
