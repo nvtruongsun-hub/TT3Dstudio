@@ -82,6 +82,13 @@ function createMockBrowser(storage) {
     console: { log: () => {}, warn: () => {}, error: () => {} },
     TT_CONFIG: { hotline: '0968988647' },
     open: () => {},
+    setTimeout: (fn, delay) => {
+      if (typeof fn === 'function') {
+        try { fn(); } catch (_) {}
+      }
+      return 1;
+    },
+    clearTimeout: () => {},
     navigator: { clipboard: { writeText: async () => {} } }
   };
   win.window = win;

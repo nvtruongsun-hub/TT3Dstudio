@@ -1,0 +1,38 @@
+﻿[
+    {
+        "file":  "catalog-store",
+        "exitCode":  0
+    },
+    {
+        "file":  "category-registry",
+        "exitCode":  0
+    },
+    {
+        "file":  "purchase-config",
+        "exitCode":  0
+    },
+    {
+        "file":  "products-manager",
+        "exitCode":  0
+    },
+    {
+        "file":  "app",
+        "exitCode":  0
+    },
+    {
+        "file":  "admin",
+        "exitCode":  0
+    },
+    {
+        "file":  "viewer3d",
+        "exitCode":  0
+    },
+    {
+        "file":  "cart",
+        "exitCode":  0
+    },
+    {
+        "file":  "checkout",
+        "exitCode":  0
+    }
+]

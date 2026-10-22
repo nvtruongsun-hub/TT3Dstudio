@@ -184,123 +184,8 @@ const TT_DEFAULT_CONFIG = {
     }
   ],
 
-  // Danh sách đơn hàng sản xuất ban đầu (5 cột Kanban xưởng)
-  sampleOrders: [
-    {
-      id: "TT3D-1089",
-      createdAt: "2026-10-06 09:15",
-      stage: "printing", // 1. new | 2. sliced | 3. printing | 4. postprocess | 5. completed
-      customerName: "Nguyễn Tuấn Anh (Cafe The Morning)",
-      phone: "0912.345.678",
-      address: "Số 45 Ngõ 12 Đặng Tiến Đông, Đống Đa, Hà Nội",
-      productName: "Đế WiFi 1 Chạm TapConnect™",
-      color: "Trắng Sứ Matte",
-      spoolId: "SPL-01",
-      weightGrams: 32,
-      material: "PLA+ Matte",
-      nfcData: { type: "wifi", ssid: "TheMorning_Coffee", pass: "morning2026", auth: "WPA" },
-      assignedPrinter: "p-01",
-      estTimeHours: 1.8,
-      statusPayment: "paid",
-      totalPrice: 109000,
-      notes: "In logo The Morning ở mặt trước, nạp sẵn WiFi khách quét thử"
-    },
-    {
-      id: "TT3D-1090",
-      createdAt: "2026-10-06 10:30",
-      stage: "new",
-      customerName: "Trần Mai Phương",
-      phone: "0987.654.321",
-      address: "Chung cư Vinhomes Smart City, Tây Mỗ, Nam Từ Liêm",
-      productName: "Bình Hoa Dập Ly Origami Watertight",
-      color: "Cam Đất (Terracotta)",
-      spoolId: "SPL-02",
-      weightGrams: 110,
-      material: "PLA+ Matte",
-      nfcData: null,
-      assignedPrinter: null,
-      estTimeHours: 4.2,
-      statusPayment: "paid",
-      totalPrice: 125000,
-      notes: "Yêu cầu test ngâm nước kỹ trước khi đóng gói"
-    },
-    {
-      id: "TT3D-1091",
-      createdAt: "2026-10-06 11:00",
-      stage: "sliced",
-      customerName: "Lê Minh Quân",
-      phone: "0904.112.233",
-      address: "128 Nguyễn Thị Minh Khai, P.6, Q.3, TP.HCM",
-      productName: "Bảng Tên Monogram 3D Chữ M",
-      color: "Trắng Sứ (White Matte)",
-      spoolId: "SPL-01",
-      weightGrams: 65,
-      material: "PLA+ Matte",
-      nfcData: null,
-      assignedPrinter: "p-02",
-      estTimeHours: 2.5,
-      statusPayment: "paid",
-      totalPrice: 135000,
-      notes: "Khắc tên Quân Lê, đính kèm linh vật Phi Hành Gia"
-    },
-    {
-      id: "TT3D-1092",
-      createdAt: "2026-10-06 08:00",
-      stage: "printing",
-      customerName: "Vũ Hải Đăng (Tech Studio)",
-      phone: "0936.789.012",
-      address: "24 Bà Triệu, Hoàn Kiếm, Hà Nội",
-      productName: "Kệ Đa Năng BedSide 5-in-1 Pro",
-      color: "Đen Mờ (Obsidian Black)",
-      spoolId: "SPL-04",
-      weightGrams: 185,
-      material: "PLA+ Matte",
-      nfcData: null,
-      assignedPrinter: "p-03",
-      estTimeHours: 6.5,
-      statusPayment: "paid",
-      totalPrice: 199000,
-      notes: "Giao hỏa tốc trong ngày nếu kịp"
-    },
-    {
-      id: "TT3D-1088",
-      createdAt: "2026-10-05 16:40",
-      stage: "postprocess",
-      customerName: "Phạm Thùy Linh",
-      phone: "0978.899.112",
-      address: "15 Lê Thánh Tông, Ngô Quyền, Hải Phòng",
-      productName: "Đèn Bàn Xoắn Kem Swirl Soft-Serve",
-      color: "Xanh Rêu (Sage Green)",
-      spoolId: "SPL-03",
-      weightGrams: 230,
-      material: "PLA+ Matte",
-      nfcData: null,
-      assignedPrinter: "p-01",
-      estTimeHours: 7.2,
-      statusPayment: "paid",
-      totalPrice: 320000,
-      notes: "Kèm bóng LED 3000K, test sáng chóa đèn"
-    },
-    {
-      id: "TT3D-1085",
-      createdAt: "2026-10-05 10:20",
-      stage: "completed",
-      customerName: "Hoàng Gia Huy",
-      phone: "0945.667.889",
-      address: "Số 8 Chùa Láng, Đống Đa, Hà Nội",
-      productName: "Hệ Bảng Hexa Pegboard Combo 4",
-      color: "Trắng Sứ (White Matte)",
-      spoolId: "SPL-01",
-      weightGrams: 140,
-      material: "PLA+ Matte",
-      nfcData: null,
-      assignedPrinter: "p-02",
-      estTimeHours: 4.8,
-      statusPayment: "paid",
-      totalPrice: 145000,
-      notes: "Đã giao thành công cho khách lấy tại xưởng"
-    }
-  ]
+  // Danh sách đơn hàng sản xuất ban đầu (Cold state sạch cho bản phát hành - Codex Directive R4-05)
+  sampleOrders: []
 };
 
 // Storage helper functions for reactive sync
@@ -504,6 +389,22 @@ window.TTStore = {
 
   clearCart: function () {
     this.saveCart([]);
+  },
+
+  getZaloPhone: function () {
+    const cfg = this.getConfig();
+    const candidates = [
+      cfg?.checkout?.zaloHandoffPhone,
+      cfg?.shopInfo?.zaloPhone,
+      cfg?.shopInfo?.hotline
+    ];
+    for (const raw of candidates) {
+      if (typeof raw !== 'string') continue;
+      let phone = raw.replace(/[\s.()-]/g, '');
+      if (/^\+84\d{9}$/.test(phone)) phone = '0' + phone.slice(3);
+      if (/^0[35789]\d{8}$/.test(phone)) return phone;
+    }
+    return null;
   }
 };
 

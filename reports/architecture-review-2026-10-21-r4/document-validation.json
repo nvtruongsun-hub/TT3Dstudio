@@ -1,0 +1,15 @@
+{
+  "directiveLines": 273,
+  "balancedFences": false,
+  "missingLocalLinks": [],
+  "oldChecks": {
+    "pass": 25,
+    "fail": 0
+  },
+  "freshChecks": {
+    "pass": 18,
+    "fail": 0
+  },
+  "manifestUnchanged": true,
+  "manifestSha256": "99a1f9bfea44757f33b939445e1cb8654e60e81ee85571d54b6f121cab1bfbbb"
+}

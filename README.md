@@ -1,93 +1,113 @@
-# T&T 3D Studio - Smart Living & Aesthetic 3D Crafts
+# T&T 3D Labs - Digital Fabrication & Aesthetic 3D Studio
 
-Website thương hiệu và cửa hàng trực tuyến hiện đại dành cho **T&T 3D Studio** (Tiên phong dòng sản phẩm in 3D công nghệ thông minh Smart NFC, Phụ kiện setup bàn làm việc & Nghệ thuật decor ánh sáng).
-
----
-
-## 🌟 Tính Năng Nổi Bật
-
-1. **Cửa Hàng Sản Phẩm Smart NFC & Decor (Theo Trend TikTok/Shopee):**
-   - **Đế WiFi 1 Chạm Thông Minh (TapConnect™ Stand):** Chạm điện thoại kết nối mạng tự động không cần mật khẩu.
-   - **Bình Hoa Dập Ly Origami Watertight:** Kỹ thuật ép lớp kín khít chống rò rỉ nước 100%, cắm được cả hoa tươi và cỏ lau khô.
-   - **Kệ Đa Năng BedSide & Desk Organizer Pro:** Khay 5-in-1 để iPhone, sạc Apple Watch, hốc AirTag, mắt kính và bút ký.
-   - **Đèn Bàn Xoắn Kem Swirl Soft-Serve:** Ánh sáng 3000K dịu êm thư giãn phong cách Crème Atelier.
-   - **Bảng Treo Tường Module Hexa Pegboard:** Hệ thống module dán tường không cần khoan.
-   - **Bảng Chữ Cái & Tên Monogram 3D Signature:** Khắc tên calligraphy theo yêu cầu kèm linh vật mini đáng yêu.
-
-2. **Trình Quản Trị Trực Quan Dành Riêng Cho Chủ Xưởng (`admin.html`):**
-   - **Bảo mật PIN:** Đăng nhập an toàn (mã PIN mặc định: `1234`).
-   - **Sửa thông tin không cần code:** Cập nhật Hotline, số Zalo, địa chỉ xưởng, email, link Shopee & TikTok chỉ bằng các ô nhập form đơn giản.
-   - **Đổi giá & Khuyến mãi sản phẩm:** Điều chỉnh giá bán, giá gốc, nhãn HOT/SALE trực tiếp.
-   - **Lưu & Đồng bộ tức thì:** Dữ liệu lưu vào `localStorage`, mở `index.html` lên là tự động cập nhật ngay lập tức. Có nút **"Tải về config.js"** để lưu vĩnh viễn đưa lên GitHub.
-
-3. **Trình Diễn 3D WebGL (Three.js Inspector):**
-   - Khối mô hình 3D tương tác xoay đa chiều trên hero banner.
-   - Xem 3D các mẫu thực tế: Đế WiFi NFC, Bình hoa dập ly, Đèn xoắn kem, Bảng Monogram.
-   - Kéo thả file `.stl` tùy ý để phân tích kích thước 3 chiều $(X \times Y \times Z)$, thể tích $(cm^3)$ và khối lượng in.
-
-4. **Bảng Tính Báo Giá In 3D Trực Tuyến (Print On Demand):**
-   - Hỗ trợ công nghệ FDM, Resin SLA 8K, SLS Laser.
-   - Tự động áp dụng chiết khấu số lượng lớn từ 10% đến 25%.
-   - Kết nối gửi báo giá trực tiếp qua Zalo chỉ với 1 click.
+Website thương hiệu và nền tảng giới thiệu xưởng chế tác kỹ thuật số trực tuyến dành cho **T&T 3D Labs** (Xưởng Chế Tác & In 3D Kỹ Thuật Số • Smart Living & Aesthetic Physical Crafts).
 
 ---
 
-## 📁 Cấu Trúc Thư Mục Dự Án
+## 🌟 Kiến Trúc & Tính Năng Cốt Lõi
+
+1. **Ngôn Ngữ Thiết Kế "Tactile Industrial Minimalism":**
+   - **Bảng màu:** Nền than chì công nghiệp Dark Slate (`#0B0C0E`, `#14171C`), viền mờ phay xước, điểm nhấn độc bản Safety Orange (`#FF5C00`).
+   - **Typography kỹ thuật:** Bộ font **Space Grotesk** dành riêng cho tiêu đề, thông số dung sai và giá bán; kết hợp **Plus Jakarta Sans** cho nội dung đọc mượt mà.
+   - **Tương tác xúc giác:** Hiệu ứng `tactile lift` 5px và viền mờ cam khói cho Hero Spotlight và Product Cards.
+
+2. **Kiến Trúc Multi-View Workspace 4 Tab Chuyên Biệt:**
+   - **`#view-store` (Cửa Hàng & Bộ Sưu Tập):** Catalog 55 sản phẩm chuẩn hóa phân theo 5 danh mục chính với 5 Hero Spotlight nổi bật.
+   - **`#view-studio3d` (Studio 3D PBR Viewport):** Khung nhìn 3D tương tác mô phỏng hình dáng và chất liệu vật liệu thời gian thực.
+   - **`#view-configurator` (Cổng Yêu Cầu Báo Giá In CAD):** Cho phép chọn file CAD tại máy (`.stl`, `.step`, `.3mf`, `.obj`) và gửi thông số vật liệu để kỹ thuật viên xưởng cắt lớp (slice) trên Bambu Studio báo giá chính xác. Không định giá tự động khi chưa cắt lớp thật.
+   - **`#view-standards` (Tiêu Chuẩn Xưởng & Bản Nháp Đơn Hàng):** Công bố quy chuẩn cơ khí, bảng so sánh chất lượng, cam kết bảo hành và Cổng xem lại bản nháp đơn hàng trên thiết bị.
+
+3. **Cổng Xem Bản Nháp Đơn Hàng Cục Bộ (`#order-tracker-portal`):**
+   - Hỗ trợ khách hàng tra cứu lại các bản nháp đơn hàng đã lập trên thiết bị theo đúng Mã đơn (`TT3D-XXXX`).
+   - **Ranh giới dữ liệu minh bạch:** Dữ liệu lưu trong bộ nhớ trình duyệt của người dùng (Local Draft Storage), không suy diễn tiến độ in máy thực tế khi chưa có backend chuyên dụng.
+   - **Bảo vệ dữ liệu:** Áp dụng DOM API an toàn `.textContent` để hiển thị dữ liệu động (tuân thủ nguyên tắc phòng vệ OWASP DOM-based XSS Prevention Cheat Sheet), validate schema chặt chẽ và tự động che giấu thông tin cá nhân (Data Masking `098***8333`).
+   - Tích hợp sao chép mã đơn vào Clipboard và mở liên kết Zalo hỗ trợ kỹ thuật viên.
+
+4. **Trình Quản Trị Xưởng Cục Bộ (`admin.html`):**
+   - Quản lý 55 sản phẩm, xem danh sách bản nháp đơn hàng trên máy, cấu hình đơn giá nhựa và thông tin hotline.
+   - Mã khóa PIN giao diện cục bộ (Mặc định: `2026`). *Lưu ý: Đây là khóa bảo vệ giao diện cục bộ trên trình duyệt, không thay thế hệ thống xác thực an toàn server-side.*
+
+---
+
+## 📁 Cấu Trúc Thư Mục Phát Hành
 
 ```
 02. T&T 3D studio/
 │
-├── index.html                  # Giao diện chính của website (Dành cho khách hàng)
-├── admin.html                  # Trang quản trị chỉnh sửa thông tin & giá (Dành cho chủ xưởng)
-├── README.md                   # Hướng dẫn sử dụng chi tiết
+├── dist/                       # Thư mục artifact đóng gói HTML tĩnh phục vụ phát hành
+│   ├── index.html              # Trang chủ ứng dụng Client-Side SPA
+│   ├── admin.html              # Trang quản trị xưởng cục bộ
+│   ├── products.json           # Catalog 55 sản phẩm chuẩn hóa
+│   ├── artifact-manifest.json  # Bảng băm SHA-256 xác thực toàn vẹn của gói phát hành
+│   ├── css/                    # Stylesheet & Design Tokens
+│   ├── js/                     # 13 tệp JavaScript module độc lập
+│   └── assets/                 # Thư mục hình ảnh & tài nguyên tĩnh
+│
+├── index.html                  # Mã nguồn giao diện chính 4 Workspace Views
+├── admin.html                  # Mã nguồn trang quản trị xưởng cục bộ
+├── products.json               # Seed catalog 55 sản phẩm chuẩn hóa (11 item / danh mục)
+├── README.md                   # Tài liệu hướng dẫn kỹ thuật & bàn giao
 │
 ├── css/
-│   └── style.css               # Phong cách công nghệ dark tech, hiệu ứng laser, badge
+│   └── style.css               # Hệ thống design tokens, bento grid, tactile cards, mobile dock
 │
 ├── js/
-│   ├── config.js               # File cấu hình trung tâm (Thông tin shop, giá sản phẩm)
-│   ├── app.js                  # Đồng bộ dữ liệu, lọc danh mục, modal đặt hàng, FAQ
-│   ├── calculator.js           # Báo giá in 3D theo yêu cầu & tạo tin nhắn Zalo
-│   └── viewer3d.js             # Dựng hình 3D Three.js và phân tích file STL
+│   ├── config.js               # Cấu hình trung tâm & resolver getZaloPhone() dùng chung
+│   ├── app.js                  # Global router hash, tabs, theme toggle, order draft tracker
+│   ├── catalog-store.js        # Catalog Store an toàn, journal recovery, immutable cache
+│   ├── category-registry.js    # Nguồn sự thật duy nhất cho 5 danh mục chính
+│   ├── purchase-config.js      # Bộ dựng đơn hàng chuẩn hóa giá & validation số lượng
+│   ├── checkout.js             # Direct Checkout Context, safe draft storage & validator
+│   ├── cart.js                 # Slide-over cart controller an toàn
+│   ├── products-manager.js     # Render 5 Hero Spotlights & 55 Product Cards
+│   ├── calculator.js           # Cổng tiếp nhận yêu cầu báo giá CAD & Zalo
+│   └── viewer3d.js             # Three.js 3D Viewport mô phỏng hình học
+│
+├── tests/                      # Bộ kiểm thử hồi quy & xác minh kiến trúc tự động (71 PASS)
+│   ├── test_audit_r2_verification.js
+│   ├── test_audit_regressions.js
+│   └── test_behavior.js
 │
 └── assets/
-    └── images/                 # Toàn bộ hình ảnh sản phẩm chụp thực tế chuẩn studio
-        ├── logo.jpg
-        ├── product-nfc-wifi.jpg
-        ├── product-pleated-vase.jpg
-        ├── product-desk-dock.jpg
-        ├── product-soft-serve-lamp.jpg
-        ├── product-pegboard.jpg
-        ├── product-monogram.jpg
-        └── product-nfc-card.jpg
+    ├── images/products/        # Toàn bộ 55 ảnh sản phẩm (11 ảnh / danh mục)
+    └── manifest.json           # PWA Web App Manifest
 ```
 
----
-
-## 🛠️ Hướng Dẫn Quản Lý & Chỉnh Sửa Website
-
-### Cách 1: Sử dụng Trang Quản Trị Trực Quan `admin.html` (Khuyên Dùng - Không Cần Biết Lập Trình)
-
-1. Nhấp đúp chuột mở file [`admin.html`](admin.html) trên trình duyệt máy tính.
-2. Nhập mã PIN bảo mật: **`1234`** $\rightarrow$ Bấm **Mở Khóa Quản Trị**.
-3. **Tại Tab "Thông Tin & Liên Hệ":**
-   * Sửa lại số điện thoại Hotline và số Zalo của bạn.
-   * Cập nhật địa chỉ xưởng và dán link gian hàng Shopee / TikTok Shop của bạn.
-4. **Tại Tab "Danh Sách Sản Phẩm & Giá":**
-   * Thay đổi giá bán, sửa tiêu đề, đổi tag nhãn *"🔥 HOT"*, *"💧 Kháng Nước"*.
-5. Bấm nút **"Lưu Thay Đổi"** ở góc trên cùng.
-6. Mở file [`index.html`](index.html), mọi thông tin và giá bán mới sẽ **tự động cập nhật ngay lập tức**!
-
-> **Mẹo:** Tại tab *"Xuất / Đồng Bộ Code"*, bạn có thể bấm **"Tải Về config.js"** rồi chép đè vào thư mục `js/` để lưu vĩnh viễn cấu hình này trước khi đẩy lên GitHub.
+> **Lưu ý kiến trúc:** Phiên bản phát hành hiện tại vận hành hoàn toàn dưới dạng **Client-Side SPA tĩnh (HTML/CSS/JavaScript thuần)**, độc lập và tải cực nhanh không phụ thuộc server backend nặng nề. Thư mục `src/` (Next.js) là nhánh thử nghiệm kiến trúc tương lai và không nằm trong gói phát hành tĩnh này.
 
 ---
 
-### Cách 2: Chỉnh Sửa Bằng Cách Mở Code Trực Tiếp
+## 🛠️ Hướng Dẫn Vận Hành & Đóng Gói
 
-Nếu bạn muốn can thiệp sâu vào code:
-* **Sửa thông tin & danh sách sản phẩm:** Mở file [`js/config.js`](js/config.js). Tại đây có đầy đủ cấu trúc tiếng Việt rõ ràng để bạn thay đổi số điện thoại, giá tiền, mô tả.
-* **Thay thế hình ảnh sản phẩm:** Chép file ảnh mới của bạn vào thư mục `assets/images/` với tên tương ứng (ví dụ: `product-nfc-wifi.jpg`).
-* **Sửa cấu trúc giao diện:** Mở file [`index.html`](index.html) bằng VS Code hoặc Notepad.
+1. **Đóng gói bản phát hành tĩnh (Artifact Build):**
+   ```bash
+   npm run build:static
+   ```
+   Lệnh này sẽ tự động thu thập các tệp allowlist vào thư mục `dist/` và sinh bảng băm SHA-256 tại `dist/artifact-manifest.json`.
+
+2. **Khởi chạy ứng dụng:**
+   Khuyến nghị phục vụ thư mục `dist/` thông qua một máy chủ HTTP tĩnh:
+   ```bash
+   # Cách 1: Dùng Node.js npx serve
+   npx serve dist
+
+   # Cách 2: Dùng Python HTTP server
+   python -m http.server 8080 -d dist
+   ```
+   Sau đó mở trình duyệt tại `http://localhost:8080` (hoặc cổng tương ứng).
+
+3. **Quản trị xưởng cục bộ:**
+   Mở `http://localhost:8080/admin.html`, nhập mã PIN `2026` để mở giao diện quản trị điều chỉnh cấu hình xưởng.
+
+4. **Chạy bộ kiểm thử kiểm định tự động:**
+   ```powershell
+   node tests/test_audit_r2_verification.js
+   node tests/test_audit_regressions.js
+   node tests/test_behavior.js
+   node reports/architecture-review-2026-10-21-r2/probe-handover.cjs
+   powershell -ExecutionPolicy Bypass -File .\test_tab_architecture.ps1
+   powershell -ExecutionPolicy Bypass -File .\test_e2e_simulation.ps1
+   ```
 
 ---
-© 2026 **T&T 3D Studio** - All rights reserved.
+© 2026 **T&T 3D Labs** • Tactile Industrial Minimalism. All rights reserved.

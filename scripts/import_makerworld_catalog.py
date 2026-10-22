@@ -32,54 +32,58 @@ DEFAULT_SOURCE_THUMBS = BASE_DIR.parent / "01. khoi nghiep in 3d" / "anh_mau_3d_
 DEFAULT_OUT_JSON = BASE_DIR / "products.json"
 DEFAULT_OUT_THUMBS = BASE_DIR / "assets" / "images" / "products"
 DEFAULT_MANIFEST = BASE_DIR / "assets" / "manifest.json"
+CATEGORY_REGISTRY_JSON = BASE_DIR / "data" / "category-registry.json"
 
-CATEGORY_REGISTRY = {
-    "Trang_Diem_Vanity": {
-        "id": "Trang_Diem_Vanity",
-        "shortName": "Trang Điểm & Nơ Lụa",
-        "title": "Hộp Đựng Đồ Trang Điểm, Cọ Mỹ Phẩm & Trang Sức Lụa Thắt Nơ",
-        "accentColor": "#E11D48",
-        "accentBg": "#FFF1F2",
-        "icon": "fa-wand-magic-sparkles",
-        "badgeText": "✦ Coquette Chic"
-    },
-    "Decor_Den_Noi_That": {
-        "id": "Decor_Den_Noi_That",
-        "shortName": "Đèn & Bình Hoa Decor",
-        "title": "Đèn Ngủ Nghệ Thuật, Bình Hoa Đánh Lừa Thị Giác & Tượng Decor",
-        "accentColor": "#D97706",
-        "accentBg": "#FEF3C7",
-        "icon": "fa-lightbulb",
-        "badgeText": "✦ Ambient Craft"
-    },
-    "Do_Choi_Moc_Khoa": {
-        "id": "Do_Choi_Moc_Khoa",
-        "shortName": "Khớp Động & Fidget",
-        "title": "Đồ Chơi Khớp Động, Móc Khóa Hoạt Hình & Fidget Xả Stress",
-        "accentColor": "#0284C7",
-        "accentBg": "#E0F2FE",
-        "icon": "fa-gamepad",
-        "badgeText": "✦ Viral Fidget"
-    },
-    "Hop_De_Ban_Tien_Ich": {
-        "id": "Hop_De_Ban_Tien_Ich",
-        "shortName": "Hộp Bàn & Bánh Răng",
-        "title": "Hộp Để Bàn Thông Minh, Cơ Cấu Bánh Răng & Tiện Ích Đa Năng",
-        "accentColor": "#16A34A",
-        "accentBg": "#DCFCE7",
-        "icon": "fa-gears",
-        "badgeText": "✦ Mechanical Desk"
-    },
-    "Ca_Nhan_Hoa_NFC": {
-        "id": "Ca_Nhan_Hoa_NFC",
-        "shortName": "Cá Nhân Hóa & NFC",
-        "title": "Sản Phẩm Cá Nhân Hóa, Biển Số Xe, Mã QR & Móc Khóa NFC",
-        "accentColor": "#7C3AED",
-        "accentBg": "#F3E8FF",
-        "icon": "fa-fingerprint",
-        "badgeText": "✦ Smart Custom"
-    }
-}
+def verify_image_file(path: Path) -> bool:
+    """Xác thực định dạng và giải mã cấu trúc ảnh PNG thực tế (Codex R07)."""
+    try:
+        import struct
+        with open(path, "rb") as f:
+            header = f.read(8)
+            if header != b"\x89PNG\r\n\x1a\n":
+                return False
+            has_ihdr = False
+            has_idat = False
+            has_iend = False
+            while True:
+                length_bytes = f.read(4)
+                if not length_bytes or len(length_bytes) < 4:
+                    break
+                length = struct.unpack(">I", length_bytes)[0]
+                chunk_type = f.read(4)
+                if len(chunk_type) < 4:
+                    break
+                if chunk_type == b"IHDR":
+                    if length != 13:
+                        return False
+                    ihdr_data = f.read(13)
+                    if len(ihdr_data) < 13:
+                        return False
+                    width, height = struct.unpack(">II", ihdr_data[:8])
+                    if width <= 0 or height <= 0:
+                        return False
+                    has_ihdr = True
+                    f.seek(4, os.SEEK_CUR)  # skip CRC
+                elif chunk_type == b"IDAT":
+                    if length > 0:
+                        has_idat = True
+                    f.seek(length + 4, os.SEEK_CUR)
+                elif chunk_type == b"IEND":
+                    has_iend = True
+                    f.seek(4, os.SEEK_CUR)
+                    break
+                else:
+                    f.seek(length + 4, os.SEEK_CUR)
+            return bool(has_ihdr and has_idat and has_iend)
+    except Exception:
+        return False
+
+# Nguồn biên tập danh mục duy nhất từ file JSON (Codex R10)
+if CATEGORY_REGISTRY_JSON.exists():
+    with open(CATEGORY_REGISTRY_JSON, "r", encoding="utf-8-sig") as f:
+        CATEGORY_REGISTRY = json.load(f)
+else:
+    raise FileNotFoundError(f"Missing category registry JSON: {CATEGORY_REGISTRY_JSON}")
 
 # Bảng palette màu sắc thông minh cho từng loại sản phẩm
 COLOR_PALETTES = {
@@ -241,36 +245,33 @@ def main():
                 sys.exit(1)
             seen_ids.add(mid)
 
-            # Kiểm tra file thumbnail
+            # Kiểm tra file thumbnail và giải mã cấu trúc ảnh (Codex R07)
             thumb_name = f"thumb_{mid}.png"
             src_thumb_path = src_thumb_dir / thumb_name
             if not src_thumb_path.exists():
                 print(f"[LỖI] Không tìm thấy file thumbnail: {src_thumb_path}")
                 sys.exit(1)
 
+            if not verify_image_file(src_thumb_path):
+                print(f"[LỖI] File thumbnail không phải ảnh PNG hợp lệ hoặc bị lỗi giải mã: {src_thumb_path}")
+                sys.exit(1)
+
             dest_thumb_path = out_thumb_dir / thumb_name
             thumb_hash = compute_sha256(src_thumb_path)
             image_hashes[thumb_name] = thumb_hash
+            copied_thumbs.append((src_thumb_path, dest_thumb_path, thumb_name))
 
-            if not args.dry_run:
-                out_thumb_dir.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(src_thumb_path, dest_thumb_path)
-            copied_thumbs.append(thumb_name)
-
-            # Xây dựng schema chuẩn hóa
+            # Xây dựng schema chuẩn hóa (Codex Section 5.6)
             is_hero = (mid == hero_id)
-            score = round(100.0 * (model["aesthetic_score"] + model["uniqueness_score"] + model["feasibility_score"]) / 15.0, 1)
+            # Giữ selectionScore chính xác từ công thức, chỉ làm tròn khi render
+            score = (100.0 * (model["aesthetic_score"] + model["uniqueness_score"] + model["feasibility_score"])) / 15.0
 
             # Specs
             hours = round(model["time_sec"] / 3600.0, 1)
             specs = {
                 "weight": f"{model['weight_g']}g",
-                "printTime": f"{hours} giờ",
-                "layer": "0.12mm Ultra-Fine" if "lithophane" in model["title_vi"].lower() else "0.16mm High-Detail",
-                "warranty": "Đổi mới 1-1 nếu lỗi kỹ thuật"
+                "printTime": f"{hours} giờ"
             }
-            if "nfc" in model["title_vi"].lower() or "nfc" in model["material_rec"].lower():
-                specs["nfc"] = "NTAG215 / NTAG213 (Tương thích 100% iOS & Android)"
 
             # Colors & Materials
             colors = determine_palette(model["material_rec"], model["title_vi"], cat_id)
@@ -324,11 +325,16 @@ def main():
         print(f"[LỖI] Tổng số sản phẩm không đúng 55 (thực tế: {len(all_products)})!")
         sys.exit(1)
 
-    print(f"\n[OK] Đã kiểm tra tính hợp lệ thành công: 55 sản phẩm duy nhất, 5 danh mục, 5 Hero items.")
-    print(f"[OK] Đã chuẩn bị {len(copied_thumbs)} ảnh thumbnails.")
+    print(f"\n[OK] Preflight đạt 100%: 55 sản phẩm duy nhất, 5 danh mục, 5 Hero items, 55 ảnh hợp lệ.")
+
+    # Sau khi preflight toàn bộ đạt mới tiến hành copy ảnh (Codex Section 5.6)
+    if not args.dry_run:
+        out_thumb_dir.mkdir(parents=True, exist_ok=True)
+        for src_p, dst_p, _ in copied_thumbs:
+            shutil.copy2(src_p, dst_p)
 
     manifest = {
-        "catalogRevision": "mw-55-v1",
+        "catalogRevision": "mw-55-v2",
         "schemaVersion": 5,
         "generatedAt": "2026-10-21T00:00:00.000Z",
         "totalProducts": 55,

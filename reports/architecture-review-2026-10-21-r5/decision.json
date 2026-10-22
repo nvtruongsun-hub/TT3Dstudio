@@ -1,0 +1,82 @@
+{
+  "recordedAt": "2026-10-21T08:28:53.963Z",
+  "decision": "APPROVED FOR COMPLETION — NOT READY FOR HANDOVER",
+  "directive": "ARCHITECTURE_DIRECTIVE_R5.md",
+  "directiveSha256": "4a4fa32481e6ed29b6fb79d6156a6c20f0f94d19b15588693e1c757f339a24c3",
+  "directiveLines": 206,
+  "brokenLinks": [],
+  "productSnapshotChangesDuringReview": [
+    "CODEX_BRIDGE.md",
+    "scripts/build-static-artifact.js",
+    "tests/test_behavior.js",
+    "js/app.js",
+    "js/calculator.js",
+    "js/viewer3d.js",
+    "dist/artifact-manifest.json"
+  ],
+  "manifestSha256": "d67009779bc73561547b653da50f74f3295256183a71c07376e528db10e0700f",
+  "payloadFiles": 103,
+  "payloadDrift": [],
+  "r4": {
+    "R4-01": "PARTIAL_OPEN",
+    "R4-02": "PARTIAL_OPEN",
+    "R4-03": "PARTIAL_OPEN",
+    "R4-04": "UNVERIFIED_OPEN",
+    "R4-05": "SEED_PASS_DOSSIER_OPEN"
+  },
+  "browser": {
+    "inventory": {
+      "apps": [],
+      "browsers": []
+    },
+    "hiddenIabAttempt": "Browser is not available: iab",
+    "cases": {
+      "B01": "BROWSER_UNVERIFIED",
+      "B02": "BROWSER_UNVERIFIED",
+      "B03": "BROWSER_UNVERIFIED",
+      "B04": "BROWSER_UNVERIFIED",
+      "B05": "BROWSER_UNVERIFIED",
+      "B06": "BROWSER_UNVERIFIED",
+      "B07": "BROWSER_UNVERIFIED",
+      "B08": "BROWSER_UNVERIFIED",
+      "B09": "BROWSER_UNVERIFIED",
+      "B10": "STATIC_INTEGRITY_PASS_BROWSER_BINDING_UNVERIFIED"
+    }
+  },
+  "verification": {
+    "baselinePass": 69,
+    "baselineTotal": 71,
+    "r4ProbePass": 18,
+    "r4ProbeTotal": 18,
+    "inheritedChecksPass": 25,
+    "inheritedVerifierExpectedExitCode": 1,
+    "syntaxPass": 26,
+    "syntaxTotal": 26
+  },
+  "evidenceHashes": {
+    "adversarial-findings.json": "2645da44407a0b0994c278ffe9773477a95c969e81fc2a324ee500b82686b702",
+    "adversarial-review.cjs": "a3bec4764fff620a032c1081059591adc08c84dff5d1da96b849ed9f3b3df32f",
+    "ARCHITECTURE_DIRECTIVE_R5.md": "4a4fa32481e6ed29b6fb79d6156a6c20f0f94d19b15588693e1c757f339a24c3",
+    "audit-r2.log": "8526b30f1c96e786356b0ecd3f3547bb3e6f410741dbfcade60855f2798ceee9",
+    "behavior.log": "89621c0ee063aacb3909ae64ca2edb04c37233894d753db1196c103b7f5dd941",
+    "diagnostic-probe.log": "2b5d45c231216ea309ec8bcdeaf145eeac61909c6bbf529a531b957e03a87104",
+    "fixture-diagnostic.cjs": "2af3a170a697f5a387577e68adc71fef716479582f81290399863e843492c33e",
+    "fixture-diagnostic.json": "175f258a41500239cda60251e29f19155889960bdde06324a6b045ea9c278f3a",
+    "probe-r4.cjs": "4c2e462ee9bb76921075dc19e986e34bcf3804b7540916f039605c543cbe2e8f",
+    "probe-r4.log": "fc389da15d015f018fca01a307bedc79e3f869523ff3a2a24cdc4b9a222dac07",
+    "r4-findings.json": "82a2d2f0fff992c444f7d154390d7d287f26088f8474cb9606a573707e61ab93",
+    "regressions.log": "fdef016a4121f5272f28993cc046ad8eba309e238377bcba3c62ececd879ab21",
+    "runner-evidence-current.json": "95d2bd188a25552a43aed608359b7e64e7bdc7018d34187cf539429cbe535232",
+    "runner-evidence.json": "95d2bd188a25552a43aed608359b7e64e7bdc7018d34187cf539429cbe535232",
+    "seal-review.cjs": "c5059377c35ff225313f323e643140bfcfc67cddafa274eeca7f1f08aed1ae3c",
+    "snapshot.cjs": "297a7195b2155903a79def2a40a0b3645ca2240dd743ebb2da70bc5f5984c417",
+    "snapshot.json": "acbf3147ffadd62624b729c924cffbdbd8586fc30c423b27f0820bec2ece8208",
+    "snapshot.log": "b02b7eab9a6785d35ac8dcd336a3cdd21885e7e6591422584f75b798cd7e6d06",
+    "static-simulation.log": "e4219d566e9ef3e300a5fb3971b826b48d0194f67dbdd10abb89d1341e0d9e7e",
+    "syntax-direct.log": "8f2114882ddcddc8077b5508401d04dd37f337cbfc762bf76289ba74d003eb12",
+    "syntax.log": "8f2114882ddcddc8077b5508401d04dd37f337cbfc762bf76289ba74d003eb12",
+    "tabs.log": "80934865552e80f0e91fa9e9f2a1271594b3c995eb21407f0ca6e39d1e2d95b8",
+    "verification.json": "f37f524a4eb3a87a8aa9cb935bde2c0b58b641b294752eca28f71b57d1d328a0",
+    "verify-final.cjs": "aa44b016e8aac6f9c5671178621b3017177dc166c4786a08b5edcf4046d81979"
+  }
+}

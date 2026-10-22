@@ -1,0 +1,97 @@
+{
+  "recordedAt": "2026-10-21T08:08:20.550Z",
+  "scope": "HTML-derived DOM simulation, not browser E2E; no actual popup/clipboard exercised",
+  "manifestSha256": "fbac352e248e929900c5b261dcfac6dab7b94ea30cdde0bc9c1a6962fde48f56",
+  "checks": [
+    {
+      "scope": "source",
+      "name": "Dedicated readonly textarea exists in actual HTML",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Clipboard rejection preserves original notes",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Repeated preparation does not nest prior generated request",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Clipboard rejection explicitly offers manual copy",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Preparing request does not auto-open Zalo after awaiting clipboard",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "No opened-success assertion when open returns no handle",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Null resolver prevents CAD external navigation",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Compatibility CAD action never adds priced cart item",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "Public HTML has no hardcoded shop Zalo recipient",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Dedicated readonly textarea exists in actual HTML",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Clipboard rejection preserves original notes",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Repeated preparation does not nest prior generated request",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Clipboard rejection explicitly offers manual copy",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Preparing request does not auto-open Zalo after awaiting clipboard",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "No opened-success assertion when open returns no handle",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Null resolver prevents CAD external navigation",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Compatibility CAD action never adds priced cart item",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "Public HTML has no hardcoded shop Zalo recipient",
+      "status": "PASS"
+    }
+  ]
+}

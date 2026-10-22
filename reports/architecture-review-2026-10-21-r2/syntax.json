@@ -1,0 +1,67 @@
+[
+    {
+        "file":  "admin.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "app.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "art-presets.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "calculator.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "cart.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "catalog-store.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "category-registry.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "checkout.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "config.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "image-uploader.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "products-manager.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "purchase-config.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    },
+    {
+        "file":  "viewer3d.js",
+        "exitCode":  0,
+        "diagnostic":  ""
+    }
+]

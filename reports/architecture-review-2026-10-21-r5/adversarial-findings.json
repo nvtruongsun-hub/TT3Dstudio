@@ -1,0 +1,157 @@
+{
+  "recordedAt": "2026-10-22T03:16:36.171Z",
+  "scope": "Synthetic VM and fixture build control flow; not browser E2E or real compiler execution",
+  "manifestSha256": "25e31cfc4267c109673eb4ba29c377d25c7ea000d8f1fda462057732fa42d21a",
+  "findings": [
+    {
+      "scope": "source",
+      "id": "same-tab config removal disables existing shop links",
+      "status": "PASS",
+      "actual": false,
+      "expected": false,
+      "detail": {
+        "event": "tt_config_updated",
+        "registeredHandlers": 1
+      }
+    },
+    {
+      "scope": "source",
+      "id": "config removal disables prepared CAD link",
+      "status": "PASS",
+      "actual": false,
+      "expected": false,
+      "detail": "Prepared CAD link must follow current resolver without dropping preview text."
+    },
+    {
+      "scope": "source",
+      "id": "manual global rebind disables shop links",
+      "status": "PASS",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "scope": "source",
+      "id": "legitimate note containing request heading survives in message",
+      "status": "PASS",
+      "actual": true,
+      "expected": true,
+      "detail": {
+        "inputPreserved": true
+      }
+    },
+    {
+      "scope": "source",
+      "id": "WebGL init failure contained by viewer",
+      "status": "PASS",
+      "actual": null,
+      "expected": null,
+      "detail": "No browser exercised. Production DOMContentLoaded handler propagates renderer exception."
+    },
+    {
+      "scope": "artifact",
+      "id": "same-tab config removal disables existing shop links",
+      "status": "PASS",
+      "actual": false,
+      "expected": false,
+      "detail": {
+        "event": "tt_config_updated",
+        "registeredHandlers": 1
+      }
+    },
+    {
+      "scope": "artifact",
+      "id": "config removal disables prepared CAD link",
+      "status": "PASS",
+      "actual": false,
+      "expected": false,
+      "detail": "Prepared CAD link must follow current resolver without dropping preview text."
+    },
+    {
+      "scope": "artifact",
+      "id": "manual global rebind disables shop links",
+      "status": "PASS",
+      "actual": false,
+      "expected": false
+    },
+    {
+      "scope": "artifact",
+      "id": "legitimate note containing request heading survives in message",
+      "status": "PASS",
+      "actual": true,
+      "expected": true,
+      "detail": {
+        "inputPreserved": true
+      }
+    },
+    {
+      "scope": "artifact",
+      "id": "WebGL init failure contained by viewer",
+      "status": "PASS",
+      "actual": null,
+      "expected": null,
+      "detail": "No browser exercised. Production DOMContentLoaded handler propagates renderer exception."
+    },
+    {
+      "scope": "build",
+      "id": "every referenced runtime JS is preflighted",
+      "status": "PASS",
+      "actual": true,
+      "expected": true,
+      "detail": {
+        "unprotected": []
+      }
+    },
+    {
+      "scope": "build",
+      "id": "missing products-manager runtime fails before replacing dist",
+      "status": "PASS",
+      "actual": true,
+      "expected": true,
+      "detail": {
+        "exit": 1,
+        "error": "EXIT",
+        "knownGoodPreserved": true,
+        "missingRuntimePublished": true,
+        "manifestExists": false,
+        "logs": [
+          "==========================================================",
+          "   T&T 3D LABS - STATIC ARTIFACT PACKAGING PIPELINE (R5)",
+          "==========================================================\n",
+          "[*] Đang thực hiện Preflight kiểm tra tài nguyên bắt buộc...",
+          "[!] Preflight Error: Không tìm thấy entrypoint bắt buộc: js/products-manager.js"
+        ]
+      }
+    },
+    {
+      "scope": "build",
+      "id": "copy failure preserves known-good dist",
+      "status": "PASS",
+      "actual": true,
+      "expected": true,
+      "detail": {
+        "exit": 1,
+        "error": "EXIT",
+        "knownGoodPreserved": true,
+        "missingRuntimePublished": true,
+        "manifestExists": false,
+        "logs": [
+          "==========================================================",
+          "   T&T 3D LABS - STATIC ARTIFACT PACKAGING PIPELINE (R5)",
+          "==========================================================\n",
+          "[*] Đang thực hiện Preflight kiểm tra tài nguyên bắt buộc...",
+          "  + Đã xác minh đầy đủ 24 entrypoints cốt lõi.\n",
+          "[*] Đang biên dịch Tailwind CSS tĩnh (Industrial Design System)...",
+          "  + Đã biên dịch css/tailwind.css (23 bytes)\n",
+          "[*] Đang sao chép các tệp HTML & cấu hình phát hành vào staging...",
+          "  + index.html",
+          "  + admin.html",
+          "  + products.json",
+          "[*] Đang sao chép tài nguyên tĩnh (css, js, assets) vào staging...",
+          "  + css/",
+          "  + js/",
+          "[!] Lỗi nghiêm trọng trong quá trình build: SYNTHETIC_COPY_FAILURE"
+        ]
+      }
+    }
+  ]
+}
