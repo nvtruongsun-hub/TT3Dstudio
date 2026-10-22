@@ -9,10 +9,11 @@
 
   const STORAGE_KEY = 'tt_products';
   const META_STORAGE_KEY = 'tt_catalog_meta';
+  const STORAGE_KEY_JOURNAL = 'tt_catalog_pending_commit';
   const EVENT_NAME = 'tt_products_updated';
   const FALLBACK_URL = 'products.json';
   const CURRENT_SCHEMA_VERSION = 5;
-  const CURRENT_CATALOG_REVISION = 'mw-55-v1';
+  const CURRENT_CATALOG_REVISION = 'mw-55-v2';
 
   // 6 Sản phẩm legacy chuẩn làm fixture làm giàu dữ liệu cũ (Codex Directive)
   const LEGACY_FIXTURE_PRODUCTS = [
@@ -97,8 +98,10 @@
     }
   ];
 
-  // 5 Danh mục sản phẩm chuẩn hóa toàn hệ thống (Shared Category Registry)
-  const CATEGORY_REGISTRY = {
+  // 5 Danh mục sản phẩm chuẩn hóa toàn hệ thống (Central Category Registry)
+  const CATEGORY_REGISTRY = (window.TTCategoryRegistry && typeof window.TTCategoryRegistry === 'object')
+    ? window.TTCategoryRegistry
+    : {
     Trang_Diem_Vanity: {
       id: 'Trang_Diem_Vanity',
       shortName: 'Trang Điểm & Nơ Lụa',
@@ -152,11 +155,32 @@
   let isWritingStorage = false;
 
   /**
+   * Phân loại trạng thái dữ liệu lưu trữ trong localStorage (Codex Section 5.1)
+   */
+  function readStoredCatalog(storage = localStorage) {
+    let raw;
+    try {
+      raw = storage.getItem(STORAGE_KEY);
+    } catch (error) {
+      return { kind: 'unavailable', error };
+    }
+    if (raw === null) return { kind: 'absent' };
+    try {
+      const products = JSON.parse(raw);
+      return Array.isArray(products)
+        ? { kind: 'array', raw, products }
+        : { kind: 'invalid', raw, reason: 'wrong-type' };
+    } catch (error) {
+      return { kind: 'invalid', raw, reason: 'invalid-json', error };
+    }
+  }
+
+  /**
    * Đọc metadata lưu trữ (revision, tombstones, version)
    */
-  function readMetadata() {
+  function readMetadata(storage = localStorage) {
     try {
-      const raw = localStorage.getItem(META_STORAGE_KEY);
+      const raw = storage.getItem(META_STORAGE_KEY);
       if (raw) {
         const parsed = JSON.parse(raw);
         if (parsed && typeof parsed === 'object') {
@@ -164,7 +188,8 @@
             schemaVersion: parsed.schemaVersion || 0,
             catalogRevision: parsed.catalogRevision || null,
             tombstones: Array.isArray(parsed.tombstones) ? parsed.tombstones : [],
-            migratedAt: parsed.migratedAt || null
+            migratedAt: parsed.migratedAt || null,
+            metadataPending: Boolean(parsed.metadataPending)
           };
         }
       }
@@ -175,39 +200,147 @@
       schemaVersion: 0,
       catalogRevision: null,
       tombstones: [],
-      migratedAt: null
+      migratedAt: null,
+      metadataPending: false
     };
   }
 
   /**
-   * Ghi metadata lưu trữ an toàn
+   * Ghi metadata lưu trữ an toàn, trả về trạng thái rõ ràng
    */
-  function writeMetadata(meta) {
+  function writeMetadata(meta, storage = localStorage) {
     try {
-      localStorage.setItem(META_STORAGE_KEY, JSON.stringify(meta));
+      storage.setItem(META_STORAGE_KEY, JSON.stringify(meta));
       cachedMetadata = meta;
+      return { ok: true };
     } catch (e) {
       console.warn('[CatalogStore] Lỗi ghi metadata:', e);
+      return { ok: false, error: e };
     }
   }
 
   /**
-   * Kiểm tra schema tối thiểu của 1 sản phẩm
+   * Kiểm tra toàn vẹn toàn bộ mảng catalog (validateWholeCatalog - Codex Section 5.1)
    */
-  function isValidProduct(p) {
-    return p && typeof p === 'object' &&
-      typeof p.id === 'string' && p.id.trim() !== '' &&
-      typeof p.title === 'string' && p.title.trim() !== '' &&
-      typeof p.price === 'number' && Number.isSafeInteger(p.price) && p.price >= 0;
+  function validateWholeCatalog(raw) {
+    if (!Array.isArray(raw)) {
+      throw new Error('Catalog phải là một mảng.');
+    }
+    const seenIds = new Set();
+    const validated = [];
+    for (let i = 0; i < raw.length; i++) {
+      const p = raw[i];
+      if (!p || typeof p !== 'object') {
+        throw new Error(`Bản ghi ở vị trí ${i} không phải object hợp lệ.`);
+      }
+      const id = String(p.id || '').trim();
+      if (!id) {
+        throw new Error(`Bản ghi ở vị trí ${i} thiếu ID hợp lệ.`);
+      }
+      if (seenIds.has(id)) {
+        throw new Error(`Phát hiện trùng lặp ID sản phẩm: ${id}`);
+      }
+      seenIds.add(id);
+
+      const title = String(p.title || '').trim();
+      if (!title) {
+        throw new Error(`Sản phẩm ${id} thiếu tiêu đề.`);
+      }
+
+      const price = p.price;
+      if (typeof price !== 'number' || !Number.isSafeInteger(price) || price < 0) {
+        throw new Error(`Sản phẩm ${id} có giá không hợp lệ: ${price}`);
+      }
+
+      // Validate colors if present
+      if (p.colors !== undefined && !Array.isArray(p.colors)) {
+        throw new Error(`Sản phẩm ${id} có danh sách colors không phải mảng.`);
+      }
+      if (Array.isArray(p.colors)) {
+        const colorIds = new Set();
+        for (const c of p.colors) {
+          if (!c || typeof c !== 'object' || !c.id) {
+            throw new Error(`Sản phẩm ${id} chứa màu không hợp lệ.`);
+          }
+          if (colorIds.has(c.id)) {
+            throw new Error(`Sản phẩm ${id} có mã màu trùng lặp: ${c.id}`);
+          }
+          colorIds.add(c.id);
+        }
+      }
+
+      // Validate materials if present
+      if (p.materials !== undefined && !Array.isArray(p.materials)) {
+        throw new Error(`Sản phẩm ${id} có danh sách materials không phải mảng.`);
+      }
+      if (Array.isArray(p.materials)) {
+        const matIds = new Set();
+        for (const m of p.materials) {
+          if (!m || typeof m !== 'object' || !m.id) {
+            throw new Error(`Sản phẩm ${id} chứa vật liệu không hợp lệ.`);
+          }
+          if (matIds.has(m.id)) {
+            throw new Error(`Sản phẩm ${id} có mã vật liệu trùng lặp: ${m.id}`);
+          }
+          matIds.add(m.id);
+          const mod = m.priceModifier ?? 0;
+          if (typeof mod !== 'number' || !Number.isSafeInteger(mod) || mod < 0) {
+            throw new Error(`Sản phẩm ${id} có phụ phí vật liệu không hợp lệ: ${mod}`);
+          }
+        }
+      }
+
+      // Validate specs
+      if (p.specs !== undefined && (typeof p.specs !== 'object' || p.specs === null || Array.isArray(p.specs))) {
+        throw new Error(`Sản phẩm ${id} có specs không hợp lệ.`);
+      }
+
+      validated.push(p);
+    }
+    return validated;
+  }
+
+  /**
+   * Tải và xác thực catalog mặc định từ file products.json
+   */
+  async function fetchDefaultCatalogResult(url = FALLBACK_URL) {
+    try {
+      const fetchUrl = url + (url.includes('?') ? '&' : '?') + 't=' + Date.now();
+      const response = await fetch(fetchUrl);
+      if (!response.ok) throw new Error(`Catalog HTTP ${response.status}`);
+      const raw = await response.json();
+      const products = validateWholeCatalog(raw);
+      return { ok: true, products };
+    } catch (error) {
+      return { ok: false, error };
+    }
   }
 
   /**
    * Chuẩn hóa và làm sạch dữ liệu sản phẩm đầy đủ 55 thuộc tính
+   * Không tự ý chế tạo điểm 5/5 hay selectionScore 100 nếu dữ liệu gốc không có
    */
   function sanitizeProduct(p, index) {
     const idx = (typeof index === 'number') ? index + 1 : 1;
     const cat = String(p.category || 'Hop_De_Ban_Tien_Ich').trim();
     const fallbackBadge = CATEGORY_REGISTRY[cat]?.badgeText || '✦ 3D Print';
+
+    // Xử lý an toàn selectionScore & rating
+    const safeSelectionScore = (typeof p.selectionScore === 'number' && Number.isFinite(p.selectionScore))
+      ? p.selectionScore
+      : null;
+
+    const safeAesthetic = (typeof p.aestheticScore === 'number' && p.aestheticScore >= 1 && p.aestheticScore <= 5)
+      ? p.aestheticScore
+      : (p.aestheticScore ? parseInt(p.aestheticScore, 10) : null);
+
+    const safeUniqueness = (typeof p.uniquenessScore === 'number' && p.uniquenessScore >= 1 && p.uniquenessScore <= 5)
+      ? p.uniquenessScore
+      : (p.uniquenessScore ? parseInt(p.uniquenessScore, 10) : null);
+
+    const safeFeasibility = (typeof p.feasibilityScore === 'number' && p.feasibilityScore >= 1 && p.feasibilityScore <= 5)
+      ? p.feasibilityScore
+      : (p.feasibilityScore ? parseInt(p.feasibilityScore, 10) : null);
 
     return {
       id: String(p.id || 'prod-' + idx).trim(),
@@ -231,10 +364,10 @@
       prints: Math.max(0, parseInt(p.prints, 10) || 0),
       weightGrams: Math.max(0, parseInt(p.weightGrams, 10) || 0),
       printTimeSeconds: Math.max(0, parseInt(p.printTimeSeconds, 10) || 0),
-      aestheticScore: Math.max(1, Math.min(5, parseInt(p.aestheticScore, 10) || 5)),
-      uniquenessScore: Math.max(1, Math.min(5, parseInt(p.uniquenessScore, 10) || 5)),
-      feasibilityScore: Math.max(1, Math.min(5, parseInt(p.feasibilityScore, 10) || 5)),
-      selectionScore: (typeof p.selectionScore === 'number') ? p.selectionScore : 100.0,
+      aestheticScore: safeAesthetic,
+      uniquenessScore: safeUniqueness,
+      feasibilityScore: safeFeasibility,
+      selectionScore: safeSelectionScore,
       materialRecommendation: String(p.materialRecommendation || '').trim(),
       headlineBenefit: String(p.headlineBenefit || '').trim(),
       desc: String(p.desc || '').trim(),
@@ -263,6 +396,38 @@
   }
 
   /**
+   * Hợp nhất thô (Raw Merge) trước khi Sanitize để bảo toàn toàn bộ trường seed bị thiếu
+   * và bảo tồn dữ liệu tùy chỉnh của Admin (Codex Section 5.1 F06)
+   */
+  function mergeRawBeforeSanitize(storedRaw, baseSeed) {
+    if (!baseSeed) return { item: storedRaw, changed: false };
+    const merged = { ...baseSeed };
+    let changed = false;
+
+    for (const key of Object.keys(storedRaw)) {
+      const val = storedRaw[key];
+      if (val === undefined) continue;
+
+      if (key === 'specs' && val && typeof val === 'object' && !Array.isArray(val)) {
+        merged.specs = { ...(baseSeed.specs || {}), ...val };
+        changed = true;
+        continue;
+      }
+
+      // Giữ nguyên các mảng hoặc giá trị người dùng đã định nghĩa
+      merged[key] = val;
+      changed = true;
+    }
+
+    // Bảo toàn modelKey:null có chủ ý (không tự phục hồi model khác)
+    if ('modelKey' in storedRaw) {
+      merged.modelKey = storedRaw.modelKey;
+    }
+
+    return { item: merged, changed };
+  }
+
+  /**
    * Hợp nhất an toàn các trường được cung cấp (Partial Update)
    */
   function mergeProvidedFields(existing, patch) {
@@ -282,216 +447,258 @@
   }
 
   /**
-   * Tải catalog nền từ products.json
-   */
-  async function fetchDefaultCatalog() {
-    try {
-      const res = await fetch(FALLBACK_URL + '?t=' + Date.now());
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      const data = await res.json();
-      if (Array.isArray(data)) {
-        return data.filter(isValidProduct).map(sanitizeProduct);
-      }
-    } catch (err) {
-      console.warn('[CatalogStore] Không thể tải products.json nền:', err);
-    }
-    return [];
-  }
-
-  /**
-   * Làm giàu dữ liệu sản phẩm cũ (Enrichment) từ bản gốc chuẩn
-   * Bảo tồn tuyệt đối dữ liệu tùy chỉnh của người dùng (ảnh upload, trọng lượng riêng, v.v.)
-   */
-  function enrichWithBaseProduct(storedItem, baseDefaults) {
-    if (!baseDefaults || !Array.isArray(baseDefaults) || baseDefaults.length === 0) {
-      return { item: storedItem, changed: false };
-    }
-    const base = baseDefaults.find(b => b.id === storedItem.id);
-    if (!base) {
-      // Sản phẩm tự tạo không có bản chuẩn: không chế tạo tùy chọn giả
-      return { item: storedItem, changed: false };
-    }
-
-    const enriched = { ...storedItem };
-    let hasChanged = false;
-
-    // Phục hồi màu nếu thiếu hoặc rỗng
-    if (!Array.isArray(enriched.colors) || enriched.colors.length === 0) {
-      if (Array.isArray(base.colors) && base.colors.length > 0) {
-        enriched.colors = JSON.parse(JSON.stringify(base.colors));
-        hasChanged = true;
-      }
-    }
-
-    // Phục hồi vật liệu nếu thiếu hoặc rỗng
-    if (!Array.isArray(enriched.materials) || enriched.materials.length === 0) {
-      if (Array.isArray(base.materials) && base.materials.length > 0) {
-        enriched.materials = JSON.parse(JSON.stringify(base.materials));
-        hasChanged = true;
-      }
-    }
-
-    // Phục hồi từng thông số kỹ thuật thiếu (giữ nguyên thông số riêng, ví dụ 101g)
-    enriched.specs = (enriched.specs && typeof enriched.specs === 'object' && !Array.isArray(enriched.specs))
-      ? { ...enriched.specs }
-      : {};
-
-    if (base.specs && typeof base.specs === 'object') {
-      for (const [k, v] of Object.entries(base.specs)) {
-        if (enriched.specs[k] === undefined || enriched.specs[k] === null || enriched.specs[k] === '' || enriched.specs[k] === 'N/A') {
-          enriched.specs[k] = v;
-          hasChanged = true;
-        }
-      }
-    }
-
-    // Bổ sung metadata MakerWorld nếu thiếu
-    const metaFields = [
-      'modelId', 'originalTitle', 'author', 'makerworldUrl', 'downloads', 'likes', 'prints',
-      'weightGrams', 'printTimeSeconds', 'aestheticScore', 'uniquenessScore', 'feasibilityScore',
-      'selectionScore', 'materialRecommendation', 'headlineBenefit', 'desc', 'videoScript',
-      'productionNotes', 'licenseName', 'commercialStatus', 'isHero'
-    ];
-    for (const field of metaFields) {
-      if ((enriched[field] === undefined || enriched[field] === null || enriched[field] === '') && base[field] !== undefined) {
-        enriched[field] = base[field];
-        hasChanged = true;
-      }
-    }
-
-    return { item: enriched, changed: hasChanged };
-  }
-
-  /**
    * Hàm thuần thực hiện di trú Catalog (Pure Migration Algorithm)
-   * Tuân thủ các quy tắc bảo toàn của Codex:
-   * 1. Storage chưa tồn tại -> nạp defaults
-   * 2. Storage [] -> giữ []
-   * 3. Có dữ liệu cũ -> giữ sản phẩm Admin, bổ sung seed mới chưa tombstone
-   * 4. Trùng ID -> giữ tùy chỉnh người dùng, bổ sung trường thiếu
-   * 5. Đã migration cùng revision -> không nạp lại seed đã xóa
+   * Nhận đầy đủ tham số, không đọc global state, trả về { products, metadata, changed, report }
    */
-  function buildMigration({ storedProducts, previousDefaults, incomingDefaults, metadata }) {
+  function buildMigration({
+    storedProducts,
+    previousDefaults,
+    incomingDefaults,
+    metadata,
+    currentRevision = CURRENT_CATALOG_REVISION,
+    currentSchemaVersion = CURRENT_SCHEMA_VERSION,
+    timestamp = new Date().toISOString()
+  }) {
     if (storedProducts === null) {
+      const seeded = (incomingDefaults || []).map((p, idx) => sanitizeProduct(p, idx));
       return {
-        products: incomingDefaults.map(sanitizeProduct),
+        products: seeded,
         metadata: {
-          schemaVersion: CURRENT_SCHEMA_VERSION,
-          catalogRevision: CURRENT_CATALOG_REVISION,
+          schemaVersion: currentSchemaVersion,
+          catalogRevision: currentRevision,
           tombstones: [],
-          migratedAt: new Date().toISOString()
+          migratedAt: timestamp,
+          metadataPending: false
         },
-        changed: true
+        changed: true,
+        report: { action: 'seeded_initial', count: seeded.length }
       };
     }
 
     if (!Array.isArray(storedProducts)) {
       return {
-        products: incomingDefaults.map(sanitizeProduct),
-        metadata: {
-          schemaVersion: CURRENT_SCHEMA_VERSION,
-          catalogRevision: CURRENT_CATALOG_REVISION,
+        products: [],
+        metadata: metadata || {
+          schemaVersion: currentSchemaVersion,
+          catalogRevision: currentRevision,
           tombstones: [],
-          migratedAt: new Date().toISOString()
+          migratedAt: timestamp,
+          metadataPending: false
         },
-        changed: true
+        changed: false,
+        report: { action: 'invalid_type', count: 0 }
       };
     }
 
-    // Tôn trọng mảng rỗng [] nếu người dùng đã xóa hết sản phẩm
+    // Tôn trọng mảng rỗng [] nếu người dùng đã xóa hết sản phẩm có chủ ý
     if (storedProducts.length === 0) {
       return {
         products: [],
         metadata: metadata || {
-          schemaVersion: CURRENT_SCHEMA_VERSION,
-          catalogRevision: CURRENT_CATALOG_REVISION,
+          schemaVersion: currentSchemaVersion,
+          catalogRevision: currentRevision,
           tombstones: [],
-          migratedAt: new Date().toISOString()
+          migratedAt: timestamp,
+          metadataPending: false
         },
-        changed: false
+        changed: false,
+        report: { action: 'preserve_empty', count: 0 }
       };
     }
 
     const tombstones = new Set(metadata?.tombstones || []);
-    let hasChanged = false;
 
-    // 1. Enrich các sản phẩm đã có trong storage (từ incoming defaults, previous defaults & legacy fixture)
+    // Danh sách toàn bộ các bản mẫu chuẩn đã biết
     const allKnownBases = [...(incomingDefaults || []), ...(previousDefaults || []), ...LEGACY_FIXTURE_PRODUCTS];
-    const enrichedExisting = storedProducts.map((p, idx) => {
-      const sanitized = sanitizeProduct(p, idx);
-      const res = enrichWithBaseProduct(sanitized, allKnownBases);
-      if (res.changed) hasChanged = true;
-      return res.item || res;
+    const baseMap = new Map();
+    for (const b of allKnownBases) {
+      if (b && b.id && !baseMap.has(b.id)) {
+        baseMap.set(b.id, b);
+      }
+    }
+
+    // 1. Raw merge trước khi sanitize cho từng sản phẩm lưu trữ
+    const enrichedExisting = storedProducts.map((rawItem, idx) => {
+      const baseSeed = rawItem && rawItem.id ? baseMap.get(rawItem.id) : null;
+      const { item: rawMerged } = mergeRawBeforeSanitize(rawItem, baseSeed);
+      return sanitizeProduct(rawMerged, idx);
     });
 
     const existingIdSet = new Set(enrichedExisting.map(p => p.id));
     const finalProducts = [...enrichedExisting];
 
-    // 2. Nếu revision catalog thay đổi hoặc chưa migrate revision này:
-    // Bổ sung các seed sản phẩm mới từ incomingDefaults mà chưa có trong storage và chưa bị tombstone
-    if (metadata?.catalogRevision !== CURRENT_CATALOG_REVISION) {
+    // 2. Bổ sung các seed sản phẩm mới từ incomingDefaults nếu revision thay đổi VÀ incomingDefaults có dữ liệu thực tế (Codex R05)
+    let addedSeed = false;
+    const hasIncoming = Array.isArray(incomingDefaults) && incomingDefaults.length > 0;
+    if (metadata?.catalogRevision !== currentRevision && hasIncoming) {
       for (const def of incomingDefaults) {
         if (!existingIdSet.has(def.id) && !tombstones.has(def.id)) {
           finalProducts.push(sanitizeProduct(def, finalProducts.length));
-          hasChanged = true;
+          addedSeed = true;
         }
       }
     }
 
+    // Chỉ coi là thay đổi khi danh sách sản phẩm sau merge khác với storedProducts ban đầu hoặc có seed mới (Codex Ca 4)
+    let productsActuallyChanged = addedSeed;
+    if (!productsActuallyChanged) {
+      if (storedProducts.length !== finalProducts.length) {
+        productsActuallyChanged = true;
+      } else {
+        for (let i = 0; i < storedProducts.length; i++) {
+          if (JSON.stringify(storedProducts[i]) !== JSON.stringify(finalProducts[i])) {
+            productsActuallyChanged = true;
+            break;
+          }
+        }
+      }
+    }
+
+    const revisionChanged = (metadata?.catalogRevision !== currentRevision) && hasIncoming;
+    const hasChanged = productsActuallyChanged || revisionChanged;
+
+    // Chỉ nâng catalogRevision khi incomingDefaults thực sự được nạp thành công (Codex R05)
+    const effectiveRevision = hasIncoming ? currentRevision : (metadata?.catalogRevision || null);
+
     const nextMeta = {
-      schemaVersion: CURRENT_SCHEMA_VERSION,
-      catalogRevision: CURRENT_CATALOG_REVISION,
+      schemaVersion: currentSchemaVersion,
+      catalogRevision: effectiveRevision,
       tombstones: Array.from(tombstones),
-      migratedAt: new Date().toISOString()
+      migratedAt: hasChanged ? timestamp : (metadata?.migratedAt || timestamp),
+      metadataPending: Boolean(metadata?.metadataPending)
     };
 
     return {
       products: finalProducts,
       metadata: nextMeta,
-      changed: hasChanged
+      changed: hasChanged,
+      report: { action: 'migrated', count: finalProducts.length, changed: hasChanged }
     };
   }
 
   /**
-   * Khởi tạo và đọc catalog với cơ chế Auto-Migration
+   * Khởi tạo và đọc catalog với 5 quy tắc trạng thái của Codex (Section 5.1)
    */
-  async function initCatalog() {
-    if (initPromise) return initPromise;
+  async function initCatalog(forceRetry = false) {
+    if (initPromise && !forceRetry) return initPromise;
 
     initPromise = (async () => {
       try {
-        const raw = localStorage.getItem(STORAGE_KEY);
-        const meta = readMetadata();
-        cachedMetadata = meta;
-
-        const defaults = await fetchDefaultCatalog();
-
-        let parsed = null;
-        if (raw !== null) {
-          try {
-            parsed = JSON.parse(raw);
-          } catch (jsonErr) {
-            console.error('[CatalogStore] Dữ liệu trong localStorage không hợp lệ (hỏng JSON):', jsonErr);
-            // Giữ nguyên dữ liệu thô bị hỏng để người dùng khôi phục, không tự ghi đè []
-            cachedProducts = defaults;
-            return cachedProducts;
+        // Khôi phục journal đang chờ xử lý nếu có (Codex R04, R05)
+        try {
+          const rawJournal = localStorage.getItem(STORAGE_KEY_JOURNAL);
+          if (rawJournal) {
+            const jEntry = JSON.parse(rawJournal);
+            if (jEntry && jEntry.targetMetadata) {
+              const currentRawList = localStorage.getItem(STORAGE_KEY);
+              if (currentRawList) {
+                let currentParsed = [];
+                try { currentParsed = JSON.parse(currentRawList); } catch (_) {}
+                if (Array.isArray(currentParsed)) {
+                  if (currentParsed.length === jEntry.afterLength) {
+                    // Bước ghi list đã hoàn tất trước crash -> Hoàn tất bước ghi metadata
+                    const writeRes = writeMetadata(jEntry.targetMetadata, localStorage);
+                    if (writeRes.ok) {
+                      localStorage.removeItem(STORAGE_KEY_JOURNAL);
+                    }
+                  } else if (currentParsed.length === jEntry.beforeLength) {
+                    // Bước ghi list chưa từng diễn ra trước crash -> Hủy transaction chưa commit
+                    localStorage.removeItem(STORAGE_KEY_JOURNAL);
+                  }
+                }
+              }
+            }
           }
+        } catch (jRecoveryErr) {
+          console.warn('[CatalogStore] Lỗi khôi phục journal:', jRecoveryErr);
         }
 
+        const storageState = readStoredCatalog(localStorage);
+        const meta = readMetadata(localStorage);
+        cachedMetadata = meta;
+
+        // Quy tắc 4: Absent + fetch lỗi -> Báo lỗi/cho retry; KHÔNG ghi tt_products=[] và KHÔNG ghi marker!
+        if (storageState.kind === 'absent') {
+          const fetchRes = await fetchDefaultCatalogResult();
+          if (!fetchRes.ok) {
+            console.error('[CatalogStore] Storage rỗng và fetch catalog lỗi:', fetchRes.error);
+            cachedProducts = [];
+            initPromise = null; // Cho phép lần sau thử lại
+            return cachedProducts;
+          }
+          // Quy tắc 1: Absent + fetch thành công -> Seed đầy đủ catalog đã xác thực
+          const sanitized = fetchRes.products.map(sanitizeProduct);
+          cachedProducts = sanitized;
+          cachedMetadata = {
+            schemaVersion: CURRENT_SCHEMA_VERSION,
+            catalogRevision: CURRENT_CATALOG_REVISION,
+            tombstones: [],
+            migratedAt: new Date().toISOString(),
+            metadataPending: false
+          };
+          try {
+            isWritingStorage = true;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedProducts));
+            const metaRes = writeMetadata(cachedMetadata, localStorage);
+            if (!metaRes.ok) cachedMetadata.metadataPending = true;
+          } catch (saveErr) {
+            console.warn('[CatalogStore] Lỗi ghi seed ban đầu vào localStorage:', saveErr);
+          } finally {
+            isWritingStorage = false;
+          }
+          return cachedProducts;
+        }
+
+        // Quy tắc 2: Mảng rỗng [] -> Giữ rỗng có chủ ý
+        if (storageState.kind === 'array' && storageState.products.length === 0) {
+          cachedProducts = [];
+          return cachedProducts;
+        }
+
+        // Quy tắc 5: Invalid hoặc unavailable -> Giữ raw, chuyển recovery; KHÔNG ghi đè dữ liệu hỏng
+        if (storageState.kind === 'invalid' || storageState.kind === 'unavailable') {
+          console.error('[CatalogStore] Dữ liệu trong localStorage không hợp lệ (hỏng JSON hoặc sai kiểu):', storageState);
+          const fetchRes = await fetchDefaultCatalogResult();
+          cachedProducts = fetchRes.ok ? fetchRes.products.map(sanitizeProduct) : [];
+          return cachedProducts;
+        }
+
+        // Quy tắc 3: Array có dữ liệu:
+        // Cố gắng tải defaults để làm giàu/di trú nếu có mạng. Nếu fetch lỗi, dùng catalog đã lưu, không nâng revision.
+        const fetchRes = await fetchDefaultCatalogResult();
+        const defaults = fetchRes.ok ? fetchRes.products : [];
+
         const migrationResult = buildMigration({
-          storedProducts: parsed,
+          storedProducts: storageState.products,
           incomingDefaults: defaults,
-          metadata: meta
+          metadata: meta,
+          currentRevision: CURRENT_CATALOG_REVISION,
+          currentSchemaVersion: CURRENT_SCHEMA_VERSION,
+          timestamp: new Date().toISOString()
         });
 
         cachedProducts = migrationResult.products;
         cachedMetadata = migrationResult.metadata;
 
-        if (migrationResult.changed) {
+        // Chỉ ghi vào storage khi có thay đổi thực tế so với dữ liệu bền vững hiện có (Codex Ca 4)
+        const currentStoredJson = localStorage.getItem(STORAGE_KEY);
+        const nextProductsJson = JSON.stringify(cachedProducts);
+        const productsActuallyChanged = currentStoredJson !== nextProductsJson;
+
+        const currentMetaJson = localStorage.getItem(META_STORAGE_KEY);
+        const nextMetaJson = JSON.stringify(cachedMetadata);
+        const metaActuallyChanged = currentMetaJson !== nextMetaJson;
+
+        if ((productsActuallyChanged || metaActuallyChanged) && fetchRes.ok) {
           try {
             isWritingStorage = true;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(cachedProducts));
-            writeMetadata(cachedMetadata);
+            if (productsActuallyChanged) {
+              localStorage.setItem(STORAGE_KEY, nextProductsJson);
+            }
+            if (metaActuallyChanged) {
+              const metaRes = writeMetadata(cachedMetadata, localStorage);
+              if (!metaRes.ok) cachedMetadata.metadataPending = true;
+            }
           } catch (saveErr) {
             console.warn('[CatalogStore] Không thể lưu migration vào localStorage:', saveErr);
           } finally {
@@ -502,7 +709,8 @@
         return cachedProducts;
       } catch (err) {
         console.error('[CatalogStore] Lỗi đọc dữ liệu localStorage:', err);
-        cachedProducts = await fetchDefaultCatalog();
+        const fetchRes = await fetchDefaultCatalogResult();
+        cachedProducts = fetchRes.ok ? fetchRes.products.map(sanitizeProduct) : [];
         return cachedProducts;
       }
     })();
@@ -511,14 +719,25 @@
   }
 
   /**
-   * Lấy danh sách sản phẩm đồng bộ (sau khi init hoàn tất)
+   * Clone sâu an toàn đối tượng sản phẩm để ngăn chặn việc sửa đổi trực tiếp vào bộ nhớ cache (Codex Ca 5)
+   */
+  function cloneProduct(p) {
+    if (!p || typeof p !== 'object') return p;
+    return {
+      ...p,
+      colors: Array.isArray(p.colors) ? p.colors.map(c => ({ ...c })) : [],
+      materials: Array.isArray(p.materials) ? p.materials.map(m => ({ ...m })) : [],
+      specs: (p.specs && typeof p.specs === 'object' && !Array.isArray(p.specs)) ? { ...p.specs } : {}
+    };
+  }
+
+  /**
+   * Lấy danh sách sản phẩm đồng bộ (sau khi init hoàn tất, trả về immutable clone)
    */
   function getProductsSync(onlyActive = true) {
     const list = cachedProducts || [];
-    if (onlyActive) {
-      return list.filter(p => p.status === 'active');
-    }
-    return list;
+    const filtered = onlyActive ? list.filter(p => p.status === 'active') : list;
+    return filtered.map(cloneProduct);
   }
 
   /**
@@ -556,21 +775,21 @@
     if (prods.length === 0) return null;
     const hero = prods.find(p => p.isHero);
     if (hero) return hero;
-    // Fallback nếu không có cờ isHero: lấy item có selectionScore và prints cao nhất
     return prods.slice().sort((a, b) => {
-      const sa = a.selectionScore || 0;
-      const sb = b.selectionScore || 0;
+      const sa = (typeof a.selectionScore === 'number') ? a.selectionScore : -1;
+      const sb = (typeof b.selectionScore === 'number') ? b.selectionScore : -1;
       if (sb !== sa) return sb - sa;
       return (b.prints || 0) - (a.prints || 0);
     })[0];
   }
 
   /**
-   * Lấy 1 sản phẩm theo ID (đồng bộ)
+   * Lấy 1 sản phẩm theo ID (đồng bộ, trả về immutable clone - Codex Ca 5)
    */
   function getProductByIdSync(id) {
     const list = cachedProducts || [];
-    return list.find(p => p.id === id) || null;
+    const item = list.find(p => p.id === id);
+    return item ? cloneProduct(item) : null;
   }
 
   /**
@@ -582,12 +801,20 @@
   }
 
   /**
-   * Lưu toàn bộ catalog mới
+   * Lưu toàn bộ catalog mới (Validate toàn bộ, ghi list trước, kiểm tra trạng thái lưu trữ - Codex R04)
    */
   function saveProducts(productsList) {
     if (!Array.isArray(productsList)) {
       throw new Error('Catalog phải là một mảng!');
     }
+    const storageState = readStoredCatalog(localStorage);
+    if (storageState.kind === 'invalid' || storageState.kind === 'unavailable') {
+      throw new Error('Không thể ghi đè vì kho lưu trữ đang ở trạng thái lỗi/hỏng dữ liệu.');
+    }
+
+    // Validate whole catalog trước khi lưu (Codex Section 6.3)
+    validateWholeCatalog(productsList);
+
     const sanitized = productsList.map(sanitizeProduct);
     const jsonStr = JSON.stringify(sanitized);
 
@@ -613,6 +840,11 @@
     if (!patch || typeof patch !== 'object' || !patch.id) {
       throw new Error('Cần cung cấp dữ liệu sản phẩm với id hợp lệ!');
     }
+    if (patch.price !== undefined) {
+      if (typeof patch.price !== 'number' || !Number.isSafeInteger(patch.price) || patch.price < 0) {
+        throw new Error('Giá sản phẩm không được là số âm hoặc sai định dạng!');
+      }
+    }
 
     const list = [...(cachedProducts || [])];
     const existingIndex = list.findIndex(p => p.id === patch.id);
@@ -631,36 +863,145 @@
   }
 
   /**
-   * Xóa 1 sản phẩm và ghi nhận tombstone nếu là seed catalog
+   * Xóa 1 sản phẩm và ghi nhận tombstone có journal phục hồi (Codex R04, Section 6.3)
    */
   async function deleteProduct(productId) {
     await initCatalog();
-    const list = (cachedProducts || []).filter(p => p.id !== productId);
-    
-    // Ghi nhận tombstone
-    const meta = cachedMetadata || readMetadata();
-    if (!meta.tombstones.includes(productId)) {
-      meta.tombstones.push(productId);
-      writeMetadata(meta);
+    const currentList = cachedProducts || [];
+    if (!currentList.some(p => p.id === productId)) {
+      // ID không tồn tại -> no-op, không ghi marker mới (Codex Section 6.3)
+      return {
+        productsCommitted: false,
+        metadataCommitted: true,
+        metadataPending: Boolean(cachedMetadata?.metadataPending),
+        notFound: true,
+        products: currentList
+      };
     }
 
-    saveProducts(list);
-    return true;
+    const nextProducts = currentList.filter(p => p.id !== productId);
+    const currentMeta = cachedMetadata || readMetadata(localStorage);
+    const nextTombstones = Array.isArray(currentMeta.tombstones) ? [...currentMeta.tombstones] : [];
+    if (!nextTombstones.includes(productId)) {
+      nextTombstones.push(productId);
+    }
+    const nextMeta = {
+      ...currentMeta,
+      tombstones: nextTombstones
+    };
+
+    // Nếu có metadata đang pending từ transaction trước, thử commit trước khi nhận mutation mới (Codex Section 6.3)
+    if (cachedMetadata && cachedMetadata.metadataPending) {
+      const flushRes = writeMetadata(cachedMetadata, localStorage);
+      if (!flushRes.ok) {
+        return {
+          productsCommitted: false,
+          metadataCommitted: false,
+          metadataPending: true,
+          error: new Error('Không thể xóa sản phẩm mới khi metadata của transaction trước chưa hoàn tất.'),
+          products: currentList
+        };
+      }
+      try { localStorage.removeItem(STORAGE_KEY_JOURNAL); } catch (_) {}
+      cachedMetadata.metadataPending = false;
+    }
+
+    const previousJournal = localStorage.getItem(STORAGE_KEY_JOURNAL);
+    const txId = `tx-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    const journalEntry = {
+      txId,
+      version: 1,
+      action: 'delete',
+      productId,
+      beforeLength: currentList.length,
+      afterLength: nextProducts.length,
+      targetMetadata: nextMeta
+    };
+
+    try {
+      localStorage.setItem(STORAGE_KEY_JOURNAL, JSON.stringify(journalEntry));
+    } catch (jErr) {
+      console.warn('[CatalogStore] Lỗi ghi journal trước delete:', jErr);
+      return {
+        productsCommitted: false,
+        metadataCommitted: false,
+        metadataPending: Boolean(cachedMetadata && cachedMetadata.metadataPending),
+        error: jErr,
+        products: currentList
+      };
+    }
+
+    // 1. Ghi list sản phẩm trước
+    try {
+      saveProducts(nextProducts);
+    } catch (saveErr) {
+      console.warn('[CatalogStore] Ghi list sản phẩm thất bại:', saveErr);
+      // Khôi phục lại journal trước đó nếu có, không xóa sạch pending journal cũ (Codex Ca 2)
+      if (previousJournal) {
+        try { localStorage.setItem(STORAGE_KEY_JOURNAL, previousJournal); } catch (_) {}
+      } else {
+        try { localStorage.removeItem(STORAGE_KEY_JOURNAL); } catch (_) {}
+      }
+      return {
+        productsCommitted: false,
+        metadataCommitted: false,
+        metadataPending: Boolean(cachedMetadata && cachedMetadata.metadataPending),
+        error: saveErr,
+        products: currentList
+      };
+    }
+
+    // 2. Ghi metadata sau
+    const metaRes = writeMetadata(nextMeta, localStorage);
+    if (metaRes.ok) {
+      try { localStorage.removeItem(STORAGE_KEY_JOURNAL); } catch (_) {}
+      cachedMetadata = nextMeta;
+      cachedMetadata.metadataPending = false;
+      return {
+        productsCommitted: true,
+        metadataCommitted: true,
+        metadataPending: false,
+        transactionId: txId,
+        products: nextProducts
+      };
+    } else {
+      // BẮT BUỘC giữ nguyên nextMeta (đã gồm tombstone của productId) trong cachedMetadata (Codex R04)
+      nextMeta.metadataPending = true;
+      cachedMetadata = nextMeta;
+      journalEntry.pending = true;
+      try {
+        localStorage.setItem(STORAGE_KEY_JOURNAL, JSON.stringify(journalEntry));
+      } catch (_) {}
+      console.warn('[CatalogStore] Ghi metadata thất bại sau khi xóa sản phẩm. Đánh dấu metadataPending và bảo toàn tombstone.');
+      return {
+        productsCommitted: true,
+        metadataCommitted: false,
+        metadataPending: true,
+        transactionId: txId,
+        products: nextProducts,
+        error: metaRes.error
+      };
+    }
   }
 
   /**
-   * Khôi phục về danh mục gốc từ products.json
+   * Khôi phục về danh mục gốc từ products.json (Quy tắc 6)
    */
   async function resetToDefaults() {
-    const defaults = await fetchDefaultCatalog();
+    const fetchRes = await fetchDefaultCatalogResult();
+    if (!fetchRes.ok) {
+      throw new Error('Không thể tải catalog gốc để khôi phục: ' + (fetchRes.error?.message || 'Lỗi mạng'));
+    }
+    const defaults = fetchRes.products.map(sanitizeProduct);
     saveProducts(defaults);
     const meta = {
       schemaVersion: CURRENT_SCHEMA_VERSION,
       catalogRevision: CURRENT_CATALOG_REVISION,
       tombstones: [],
-      migratedAt: new Date().toISOString()
+      migratedAt: new Date().toISOString(),
+      metadataPending: false
     };
-    writeMetadata(meta);
+    writeMetadata(meta, localStorage);
     return defaults;
   }
 
@@ -708,6 +1049,9 @@
     deleteProduct,
     resetToDefaults,
     buildMigration,
+    readStoredCatalog,
+    fetchDefaultCatalogResult,
+    validateWholeCatalog,
     CATEGORY_REGISTRY,
     EVENT_NAME,
     STORAGE_KEY,

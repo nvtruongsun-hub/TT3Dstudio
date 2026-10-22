@@ -1,0 +1,58 @@
+﻿[
+    {
+        "file":  "index.html",
+        "sha256":  "779502464FAC60FD5AF024610F402F44E2BA93145B5E20F4AE2224AA86021562"
+    },
+    {
+        "file":  "admin.html",
+        "sha256":  "E4F8BE3DC5969BAFB537581868C7C09A2EB126DC47AB828BC9C5D7628E178291"
+    },
+    {
+        "file":  "js/catalog-store.js",
+        "sha256":  "14F62355CC01D330D104BB9D36AD9AF8BF9654CB9AE8086171A6F7F9B69DEAE9"
+    },
+    {
+        "file":  "js/purchase-config.js",
+        "sha256":  "4685FF9BAFB05520D199BDBC5F3F399787F0467EED30E16AC6AFA47CA1ADE5F4"
+    },
+    {
+        "file":  "js/products-manager.js",
+        "sha256":  "3D13B11F48DFF0C71500113A8F097843660D6BD90FF2DFEFD27DCF03FDCD4176"
+    },
+    {
+        "file":  "js/cart.js",
+        "sha256":  "A0BD8B5E92B4B281A18C9035432CFE1A77FC8B328077935562953270944E9DDB"
+    },
+    {
+        "file":  "js/admin.js",
+        "sha256":  "BE7A2F0F252B7C767ACE500AE1FD9C3D819D648134C538B57ED38371CED34C6B"
+    },
+    {
+        "file":  "js/viewer3d.js",
+        "sha256":  "48D32E3F24143EEFAE29FDC440F2DB409DFA78C462D6F74D1E13AE7CC48286B0"
+    },
+    {
+        "file":  "js/app.js",
+        "sha256":  "5D5B4590A3240888F4565AB68C341F8EAA73ECC01D88C96C0B40F60BD9DE23F3"
+    },
+    {
+        "file":  "js/checkout.js",
+        "sha256":  "0C837867E7A8F97FA7966CCCA45F8EC9DCDB157949ABE0CFFD8459842C2F6AEB"
+    },
+    {
+        "file":  "scripts/import_makerworld_catalog.py",
+        "sha256":  "37D2002A02B0215D27E1262E0A2C6C8A94CE147E520A45E07AD67794BCEDC408"
+    },
+    {
+        "file":  "tests/test_audit_regressions.js",
+        "sha256":  "D9C6E2C0A8BDDD27678E6EED4A79515350DAEF51F4DFCEC8C3B8D4C807E8CC50"
+    },
+    {
+        "file":  "products.json",
+        "sha256":  "EA9E8C2EA799B7791B8980522DAFDF44CD4B33A53EB39BE145C173ADA194288A"
+    },
+    {
+        "file":  "data/baseline_products_v1.json",
+        "sha256":  "EA9E8C2EA799B7791B8980522DAFDF44CD4B33A53EB39BE145C173ADA194288A"
+    }
+]

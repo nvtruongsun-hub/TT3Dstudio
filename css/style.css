@@ -5,44 +5,47 @@
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* --- 1. DESIGN TOKENS & COLOR PALETTE --- */
+/* --- 1. DESIGN TOKENS & COLOR PALETTE (WARM LIGHT STUDIO DEFAULT) --- */
 :root {
-  /* Dark Mode Defaults (Matte Obsidian) */
-  --bg-canvas: #0B0C0E;
-  --bg-surface: #14161C;
-  --bg-surface-elevated: #1D2028;
-  --bg-surface-glass: rgba(20, 22, 28, 0.85);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-hover: rgba(255, 255, 255, 0.16);
-  --border-active: rgba(255, 92, 0, 0.45);
+  /* Warm Stone Light Studio Defaults (Audited Standard 2026-10-22) */
+  --bg-canvas: #F7F6F2;
+  --bg-surface: #FFFFFF;
+  --bg-surface-elevated: #FFFFFF;
+  --bg-surface-glass: rgba(255, 255, 255, 0.94);
+  --border-subtle: #DCDDD5;
+  --border-hover: #C5C6BC;
+  --border-active: #FF5C00;
   
-  --text-primary: #EDEDED;
-  --text-secondary: #8A8F98;
-  --text-muted: #5D636F;
-  --text-inverse: #0B0C0E;
+  --text-primary: #20231F;
+  --text-secondary: #586057;
+  --text-muted: #7E857C;
+  --text-inverse: #FFFFFF;
 
-  /* Accent Color: Industrial Safety Orange (10% Rule) */
+  /* Accent Color: Signature Craft Orange */
   --accent-primary: #FF5C00;
   --accent-hover: #E05200;
   --accent-active: #C44800;
-  --accent-subtle: rgba(255, 92, 0, 0.12);
-  --accent-ring: rgba(255, 92, 0, 0.35);
+  --button-primary-fg: #FFFFFF;
+  --accent-text: #C44800; /* WCAG AA >= 4.5:1 on light canvas #F7F6F2 */
+  --accent-subtle: #FFF7ED;
+  --accent-ring: rgba(255, 92, 0, 0.25);
 
   /* Functional status */
   --status-success: #10B981;
-  --status-success-subtle: rgba(16, 185, 129, 0.12);
+  --status-success-subtle: #ECFDF5;
   --status-warning: #F59E0B;
   --status-error: #EF4444;
 
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 
   /* Shadows */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.25);
-  --shadow-card: 0 8px 24px -6px rgba(0, 0, 0, 0.45);
-  --shadow-card-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.6);
-  --shadow-modal: 0 25px 60px -15px rgba(0, 0, 0, 0.75);
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 12px 28px -4px rgba(0, 0, 0, 0.1);
+  --shadow-modal: 0 20px 50px -10px rgba(0, 0, 0, 0.15);
 
   /* Radius */
   --radius-sm: 8px;
@@ -52,13 +55,9 @@
   --radius-pill: 9999px;
 }
 
-/* Brand lockup switches between the matching dark and light logo artwork. */
-.brand-logo-dark { display: block; }
-.brand-logo-light { display: none; }
-html.light-theme .brand-logo-dark,
-body.light-theme .brand-logo-dark { display: none; }
-html.light-theme .brand-logo-light,
-body.light-theme .brand-logo-light { display: block; }
+/* Brand logo: Always light version on warm background */
+.brand-logo-dark { display: none !important; }
+.brand-logo-light { display: block !important; }
 
 /* --- 2. NORDIC LIGHT STUDIO MODE (Toggleable via .light-theme) --- */
 .light-theme,
@@ -79,7 +78,9 @@ body.light-theme {
 
   --accent-primary: #FF5C00;
   --accent-hover: #E05200;
-  --accent-active: #C44800;
+  --accent-active: #E05200;
+  --button-primary-fg: #0B0C0E;
+  --accent-text: #C44800; /* WCAG AA >= 4.5:1 on light canvas #F8F9FA */
   --accent-subtle: #FFF7ED;
   --accent-ring: rgba(255, 92, 0, 0.25);
 
@@ -87,6 +88,13 @@ body.light-theme {
   --shadow-card: 0 8px 24px -6px rgba(0, 0, 0, 0.06);
   --shadow-card-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.1);
   --shadow-modal: 0 25px 60px -15px rgba(0, 0, 0, 0.18);
+}
+
+/* Light Theme Accent Text Rule (Codex R2-02: Đạt 5.0:1 tương phản trên nền sáng) */
+.light-theme .text-\[\#FF5C00\],
+html.light-theme .text-\[\#FF5C00\],
+body.light-theme .text-\[\#FF5C00\] {
+  color: #C44800 !important;
 }
 
 /* --- 3. GLOBAL RESET & BASE STYLES --- */
@@ -139,9 +147,11 @@ body {
 
 /* --- 4. TYPOGRAPHY SYSTEM (Modular Scale) --- */
 .font-sans { font-family: var(--font-sans); }
+.font-display { font-family: var(--font-display); }
 .font-mono { font-family: var(--font-mono); }
 
 .display-hero {
+  font-family: var(--font-display);
   font-size: clamp(2.25rem, 5vw, 3.75rem);
   font-weight: 800;
   line-height: 1.1;
@@ -150,6 +160,7 @@ body {
 }
 
 .heading-1 {
+  font-family: var(--font-display);
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   font-weight: 700;
   line-height: 1.2;
@@ -158,6 +169,7 @@ body {
 }
 
 .heading-2 {
+  font-family: var(--font-display);
   font-size: clamp(1.35rem, 2.5vw, 1.75rem);
   font-weight: 700;
   line-height: 1.3;
@@ -166,6 +178,7 @@ body {
 }
 
 .heading-3 {
+  font-family: var(--font-display);
   font-size: 1.125rem;
   font-weight: 600;
   line-height: 1.4;
@@ -174,7 +187,7 @@ body {
 }
 
 .price-display {
-  font-family: var(--font-sans);
+  font-family: var(--font-display);
   font-size: 1.35rem;
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -319,8 +332,8 @@ body {
   justify-content: center;
   gap: 8px;
   background: var(--accent-primary);
-  color: #FFFFFF;
-  font-weight: 600;
+  color: var(--button-primary-fg, #0B0C0E); /* WCAG AA 6.32:1 contrast on #FF5C00 */
+  font-weight: 700;
   font-size: 0.875rem;
   padding: 10px 20px;
   border-radius: var(--radius-md);
@@ -332,12 +345,14 @@ body {
 
 .btn-primary:hover {
   background: var(--accent-hover);
+  color: var(--button-primary-fg, #0B0C0E);
   transform: translateY(-1px);
 }
 
 .btn-primary:active {
-  background: var(--accent-active);
-  transform: translateY(0);
+  background: var(--accent-hover);
+  color: var(--button-primary-fg, #0B0C0E);
+  transform: translateY(0) scale(0.98);
 }
 
 .btn-secondary {
@@ -438,13 +453,14 @@ body {
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+  transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
 }
 
 .studio-product-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card-hover);
-  border-color: var(--border-hover);
+  transform: translateY(-5px);
+  box-shadow: 0 18px 38px -10px rgba(0, 0, 0, 0.65);
+  border-color: rgba(255, 92, 0, 0.35);
 }
 
 .product-image-box {
@@ -570,16 +586,35 @@ body {
 
 .studio-hero-spotlight {
   background: var(--bg-surface);
+  background-image: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0) 100%);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-xl);
   overflow: hidden;
   box-shadow: var(--shadow-card);
-  transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.studio-hero-spotlight::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 92, 0, 0.4), transparent);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
 
 .studio-hero-spotlight:hover {
-  border-color: var(--border-hover);
+  border-color: rgba(255, 92, 0, 0.35);
   box-shadow: var(--shadow-card-hover);
+  transform: translateY(-2px);
+}
+
+.studio-hero-spotlight:hover::before {
+  opacity: 1;
 }
 
 .hero-spotlight-image-box {
@@ -1166,3 +1201,316 @@ body {
 .btn-cyan-glow {
   display: none !important;
 }
+
+/* =========================================================================
+   18. 2-LAYER STUDIO VISUAL FRAME & 4K CRISP ENHANCEMENT
+   ========================================================================= */
+
+/* Tầng 1: Bộ lọc tăng cường độ nét cạnh & chống mờ */
+.studio-crisp-img {
+  image-rendering: -webkit-optimize-contrast;
+  image-rendering: crisp-edges;
+  filter: contrast(1.05) saturate(1.02);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+.studio-crisp-svg {
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.45));
+}
+
+/* Tầng 2: 100% Crisp Vietnamese CAD HUD Overlay */
+.cad-hud-top-left,
+.cad-hud-top-right,
+.cad-hud-bottom-ruler {
+  z-index: 15;
+  pointer-events: none;
+  user-select: none;
+}
+
+.cad-hud-ruler-bar {
+  font-family: 'JetBrains Mono', 'Space Grotesk', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* Kính lúp soi chi tiết vi mô 0.16mm (Retina Macro Loupe) */
+.macro-loupe-glass {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  border: 2px solid #FF5C00;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.75), inset 0 0 20px rgba(255, 92, 0, 0.4);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 35;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-color: rgba(18, 20, 24, 0.95);
+}
+
+.macro-loupe-micro-lines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.08) 0px,
+    rgba(255, 255, 255, 0.08) 1px,
+    transparent 1px,
+    transparent 3.5px
+  );
+  pointer-events: none;
+}
+
+.macro-loupe-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+
+.macro-loupe-crosshair::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  left: 0;
+  width: 18px;
+  height: 1.5px;
+  background: #FF5C00;
+}
+
+.macro-loupe-crosshair::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 8px;
+  width: 1.5px;
+  height: 18px;
+  background: #FF5C00;
+}
+
+.macro-loupe-tooltip {
+  position: absolute;
+  bottom: 48px;
+  left: 12px;
+  right: 12px;
+  background: rgba(11, 12, 14, 0.92);
+  border: 1px solid rgba(255, 92, 0, 0.45);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 10.5px;
+  font-family: 'JetBrains Mono', monospace;
+  color: #E2E8F0;
+  line-height: 1.45;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 38;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   AUDITED REDESIGN 2026-10-22 COMPONENTS
+   Tracking Timeline, 2D Personalization Studio, Shoppable Setups, Gift Quiz
+   ========================================================================== */
+
+/* 1. Real Order Tracking Timeline */
+.tracking-timeline {
+  position: relative;
+  padding: 1.5rem 0;
+}
+
+.timeline-step {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding-bottom: 2rem;
+}
+
+.timeline-step:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-step-indicator {
+  position: relative;
+  z-index: 2;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 0.8125rem;
+  flex-shrink: 0;
+  transition: all 0.25s ease;
+}
+
+.timeline-step.completed .timeline-step-indicator {
+  background-color: #10B981;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+}
+
+.timeline-step.current .timeline-step-indicator {
+  background-color: #FF5C00;
+  color: #FFFFFF;
+  box-shadow: 0 0 0 4px rgba(255, 92, 0, 0.2);
+  animation: pulse-ring 2s infinite;
+}
+
+.timeline-step.upcoming .timeline-step-indicator {
+  background-color: #FFFFFF;
+  border: 2px dashed #DCDDD5;
+  color: #7E857C;
+}
+
+.timeline-connector {
+  position: absolute;
+  top: 2.25rem;
+  left: 1.0625rem;
+  bottom: 0;
+  width: 2px;
+  background-color: #DCDDD5;
+  z-index: 1;
+}
+
+.timeline-step.completed + .timeline-connector,
+.timeline-step.completed .timeline-connector {
+  background-color: #10B981;
+}
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(255, 92, 0, 0.4); }
+  70% { box-shadow: 0 0 0 8px rgba(255, 92, 0, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 92, 0, 0); }
+}
+
+/* 2. Shoppable Setups (Inspiration) */
+.setup-card {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.setup-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.setup-hotspot-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid var(--border-subtle);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.setup-hotspot-pill:hover {
+  border-color: #FF5C00;
+  color: #FF5C00;
+  transform: scale(1.03);
+}
+
+/* 3. 2D Personalization Studio */
+.personalize-canvas-box {
+  background: #FFFFFF;
+  border: 1px solid var(--border-subtle);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  position: relative;
+  box-shadow: var(--shadow-card);
+}
+
+.custom-font-serif {
+  font-family: Georgia, 'Playfair Display', serif;
+}
+
+.custom-font-sans {
+  font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.custom-font-script {
+  font-family: 'Brush Script MT', 'Dancing Script', cursive, sans-serif;
+  font-style: italic;
+}
+
+/* 4. Accessible Accordion Details */
+details.support-accordion {
+  border: 1px solid var(--border-subtle);
+  background: #FFFFFF;
+  border-radius: 1rem;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+details.support-accordion[open] {
+  border-color: #FF5C00;
+  box-shadow: 0 4px 14px rgba(255, 92, 0, 0.06);
+}
+
+details.support-accordion summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1.125rem 1.25rem;
+  font-weight: 700;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--text-primary);
+  user-select: none;
+}
+
+details.support-accordion summary::-webkit-details-marker {
+  display: none;
+}
+
+details.support-accordion summary .accordion-chevron {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: var(--text-secondary);
+}
+
+details.support-accordion[open] summary .accordion-chevron {
+  transform: rotate(180deg);
+  color: #FF5C00;
+}
+
+details.support-accordion .accordion-content {
+  padding: 0 1.25rem 1.25rem 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+  border-top: 1px solid #F0F1EA;
+  padding-top: 1rem;
+}
+
+/* 5. Reduced-Motion Guardrail */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+

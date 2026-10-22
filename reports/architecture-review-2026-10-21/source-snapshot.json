@@ -1,0 +1,94 @@
+﻿[
+    {
+        "file":  "index.html",
+        "sha256":  "C65E5AE40810B7158AFC7826FBDEA07EA11B33E6714BCDF27F861B229480C05F"
+    },
+    {
+        "file":  "admin.html",
+        "sha256":  "65696BEE47CBDDADCE164289BAD3404A404DA96450B785DB0942F5AAE7C2CE37"
+    },
+    {
+        "file":  "css\\style.css",
+        "sha256":  "02CA028A71C460F15E6B1E553EF93B5DE8B39769CBEDBBFB8C0480E5015ADC01"
+    },
+    {
+        "file":  "package.json",
+        "sha256":  "6E4D3BA4F776B5995B8E95E326C43411217202FF940EA254D1F1021A08737FEF"
+    },
+    {
+        "file":  "tailwind.config.ts",
+        "sha256":  "FF05F214F6F5FD3D43806BBC9909CB5CA96DBD9A1C94C4FBD5970A988440D229"
+    },
+    {
+        "file":  "test_tab_architecture.ps1",
+        "sha256":  "EBB3D68D62782D63C08F4CEA87DE2212E9D2A9376D4F8D983807B1D7B6F43E2E"
+    },
+    {
+        "file":  "test_e2e_simulation.ps1",
+        "sha256":  "E23AFDCAF991553B547CEFF01F596330E4000C7612E12B03C26AEB3CDBE0B930"
+    },
+    {
+        "file":  "js\\admin.js",
+        "sha256":  "FC722EED9770BF696C24A1F76ADCD2FE2F54F4D5D4069CB14A0A016867BA65A6"
+    },
+    {
+        "file":  "js\\app.js",
+        "sha256":  "DA559C7289B9170BCF3667F17970DFF31CD76EFBECA26059394CBEFCA9F64183"
+    },
+    {
+        "file":  "js\\art-presets.js",
+        "sha256":  "AAE9F97FBE41966A798D370FFFFC22345D99D8E64FB10ABADB1BCAA5A3857224"
+    },
+    {
+        "file":  "js\\calculator.js",
+        "sha256":  "BE8C6631CB85B1AAE1E4FB45286CF065301F714936B20CA076AB94F663FA5C2A"
+    },
+    {
+        "file":  "js\\cart.js",
+        "sha256":  "FE4E1F38165A4F8B41DAA6F535077D88285A3E99FD99D48C4E5B6BB760609073"
+    },
+    {
+        "file":  "js\\catalog-store.js",
+        "sha256":  "0BE52A63AFA0F3F97E4670F6B09B2F12035A541C4A91A7E098F7E19813CAB9E6"
+    },
+    {
+        "file":  "js\\category-registry.js",
+        "sha256":  "751B0115785A16592C25F1BD1FB3AD3AF263B909B1B585992FCBFB2D2799CF1A"
+    },
+    {
+        "file":  "js\\checkout.js",
+        "sha256":  "5B81B87DB15DE2E43E5A559E74CE8599AE2E734ECB7725901A5142985E9A880D"
+    },
+    {
+        "file":  "js\\config.js",
+        "sha256":  "649B26346169E663B7698651D359DCB9D3FE4A842751D936271AFE9C51C8F635"
+    },
+    {
+        "file":  "js\\image-uploader.js",
+        "sha256":  "91122967CF9A7BAE072DFF201137B0B93403F0452B9597F68569AB6A7688C69D"
+    },
+    {
+        "file":  "js\\products-manager.js",
+        "sha256":  "7481B2F2EC10DC446B00DA34EC26AA9A6B899FFC2DDF94CEE46E5E5CEA31F480"
+    },
+    {
+        "file":  "js\\purchase-config.js",
+        "sha256":  "65ACCAC6A104F50C9D40C85DF536B6592ACC51B0F91F9A66AF394A6DD00E83B6"
+    },
+    {
+        "file":  "js\\viewer3d.js",
+        "sha256":  "48325591158F33662F97BC9358C4D26FED666CAF21A79702B7904932151F2C48"
+    },
+    {
+        "file":  "tests\\test_audit_r2_verification.js",
+        "sha256":  "F0805BC7FBFC43ABB1DB7527C65F45E51581A49713A97DACB8246C5C5BD3822E"
+    },
+    {
+        "file":  "tests\\test_audit_regressions.js",
+        "sha256":  "8EF825722211664C64E1DF4CCB7818C64076376CC48B7ACB02A7D3CBE6875C87"
+    },
+    {
+        "file":  "tests\\test_behavior.js",
+        "sha256":  "C96BB6A096DEEB4C18FA059120B49F1009C94CD0508349A6C490D7ECC4E5A1EB"
+    }
+]

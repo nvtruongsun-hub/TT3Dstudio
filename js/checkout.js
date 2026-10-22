@@ -10,10 +10,10 @@
 
   const DRAFT_ORDERS_KEY = 'TT_DIRECT_ORDER_DRAFTS_V1';
   const CUSTOMER_INFO_KEY = 'tt_customer_saved_info';
-  const DEFAULT_ZALO = '0968988647';
 
   // Checkout Context cô lập phiên đặt hàng
   let currentCheckoutContext = null;
+  let previousActiveElement = null;
 
   function escapeHtml(str) {
     if (str === null || str === undefined) return '';
@@ -36,6 +36,59 @@
       return 'TT3D-' + crypto.randomUUID().slice(0, 8).toUpperCase();
     }
     return 'TT3D-' + Date.now().toString(36).slice(-6).toUpperCase();
+  }
+
+  /**
+   * Kiểm tra schema bản ghi đơn hàng nghiêm ngặt (Codex Directive TT3D-ARCH-20261021-R2)
+   * Chặn hoàn toàn invalid channel types, invalid totals fields, markup hoặc injection
+   */
+  function isValidOrderRecord(rec) {
+    if (!rec || typeof rec !== 'object') return false;
+    if (typeof rec.clientRequestId !== 'string' || !rec.clientRequestId || rec.clientRequestId.length > 64) return false;
+    if (typeof rec.createdAt !== 'string' || isNaN(Date.parse(rec.createdAt))) return false;
+
+    // Validate channel strictly (string only, max 32 chars)
+    if (rec.channel !== undefined && rec.channel !== null) {
+      if (typeof rec.channel !== 'string' || !rec.channel.trim() || rec.channel.length > 32) return false;
+    }
+
+    if (!rec.customer || typeof rec.customer !== 'object') return false;
+    if (typeof rec.customer.name !== 'string' || !rec.customer.name.trim() || rec.customer.name.length > 100) return false;
+    const cleanPhone = (typeof rec.customer.phone === 'string') ? rec.customer.phone.replace(/[\s.-]/g, '') : '';
+    if (!/^(?:0|\+84)(?:3|5|7|8|9)\d{8}$/.test(cleanPhone)) return false;
+    if (typeof rec.customer.address !== 'string' || !rec.customer.address.trim() || rec.customer.address.length > 255) return false;
+    if (rec.customer.note !== undefined && rec.customer.note !== null && (typeof rec.customer.note !== 'string' || rec.customer.note.length > 500)) return false;
+
+    if (!Array.isArray(rec.items) || rec.items.length === 0 || rec.items.length > 100) return false;
+    for (const item of rec.items) {
+      if (!item || typeof item !== 'object') return false;
+      if (typeof item.title !== 'string' || item.title.length > 150) return false;
+      if (typeof item.qty !== 'number' || !Number.isSafeInteger(item.qty) || item.qty <= 0) return false;
+      if (typeof item.price !== 'number' || !Number.isSafeInteger(item.price) || item.price < 0) return false;
+    }
+
+    if (!rec.totals || typeof rec.totals !== 'object') return false;
+    const finalTotal = rec.totals.finalTotal !== undefined ? rec.totals.finalTotal : rec.totals.total;
+    if (typeof finalTotal !== 'number' || !Number.isSafeInteger(finalTotal) || finalTotal < 0) return false;
+
+    // Validate subtotal if present (must be safe non-negative integer)
+    if (rec.totals.subtotal !== undefined && rec.totals.subtotal !== null) {
+      if (typeof rec.totals.subtotal !== 'number' || !Number.isSafeInteger(rec.totals.subtotal) || rec.totals.subtotal < 0) return false;
+    }
+    // Validate shippingFee if present
+    if (rec.totals.shippingFee !== undefined && rec.totals.shippingFee !== null) {
+      if (typeof rec.totals.shippingFee !== 'number' || !Number.isSafeInteger(rec.totals.shippingFee) || rec.totals.shippingFee < 0) return false;
+    }
+    // Validate discountAmount if present
+    if (rec.totals.discountAmount !== undefined && rec.totals.discountAmount !== null) {
+      if (typeof rec.totals.discountAmount !== 'number' || !Number.isSafeInteger(rec.totals.discountAmount) || rec.totals.discountAmount < 0) return false;
+    }
+    // Validate discountPercent if present (0 to 100)
+    if (rec.totals.discountPercent !== undefined && rec.totals.discountPercent !== null) {
+      if (typeof rec.totals.discountPercent !== 'number' || isNaN(rec.totals.discountPercent) || rec.totals.discountPercent < 0 || rec.totals.discountPercent > 100) return false;
+    }
+
+    return true;
   }
 
   /**
@@ -67,10 +120,11 @@
       discountedSubtotal,
       merchandiseTotal: discountedSubtotal,
       shippingFee,
+      shipping: shippingFee,
       finalTotal,
       total: finalTotal,
       payableTotal: finalTotal,
-      isFreeShipping: shippingFee === 0
+      isFreeShipping: (shippingFee === 0 && subtotal > 0)
     };
   }
 
@@ -110,16 +164,37 @@
 
   /**
    * Lưu đơn nháp vào lịch sử trình duyệt (TT_DIRECT_ORDER_DRAFTS_V1)
-   * Chống trùng lặp draft theo clientRequestId
+   * Tuân thủ triệt để Contract TT3D-ARCH-20261021-R2 từ Codex Master Controller:
+   * Phân biệt rõ key chưa tồn tại (raw === null) với JSON rỗng / chuỗi whitespace / corrupted
+   * Trả về:
+   *   { ok: true, clientRequestId: string }
+   *   { ok: false, code: 'INVALID_RECORD' | 'INVALID_STORE' | 'STORAGE_UNAVAILABLE' }
    */
   function saveOrderDraft(orderRecord) {
+    if (!isValidOrderRecord(orderRecord)) {
+      return { ok: false, code: 'INVALID_RECORD' };
+    }
     try {
-      if (typeof localStorage === 'undefined') return;
+      if (typeof localStorage === 'undefined') {
+        return { ok: false, code: 'STORAGE_UNAVAILABLE' };
+      }
       const raw = localStorage.getItem(DRAFT_ORDERS_KEY);
-      const list = raw ? JSON.parse(raw) : [];
+      let list = [];
+      if (raw !== null) {
+        try {
+          list = JSON.parse(raw);
+        } catch (e) {
+          // raw JSON hỏng hoặc chuỗi rỗng: giữ nguyên dữ liệu gốc, KHÔNG ghi đè, trả INVALID_STORE (Codex R2-03)
+          return { ok: false, code: 'INVALID_STORE' };
+        }
+        if (!Array.isArray(list)) {
+          // raw JSON không phải mảng (kể cả object/null): không tự ý đè, trả INVALID_STORE
+          return { ok: false, code: 'INVALID_STORE' };
+        }
+      }
 
-      // Kiểm tra nếu clientRequestId đã tồn tại thì không ghi đè thêm mới
-      const existingIdx = list.findIndex(d => d.clientRequestId === orderRecord.clientRequestId);
+      // Deduplicate theo clientRequestId khi retry, không tạo bản sao trùng lặp
+      const existingIdx = list.findIndex(d => d && d.clientRequestId === orderRecord.clientRequestId);
       if (existingIdx >= 0) {
         list[existingIdx] = orderRecord;
       } else {
@@ -127,10 +202,71 @@
       }
 
       // Giữ tối đa 50 đơn nháp gần nhất
-      localStorage.setItem(DRAFT_ORDERS_KEY, JSON.stringify(list.slice(0, 50)));
+      const sliced = list.slice(0, 50);
+      localStorage.setItem(DRAFT_ORDERS_KEY, JSON.stringify(sliced));
+      return { ok: true, clientRequestId: orderRecord.clientRequestId };
     } catch (e) {
       console.warn('[Checkout] Lỗi lưu đơn nháp vào localStorage:', e);
+      return { ok: false, code: 'STORAGE_UNAVAILABLE' };
     }
+  }
+
+  /**
+   * Lấy danh sách các đơn hàng nháp từ localStorage
+   * Lọc và chỉ trả về các record hợp lệ (safe schema). Bỏ qua record sai, không ném lỗi.
+   */
+  function getDraftOrders() {
+    try {
+      if (typeof localStorage === 'undefined') return [];
+      const raw = localStorage.getItem(DRAFT_ORDERS_KEY);
+      if (raw === null || !raw.trim()) return [];
+      const list = JSON.parse(raw);
+      if (!Array.isArray(list)) return [];
+      return list.filter(isValidOrderRecord);
+    } catch (e) {
+      console.warn('[Checkout] Lỗi đọc đơn nháp từ localStorage:', e);
+      return [];
+    }
+  }
+
+  /**
+   * Tra cứu đơn hàng theo Mã Đơn chính xác (clientRequestId)
+   * Không tìm theo tên, số điện thoại hoặc partial ID ở bản client-side (Codex Directive F06 & R2-06).
+   * Trả về view model đã được whitelist projection tối thiểu an toàn, che giấu PII.
+   */
+  function lookupOrder(query) {
+    if (!query || typeof query !== 'string') return [];
+    const q = query.trim().toLowerCase();
+    if (!q) return [];
+    const orders = getDraftOrders();
+    const match = orders.find(ord => {
+      return typeof ord.clientRequestId === 'string' && ord.clientRequestId.toLowerCase() === q;
+    });
+    if (!match) return [];
+
+    const rawPhone = (match.customer && typeof match.customer.phone === 'string') ? match.customer.phone.replace(/\D/g, '') : '';
+    const masked = rawPhone.length > 5
+      ? rawPhone.slice(0, 3) + '***' + rawPhone.slice(-3)
+      : rawPhone;
+
+    const totalVnd = (match.totals && typeof (match.totals.finalTotal !== undefined ? match.totals.finalTotal : match.totals.total) === 'number')
+      ? (match.totals.finalTotal !== undefined ? match.totals.finalTotal : match.totals.total)
+      : 0;
+
+    return [{
+      clientRequestId: match.clientRequestId,
+      createdAt: match.createdAt,
+      statusText: 'Bản nháp trên thiết bị · Chưa gửi tới xưởng',
+      channel: match.channel || 'zalo',
+      maskedPhone: masked,
+      items: match.items.map(item => ({
+        title: item.title,
+        qty: item.qty,
+        price: item.price
+      })),
+      estimatedTotalVnd: totalVnd,
+      isFreeShipping: !!(match.totals && match.totals.isFreeShipping)
+    }];
   }
 
   /**
@@ -222,6 +358,18 @@
       return;
     }
 
+    // Chặn các dòng CAD cũ có id print-quote-* hoặc category custom-print ở đầu vào checkout (Codex R2-01)
+    const hasLegacyCadQuote = items.some(item => item && (String(item.id || '').startsWith('print-quote-') || item.category === 'custom-print'));
+    if (hasLegacyCadQuote) {
+      const msg = 'Đơn hàng có chứa mục yêu cầu in 3D theo file CAD chưa có báo giá từ xưởng. Vui lòng gửi yêu cầu báo giá qua Zalo để kỹ thuật viên cắt lớp (slice) và báo giá chính xác, hoặc xóa mục này khỏi giỏ trước khi đặt hàng.';
+      if (typeof window.showToast === 'function') {
+        window.showToast(msg);
+      } else if (typeof alert === 'function') {
+        alert(msg);
+      }
+      return;
+    }
+
     // Thiết lập Context duy nhất cho phiên checkout này
     const source = (options && options.source === 'direct') ? 'direct' : 'cart';
     const cleanItems = items.map(item => ({
@@ -246,6 +394,10 @@
     };
 
     if (typeof document === 'undefined') return;
+
+    if (document.activeElement) {
+      previousActiveElement = document.activeElement;
+    }
 
     const modal = document.getElementById('checkout-modal');
     if (!modal) return;
@@ -337,6 +489,14 @@
     const resultSection = document.getElementById('checkout-result-section') || document.getElementById('checkout-step-result');
     if (formSection) formSection.classList.remove('hidden');
     if (resultSection) resultSection.classList.add('hidden');
+
+    // Chuyển focus vào ô nhập đầu tiên hoặc nút đóng (Codex B07 Accessibility)
+    setTimeout(() => {
+      const firstInput = document.getElementById('checkout-cust-name') || document.getElementById('checkout-close-btn');
+      if (firstInput && typeof firstInput.focus === 'function') {
+        try { firstInput.focus(); } catch (_) {}
+      }
+    }, 50);
   }
 
   function closeCheckoutModal() {
@@ -350,6 +510,12 @@
     }
     if (currentCheckoutContext) {
       currentCheckoutContext.state = 'closed';
+    }
+    if (previousActiveElement && typeof previousActiveElement.focus === 'function') {
+      try {
+        previousActiveElement.focus();
+      } catch (_) {}
+      previousActiveElement = null;
     }
   }
 
@@ -437,19 +603,27 @@
       totals
     };
 
-    // Lưu vào draft storage và thông tin ghi nhớ
-    saveOrderDraft(orderRecord);
-    saveCustomerPreferences({ name, phone: cleanPhone, address }, remember);
+    // Lưu vào draft storage và thông tin ghi nhớ với contract chặt chẽ (Codex F03)
+    const saved = saveOrderDraft(orderRecord);
+    if (!saved.ok) {
+      currentCheckoutContext.state = 'editing';
+      const errMsg = (saved.code === 'STORAGE_UNAVAILABLE')
+        ? 'Không thể lưu bản nháp đơn hàng (bộ nhớ trình duyệt bị đầy hoặc bị vô hiệu hóa). Giỏ hàng của bạn vẫn được giữ nguyên.'
+        : 'Không thể lưu bản nháp đơn hàng do dữ liệu hoặc bộ nhớ cục bộ bị lỗi. Giỏ hàng của bạn vẫn được giữ nguyên.';
+      if (typeof alert === 'function') alert(errMsg);
+      return;
+    }
 
+    saveCustomerPreferences({ name, phone: cleanPhone, address }, remember);
     currentCheckoutContext.state = 'handoff_ready';
 
     // Tạo tin nhắn chuyển tiếp
     const messageText = buildOrderMessage(orderRecord);
 
-    // Lấy số Zalo hotline từ cấu hình
-    const hotlinePhone = (window.TT_CONFIG && (window.TT_CONFIG.hotline || window.TT_CONFIG.zalo))
-      ? String(window.TT_CONFIG.hotline || window.TT_CONFIG.zalo).replace(/\D/g, '')
-      : DEFAULT_ZALO;
+    // Lấy số Zalo hotline từ helper dùng chung (Codex R2-04: Resolver duy nhất, không dùng fallback hardcode)
+    const hotlinePhone = (window.TTStore && typeof window.TTStore.getZaloPhone === 'function')
+      ? window.TTStore.getZaloPhone()
+      : null;
 
     // Chuyển sang màn hình xác nhận kết quả
     const formSection = document.getElementById('checkout-form-section') || document.getElementById('checkout-step-input');
@@ -463,15 +637,15 @@
     const resTitleEl = document.getElementById('checkout-result-title');
     if (resTitleEl) {
       resTitleEl.textContent = (channel === 'cod')
-        ? 'Đã Ghi Nhận Yêu Cầu COD Thành Công!'
-        : 'Yêu Cầu Đã Sẵn Sàng Chuyển Tiếp Zalo!';
+        ? 'Đã Chuẩn Bị Yêu Cầu COD Trên Thiết Bị!'
+        : 'Bản Nháp Sẵn Sàng Chuyển Tiếp Zalo!';
     }
 
     const resMsgEl = document.getElementById('checkout-result-msg');
     if (resMsgEl) {
       resMsgEl.textContent = (channel === 'cod')
-        ? 'Xưởng in T&T 3D Labs đã lưu yêu cầu của bạn. Kỹ thuật viên sẽ gọi điện xác nhận chi tiết kỹ thuật trước khi đưa vào máy in.'
-        : 'Vui lòng nhấn nút "Mở Chat Zalo Với Xưởng" để gửi chi tiết đơn hàng cho kỹ thuật viên tiếp nhận ngay.';
+        ? 'Đã chuẩn bị yêu cầu COD trên thiết bị này. Hãy gửi nội dung đơn hàng cho xưởng qua Zalo hoặc Hotline để kỹ thuật viên xác nhận.'
+        : 'Bản nháp đã lưu trên thiết bị. Vui lòng nhấn nút "Mở Chat Zalo Với Xưởng" để gửi chi tiết đơn hàng cho kỹ thuật viên tiếp nhận.';
     }
 
     const msgPreviewEl = document.getElementById('checkout-res-msg-preview') || document.getElementById('checkout-msg-text');
@@ -504,25 +678,138 @@
 
     const zaloBtn = document.getElementById('checkout-btn-open-zalo') || document.getElementById('checkout-zalo-direct-link');
     if (zaloBtn) {
-      const zaloUrl = `https://zalo.me/${hotlinePhone}?text=${encodeURIComponent(messageText)}`;
-      if ('href' in zaloBtn) {
-        zaloBtn.href = zaloUrl;
-        zaloBtn.target = '_blank';
-        zaloBtn.rel = 'noopener noreferrer';
+      if (hotlinePhone) {
+        const zaloUrl = `https://zalo.me/${hotlinePhone}?text=${encodeURIComponent(messageText)}`;
+        if ('href' in zaloBtn) {
+          zaloBtn.href = zaloUrl;
+          zaloBtn.target = '_blank';
+          zaloBtn.rel = 'noopener noreferrer';
+        }
+        if (typeof zaloBtn.removeAttribute === 'function') {
+          zaloBtn.removeAttribute('aria-disabled');
+        }
+        zaloBtn.onclick = function (e) {
+          copyTextToClipboard(messageText, fallbackTextarea);
+        };
+      } else {
+        // Resolver trả null: bỏ href, không tự fallback số khác (Codex R2-04)
+        if (typeof zaloBtn.removeAttribute === 'function') {
+          zaloBtn.removeAttribute('href');
+        } else if ('href' in zaloBtn) {
+          zaloBtn.href = '';
+        }
+        if (typeof zaloBtn.setAttribute === 'function') {
+          zaloBtn.setAttribute('aria-disabled', 'true');
+        }
+        zaloBtn.onclick = function (e) {
+          if (e && e.preventDefault) e.preventDefault();
+          copyTextToClipboard(messageText, fallbackTextarea);
+          const msg = 'Chưa cấu hình kênh Zalo hợp lệ. Vui lòng liên hệ hotline xưởng hoặc sao chép nội dung đơn hàng.';
+          if (typeof window.showToast === 'function') window.showToast(msg);
+          else if (typeof alert === 'function') alert(msg);
+          return false;
+        };
       }
-      zaloBtn.onclick = function (e) {
-        copyTextToClipboard(messageText, fallbackTextarea);
-      };
     }
 
-    // Nếu đơn hàng từ Giỏ Hàng hoàn tất qua Zalo/COD, xóa giỏ hàng (nếu là Mua Ngay, không động tới giỏ hàng)
-    if (currentCheckoutContext.source === 'cart' && window.TTCart && typeof window.TTCart.clearCart === 'function') {
-      window.TTCart.clearCart();
-    }
+    // Ghi chú Codex F03: Không tự ý clearCart khi chỉ mới ở bước handoff_ready hoặc mở Zalo link.
+    // Giỏ hàng được giữ an toàn để tránh mất dữ liệu của khách hàng.
   }
 
   function getCurrentContext() {
     return currentCheckoutContext ? JSON.parse(JSON.stringify(currentCheckoutContext)) : null;
+  }
+
+  function getFocusableElements(container) {
+    if (!container || typeof container.querySelectorAll !== 'function') return [];
+    const selectors = [
+      'button:not([disabled]):not([aria-hidden="true"])',
+      '[href]:not([aria-disabled="true"]):not([aria-hidden="true"])',
+      'input:not([disabled]):not([type="hidden"]):not([aria-hidden="true"])',
+      'select:not([disabled]):not([aria-hidden="true"])',
+      'textarea:not([disabled]):not([aria-hidden="true"])',
+      '[tabindex]:not([tabindex="-1"]):not([aria-hidden="true"])'
+    ];
+    const elements = Array.from(container.querySelectorAll(selectors.join(',')));
+    return elements.filter(el => {
+      return el.offsetParent !== null || (typeof el.offsetWidth === 'number' && el.offsetWidth > 0) || (typeof el.offsetHeight === 'number' && el.offsetHeight > 0);
+    });
+  }
+
+  function initCheckoutModal() {
+    if (typeof document === 'undefined') return;
+
+    const modal = document.getElementById('checkout-modal');
+    const closeBtn = document.getElementById('checkout-close-btn');
+    const submitZaloBtn = document.getElementById('checkout-submit-zalo');
+    const submitCodBtn = document.getElementById('checkout-submit-cod');
+
+    if (closeBtn) {
+      closeBtn.addEventListener('click', closeCheckoutModal);
+    }
+
+    if (submitZaloBtn) {
+      submitZaloBtn.addEventListener('click', () => submitCheckout('zalo'));
+    }
+
+    if (submitCodBtn) {
+      submitCodBtn.addEventListener('click', () => submitCheckout('cod'));
+    }
+
+    if (modal) {
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+          closeCheckoutModal();
+        }
+      });
+
+      // Trap Tab key inside modal (Codex B07 Focus Isolation)
+      modal.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const focusables = getFocusableElements(modal);
+        if (focusables.length === 0) return;
+
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+
+        if (e.shiftKey) {
+          if (document.activeElement === first || !modal.contains(document.activeElement)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || !modal.contains(document.activeElement)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      });
+    }
+
+    const addKeydown = (typeof window !== 'undefined' && typeof window.addEventListener === 'function')
+      ? window.addEventListener.bind(window)
+      : (typeof document !== 'undefined' && typeof document.addEventListener === 'function')
+        ? document.addEventListener.bind(document)
+        : null;
+
+    if (addKeydown) {
+      addKeydown('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+          const modalEl = document.getElementById('checkout-modal');
+          if (modalEl && !modalEl.classList.contains('hidden')) {
+            closeCheckoutModal();
+          }
+        }
+      });
+    }
+  }
+
+  if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initCheckoutModal);
+    } else {
+      initCheckoutModal();
+    }
   }
 
   // Export API
@@ -536,7 +823,9 @@
     getCurrentContext,
     escapeHtml,
     formatMoney,
-    buildOrderMessage
+    buildOrderMessage,
+    getDraftOrders,
+    lookupOrder
   };
 
 })(typeof window !== 'undefined' ? window : this);

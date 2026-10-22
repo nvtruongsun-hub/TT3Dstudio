@@ -1,14 +1,17 @@
-# End-to-end logic simulation test for T&T 3D Studio Tab Architecture
+# End-to-end logic simulation test for T&T 3D Studio Architecture (Rebuild Spec 2026-10-22)
 $ErrorActionPreference = 'Stop'
 
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "   END-TO-END WORKSPACE ROUTER & INTERACTION TEST" -ForegroundColor Cyan
+Write-Host "   END-TO-END STORE, TRACKING & NAVIGATION SIMULATION" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-# 1. Test hash map completeness in js/app.js
-$appJs = Get-Content -Raw -Encoding UTF8 'js/app.js'
+$appJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/app.js", [System.Text.Encoding]::UTF8)
+$html = [System.IO.File]::ReadAllText("$PSScriptRoot/index.html", [System.Text.Encoding]::UTF8)
+$productsJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/products-manager.js", [System.Text.Encoding]::UTF8)
+$orderJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/order-engine.js", [System.Text.Encoding]::UTF8)
 
-$requiredHashes = @('#store', '#studio3d', '#calculator', '#standards')
+# 1. Test hash map completeness in js/app.js
+$requiredHashes = @('#store', '#personalize', '#inspiration', '#tracking', '#support')
 $allHashesPresent = $true
 foreach ($h in $requiredHashes) {
     if (-not $appJs.Contains($h)) {
@@ -18,15 +21,14 @@ foreach ($h in $requiredHashes) {
 }
 
 if ($allHashesPresent) {
-    Write-Host "  [PASS] All 4 primary hash routes present in router map" -ForegroundColor Green
+    Write-Host "  [PASS] All 5 primary hash routes present in router map" -ForegroundColor Green
 } else {
     Write-Host "  [FAIL] Missing hash routes" -ForegroundColor Red
     exit 1
 }
 
 # 2. Test view IDs in index.html
-$html = Get-Content -Raw -Encoding UTF8 'index.html'
-$requiredViews = @('view-store', 'view-studio3d', 'view-configurator', 'view-standards')
+$requiredViews = @('view-store', 'view-personalize', 'view-inspiration', 'view-tracking', 'view-support')
 $allViewsPresent = $true
 foreach ($v in $requiredViews) {
     if (-not $html.Contains("id=""$v""")) {
@@ -36,7 +38,7 @@ foreach ($v in $requiredViews) {
 }
 
 if ($allViewsPresent) {
-    Write-Host "  [PASS] All 4 discrete workspace views defined in HTML" -ForegroundColor Green
+    Write-Host "  [PASS] All 5 discrete user-centric views defined in HTML" -ForegroundColor Green
 } else {
     Write-Host "  [FAIL] Missing workspace views" -ForegroundColor Red
     exit 1
@@ -44,11 +46,12 @@ if ($allViewsPresent) {
 
 # 3. Test that views have app-workspace class and initial active/hidden states
 $storeActive = $html -match 'id="view-store"\s+class="app-workspace\s+active"'
-$studioHidden = $html -match 'id="view-studio3d"\s+class="app-workspace\s+hidden"'
-$configHidden = $html -match 'id="view-configurator"\s+class="app-workspace\s+hidden"'
-$standardsHidden = $html -match 'id="view-standards"\s+class="app-workspace\s+hidden"'
+$personalizeHidden = $html -match 'id="view-personalize"\s+class="app-workspace\s+hidden'
+$inspirationHidden = $html -match 'id="view-inspiration"\s+class="app-workspace\s+hidden'
+$trackingHidden = $html -match 'id="view-tracking"\s+class="app-workspace\s+hidden'
+$supportHidden = $html -match 'id="view-support"\s+class="app-workspace\s+hidden'
 
-if ($storeActive -and $studioHidden -and $configHidden -and $standardsHidden) {
+if ($storeActive -and $personalizeHidden -and $inspirationHidden -and $trackingHidden -and $supportHidden) {
     Write-Host "  [PASS] Initial workspace states: view-store active, others hidden" -ForegroundColor Green
 } else {
     Write-Host "  [FAIL] Incorrect initial workspace visibility classes" -ForegroundColor Red
@@ -56,57 +59,47 @@ if ($storeActive -and $studioHidden -and $configHidden -and $standardsHidden) {
 }
 
 # 4. Test Mobile Bottom Dock specifications
-$dockPresent = $html.Contains('id="mobile-app-dock"')
-$dockPills = [regex]::Matches($html, 'data-nav-view="([^"]+)"')
-$dockViewNames = @()
-foreach ($m in $dockPills) { $dockViewNames += $m.Groups[1].Value }
+$dockPresent = $html.Contains('class="mobile-bottom-dock')
+$hasStore = $html.Contains("window.switchWorkspace('view-store')")
+$hasInspiration = $html.Contains("window.switchWorkspace('view-inspiration')")
+$hasTracking = $html.Contains("window.switchWorkspace('view-tracking')")
+$hasSupport = $html.Contains("window.switchWorkspace('view-support')")
+$hasCart = $html.Contains("window.TTCart.openCart()")
 
-$hasStore = $dockViewNames -contains 'view-store'
-$hasStudio = $dockViewNames -contains 'view-studio3d'
-$hasConfig = $dockViewNames -contains 'view-configurator'
-$hasStandards = $dockViewNames -contains 'view-standards'
-
-if ($dockPresent -and $hasStore -and $hasStudio -and $hasConfig -and $hasStandards) {
-    Write-Host "  [PASS] Mobile bottom dock contains all 4 view targets" -ForegroundColor Green
+if ($dockPresent -and $hasStore -and $hasInspiration -and $hasTracking -and $hasSupport -and $hasCart) {
+    Write-Host "  [PASS] Mobile bottom dock contains all 5 items specified in spec" -ForegroundColor Green
 } else {
-    Write-Host "  [FAIL] Mobile bottom dock missing view targets" -ForegroundColor Red
+    Write-Host "  [FAIL] Mobile bottom dock missing items" -ForegroundColor Red
     exit 1
 }
 
-# 5. Test 3D synchronization and Soi 3D transition
-$viewerJs = Get-Content -Raw -Encoding UTF8 'js/viewer3d.js'
-$productsJs = Get-Content -Raw -Encoding UTF8 'js/products-manager.js'
+# 5. Test Real Order Tracking Engine API contract
+$hasEngine = $orderJs.Contains('window.TTOrderEngine =')
+$hasGetOrder = $orderJs.Contains('getOrderProjection')
+$hasCreateOrder = $orderJs.Contains('createOrderRequest')
+$hasUpdateStatus = $orderJs.Contains('updateOrderStatus')
+$hasHistory = $orderJs.Contains('history')
 
-$hasSoi3D = $productsJs.Contains('Soi 3D')
-$hasCard3DCall = $productsJs.Contains('window.open3DViewerById')
-$hasRouterSwitchInViewer = $viewerJs.Contains("window.switchWorkspace('view-studio3d'")
-$hasResizeExport = $viewerJs.Contains('window.onResize3DViewer = onResize')
-$hasAppJsResizeTrigger = $appJs.Contains('window.onResize3DViewer()')
-
-if ($hasSoi3D -and $hasCard3DCall -and $hasRouterSwitchInViewer -and $hasResizeExport -and $hasAppJsResizeTrigger) {
-    Write-Host "  [PASS] 3D Synchronization & 'Soi 3D' cross-workspace transition fully verified" -ForegroundColor Green
+if ($hasEngine -and $hasGetOrder -and $hasCreateOrder -and $hasUpdateStatus -and $hasHistory) {
+    Write-Host "  [PASS] Real Order Engine exports createOrder, getOrder, updateStatus & history" -ForegroundColor Green
 } else {
-    Write-Host "  [FAIL] Incomplete 3D synchronization wiring" -ForegroundColor Red
+    Write-Host "  [FAIL] Incomplete Order Engine API contract" -ForegroundColor Red
     exit 1
 }
 
-# 6. Test Interactive Calculator and Cart integration across tabs
-$calcJs = Get-Content -Raw -Encoding UTF8 'js/calculator.js'
-$cartJs = Get-Content -Raw -Encoding UTF8 'js/cart.js'
+# 6. Test Per-SKU Option Isolation (F15)
+$hasNfcCheck = $productsJs.Contains("item.category === 'Ca_Nhan_Hoa_NFC'")
+$hasContainerHide = $productsJs.Contains("customContainer.classList.add('hidden')")
+$hasCleanTitle = $productsJs.Contains("getCleanTitle")
 
-$hasZaloPrefill = $calcJs.Contains('window.sendZaloConfigQuote')
-$hasAddConfigCart = $calcJs.Contains('window.addConfigQuoteToCart')
-$hasDirectCheckout = $cartJs.Contains('triggerCheckout')
-$hasDropzone = $html.Contains('id="config-dropzone"')
-$hasSlider = $html.Contains('id="config-qty-slider"')
-
-if ($hasZaloPrefill -and $hasAddConfigCart -and $hasDirectCheckout -and $hasDropzone -and $hasSlider) {
-    Write-Host "  [PASS] Calculator & Cart persistent interaction across tabs fully verified" -ForegroundColor Green
+if ($hasNfcCheck -and $hasContainerHide -and $hasCleanTitle) {
+    Write-Host "  [PASS] Per-SKU customization isolation and clean title extraction verified" -ForegroundColor Green
 } else {
-    Write-Host "  [FAIL] Missing calculator/cart components" -ForegroundColor Red
+    Write-Host "  [FAIL] Incomplete option isolation logic" -ForegroundColor Red
     exit 1
 }
 
 Write-Host "==========================================================" -ForegroundColor Cyan
-Write-Host "   ALL END-TO-END VERIFICATION CHECKS PASSED!" -ForegroundColor Green
+Write-Host "   ALL E2E SIMULATION CHECKS PASSED (6/6)" -ForegroundColor Green
 Write-Host "==========================================================" -ForegroundColor Cyan
+exit 0

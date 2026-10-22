@@ -11,27 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          colors: {
-            brand: {
-              cyan: '#FF5C00',
-              accent: '#FF5C00'
-            }
-          },
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'system-ui', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace']
-          }
-        }
-      }
-    }
-  </script>
+  <!-- Industrial Design System Compiled Tailwind Utilities -->
+  <link rel="stylesheet" href="css/tailwind.css?v=3.2">
 
   <!-- Font Awesome Icons 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -548,12 +529,13 @@
               <table class="w-full text-left text-xs">
                 <thead class="bg-slate-950/80 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
                   <tr>
-                    <th class="p-3">Mã Tham Chiếu</th>
+                    <th class="p-3">Mã Đơn Hàng</th>
                     <th class="p-3">Khách Hàng &amp; SĐT</th>
-                    <th class="p-3">Mặt Hàng</th>
+                    <th class="p-3">Mặt Hàng &amp; Yêu Cầu</th>
                     <th class="p-3">Tổng Tiền</th>
-                    <th class="p-3 text-center">Kênh</th>
-                    <th class="p-3 text-center w-24">Thao Tác</th>
+                    <th class="p-3 text-center">Tiến Độ Thực Tế</th>
+                    <th class="p-3 text-center">Dự Kiến (ETA)</th>
+                    <th class="p-3 text-center w-36">Thao Tác Xưởng</th>
                   </tr>
                 </thead>
                 <tbody id="orders-table-body" class="divide-y divide-slate-800/80 text-slate-200"></tbody>
@@ -561,6 +543,98 @@
             </div>
           </div>
         </section>
+
+        <!-- MODAL CẬP NHẬT TRẠNG THÁI & TIẾN ĐỘ ĐƠN HÀNG (WORKSHOP PIPELINE) -->
+        <div id="admin-order-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div class="w-full max-w-xl admin-card rounded-3xl border border-slate-700 p-6 space-y-5 max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+              <div class="flex items-center gap-2">
+                <i class="fa-solid fa-cube text-[#FF5C00]"></i>
+                <h3 class="text-sm font-bold text-white">Cập Nhật Tiến Độ Đơn: <span id="admin-modal-order-id" class="font-mono text-[#FF5C00]"></span></h3>
+              </div>
+              <button type="button" onclick="window.closeAdminOrderModal()" class="w-7 h-7 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark"></i>
+              </button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+              <!-- Chọn trạng thái -->
+              <div class="space-y-1.5">
+                <label class="font-bold text-slate-200 block">Trạng Thái Quy Trình Xưởng:</label>
+                <select id="admin-modal-status-select" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-[#FF5C00] focus:outline-none">
+                  <option value="request_received">1. Đã nhận yêu cầu (Tiếp nhận hệ thống)</option>
+                  <option value="confirmed">2. Xưởng xác nhận (Đã duyệt phôi in & xếp lịch)</option>
+                  <option value="in_production">3. Đang làm (Đang in 3D Bambu & xử lý bề mặt)</option>
+                  <option value="quality_check">4. Kiểm tra chất lượng (QC độ mịn & chip NFC)</option>
+                  <option value="shipped">5. Đang giao hàng (Đã bàn giao bưu chính)</option>
+                  <option value="delivered">6. Đã nhận hàng (Hoàn tất thành công)</option>
+                  <option value="awaiting_customer">⚠️ Chờ khách xác nhận (Màu sắc / Mẫu chữ)</option>
+                  <option value="on_hold">⏸ Tạm hoãn đơn</option>
+                  <option value="cancelled">❌ Đã hủy đơn</option>
+                </select>
+              </div>
+
+              <!-- Ngày dự kiến (ETA) -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                  <label class="font-bold text-slate-200 block">Ngày Hoàn Thiện Dự Kiến (ETA):</label>
+                  <input type="text" id="admin-modal-eta-input" placeholder="Ví dụ: 24/10/2026 hoặc Chiều mai" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                </div>
+                <div class="space-y-1.5">
+                  <label class="font-bold text-slate-200 block">Đơn Vị Vận Chuyển:</label>
+                  <select id="admin-modal-carrier-select" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                    <option value="">Chưa có / Tự giao</option>
+                    <option value="Giao Hàng Tiết Kiệm (GHTK)">GHTK (Giao Hàng Tiết Kiệm)</option>
+                    <option value="Viettel Post">Viettel Post</option>
+                    <option value="Shopee Xpress">Shopee Xpress</option>
+                    <option value="GrabExpress / AhaMove">Hỏa Tốc (Grab / AhaMove)</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Mã vận đơn -->
+              <div class="space-y-1.5">
+                <label class="font-bold text-slate-200 block">Mã Vận Đơn Bưu Cục (nếu có):</label>
+                <input type="text" id="admin-modal-carrier-code" placeholder="Ví dụ: S224899120.VN" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-[#FF5C00] focus:outline-none">
+              </div>
+
+              <!-- Thông báo hành động gửi khách -->
+              <div class="space-y-1.5">
+                <label class="font-bold text-slate-200 block">Thông Báo Cho Khách Trên Trang Tra Cứu:</label>
+                <input type="text" id="admin-modal-alert-input" placeholder="Ví dụ: Đã in xong phôi lụa, đang sấy nhiệt và kiểm tra QC trước khi gửi." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+              </div>
+
+              <!-- Ghi chú nội bộ -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div class="space-y-1.5">
+                  <label class="font-mono text-slate-400 block">Ghi chú công khai (Public):</label>
+                  <input type="text" id="admin-modal-public-note" placeholder="Hiển thị cho khách xem" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                </div>
+                <div class="space-y-1.5">
+                  <label class="font-mono text-slate-400 block">Ghi chú nội bộ thợ in (Private):</label>
+                  <input type="text" id="admin-modal-private-note" placeholder="Chỉ thợ xưởng thấy" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                </div>
+              </div>
+
+              <!-- Lịch sử tiến độ -->
+              <div class="space-y-2 pt-2 border-t border-slate-800">
+                <label class="font-bold text-slate-300 block">Lịch Sử Cập Nhật Đơn Hàng (Audit Trail):</label>
+                <div id="admin-modal-history-list" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+              </div>
+            </div>
+
+            <!-- Footer Actions -->
+            <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
+              <button type="button" onclick="window.closeAdminOrderModal()" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:text-white text-xs">
+                Đóng
+              </button>
+              <button type="button" onclick="window.saveAdminOrderUpdate()" class="btn-orange-primary px-5 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5">
+                <i class="fa-solid fa-floppy-disk"></i>
+                <span>Lưu Cập Nhật Tiến Độ</span>
+              </button>
+            </div>
+          </div>
+        </div>
 
         <!-- ===================================================================
              TAB 5: CẤU HÌNH BẢNG GIÁ IN 3D
@@ -610,12 +684,14 @@
   <div id="admin-toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Central Engines Scripts -->
-  <script src="js/config.js?v=3.1"></script>
-  <script src="js/catalog-store.js?v=3.1"></script>
-  <script src="js/art-presets.js?v=3.1"></script>
-  <script src="js/image-uploader.js?v=3.1"></script>
-  <script src="js/checkout.js?v=3.1"></script>
-  <script src="js/admin.js?v=3.1"></script>
+  <script src="js/config.js?v=3.2"></script>
+  <script src="js/category-registry.js?v=3.2"></script>
+  <script src="js/catalog-store.js?v=3.2"></script>
+  <script src="js/art-presets.js?v=3.2"></script>
+  <script src="js/image-uploader.js?v=3.2"></script>
+  <script src="js/order-engine.js?v=4.0"></script>
+  <script src="js/checkout.js?v=3.2"></script>
+  <script src="js/admin.js?v=3.2"></script>
 
 </body>
 </html>

@@ -1,0 +1,113 @@
+{
+  "scope": "read-only product audit; isolated VM; synthetic data; no network",
+  "findings": {
+    "quota": {
+      "actualDraftWriteAttempts": 1,
+      "state": "editing",
+      "cartClearCalls": 0,
+      "draftSaved": false,
+      "alertCount": 1
+    },
+    "retry": {
+      "idRetained": true,
+      "recordCount": 1,
+      "state": "handoff_ready",
+      "cartClearCalls": 0,
+      "recipient": "https://zalo.me/0900000000"
+    },
+    "corruptStore": [
+      {
+        "raw": "{bad",
+        "preserved": true,
+        "state": "editing",
+        "writeAttempts": 0
+      },
+      {
+        "raw": "{}",
+        "preserved": true,
+        "state": "editing",
+        "writeAttempts": 0
+      },
+      {
+        "raw": "null",
+        "preserved": true,
+        "state": "editing",
+        "writeAttempts": 0
+      },
+      {
+        "raw": "",
+        "preserved": false,
+        "state": "handoff_ready",
+        "writeAttempts": 1
+      }
+    ],
+    "lookup": {
+      "exactTrimmed": true,
+      "partial": 0,
+      "phone": 0,
+      "keys": [
+        "clientRequestId",
+        "createdAt",
+        "statusText",
+        "channel",
+        "maskedPhone",
+        "customerName",
+        "items",
+        "estimatedTotalVnd",
+        "isFreeShipping"
+      ],
+      "maskedPhone": "090***000",
+      "hasPrivateAddress": false
+    },
+    "invalidSchema": [
+      {
+        "label": "null item",
+        "acceptedCount": 0
+      },
+      {
+        "label": "object phone",
+        "acceptedCount": 0
+      },
+      {
+        "label": "markup qty",
+        "acceptedCount": 0
+      },
+      {
+        "label": "markup total",
+        "acceptedCount": 0
+      },
+      {
+        "label": "object channel",
+        "acceptedCount": 1
+      },
+      {
+        "label": "unsafe subtotal",
+        "acceptedCount": 1
+      }
+    ],
+    "nullResolverRecipient": "https://zalo.me/0986888333",
+    "syntheticQuoteInCart": [
+      {
+        "id": "print-quote-pla_matte-15-Ch_a___nh_k_m_file",
+        "title": "Gia Công In 3D: Chưa đính kèm file",
+        "price": 115000,
+        "qty": 1,
+        "storageApi": "TTStore.addToCart"
+      }
+    ],
+    "calculatorDisplayedTotal": "115.000 đ",
+    "resolverPriority": "0900000000",
+    "trackerSink": {
+      "markupInInnerHTML": false,
+      "markupInTextContent": true,
+      "scope": "isolated controller; no browser payload execution"
+    },
+    "contrast": {
+      "whiteOnOrange": 3.0960398345856497,
+      "charcoalOnOrange": 6.320457149949287,
+      "charcoalOnHover": 5.009857494148445,
+      "charcoalOnActive": 3.9827243881333882,
+      "orangeOnLightCanvas": 2.9371083067296837
+    }
+  }
+}

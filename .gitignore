@@ -15,11 +15,15 @@ $RECYCLE.BIN/
 *.log
 *.tmp
 *.backup.html
+reports/**/build-fixtures*
 
 # Dependencies & Build Output
 node_modules/
 .next/
 out/
+dist/
+dist_staging/
+dist_backup/
 
 
 # Agent Telemetry & Logs

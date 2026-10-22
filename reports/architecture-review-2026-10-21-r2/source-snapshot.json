@@ -1,0 +1,117 @@
+{
+    "capturedAt":  "2026-10-21T13:42:01.2516077+07:00",
+    "nodeVersion":  "v24.20.0",
+    "productFilesChangedByReview":  false,
+    "browserInventory":  {
+                             "browsers":  [
+
+                                          ],
+                             "apps":  [
+
+                                      ]
+                         },
+    "browserChecksPerformed":  false,
+    "tests":  {
+                  "sourceChecks":  32,
+                  "vmBehavior":  39,
+                  "syntaxFiles":  13
+              },
+    "files":  [
+                  {
+                      "path":  "index.html",
+                      "sha256":  "C0ACB52409CDF3E3452CECB2DE9AD4CA5EFAFAF17E9E24E657551BDF93AEABB9"
+                  },
+                  {
+                      "path":  "admin.html",
+                      "sha256":  "65696BEE47CBDDADCE164289BAD3404A404DA96450B785DB0942F5AAE7C2CE37"
+                  },
+                  {
+                      "path":  "README.md",
+                      "sha256":  "FDEE502AEEDF780B4FBD11D75AF966A811ECF8F49B6FD101404865B5EF06B97A"
+                  },
+                  {
+                      "path":  "package.json",
+                      "sha256":  "6E4D3BA4F776B5995B8E95E326C43411217202FF940EA254D1F1021A08737FEF"
+                  },
+                  {
+                      "path":  "products.json",
+                      "sha256":  "BD351F28517C0FF300E7ACEB8A321A3CF680A08E331DD841EC3A44DA03956421"
+                  },
+                  {
+                      "path":  "css/style.css",
+                      "sha256":  "4E6C2F5D7D099D9550A452140D2EE89126FDEF878FE9345CFA2FAF1D29C07CE8"
+                  },
+                  {
+                      "path":  "test_tab_architecture.ps1",
+                      "sha256":  "EBB3D68D62782D63C08F4CEA87DE2212E9D2A9376D4F8D983807B1D7B6F43E2E"
+                  },
+                  {
+                      "path":  "test_e2e_simulation.ps1",
+                      "sha256":  "E23AFDCAF991553B547CEFF01F596330E4000C7612E12B03C26AEB3CDBE0B930"
+                  },
+                  {
+                      "path":  "js/admin.js",
+                      "sha256":  "FC722EED9770BF696C24A1F76ADCD2FE2F54F4D5D4069CB14A0A016867BA65A6"
+                  },
+                  {
+                      "path":  "js/app.js",
+                      "sha256":  "AC211ED8A30966AC201700557CA57D5CA600B51EC9753F4FB50445607152EA0C"
+                  },
+                  {
+                      "path":  "js/art-presets.js",
+                      "sha256":  "AAE9F97FBE41966A798D370FFFFC22345D99D8E64FB10ABADB1BCAA5A3857224"
+                  },
+                  {
+                      "path":  "js/calculator.js",
+                      "sha256":  "9FC484C2C90B269CCFB69B89E5224DA61AD62C1D7486F13D81A6EC9634A8FB66"
+                  },
+                  {
+                      "path":  "js/cart.js",
+                      "sha256":  "FE4E1F38165A4F8B41DAA6F535077D88285A3E99FD99D48C4E5B6BB760609073"
+                  },
+                  {
+                      "path":  "js/catalog-store.js",
+                      "sha256":  "0BE52A63AFA0F3F97E4670F6B09B2F12035A541C4A91A7E098F7E19813CAB9E6"
+                  },
+                  {
+                      "path":  "js/category-registry.js",
+                      "sha256":  "751B0115785A16592C25F1BD1FB3AD3AF263B909B1B585992FCBFB2D2799CF1A"
+                  },
+                  {
+                      "path":  "js/checkout.js",
+                      "sha256":  "57B46665926AEECB380025CE339C348F12E2BAB7D36E40D0E1820C7D1126C6E6"
+                  },
+                  {
+                      "path":  "js/config.js",
+                      "sha256":  "BBA22A1B3462ED67102464489E410731ADEB35565BDB26CA9F1E6141320ABD28"
+                  },
+                  {
+                      "path":  "js/image-uploader.js",
+                      "sha256":  "91122967CF9A7BAE072DFF201137B0B93403F0452B9597F68569AB6A7688C69D"
+                  },
+                  {
+                      "path":  "js/products-manager.js",
+                      "sha256":  "7481B2F2EC10DC446B00DA34EC26AA9A6B899FFC2DDF94CEE46E5E5CEA31F480"
+                  },
+                  {
+                      "path":  "js/purchase-config.js",
+                      "sha256":  "65ACCAC6A104F50C9D40C85DF536B6592ACC51B0F91F9A66AF394A6DD00E83B6"
+                  },
+                  {
+                      "path":  "js/viewer3d.js",
+                      "sha256":  "48325591158F33662F97BC9358C4D26FED666CAF21A79702B7904932151F2C48"
+                  },
+                  {
+                      "path":  "tests/test_audit_r2_verification.js",
+                      "sha256":  "F0805BC7FBFC43ABB1DB7527C65F45E51581A49713A97DACB8246C5C5BD3822E"
+                  },
+                  {
+                      "path":  "tests/test_audit_regressions.js",
+                      "sha256":  "E350F784FF44367DB785F421EC60D51B7950B7F29465D60C59B3577459BC95F2"
+                  },
+                  {
+                      "path":  "tests/test_behavior.js",
+                      "sha256":  "C96BB6A096DEEB4C18FA059120B49F1009C94CD0508349A6C490D7ECC4E5A1EB"
+                  }
+              ]
+}

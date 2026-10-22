@@ -1,0 +1,353 @@
+{
+  "timestamp": "2026-10-22T02:34:31.737Z",
+  "node": "v24.20.0",
+  "suites": [
+    {
+      "name": "audit-r2",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "tests/test_audit_r2_verification.js"
+      ],
+      "exitCode": 0,
+      "log": "audit-r2.log"
+    },
+    {
+      "name": "regressions",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "tests/test_audit_regressions.js"
+      ],
+      "exitCode": 0,
+      "log": "regressions.log"
+    },
+    {
+      "name": "behavior",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "tests/test_behavior.js"
+      ],
+      "exitCode": 0,
+      "log": "behavior.log"
+    },
+    {
+      "name": "tabs",
+      "command": [
+        "powershell.exe",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "test_tab_architecture.ps1"
+      ],
+      "exitCode": 0,
+      "log": "tabs.log"
+    },
+    {
+      "name": "static-simulation",
+      "command": [
+        "powershell.exe",
+        "-NoProfile",
+        "-ExecutionPolicy",
+        "Bypass",
+        "-File",
+        "test_e2e_simulation.ps1"
+      ],
+      "exitCode": 0,
+      "log": "static-simulation.log"
+    },
+    {
+      "name": "diagnostic-probe",
+      "command": [
+        "C:\\Program Files\\nodejs\\node.exe",
+        "reports/architecture-review-2026-10-21-r2/probe-handover.cjs"
+      ],
+      "exitCode": 0,
+      "log": "diagnostic-probe.log"
+    }
+  ],
+  "checks": [
+    {
+      "scope": "source",
+      "name": "quota failure reaches storage and retry retains ID with one draft",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "absent key accepts one draft",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "five corrupted storage forms preserved with zero writes",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "SecurityError read and write preserve context",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "lookup exact match returns only eight approved fields",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "invalid schema fixtures rejected",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "null resolver checkout does not invent recipient",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "null resolver tracker no-match branch has no recipient",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "compatibility CAD function never adds priced cart row",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "legacy CAD entries blocked in both cart and direct",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "CAD clipboard rejection exposes preview/manual copy and truthful status",
+      "status": "PASS"
+    },
+    {
+      "scope": "source",
+      "name": "artifact/source HTML free of Tailwind Play CDN runtime",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "quota failure reaches storage and retry retains ID with one draft",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "absent key accepts one draft",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "five corrupted storage forms preserved with zero writes",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "SecurityError read and write preserve context",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "lookup exact match returns only eight approved fields",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "invalid schema fixtures rejected",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "null resolver checkout does not invent recipient",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "null resolver tracker no-match branch has no recipient",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "compatibility CAD function never adds priced cart row",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "legacy CAD entries blocked in both cart and direct",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "CAD clipboard rejection exposes preview/manual copy and truthful status",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "artifact/source HTML free of Tailwind Play CDN runtime",
+      "status": "PASS"
+    },
+    {
+      "scope": "artifact",
+      "name": "SHA-256 manifest exactly covers all payload files",
+      "status": "PASS",
+      "detail": {
+        "payloadFiles": 168,
+        "manifestExcludedFromSelfHash": true
+      }
+    }
+  ],
+  "browser": {
+    "apps": [],
+    "browsers": [],
+    "status": "UNVERIFIED: CUA inventory has no connected surfaces"
+  },
+  "runnerEvidenceTimestamp": "2026-10-21T07:06:24.407Z",
+  "syntax": [
+    {
+      "file": "js/admin.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/app.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/art-presets.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/calculator.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/cart.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/catalog-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/category-registry.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/checkout.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/config.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/image-uploader.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/products-manager.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/purchase-config.js",
+      "exitCode": 0
+    },
+    {
+      "file": "js/viewer3d.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/admin.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/app.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/art-presets.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/calculator.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/cart.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/catalog-store.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/category-registry.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/checkout.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/config.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/image-uploader.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/products-manager.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/purchase-config.js",
+      "exitCode": 0
+    },
+    {
+      "file": "dist/js/viewer3d.js",
+      "exitCode": 0
+    }
+  ],
+  "colorMath": {
+    "scope": "Opaque color tokens only; not computed browser styles",
+    "charcoalOnOrange": 6.320457149949287,
+    "charcoalOnHoverAndActive": 5.009857494148445,
+    "darkOrangeOnLightCanvas": 4.661097627733546
+  },
+  "sourceSnapshot": {
+    "index.html": "d0d32a1a245f58bd151bb715d51e9409a1fc6f6bb10f7c4e1bf3ede0ad0c23ee",
+    "admin.html": "193241780411e14ec1219bc83ac10f4d723fb8dcd5293291cb21100ebbd806f6",
+    "README.md": "00ab7ea56097a8ca6366981a41bbc1d476821b2b9173cc4c2a42d89a369d6ab1",
+    "HANDOVER_R2.md": "ed89938dc2e7506eed10a5cfebd8f325eccb44543a4431e44e20e55612fd3073",
+    "CODEX_BRIDGE.md": "2470b0f37d946d52fe77bec4ccdab235eafff5f2219ffe4005dd04a48283216b",
+    "package.json": "d9f348aee7ac0f8dccc1f1c70e57687affc42ab43afd8ea9426d20e92f02d00d",
+    "tailwind.config.ts": "ff05f214f6f5fd3d43806bbc9909cb5ca96dbd9a1c94c4fbd5970a988440d229",
+    "scripts/build-static-artifact.js": "0e11afb008a99edfd56e652f37d9511669acc51befc14d6694c6e43f06fedbc1",
+    "tests/test_audit_r2_verification.js": "f0805bc7fbfc43abb1db7527c65f45e51581a49713a97dacb8246c5c5bd3822e",
+    "tests/test_audit_regressions.js": "e350f784ff44367db785f421ec60d51b7950b7f29465d60c59b3577459bc95f2",
+    "tests/test_behavior.js": "d3cbe0b4b2fee20223513da3408182654ab05feeb60965dda76776fbfed300c8",
+    "test_tab_architecture.ps1": "ebb3d68d62782d63c08f4cea87de2212e9d2a9376d4f8d983807b1d7b6f43e2e",
+    "test_e2e_simulation.ps1": "e23afdcaf991553b547ceff01f596330e4000c7612e12b03c26aeb3cdbe0b930",
+    "reports/architecture-review-2026-10-21-r2/probe-handover.cjs": "ad3fbb93c329ad9aa550a511410ee2136f61d25fe57e5be771e4c4d9ff09fa9c",
+    "js/admin.js": "af7eb8d09280925990d36dd8002a667aa56d60f76cdd7f65fd844e2e1a6d2761",
+    "js/app.js": "200f6be8e26d89bc0bff6ed4948f8163c2e47c6a6b23e32815957128d7a2d685",
+    "js/art-presets.js": "aae9f97fbe41966a798d370ffffc22345d99d8e64fb10abadb1bcaa5a3857224",
+    "js/calculator.js": "ca2593f9e3d92a2604a3d5db5f004a6210caeebdaef687fed2254ace9a1e298a",
+    "js/cart.js": "c293bd1acc457ebe89d8e023fe7e679ed3afa61ee1258aab0ac067f1a403b873",
+    "js/catalog-store.js": "0be52a63afa0f3f97e4670f6b09b2f12035a541c4a91a7e098f7e19813cab9e6",
+    "js/category-registry.js": "751b0115785a16592c25f1bd1fb3ad3af263b909b1b585992fcbfb2d2799cf1a",
+    "js/checkout.js": "333f7413c2696c3d7dc4eb2e2b7e617587516157686ab8ee6c3b6c19b05ac6a4",
+    "js/config.js": "51d4d09933f1091e9c703f3a1bd181700e3ae41d78184d4d2d584360308c32e3",
+    "js/gift-quiz.js": "0ffa5d74f0e9cbdcc9ab42ddf6ddccd47a70749de792ad4fcb651933f8efe2ab",
+    "js/image-uploader.js": "91122967cf9a7bae072dff201137b0b93403f0452b9597f68569ab6a7688c69d",
+    "js/order-engine.js": "ef0ea57359af1fd0ddf97d0a92e9ca23844d7efa6c12cc1cad37af6f71f72066",
+    "js/personalize-studio.js": "8a6a98c2d8b2d33632afc0f411126dadb5cda12d65479885b527cc6f84a906b8",
+    "js/products-manager.js": "2e8748a417dd92041f0e1d4eb1cf3b21fc4869269b74c58bb98bdad98e238243",
+    "js/purchase-config.js": "65accac6a104f50c9d40c85df536b6592acc51b0f91f9a66af394a6dd00e83b6",
+    "js/viewer3d.js": "520af0f9e82e7970a85519a0ea6f2b81fcf1e496381a73393546c9d16dbae8e2",
+    "js/visual-renderer.js": "dd47b3b865c4c88201743aca47aac710bc78e4a4bfc9fa58c1c47534aa556340",
+    "css/style.css": "15d2623fa3e940627026f885bae1751ffa7f8f7b6e5ee8fcc0b6e4fa6c818541",
+    "dist/artifact-manifest.json": "390b6bfac79c423bb1d8a3ff7f2c6df6a53f467fde0152efecfb3668320e6f54"
+  },
+  "expectedExitCode": 0
+}

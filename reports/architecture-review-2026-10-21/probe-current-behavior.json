@@ -1,0 +1,20 @@
+﻿{
+  "scope": "isolated VM; no browser execution or external messages",
+  "findings": {
+    "partialPhoneMatches": 1,
+    "customerNameMatches": 1,
+    "lookupReturnsRawAddress": true,
+    "totalMarkupReachesInnerHTML": true,
+    "quantityMarkupReachesInnerHTML": true,
+    "handoffReadyShownAsProducing": true,
+    "nullItemError": "TypeError: Cannot read properties of null (reading 'title')",
+    "objectPhoneError": "TypeError: rawPhone.slice is not a function",
+    "failedSaveDraftCount": 0,
+    "failedSaveContextState": "handoff_ready",
+    "failedSaveCartClears": 1,
+    "generatedZaloRecipient": "https://zalo.me/0968988647",
+    "expectedSyntheticZaloRecipient": "https://zalo.me/0900000000",
+    "whiteOnOrangeContrast": 3.1,
+    "charcoalOnOrangeContrast": 6.32
+  }
+}

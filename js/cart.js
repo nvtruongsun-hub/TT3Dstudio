@@ -19,6 +19,16 @@
     return num.toLocaleString('vi-VN') + ' đ';
   }
 
+  function escapeHtml(str) {
+    if (!str) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+  }
+
   /**
    * Tạo Line ID dạng tuple có cấu trúc an toàn
    */
@@ -64,6 +74,28 @@
     cart = [];
   }
 
+  function sanitizeImageUrl(url) {
+    if (!url || typeof url !== 'string') return 'assets/images/logo-premium-mark.svg';
+    const trimmed = url.trim();
+    if (trimmed.startsWith('javascript:')) return 'assets/images/logo-premium-mark.svg';
+    if (trimmed.startsWith('data:')) {
+      if (/^data:image\/(png|jpeg|jpg|webp|gif);base64,/i.test(trimmed)) {
+        return trimmed;
+      }
+      return 'assets/images/logo-premium-mark.svg';
+    }
+    if (
+      trimmed.startsWith('assets/') ||
+      trimmed.startsWith('https://') ||
+      trimmed.startsWith('http://') ||
+      trimmed.startsWith('./') ||
+      trimmed.startsWith('/')
+    ) {
+      return trimmed;
+    }
+    return 'assets/images/logo-premium-mark.svg';
+  }
+
   function saveCart() {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
@@ -74,25 +106,45 @@
   }
 
   /**
-   * Thêm sản phẩm vào giỏ với lineId có cấu trúc
+   * Thêm sản phẩm vào giỏ với lineId có cấu trúc và validation nghiêm ngặt (Codex R06)
    */
   function addToCart(item) {
+    if (!item || typeof item !== 'object') {
+      console.warn('[Cart] Bị từ chối: Dữ liệu sản phẩm không hợp lệ.');
+      return false;
+    }
+    if (typeof item.id !== 'string' || !item.id.trim()) {
+      console.warn('[Cart] Bị từ chối: ID sản phẩm không được rỗng.');
+      return false;
+    }
+    const qty = item.qty !== undefined ? item.qty : 1;
+    if (typeof qty !== 'number' || !Number.isInteger(qty) || !Number.isSafeInteger(qty) || qty < 1 || qty > 99) {
+      console.warn('[Cart] Bị từ chối: Số lượng phải là số nguyên safe integer từ 1 đến 99.');
+      return false;
+    }
+    const price = item.price;
+    if (typeof price !== 'number' || !Number.isInteger(price) || !Number.isSafeInteger(price) || price < 0) {
+      console.warn('[Cart] Bị từ chối: Giá sản phẩm phải là số nguyên safe integer không âm.');
+      return false;
+    }
+
     const cId = (item.color && item.color.id) || item.colorId || '';
     const mId = (item.material && item.material.id) || item.materialId || '';
-    const cText = item.customText || '';
+    const cText = (typeof item.customText === 'string') ? item.customText.trim().normalize('NFC').slice(0, 100) : '';
     const lineId = buildLineId(item.id, cId, mId, cText);
 
     const existingIndex = cart.findIndex(i => i.cartItemId === lineId);
     if (existingIndex > -1) {
-      cart[existingIndex].qty += (item.qty || 1);
+      const mergedQty = cart[existingIndex].qty + qty;
+      cart[existingIndex].qty = Math.min(99, mergedQty);
     } else {
       cart.push({
         cartItemId: lineId,
-        id: item.id || `prod-${Date.now()}`,
-        title: item.title,
-        price: item.price,
-        qty: Math.max(1, item.qty || 1),
-        image: item.image,
+        id: item.id.trim(),
+        title: String(item.title || 'Sản phẩm 3D').trim(),
+        price: price,
+        qty: qty,
+        image: sanitizeImageUrl(item.image),
         color: item.color || null,
         colorId: cId,
         colorName: (item.color && item.color.name) || item.colorName || '',
@@ -104,14 +156,17 @@
       });
     }
     saveCart();
+    return true;
   }
 
   function updateItemQty(cartItemId, delta) {
     const idx = cart.findIndex(i => i.cartItemId === cartItemId || i.id === cartItemId);
     if (idx > -1) {
-      cart[idx].qty += delta;
-      if (cart[idx].qty <= 0) {
+      const targetQty = cart[idx].qty + delta;
+      if (targetQty <= 0) {
         cart.splice(idx, 1);
+      } else {
+        cart[idx].qty = Math.min(99, targetQty);
       }
       saveCart();
     }
@@ -129,13 +184,24 @@
   }
 
   // Quản lý Drawer trượt
+  let cartPreviousActiveElement = null;
+
   function openCart() {
     const drawer = document.getElementById('cart-slide-drawer');
     const overlay = document.getElementById('cart-drawer-overlay');
+    if (typeof document !== 'undefined' && document.activeElement) {
+      cartPreviousActiveElement = document.activeElement;
+    }
     if (drawer && overlay) {
       overlay.classList.add('active');
       drawer.classList.add('active');
       document.body.style.overflow = 'hidden';
+      setTimeout(() => {
+        const closeBtn = document.getElementById('cart-drawer-close-btn');
+        if (closeBtn && typeof closeBtn.focus === 'function') {
+          try { closeBtn.focus(); } catch (_) {}
+        }
+      }, 50);
     }
   }
 
@@ -146,6 +212,10 @@
       drawer.classList.remove('active');
       overlay.classList.remove('active');
       document.body.style.overflow = '';
+      if (cartPreviousActiveElement && typeof cartPreviousActiveElement.focus === 'function') {
+        try { cartPreviousActiveElement.focus(); } catch (_) {}
+        cartPreviousActiveElement = null;
+      }
     }
   }
 
@@ -154,19 +224,18 @@
     const totalCount = cart.reduce((acc, i) => acc + i.qty, 0);
     const subtotalRaw = cart.reduce((acc, i) => acc + (i.price * i.qty), 0);
     
-    // Đồng bộ tính toán với TTCheckout
-    const totals = (window.TTCheckout && typeof window.TTCheckout.calculateOrderTotals === 'function')
-      ? window.TTCheckout.calculateOrderTotals(cart, currentDiscountPercent)
-      : {
-          subtotal: subtotalRaw,
-          discountedSubtotal: Math.max(0, subtotalRaw - Math.round(subtotalRaw * (currentDiscountPercent / 100))),
-          shippingFee: subtotalRaw >= FREESHIP_THRESHOLD ? 0 : 25000,
-          finalTotal: subtotalRaw
-        };
+    // Đồng bộ tính toán với TTCheckout (Codex R06)
+    let totals = null;
+    if (window.TTCheckout && typeof window.TTCheckout.calculateOrderTotals === 'function') {
+      totals = window.TTCheckout.calculateOrderTotals(cart, currentDiscountPercent);
+    }
+    if (!totals) {
+      console.warn('[Cart] TTCheckout chưa sẵn sàng.');
+    }
 
-    const subtotal = totals.subtotal;
-    const discountedTotal = totals.discountedSubtotal;
-    const grandTotal = totals.finalTotal;
+    const subtotal = totals ? totals.subtotal : subtotalRaw;
+    const discountedTotal = totals ? totals.discountedSubtotal : subtotalRaw;
+    const grandTotal = totals ? totals.finalTotal : subtotalRaw;
 
     // Cập nhật số đếm trên Header & Mobile Dock
     document.querySelectorAll('.cart-badge-count').forEach(badge => {
@@ -200,7 +269,7 @@
       }
     }
 
-    // Danh sách mặt hàng
+    // Danh sách mặt hàng - Render an toàn hoàn toàn bằng DOM (Codex R03)
     const listContainer = document.getElementById('cart-items-container');
     const emptyState = document.getElementById('cart-empty-state');
     const footerTray = document.getElementById('cart-drawer-footer');
@@ -215,52 +284,142 @@
       if (emptyState) emptyState.classList.add('hidden');
       if (footerTray) footerTray.classList.remove('hidden');
 
-      listContainer.innerHTML = cart.map(item => {
-        const lineKey = encodeURIComponent(item.cartItemId || item.id);
-        return `
-          <div class="p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex gap-3.5 relative group">
-            <img src="${item.image || 'assets/images/logo-premium-mark.svg'}" 
-                 alt="${item.title}" 
-                 class="w-16 h-16 rounded-xl object-cover bg-[var(--bg-surface)] shrink-0 border border-[var(--border-subtle)]"
-                 onerror="this.src='assets/images/logo-premium-mark.svg';">
-            
-            <div class="flex-1 min-w-0 pr-6">
-              <h4 class="text-xs font-bold text-primary-color truncate">${item.title}</h4>
-              
-              <div class="text-[11px] text-secondary-color mt-0.5 space-y-0.5">
-                ${item.colorName ? `<div>Màu: <strong class="text-primary-color">${item.colorName}</strong></div>` : ''}
-                ${item.materialName ? `<div>Vật liệu: <strong class="text-primary-color">${item.materialName}</strong></div>` : ''}
-                ${item.customText ? `<div class="text-[#FF5C00] truncate">Khắc tên: "${item.customText}"</div>` : ''}
-              </div>
+      listContainer.innerHTML = '';
+      cart.forEach(item => {
+        const lineKey = item.cartItemId || item.id;
 
-              <div class="flex items-center justify-between mt-2.5">
-                <div class="flex items-center border border-[var(--border-subtle)] rounded-lg bg-[var(--bg-surface)]">
-                  <button type="button" 
-                          onclick="window.TTCart.updateQty(decodeURIComponent('${lineKey}'), -1)" 
-                          class="px-2.5 py-0.5 text-xs text-secondary-color hover:text-primary-color transition-colors"
-                          aria-label="Giảm số lượng">-</button>
-                  <span class="px-2 py-0.5 text-xs font-mono font-bold text-primary-color">${item.qty}</span>
-                  <button type="button" 
-                          onclick="window.TTCart.updateQty(decodeURIComponent('${lineKey}'), 1)" 
-                          class="px-2.5 py-0.5 text-xs text-secondary-color hover:text-primary-color transition-colors"
-                          aria-label="Tăng số lượng">+</button>
-                </div>
-                <span class="text-xs font-extrabold text-[#FF5C00] font-mono">
-                  ${formatMoney(item.price * item.qty)}
-                </span>
-              </div>
-            </div>
+        const row = document.createElement('div');
+        row.className = 'p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex gap-3.5 relative group';
 
-            <button type="button" 
-                    onclick="window.TTCart.removeItem(decodeURIComponent('${lineKey}'))" 
-                    class="absolute top-3 right-3 p-1.5 text-secondary-color hover:text-red-500 transition-colors" 
-                    title="Xóa khỏi giỏ"
-                    aria-label="Xóa sản phẩm">
-              <i class="fa-solid fa-trash-can text-xs"></i>
-            </button>
-          </div>
-        `;
-      }).join('');
+        const img = document.createElement('img');
+        img.className = 'w-16 h-16 rounded-xl object-cover bg-[var(--bg-surface)] shrink-0 border border-[var(--border-subtle)]';
+        img.alt = item.title || 'Product';
+        img.onerror = function () {
+          this.onerror = null;
+          this.src = 'assets/images/logo-premium-mark.svg';
+        };
+        img.src = sanitizeImageUrl(item.image);
+        row.appendChild(img);
+
+        const body = document.createElement('div');
+        body.className = 'flex-1 min-w-0 pr-6';
+
+        const titleEl = document.createElement('h4');
+        titleEl.className = 'text-xs font-bold text-primary-color truncate';
+        titleEl.textContent = item.title || '';
+        body.appendChild(titleEl);
+
+        const metaEl = document.createElement('div');
+        metaEl.className = 'text-[11px] text-secondary-color mt-0.5 space-y-0.5';
+
+        if (item.colorName) {
+          const cDiv = document.createElement('div');
+          cDiv.appendChild(document.createTextNode('Màu: '));
+          const cStrong = document.createElement('strong');
+          cStrong.className = 'text-primary-color';
+          cStrong.textContent = item.colorName;
+          cDiv.appendChild(cStrong);
+          metaEl.appendChild(cDiv);
+        }
+
+        if (item.materialName) {
+          const mDiv = document.createElement('div');
+          mDiv.appendChild(document.createTextNode('Vật liệu: '));
+          const mStrong = document.createElement('strong');
+          mStrong.className = 'text-primary-color';
+          mStrong.textContent = item.materialName;
+          mDiv.appendChild(mStrong);
+          metaEl.appendChild(mDiv);
+        }
+
+        if (item.customText) {
+          const tDiv = document.createElement('div');
+          tDiv.className = 'text-[#FF5C00] truncate';
+          tDiv.textContent = `Khắc tên: "${item.customText}"`;
+          metaEl.appendChild(tDiv);
+        }
+
+        body.appendChild(metaEl);
+
+        const priceRow = document.createElement('div');
+        priceRow.className = 'flex items-center justify-between mt-2.5';
+
+        const counter = document.createElement('div');
+        counter.className = 'flex items-center border border-[var(--border-subtle)] rounded-lg bg-[var(--bg-surface)]';
+
+        const decBtn = document.createElement('button');
+        decBtn.type = 'button';
+        decBtn.dataset.action = 'cart-qty-dec';
+        decBtn.dataset.lineId = lineKey;
+        decBtn.className = 'px-2.5 py-0.5 text-xs text-secondary-color hover:text-primary-color transition-colors';
+        decBtn.setAttribute('aria-label', 'Giảm số lượng');
+        decBtn.textContent = '-';
+        counter.appendChild(decBtn);
+
+        const qtySpan = document.createElement('span');
+        qtySpan.className = 'px-2 py-0.5 text-xs font-mono font-bold text-primary-color';
+        qtySpan.textContent = String(item.qty);
+        counter.appendChild(qtySpan);
+
+        const incBtn = document.createElement('button');
+        incBtn.type = 'button';
+        incBtn.dataset.action = 'cart-qty-inc';
+        incBtn.dataset.lineId = lineKey;
+        incBtn.className = 'px-2.5 py-0.5 text-xs text-secondary-color hover:text-primary-color transition-colors';
+        incBtn.setAttribute('aria-label', 'Tăng số lượng');
+        incBtn.textContent = '+';
+        counter.appendChild(incBtn);
+
+        priceRow.appendChild(counter);
+
+        const totalSpan = document.createElement('span');
+        totalSpan.className = 'text-xs font-extrabold text-[#FF5C00] font-mono';
+        totalSpan.textContent = formatMoney(item.price * item.qty);
+        priceRow.appendChild(totalSpan);
+
+        body.appendChild(priceRow);
+        row.appendChild(body);
+
+        const removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.dataset.action = 'cart-item-remove';
+        removeBtn.dataset.lineId = lineKey;
+        removeBtn.className = 'absolute top-3 right-3 p-1.5 text-secondary-color hover:text-red-500 transition-colors';
+        removeBtn.title = 'Xóa khỏi giỏ';
+        removeBtn.setAttribute('aria-label', 'Xóa sản phẩm');
+        const trashIcon = document.createElement('i');
+        trashIcon.className = 'fa-solid fa-trash-can text-xs';
+        removeBtn.appendChild(trashIcon);
+
+        row.appendChild(removeBtn);
+
+        listContainer.appendChild(row);
+      });
+
+      // Event delegation an toàn cho giỏ hàng (Codex R01)
+      if (!listContainer._hasCartDelegation) {
+        listContainer.addEventListener('click', (e) => {
+          const decBtn = e.target.closest('[data-action="cart-qty-dec"]');
+          if (decBtn) {
+            const lId = decBtn.dataset.lineId || '';
+            if (lId) updateItemQty(lId, -1);
+            return;
+          }
+          const incBtn = e.target.closest('[data-action="cart-qty-inc"]');
+          if (incBtn) {
+            const lId = incBtn.dataset.lineId || '';
+            if (lId) updateItemQty(lId, 1);
+            return;
+          }
+          const removeBtn = e.target.closest('[data-action="cart-item-remove"]');
+          if (removeBtn) {
+            const lId = removeBtn.dataset.lineId || '';
+            if (lId) removeCartItem(lId);
+            return;
+          }
+        });
+        listContainer._hasCartDelegation = true;
+      }
 
       // Tổng tiền
       const subtotalEl = document.getElementById('cart-subtotal-val');
@@ -321,6 +480,55 @@
     const btnCheckout = document.getElementById('cart-checkout-direct-btn');
     if (btnCheckout) {
       btnCheckout.addEventListener('click', triggerCheckout);
+    }
+
+    // Đóng giỏ hàng bằng phím Escape (Codex B07)
+    const addKeydown = (typeof window !== 'undefined' && typeof window.addEventListener === 'function')
+      ? window.addEventListener.bind(window)
+      : (typeof document !== 'undefined' && typeof document.addEventListener === 'function')
+        ? document.addEventListener.bind(document)
+        : null;
+
+    if (addKeydown) {
+      addKeydown('keydown', (e) => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+          const drawerEl = document.getElementById('cart-slide-drawer');
+          if (drawerEl && drawerEl.classList.contains('active')) {
+            closeCart();
+          }
+        }
+      });
+    }
+
+    // Cô lập Tab focus trong giỏ hàng khi mở
+    const slideDrawer = document.getElementById('cart-slide-drawer');
+    if (slideDrawer) {
+      slideDrawer.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const selectors = [
+          'button:not([disabled]):not([aria-hidden="true"])',
+          '[href]:not([aria-disabled="true"]):not([aria-hidden="true"])',
+          'input:not([disabled]):not([aria-hidden="true"])',
+          '[tabindex]:not([tabindex="-1"]):not([aria-hidden="true"])'
+        ];
+        const focusables = Array.from(slideDrawer.querySelectorAll(selectors.join(','))).filter(el => {
+          return el.offsetParent !== null || (typeof el.offsetWidth === 'number' && el.offsetWidth > 0) || (typeof el.offsetHeight === 'number' && el.offsetHeight > 0);
+        });
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first || !slideDrawer.contains(document.activeElement)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || !slideDrawer.contains(document.activeElement)) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      });
     }
 
     renderCartUI();

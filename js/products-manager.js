@@ -7,8 +7,8 @@
 (function (window) {
   'use strict';
 
-  // 1. SHARED CATEGORY REGISTRY
-  const CATEGORY_REGISTRY = {
+  // 1. SHARED CATEGORY REGISTRY (Linked to Central Registry - Codex R10)
+  const DEFAULT_CATEGORY_METADATA = {
     Trang_Diem_Vanity: {
       id: 'Trang_Diem_Vanity',
       shortName: 'Trang Điểm & Nơ Lụa',
@@ -51,6 +51,20 @@
     }
   };
 
+  function getCategoryRegistry() {
+    const central = (window.TTCatalogStore && window.TTCatalogStore.CATEGORY_REGISTRY) || window.TTCategoryRegistry;
+    if (central && typeof central === 'object') {
+      const merged = { ...DEFAULT_CATEGORY_METADATA };
+      Object.keys(central).forEach(k => {
+        merged[k] = { ...(DEFAULT_CATEGORY_METADATA[k] || {}), ...central[k] };
+      });
+      return merged;
+    }
+    return DEFAULT_CATEGORY_METADATA;
+  }
+
+  const CATEGORY_REGISTRY = getCategoryRegistry();
+
   let currentCategoryFilter = 'all';
   let currentSearchKeyword = '';
   window.cardSelectedColors = window.cardSelectedColors || {};
@@ -72,24 +86,38 @@
   }
 
   function isValidHex(hex) {
-    return typeof hex === 'string' && /^#[0-9A-Fa-f]{3,8}$/.test(hex.trim());
+    return typeof hex === 'string' && /^#([0-9A-Fa-f]{3}|[0-9A-Fa-f]{4}|[0-9A-Fa-f]{6}|[0-9A-Fa-f]{8})$/.test(hex.trim());
   }
 
   function sanitizeImageUrl(url) {
     if (!url || typeof url !== 'string') return 'assets/images/logo-premium-mark.svg';
     const trimmed = url.trim();
     if (trimmed.startsWith('javascript:')) return 'assets/images/logo-premium-mark.svg';
+    // Chặn SVG data URL (nguy cơ XSS payload), chỉ nhận raster images
+    if (trimmed.startsWith('data:')) {
+      if (/^data:image\/(png|jpeg|jpg|webp|gif);base64,/i.test(trimmed)) {
+        return trimmed;
+      }
+      return 'assets/images/logo-premium-mark.svg';
+    }
     if (
-      trimmed.startsWith('data:image/') ||
       trimmed.startsWith('assets/') ||
       trimmed.startsWith('https://') ||
       trimmed.startsWith('http://') ||
       trimmed.startsWith('./') ||
       trimmed.startsWith('/')
     ) {
-      return escapeHTML(trimmed);
+      return trimmed;
     }
     return 'assets/images/logo-premium-mark.svg';
+  }
+
+  const MODEL_REGISTRY = new Set(['nfc_wifi', 'pleated_vase', 'soft_lamp', 'desk_dock', 'pegboard', 'monogram']);
+
+  function isSupported3DModel(modelKey) {
+    if (!modelKey || typeof modelKey !== 'string') return false;
+    const reg = window.TT_3D_MODEL_REGISTRY || MODEL_REGISTRY;
+    return reg.has(modelKey.trim());
   }
 
   function removeVietnameseDiacritics(str) {
@@ -101,6 +129,15 @@
       .replace(/Đ/g, 'D')
       .toLowerCase()
       .trim();
+  }
+
+  /**
+   * Trích xuất tên ngắn gọn, dễ nhớ (Rebuild Spec F05)
+   * Loại bỏ tên tiếng Anh trong ngoặc và mã Model ID #MW-XXXXXX khỏi tiêu đề bán hàng
+   */
+  function getCleanTitle(rawTitle) {
+    if (!rawTitle) return '';
+    return String(rawTitle).replace(/\s*\([^)]*\)/g, '').replace(/#MW-\d+/g, '').trim();
   }
 
   function getStoredProducts() {
@@ -152,42 +189,42 @@
     const currentSwatchId = window.cardSelectedColors[item.id] || swatches[0].id;
     const currentSwatch = swatches.find(s => s.id === currentSwatchId) || swatches[0];
 
-    const specLine = item.specLine || (item.specs ? `📐 ${item.specs.dimensions || 'Chuẩn Xưởng'} • ${item.specs.weight || item.specs.material || 'Bio-PLA'}` : '📐 Tiêu chuẩn xưởng • Bio-PLA');
+    const cleanTitle = getCleanTitle(item.title);
+    const sp = item.specs || {};
+    const specLine = item.specLine || (sp.dimensions ? `📐 ${sp.dimensions} • ${sp.material || 'Bio-PLA'}` : '🌱 Nhựa Bio-PLA • 0.16mm');
 
-    const has3D = Boolean(item.modelKey && String(item.modelKey).trim() !== '');
+    const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
 
     return `
       <article class="studio-product-card group cursor-pointer" data-product-id="${escapeHTML(item.id)}">
-        <!-- Image Box with hover zoom & subtle 3D launcher -->
-        <div class="product-image-box">
+        <!-- Clean Product Visual Frame -->
+        <div class="product-image-box relative overflow-hidden group">
           <img src="${safeImage}" 
                width="600" 
                height="600" 
                loading="lazy" 
                decoding="async" 
-               alt="${escapeHTML(item.imageAlt || item.title)}" 
+               alt="${escapeHTML(item.imageAlt || cleanTitle)}" 
                id="img-${escapeHTML(item.id)}"
+               class="studio-crisp-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
           
-          <!-- Frosted micro badge (top-left) -->
+          <!-- Subtle clean badge (if item has special badge) -->
           ${item.badge ? `
-            <span class="card-micro-badge">
-              ${escapeHTML(item.badge)}
-            </span>
-          ` : ''}
-
-          <!-- 3D Launcher Pill (top-right, only if modelKey is valid) -->
-          ${has3D ? `
-            <button type="button" 
-                    class="card-3d-launcher" 
-                    data-action="open-3d"
-                    data-product-id="${escapeHTML(item.id)}"
-                    title="Soi 3D tương tác 360°" 
-                    aria-label="Soi 3D ${escapeHTML(item.title)}">
-              <i class="fa-solid fa-cube text-xs pointer-events-none"></i>
-              <span class="pointer-events-none">Soi 3D</span>
-            </button>
-          ` : ''}
+            <div class="absolute top-2.5 left-2.5 pointer-events-none z-10">
+              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white/95 backdrop-blur-md text-[#20231F] border border-[#DCDDD5] shadow-sm flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"></span>
+                <span>${escapeHTML(item.badge)}</span>
+              </span>
+            </div>
+          ` : (isNFC ? `
+            <div class="absolute top-2.5 left-2.5 pointer-events-none z-10">
+              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white/95 backdrop-blur-md text-purple-700 border border-purple-200 shadow-sm flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+                <span>Chip NFC 1-Chạm</span>
+              </span>
+            </div>
+          ` : '')}
         </div>
 
         <!-- Card Content Body -->
@@ -195,7 +232,7 @@
           <div class="space-y-2">
             
             <!-- Color Swatches Row (Interactive) -->
-            <div class="flex items-center justify-between" onclick="event.stopPropagation()">
+            <div class="flex items-center justify-between">
               <div class="swatch-group">
                 ${swatches.map((c) => {
                   const safeHex = isValidHex(c.hex) ? c.hex : '#26282B';
@@ -208,7 +245,8 @@
                             data-action="swatch-select"
                             data-product-id="${escapeHTML(item.id)}"
                             data-swatch-id="${escapeHTML(c.id)}"
-                            data-swatch-name="${escapeHTML(c.name)}"></button>
+                            data-swatch-name="${escapeHTML(c.name)}"
+                            aria-label="Chọn màu ${escapeHTML(c.name)}"></button>
                   `;
                 }).join('')}
               </div>
@@ -217,9 +255,9 @@
               </span>
             </div>
 
-            <!-- Product Title -->
-            <h3 class="text-xs sm:text-sm font-bold text-primary-color line-clamp-1 group-hover:text-[#FF5C00] transition-colors">
-              ${escapeHTML(item.title)}
+            <!-- Product Title (Clean, short, readable) -->
+            <h3 class="text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-1 group-hover:text-[#FF5C00] transition-colors" title="${escapeHTML(cleanTitle)}">
+              ${escapeHTML(cleanTitle)}
             </h3>
 
             <!-- 1-Line Headline Benefit -->
@@ -227,25 +265,25 @@
               ${escapeHTML(item.headlineBenefit || item.desc || '')}
             </p>
 
-            <!-- Technical Spec Line (JetBrains Mono) -->
-            <div class="text-[10px] sm:text-[11px] font-mono text-muted pt-1 truncate">
+            <!-- Clean Spec Line -->
+            <div class="text-[10px] sm:text-[11px] font-mono text-muted pt-0.5 truncate">
               ${escapeHTML(specLine)}
             </div>
           </div>
 
-          <!-- Price & Single CTA Button Row -->
+          <!-- Price & Action Button Row -->
           <div class="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between gap-2 mt-auto">
             <div>
               <div class="price-display leading-none text-xs sm:text-sm font-bold font-mono text-[#FF5C00]">${priceFormatted}</div>
               ${originalPriceFormatted ? `<div class="text-[10px] sm:text-[11px] text-muted line-through mt-0.5">${originalPriceFormatted}</div>` : ''}
             </div>
 
-            <!-- Single Add to Cart Action -->
+            <!-- Quick Add to Cart Button -->
             <button type="button" 
                     class="btn-primary text-[11px] sm:text-xs !py-2 !px-3 sm:!px-4 shrink-0" 
                     data-action="quick-add-cart"
                     data-product-id="${escapeHTML(item.id)}"
-                    title="Thêm ngay vào giỏ hàng">
+                    title="Thêm vào giỏ">
               <i class="fa-solid fa-bag-shopping text-xs pointer-events-none"></i>
               <span class="pointer-events-none">Thêm vào giỏ</span>
             </button>
@@ -261,16 +299,12 @@
     const safeImage = sanitizeImageUrl(item.image);
     const priceFormatted = formatMoney(item.price);
     const originalPriceFormatted = item.originalPrice ? formatMoney(item.originalPrice) : '';
-    const has3D = Boolean(item.modelKey && String(item.modelKey).trim() !== '');
-
-    const roundedScore = Math.round(item.selectionScore || 92);
-    const printStats = (item.prints ? item.prints.toLocaleString('vi-VN') + ' lượt in' : '') +
-                       (item.downloads ? ' • ' + item.downloads.toLocaleString('vi-VN') + ' lượt tải' : '');
+    const cleanTitle = getCleanTitle(item.title);
 
     const sp = item.specs || {};
     const specTags = [
-      sp.dimensions ? `📐 ${sp.dimensions}` : '📐 Chuẩn Xưởng',
-      sp.weight ? `⚖️ ${sp.weight}` : '⚖️ Chuẩn Trọng Lượng',
+      sp.dimensions ? `📐 ${sp.dimensions}` : '📐 Kích thước chuẩn',
+      sp.weight ? `⚖️ ${sp.weight}` : '⚖️ Nhẹ bền',
       item.materialRecommendation ? `🌱 ${item.materialRecommendation}` : '🌱 Bio-PLA Cao Cấp'
     ];
 
@@ -280,47 +314,22 @@
           
           <!-- Left Packshot Image (Desktop 5 cols) -->
           <div class="lg:col-span-5 relative">
-            <div class="hero-spotlight-image-box cursor-pointer" data-action="open-detail" data-product-id="${escapeHTML(item.id)}">
+            <div class="hero-spotlight-image-box cursor-pointer relative overflow-hidden group rounded-2xl border border-[var(--border-subtle)]" data-action="open-detail" data-product-id="${escapeHTML(item.id)}">
               <img src="${safeImage}" 
-                   alt="${escapeHTML(item.imageAlt || item.title)}" 
+                   alt="${escapeHTML(item.imageAlt || cleanTitle)}" 
                    width="700" 
                    height="700" 
                    loading="lazy" 
-                   class="w-full h-full object-cover"
+                   class="studio-crisp-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                    onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
 
-              <!-- Badge Curation Score Top Left -->
-              <div class="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
-                <span class="hero-score-badge">
-                  <i class="fa-solid fa-star text-xs"></i>
-                  <span>${roundedScore}/100 Điểm tuyển chọn</span>
+              <!-- Subtle clean badge -->
+              <div class="absolute top-3 left-3 z-10 pointer-events-none">
+                <span class="px-3 py-1 rounded-full text-xs font-bold bg-white/95 backdrop-blur-md text-[#20231F] border border-[#DCDDD5] shadow-sm flex items-center gap-1.5">
+                  <span class="w-2 h-2 rounded-full bg-[#FF5C00]"></span>
+                  <span>${escapeHTML(categoryMeta ? categoryMeta.shortName : '✦ Nổi Bật')}</span>
                 </span>
-                ${item.badge ? `
-                  <span class="card-micro-badge !relative !top-0 !left-0">
-                    ${escapeHTML(item.badge)}
-                  </span>
-                ` : ''}
               </div>
-
-              <!-- 3D Launcher Button Top Right -->
-              ${has3D ? `
-                <button type="button" 
-                        class="card-3d-launcher" 
-                        data-action="open-3d"
-                        data-product-id="${escapeHTML(item.id)}"
-                        title="Soi 3D 360°">
-                  <i class="fa-solid fa-cube text-xs pointer-events-none"></i>
-                  <span class="pointer-events-none">Soi 3D 360°</span>
-                </button>
-              ` : ''}
-
-              <!-- Bottom Stats Gradient Bar -->
-              ${printStats ? `
-                <div class="absolute bottom-3 left-3 right-3 p-2.5 rounded-xl bg-[rgba(11,12,14,0.85)] border border-white/10 backdrop-blur-md text-[11px] font-mono text-slate-300 flex items-center justify-between">
-                  <span>✦ Thống kê MakerWorld</span>
-                  <span class="text-[#FF5C00] font-bold">${escapeHTML(printStats)}</span>
-                </div>
-              ` : ''}
             </div>
           </div>
 
@@ -330,16 +339,15 @@
             <div class="space-y-3">
               <!-- Category Micro Tagline -->
               <div class="flex items-center gap-2">
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[#FF5C00]">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-orange-50 border border-orange-200 text-[#C44800]">
                   <i class="fa-solid ${categoryMeta ? categoryMeta.icon : 'fa-sparkles'} text-xs"></i>
-                  <span>${escapeHTML(categoryMeta ? categoryMeta.badgeText : '✦ Spotlight Hero')}</span>
+                  <span>${escapeHTML(categoryMeta ? categoryMeta.badgeText : '✦ Spotlight')}</span>
                 </span>
-                <span class="text-xs font-mono text-muted">Model ID #${escapeHTML(item.modelId || item.id)}</span>
               </div>
 
               <!-- Title -->
-              <h3 class="text-lg sm:text-2xl font-extrabold text-primary-color leading-tight hover:text-[#FF5C00] transition-colors cursor-pointer" data-action="open-detail" data-product-id="${escapeHTML(item.id)}">
-                ${escapeHTML(item.title)}
+              <h3 class="text-lg sm:text-2xl font-extrabold font-display text-primary-color leading-tight hover:text-[#FF5C00] transition-colors cursor-pointer" data-action="open-detail" data-product-id="${escapeHTML(item.id)}">
+                ${escapeHTML(cleanTitle)}
               </h3>
 
               <!-- Headline Benefit -->
@@ -347,48 +355,45 @@
                 ${escapeHTML(item.headlineBenefit || item.desc || '')}
               </p>
 
-              <!-- Technical Specs Row -->
-              <div class="flex flex-wrap items-center gap-2 pt-1">
+              <!-- Spec Chips -->
+              <div class="flex flex-wrap gap-2 pt-1">
                 ${specTags.map(tag => `
-                  <span class="px-2.5 py-1 rounded-lg bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] font-mono text-[11px] text-secondary-color">
+                  <span class="px-2.5 py-1 rounded-lg text-xs font-mono font-medium bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-secondary-color">
                     ${escapeHTML(tag)}
                   </span>
                 `).join('')}
               </div>
             </div>
 
-            <!-- Price & Action Buttons Row -->
-            <div class="pt-4 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-4 mt-auto">
+            <!-- Price & Actions Row -->
+            <div class="pt-4 border-t border-[var(--border-subtle)] flex flex-wrap items-center justify-between gap-3">
               <div>
-                <div class="text-[11px] uppercase tracking-wider text-muted font-mono font-medium">Giá hoàn thiện xưởng</div>
-                <div class="text-xl sm:text-2xl font-extrabold font-mono text-[#FF5C00] leading-none mt-1">
-                  ${priceFormatted}
+                <span class="text-[11px] text-secondary-color block font-mono">Đơn giá hoàn thiện:</span>
+                <div class="flex items-baseline gap-2">
+                  <span class="text-xl sm:text-2xl font-black font-mono text-[#FF5C00]">${priceFormatted}</span>
+                  ${originalPriceFormatted ? `<span class="text-xs font-mono text-muted line-through">${originalPriceFormatted}</span>` : ''}
                 </div>
-                ${originalPriceFormatted ? `<div class="text-xs text-muted line-through mt-1">${originalPriceFormatted}</div>` : ''}
               </div>
 
-              <!-- Action CTAs -->
-              <div class="flex flex-wrap items-center gap-3">
+              <div class="flex items-center gap-2.5">
                 <button type="button" 
-                        class="btn-primary text-xs sm:text-sm !py-2.5 !px-5" 
-                        data-action="hero-buy-now"
+                        class="btn-secondary text-xs !py-2.5 !px-4" 
+                        data-action="open-detail" 
                         data-product-id="${escapeHTML(item.id)}">
-                  <i class="fa-solid fa-bolt pointer-events-none"></i>
-                  <span class="pointer-events-none">Đặt Hàng Ngay</span>
+                  <span>Xem Chi Tiết</span>
                 </button>
 
                 <button type="button" 
-                        class="btn-secondary text-xs sm:text-sm !py-2.5 !px-4" 
-                        data-action="hero-add-cart"
+                        class="btn-primary text-xs !py-2.5 !px-5 shadow-sm" 
+                        data-action="quick-add-cart" 
                         data-product-id="${escapeHTML(item.id)}">
-                  <i class="fa-solid fa-bag-shopping pointer-events-none text-secondary-color"></i>
+                  <i class="fa-solid fa-bag-shopping mr-1.5 pointer-events-none"></i>
                   <span class="pointer-events-none">Thêm Vào Giỏ</span>
                 </button>
               </div>
             </div>
 
           </div>
-
         </div>
       </div>
     `;
@@ -712,46 +717,48 @@
   window.quickAddToCart = function (prodId) {
     const products = getStoredProducts();
     const item = products.find(p => p.id === prodId);
-    if (!item) return;
+    if (!item || item.status !== 'active') return;
 
-    const cardPreSelectedColorId = window.cardSelectedColors ? window.cardSelectedColors[prodId] : null;
-    let selectedColor = null;
-    if (Array.isArray(item.colors) && item.colors.length > 0) {
-      if (cardPreSelectedColorId) {
-        selectedColor = item.colors.find(c => c.id === cardPreSelectedColorId) || item.colors[0];
-      } else {
-        selectedColor = item.colors[0];
+    // Nếu sản phẩm yêu cầu cá nhân hóa: mở modal để người dùng nhập thông tin
+    if (item.type === 'monogram' || (item.specs && item.specs.requireCustomText)) {
+      window.openProductDetailModal(prodId);
+      if (window.showToast) {
+        window.showToast('Vui lòng chọn cấu hình và nhập nội dung cá nhân hóa.');
       }
-    } else {
-      selectedColor = { id: 'default', name: 'Tiêu chuẩn', hex: '#26282B' };
+      return;
     }
 
-    const defaultMat = (item.materials && item.materials[0]) || { id: 'pla_matte', name: 'PLA Matte', label: 'PLA Matte', priceModifier: 0 };
+    const cardPreSelectedColorId = window.cardSelectedColors ? window.cardSelectedColors[prodId] : null;
+    let line = null;
+    if (window.TTPurchaseConfig && typeof window.TTPurchaseConfig.buildConfiguredLine === 'function') {
+      try {
+        line = window.TTPurchaseConfig.buildConfiguredLine(prodId, {
+          colorId: cardPreSelectedColorId,
+          materialId: (item.materials && item.materials[0]) ? item.materials[0].id : null,
+          qty: 1
+        });
+      } catch (err) {
+        window.openProductDetailModal(prodId);
+        return;
+      }
+    } else {
+      console.warn('[ProductsManager] TTPurchaseConfig chưa sẵn sàng.');
+      window.openProductDetailModal(prodId);
+      return;
+    }
 
     if (window.TTCart && typeof window.TTCart.addToCart === 'function') {
-      window.TTCart.addToCart({
-        id: item.id,
-        title: item.title,
-        price: item.price + (defaultMat.priceModifier || 0),
-        qty: 1,
-        image: item.image,
-        color: selectedColor,
-        colorId: selectedColor.id,
-        colorName: selectedColor.name,
-        material: defaultMat,
-        materialId: defaultMat.id,
-        materialName: defaultMat.label || defaultMat.name,
-        customText: null,
-        category: item.category
-      });
+      window.TTCart.addToCart(line);
       window.TTCart.openCart();
       if (window.showToast) {
-        window.showToast(`Đã thêm "${item.title}" (${selectedColor.name}) vào giỏ hàng!`);
+        window.showToast(`Đã thêm "${item.title}" (${line.colorName}) vào giỏ hàng!`);
       }
     }
   };
 
   // 7. PRODUCT DETAIL MODAL CONTROLLER
+  let productModalPreviousActiveElement = null;
+
   window.openProductDetailModal = function (prodId) {
     const products = getStoredProducts();
     const item = products.find(p => p.id === prodId);
@@ -759,6 +766,10 @@
 
     const modal = document.getElementById('order-modal');
     if (!modal) return;
+
+    if (typeof document !== 'undefined' && document.activeElement) {
+      productModalPreviousActiveElement = document.activeElement;
+    }
 
     window.modalActiveProduct = item;
     window.modalQty = 1;
@@ -792,17 +803,69 @@
     const customInput = document.getElementById('order-custom-text-input');
     const customCount = document.getElementById('order-custom-text-count');
     const qtyVal = document.getElementById('modal-qty-val');
-    const btnModal3D = document.getElementById('btn-modal-open-3d');
+    const btnModal3D = document.getElementById('order-modal-3d-btn') || document.getElementById('btn-modal-open-3d');
 
     if (imgEl) {
       imgEl.src = sanitizeImageUrl(item.image);
-      imgEl.onerror = () => { imgEl.src = 'assets/images/logo-premium-mark.svg'; };
+      imgEl.onerror = function () {
+        this.onerror = null;
+        this.src = 'assets/images/logo-premium-mark.svg';
+      };
     }
     if (badgeEl) {
       badgeEl.textContent = item.badge || '✦ Studio Craft';
     }
-    if (titleEl) titleEl.textContent = item.title;
+
+    // Tầng 2: Điền thông số CAD HUD tiếng Việt sắc nét cho Modal
+    const techData = (typeof window !== 'undefined' && window.TT3DVisualRenderer && window.TT3DVisualRenderer.getTechData)
+      ? window.TT3DVisualRenderer.getTechData(item.category)
+      : { badge: '⚡ CHIP NTAG215 ĐÚC CHÌM', dimensionText: '├── 120.0 mm ──┤', layerHeight: '0.16MM BAMBU LAB' };
+
+    const hudBadge = document.getElementById('order-hud-badge-text');
+    if (hudBadge) hudBadge.textContent = techData.badge;
+
+    const hudRulerDim = document.getElementById('order-hud-ruler-dim');
+    if (hudRulerDim) hudRulerDim.textContent = techData.dimensionText;
+
+    const hudRulerLayer = document.getElementById('order-hud-ruler-layer');
+    if (hudRulerLayer) hudRulerLayer.textContent = `LỚP IN: ${techData.layerHeight}`;
+
+    // Khởi tạo chế độ xem mặc định Studio
+    if (typeof window.setModalImageViewMode === 'function') {
+      window.setModalImageViewMode('studio');
+    }
+
+    // Kích hoạt kính lúp soi chi tiết vân in 0.16mm (Retina Macro Loupe)
+    const frameEl = document.getElementById('modal-visual-frame');
+    if (frameEl && imgEl && window.TT3DVisualRenderer && typeof window.TT3DVisualRenderer.attachMacroLoupe === 'function') {
+      window.TT3DVisualRenderer.attachMacroLoupe(frameEl, imgEl);
+    }
+
+    if (titleEl) titleEl.textContent = getCleanTitle(item.title);
     if (descEl) descEl.textContent = item.desc || item.headlineBenefit || '';
+
+    // Per-SKU Option Schema (Audited Standard F15: Tùy chọn riêng theo từng sản phẩm)
+    const customContainer = document.getElementById('order-custom-text-container') || (customInput ? customInput.closest('.space-y-1\\.5') : null);
+    const customLabel = document.getElementById('order-custom-text-label');
+
+    const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi') || item.title.toLowerCase().includes('qr'))));
+    const isCustomText = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'monogram' || (item.title && (item.title.includes('Biển số') || item.title.includes('Biển tên') || item.title.includes('Logo') || item.title.includes('tùy biến') || item.title.includes('Khắc'))));
+
+    if (customContainer) {
+      if (isNFC) {
+        customContainer.classList.remove('hidden');
+        if (customLabel) customLabel.innerHTML = '<i class="fa-solid fa-wifi text-[#FF5C00]"></i><span>Cài đặt chip NFC 1-chạm (WiFi / Link quán / Trang cá nhân):</span>';
+        if (customInput) customInput.placeholder = 'Ví dụ: WiFi: T&T Coffee / Pass: 88888888 hoặc https://menu.quan.vn';
+      } else if (isCustomText) {
+        customContainer.classList.remove('hidden');
+        if (customLabel) customLabel.innerHTML = '<i class="fa-solid fa-pen-nib text-[#FF5C00]"></i><span>Nội dung chữ / Số điện thoại khắc lên sản phẩm:</span>';
+        if (customInput) customInput.placeholder = 'Ví dụ: Số ĐT 0986xxxxxx hoặc Tên "Quân & Trang"';
+      } else {
+        // Không hỗ trợ cá nhân hóa -> Ẩn hoàn toàn trường này (Khay trang sức, bình hoa, đèn...) (Fix F15)
+        customContainer.classList.add('hidden');
+      }
+    }
+
     if (customInput) {
       customInput.value = '';
       customInput.oninput = () => {
@@ -812,16 +875,22 @@
     if (customCount) customCount.textContent = '0/100';
     if (qtyVal) qtyVal.textContent = '1';
 
-    // Show or hide Modal 3D Viewer button based on modelKey
+    // Show or hide Modal 3D Viewer button based on modelRegistry (Codex Section 5.4 F01)
+    const hasValidModel = isSupported3DModel(item.modelKey);
+
     if (btnModal3D) {
-      if (item.modelKey && String(item.modelKey).trim() !== '') {
+      if (hasValidModel) {
+        btnModal3D.hidden = false;
+        btnModal3D.disabled = false;
         btnModal3D.classList.remove('hidden');
       } else {
+        btnModal3D.hidden = true;
+        btnModal3D.disabled = true;
         btnModal3D.classList.add('hidden');
       }
     }
 
-    // Technical Specs Grid
+    // Technical Specs Grid (Safe markup)
     if (specsEl) {
       const sp = item.specs || {};
       const specsList = [
@@ -835,95 +904,246 @@
         specsList.push({ label: 'Chip NFC', val: sp.nfc, isAccent: true });
       }
 
-      specsEl.innerHTML = specsList.map(s => `
-        <div class="space-y-0.5">
-          <dt class="text-[11px] uppercase tracking-wider text-secondary-color font-medium">${escapeHTML(s.label)}</dt>
-          <dd class="font-mono font-semibold ${s.isAccent ? 'text-[#FF5C00]' : 'text-primary-color'} truncate">${escapeHTML(s.val)}</dd>
-        </div>
-      `).join('');
+      specsEl.innerHTML = '';
+      specsList.forEach(s => {
+        const wrap = document.createElement('div');
+        wrap.className = 'space-y-0.5';
+
+        const dt = document.createElement('dt');
+        dt.className = 'text-[11px] uppercase tracking-wider text-secondary-color font-medium';
+        dt.textContent = s.label;
+
+        const dd = document.createElement('dd');
+        dd.className = `font-mono font-semibold ${s.isAccent ? 'text-[#FF5C00]' : 'text-primary-color'} truncate`;
+        dd.textContent = s.val;
+
+        wrap.appendChild(dt);
+        wrap.appendChild(dd);
+        specsEl.appendChild(wrap);
+      });
     }
 
-    // Swatches in Modal
+    // Swatches in Modal (Dùng createElement & textContent, loại bỏ inline onclick XSS - Codex F07)
     if (swatchesEl) {
       const colors = (Array.isArray(item.colors) && item.colors.length > 0) ? item.colors : [initialColor];
 
       swatchesEl.innerHTML = `
         <div class="flex items-center justify-between text-xs font-semibold text-secondary-color mb-1.5">
           <span>Chọn màu sắc:</span>
-          <span id="modal-color-name" class="text-primary-color font-bold">${escapeHTML(initialColor.name)}</span>
+          <span id="modal-color-name" class="text-primary-color font-bold"></span>
         </div>
-        <div class="flex flex-wrap gap-2.5">
-          ${colors.map((c) => {
-            const safeHex = isValidHex(c.hex) ? c.hex : '#26282B';
-            return `
-              <button type="button" 
-                      class="modal-color-btn px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-all ${c.id === initialColor.id ? 'border-[#FF5C00] bg-[rgba(255,92,0,0.12)] text-primary-color ring-2 ring-[#FF5C00]/30' : 'border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-secondary-color hover:border-slate-500'}" 
-                      onclick="window.selectModalColor('${escapeHTML(c.id)}', '${escapeHTML(c.name)}', this)">
-                <span class="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0" style="background-color: ${safeHex}"></span>
-                <span>${escapeHTML(c.name)}</span>
-              </button>
-            `;
-          }).join('')}
-        </div>
+        <div class="flex flex-wrap gap-2.5" id="modal-swatches-list"></div>
       `;
+      const colorLabel = document.getElementById('modal-color-name');
+      if (colorLabel) colorLabel.textContent = initialColor.name;
+
+      const swatchesListEl = document.getElementById('modal-swatches-list');
+      if (swatchesListEl) {
+        colors.forEach(c => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `modal-color-btn px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-all ${c.id === initialColor.id ? 'border-[#FF5C00] bg-[rgba(255,92,0,0.12)] text-primary-color ring-2 ring-[#FF5C00]/30' : 'border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-secondary-color hover:border-slate-500'}`;
+          btn.dataset.action = 'modal-select-color';
+          btn.dataset.colorId = c.id;
+
+          const dot = document.createElement('span');
+          dot.className = 'w-3.5 h-3.5 rounded-full border border-black/20 shrink-0';
+          dot.style.backgroundColor = isValidHex(c.hex) ? c.hex : '#26282B';
+
+          const nameSpan = document.createElement('span');
+          nameSpan.textContent = c.name;
+
+          btn.appendChild(dot);
+          btn.appendChild(nameSpan);
+          swatchesListEl.appendChild(btn);
+        });
+      }
     }
 
-    // Materials in Modal
+    // Materials in Modal (Dùng createElement & textContent - Codex F07)
     if (matsEl) {
       const materials = (Array.isArray(item.materials) && item.materials.length > 0) ? item.materials : [initialMat];
 
       matsEl.innerHTML = `
         <div class="text-xs font-semibold text-secondary-color mb-1.5">Vật liệu in:</div>
-        <div class="space-y-2">
-          ${materials.map((m, i) => `
-            <button type="button" 
-                    class="modal-mat-btn w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between ${i === 0 ? 'border-[#FF5C00] bg-[var(--bg-surface-elevated)] ring-1 ring-[#FF5C00]/40' : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-slate-600'}" 
-                    onclick="window.selectModalMaterial('${escapeHTML(m.id)}', this)">
-              <div>
-                <div class="text-xs font-bold text-primary-color flex items-center gap-2">
-                  <span>${escapeHTML(m.label || m.name)}</span>
-                  ${i === 0 ? '<span class="text-[10px] font-mono font-normal px-2 py-0.5 rounded-full bg-[#FF5C00]/15 text-[#FF5C00]">Khuyên dùng</span>' : ''}
-                </div>
-                <div class="text-[11px] text-secondary-color mt-0.5">${escapeHTML(m.desc || '')}</div>
-              </div>
-              ${m.priceModifier > 0 ? `<span class="text-xs font-mono font-bold text-[#FF5C00] ml-3 shrink-0">+${formatMoney(m.priceModifier)}</span>` : ''}
-            </button>
-          `).join('')}
-        </div>
+        <div class="space-y-2" id="modal-materials-list"></div>
       `;
+      const matsListEl = document.getElementById('modal-materials-list');
+      if (matsListEl) {
+        materials.forEach((m, i) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = `modal-mat-btn w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between ${i === 0 ? 'border-[#FF5C00] bg-[var(--bg-surface-elevated)] ring-1 ring-[#FF5C00]/40' : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-slate-600'}`;
+          btn.dataset.action = 'modal-select-material';
+          btn.dataset.matId = m.id;
+
+          const left = document.createElement('div');
+          const header = document.createElement('div');
+          header.className = 'text-xs font-bold text-primary-color flex items-center gap-2';
+
+          const labelSpan = document.createElement('span');
+          labelSpan.textContent = m.label || m.name;
+          header.appendChild(labelSpan);
+
+          if (i === 0) {
+            const badge = document.createElement('span');
+            badge.className = 'text-[10px] font-mono font-normal px-2 py-0.5 rounded-full bg-[#FF5C00]/15 text-[#FF5C00]';
+            badge.textContent = 'Khuyên dùng';
+            header.appendChild(badge);
+          }
+
+          const descDiv = document.createElement('div');
+          descDiv.className = 'text-[11px] text-secondary-color mt-0.5';
+          descDiv.textContent = m.desc || '';
+
+          left.appendChild(header);
+          left.appendChild(descDiv);
+          btn.appendChild(left);
+
+          if (m.priceModifier > 0) {
+            const modSpan = document.createElement('span');
+            modSpan.className = 'text-xs font-mono font-bold text-[#FF5C00] ml-3 shrink-0';
+            modSpan.textContent = `+${formatMoney(m.priceModifier)}`;
+            btn.appendChild(modSpan);
+          }
+
+          matsListEl.appendChild(btn);
+        });
+      }
+    }
+
+    // Đăng ký event delegation một lần cho swatches và materials trong modal
+    if (!modal._hasDelegation) {
+      modal.addEventListener('click', (e) => {
+        const colorBtn = e.target.closest('[data-action="modal-select-color"]');
+        if (colorBtn) {
+          const colorId = colorBtn.dataset.colorId;
+          window.selectModalColorById(colorId, colorBtn);
+          return;
+        }
+        const matBtn = e.target.closest('[data-action="modal-select-material"]');
+        if (matBtn) {
+          const matId = matBtn.dataset.matId;
+          window.selectModalMaterialById(matId, matBtn);
+          return;
+        }
+      });
+      modal._hasDelegation = true;
     }
 
     window.updateModalPriceSummary();
     modal.classList.remove('hidden');
     modal.classList.add('flex', 'active');
+    if (document.body && document.body.style) {
+      document.body.style.overflow = 'hidden';
+    }
+    setTimeout(() => {
+      const closeBtn = document.getElementById('order-modal-close-btn');
+      if (closeBtn && typeof closeBtn.focus === 'function') {
+        try { closeBtn.focus(); } catch (_) {}
+      }
+    }, 50);
   };
 
-  window.selectModalColor = function (colorId, colorName, btn) {
+  window.selectModalColorById = function (colorId, btn) {
     if (!window.modalActiveProduct || !window.modalActiveProduct.colors) return;
-    window.modalSelectedColor = window.modalActiveProduct.colors.find(c => c.id === colorId) || { id: colorId, name: colorName };
+    const colors = window.modalActiveProduct.colors || [];
+    const matched = colors.find(c => c.id === colorId) || { id: colorId, name: 'Tùy chọn' };
+    window.modalSelectedColor = matched;
     const label = document.getElementById('modal-color-name');
-    if (label) label.textContent = colorName;
+    if (label) label.textContent = matched.name;
 
     document.querySelectorAll('.modal-color-btn').forEach(b => {
       b.classList.remove('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
       b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
     });
-    btn.classList.add('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
-    btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
+    if (btn) {
+      btn.classList.add('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
+      btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
+    }
+
+    // Nếu đang ở chế độ CAD hoặc chuyển màu, cập nhật bản vẽ Vector Retina tương ứng
+    if (window.modalImageViewMode === 'cad' && typeof window.setModalImageViewMode === 'function') {
+      window.setModalImageViewMode('cad');
+    }
   };
 
-  window.selectModalMaterial = function (matId, btn) {
+  /**
+   * Dual-View Controller: Chuyển đổi giữa [📸 Ảnh Thực Tế Studio] và [📐 Bản Vẽ Cấu Tạo CAD]
+   */
+  window.setModalImageViewMode = function (mode) {
+    window.modalImageViewMode = mode;
+    const btnStudio = document.getElementById('modal-toggle-view-studio');
+    const btnCad = document.getElementById('modal-toggle-view-cad');
+    const imgEl = document.getElementById('order-prod-img');
+    const vectorEl = document.getElementById('order-prod-vector');
+    const rulerLayer = document.getElementById('order-hud-ruler-layer');
+    const item = window.modalActiveProduct;
+    const currentColor = window.modalSelectedColor || (item && item.colors ? item.colors[0] : { hex: '#F5F2EB' });
+
+    if (mode === 'cad') {
+      if (btnCad) {
+        btnCad.className = 'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all bg-[#00E5FF] text-black shadow-sm';
+      }
+      if (btnStudio) {
+        btnStudio.className = 'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all text-secondary-color hover:text-white';
+      }
+      if (imgEl) imgEl.classList.add('hidden');
+      if (vectorEl) {
+        vectorEl.classList.remove('hidden');
+        if (typeof window !== 'undefined' && window.TT3DVisualRenderer && item) {
+          vectorEl.innerHTML = window.TT3DVisualRenderer.renderProductVectorSvg({
+            category: item.category,
+            colorHex: currentColor.hex,
+            mode: 'cad',
+            productId: item.id,
+            title: item.title
+          });
+        }
+      }
+      if (rulerLayer) rulerLayer.textContent = 'BẢN VẼ KỸ THUẬT CAD 2.5D';
+    } else {
+      if (btnStudio) {
+        btnStudio.className = 'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all bg-[#FF5C00] text-black shadow-sm';
+      }
+      if (btnCad) {
+        btnCad.className = 'flex-1 py-1.5 px-3 rounded-lg text-xs font-mono font-bold flex items-center justify-center gap-1.5 transition-all text-secondary-color hover:text-white';
+      }
+      if (imgEl) imgEl.classList.remove('hidden');
+      if (vectorEl) vectorEl.classList.add('hidden');
+      if (rulerLayer) {
+        const techData = (typeof window !== 'undefined' && window.TT3DVisualRenderer && item)
+          ? window.TT3DVisualRenderer.getTechData(item.category)
+          : null;
+        rulerLayer.textContent = techData ? `LỚP IN: ${techData.layerHeight}` : 'LỚP IN: 0.16MM BAMBU LAB';
+      }
+    }
+  };
+
+  window.selectModalColor = function (colorId, colorName, btn) {
+    window.selectModalColorById(colorId, btn);
+  };
+
+  window.selectModalMaterialById = function (matId, btn) {
     if (!window.modalActiveProduct || !window.modalActiveProduct.materials) return;
-    window.modalSelectedMat = window.modalActiveProduct.materials.find(m => m.id === matId) || { id: matId, name: 'Tiêu chuẩn', priceModifier: 0 };
+    const mats = window.modalActiveProduct.materials || [];
+    const matched = mats.find(m => m.id === matId) || { id: matId, name: 'Tiêu chuẩn', label: 'Tiêu chuẩn', priceModifier: 0 };
+    window.modalSelectedMat = matched;
 
     document.querySelectorAll('.modal-mat-btn').forEach(b => {
       b.classList.remove('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
       b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
     });
-    btn.classList.add('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
-    btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
+    if (btn) {
+      btn.classList.add('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
+      btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
+    }
 
     window.updateModalPriceSummary();
+  };
+
+  window.selectModalMaterial = function (matId, btn) {
+    window.selectModalMaterialById(matId, btn);
   };
 
   window.updateModalPriceSummary = function () {
@@ -968,30 +1188,26 @@
       return null;
     }
 
-    const selectedColor = window.modalSelectedColor || ((prod.colors && prod.colors[0]) || { id: 'default', name: 'Tiêu chuẩn' });
-    const selectedMat = window.modalSelectedMat || ((prod.materials && prod.materials[0]) || { id: 'default', name: 'Tiêu chuẩn', priceModifier: 0 });
-    const qty = Math.min(99, Math.max(1, parseInt(window.modalQty, 10) || 1));
-
     const customInput = document.getElementById('order-custom-text-input');
-    const customText = customInput ? customInput.value.trim().normalize('NFC').slice(0, 100) : null;
+    const customText = customInput ? customInput.value.trim().normalize('NFC').slice(0, 100) : '';
 
-    const unitPrice = prod.price + (selectedMat.priceModifier || 0);
+    if (window.TTPurchaseConfig && typeof window.TTPurchaseConfig.buildConfiguredLine === 'function') {
+      try {
+        const qtyNum = typeof window.modalQty === 'number' ? window.modalQty : (parseInt(window.modalQty, 10) || 1);
+        return window.TTPurchaseConfig.buildConfiguredLine(prod.id, {
+          colorId: window.modalSelectedColor ? window.modalSelectedColor.id : null,
+          materialId: window.modalSelectedMat ? window.modalSelectedMat.id : null,
+          qty: qtyNum,
+          customText
+        });
+      } catch (err) {
+        if (window.showToast) window.showToast(err.message || 'Cấu hình không hợp lệ.', 'error');
+        return null;
+      }
+    }
 
-    return {
-      id: prod.id,
-      title: prod.title,
-      price: unitPrice,
-      qty: qty,
-      image: prod.image,
-      category: prod.category,
-      color: selectedColor,
-      colorId: selectedColor.id,
-      colorName: selectedColor.name,
-      material: selectedMat,
-      materialId: selectedMat.id,
-      materialName: selectedMat.label || selectedMat.name,
-      customText: customText || null
-    };
+    if (window.showToast) window.showToast('Hệ thống cấu hình chưa sẵn sàng.', 'error');
+    return null;
   }
 
   window.submitModalAddToCart = function () {
@@ -1019,12 +1235,25 @@
     }
   };
 
+  // Mở không gian 3D từ Modal chi tiết (Codex Section 5.2 F01)
   window.open3DFromModal = function () {
     if (!window.modalActiveProduct) return;
-    const prodId = window.modalActiveProduct.id;
-    window.closeProductDetailModal();
+    const item = window.modalActiveProduct;
+    const hasValidModel = isSupported3DModel(item.modelKey);
+
+    if (!hasValidModel) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('Sản phẩm hiện chưa có mô hình 3D tương tác.');
+      }
+      return;
+    }
+
+    const prodId = item.id;
     if (typeof window.open3DViewerById === 'function') {
-      window.open3DViewerById(prodId);
+      const success = window.open3DViewerById(prodId);
+      if (success !== false) {
+        window.closeProductDetailModal();
+      }
     }
   };
 
@@ -1033,6 +1262,15 @@
     if (modal) {
       modal.classList.add('hidden');
       modal.classList.remove('flex', 'active');
+    }
+    if (document.body && document.body.style) {
+      document.body.style.overflow = '';
+    }
+    if (productModalPreviousActiveElement && typeof productModalPreviousActiveElement.focus === 'function') {
+      try {
+        productModalPreviousActiveElement.focus();
+      } catch (_) {}
+      productModalPreviousActiveElement = null;
     }
   };
 
@@ -1068,13 +1306,53 @@
     }
   }
 
-  // 9. INITIALIZATION LIFECYCLE
+  // 9. CURATED PRODUCTS (HOMEPAGE 6-8 HIGHLIGHTS)
+  function renderCuratedProducts() {
+    const container = document.getElementById('curated-product-grid');
+    if (!container) return;
+
+    const allProducts = getStoredProducts();
+    const activeProducts = allProducts.filter(p => (p.status || 'active') === 'active');
+
+    // 8 sản phẩm tiêu biểu cho trang chủ rút gọn
+    const curatedIds = [
+      'mw-cn-2084928', // Khay trang sức nơ lụa
+      'mw-cn-1836100', // Đế WiFi NFC 1-chạm
+      'mw-cn-1438306', // Đèn bàn xoắn kem
+      'mw-cn-1971424', // Hộp để bàn tiện ích
+      'mw-cn-1702306', // Móc khóa cá nhân hóa
+      'mw-cn-1646129', // Ống cắm cọ Coquette
+      'mw-cn-2332220', // Bình hoa dập ly xếp nếp
+      'mw-cn-2531095'  // Khay nơ lụa cánh bướm
+    ];
+
+    const curatedList = [];
+    curatedIds.forEach(id => {
+      const item = activeProducts.find(p => p.id === id);
+      if (item) curatedList.push(item);
+    });
+
+    if (curatedList.length < 8) {
+      for (const p of activeProducts) {
+        if (!curatedList.some(c => c.id === p.id)) {
+          curatedList.push(p);
+          if (curatedList.length >= 8) break;
+        }
+      }
+    }
+
+    container.innerHTML = curatedList.map(buildProductCardHTML).join('');
+  }
+
+  // 10. INITIALIZATION LIFECYCLE
   window.renderStoreProducts = renderStoreProducts;
+  window.renderCuratedProducts = renderCuratedProducts;
   window.getStoredProducts = getStoredProducts;
   window.CATEGORY_REGISTRY = CATEGORY_REGISTRY;
 
   window.addEventListener('tt_products_updated', () => {
     renderStoreProducts(currentCategoryFilter);
+    renderCuratedProducts();
   });
 
   async function init() {
@@ -1087,6 +1365,7 @@
     currentCategoryFilter = initialParsed.category || 'all';
 
     renderStoreProducts(currentCategoryFilter);
+    renderCuratedProducts();
     initEventDelegation();
     initSearchHandler();
 
@@ -1095,6 +1374,35 @@
       orderModal.addEventListener('click', (e) => {
         if (e.target === orderModal) {
           window.closeProductDetailModal();
+        }
+      });
+
+      // Trap Tab key inside order modal (Codex B07 Focus Isolation)
+      orderModal.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab') return;
+        const selectors = [
+          'button:not([disabled]):not([aria-hidden="true"])',
+          '[href]:not([aria-disabled="true"]):not([aria-hidden="true"])',
+          'input:not([disabled]):not([aria-hidden="true"])',
+          'select:not([disabled]):not([aria-hidden="true"])',
+          '[tabindex]:not([tabindex="-1"]):not([aria-hidden="true"])'
+        ];
+        const focusables = Array.from(orderModal.querySelectorAll(selectors.join(','))).filter(el => {
+          return el.offsetParent !== null || (typeof el.offsetWidth === 'number' && el.offsetWidth > 0) || (typeof el.offsetHeight === 'number' && el.offsetHeight > 0);
+        });
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first || !orderModal.contains(document.activeElement)) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || !orderModal.contains(document.activeElement)) {
+            e.preventDefault();
+            first.focus();
+          }
         }
       });
     }

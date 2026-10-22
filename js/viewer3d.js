@@ -16,6 +16,11 @@
     { id: 'sage', name: 'Xanh Rêu Mộc', hex: '#5B684E', color: 0x5b684e, roughness: 0.78, metalness: 0.03 }
   ];
 
+  // Registry các modelKey hình học được hỗ trợ thực tế trong Three.js (Codex Section 5.2)
+  const modelRegistry = new Set(['nfc_wifi', 'pleated_vase', 'soft_lamp', 'desk_dock', 'pegboard', 'monogram']);
+  window.TT_3D_MODEL_REGISTRY = modelRegistry;
+
+  let activeViewerProductId = null;
   let currentPalette = PBR_PALETTES[0];
   let currentModelKey = 'nfc_wifi';
   let isWireframe = false;
@@ -25,86 +30,147 @@
   let scene, camera, renderer, controls;
   let activeMesh, shadowFloor;
   let animFrameId = null;
+  let viewerState = 'uninitialized';
+
+  function showViewerFallback(message) {
+    viewerState = 'unavailable';
+    if (typeof document === 'undefined' || typeof document.createElement !== 'function') return;
+    const canvas = document.getElementById('viewer-canvas');
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    let fallbackEl = document.getElementById('viewer-fallback-banner');
+    if (!fallbackEl) {
+      fallbackEl = document.createElement('div');
+      fallbackEl.id = 'viewer-fallback-banner';
+      fallbackEl.className = 'absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-[var(--bg-surface)]/90 backdrop-blur-sm z-10 space-y-3';
+      
+      const icon = document.createElement('div');
+      icon.className = 'w-12 h-12 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-500 flex items-center justify-center text-xl';
+      icon.innerHTML = '<i class="fa-solid fa-cube"></i>';
+      fallbackEl.appendChild(icon);
+
+      const title = document.createElement('h4');
+      title.className = 'text-sm font-bold text-primary-color';
+      title.textContent = 'Mô hình 3D chưa khả dụng';
+      fallbackEl.appendChild(title);
+
+      const desc = document.createElement('p');
+      desc.className = 'text-xs text-secondary-color max-w-sm leading-relaxed';
+      desc.textContent = message || 'Trình duyệt hoặc thiết bị chưa hỗ trợ tăng tốc đồ họa WebGL. Quý khách vẫn có thể xem ảnh và đặt hàng bình thường.';
+      fallbackEl.appendChild(desc);
+
+      if (parent.style && parent.style.position !== 'relative' && parent.style.position !== 'absolute') {
+        parent.style.position = 'relative';
+      }
+      parent.appendChild(fallbackEl);
+    }
+  }
 
   // Initialize 3D Viewer in designated container
   function initViewer(canvasId = 'viewer-canvas') {
-    if (typeof THREE === 'undefined') return;
+    if (typeof THREE === 'undefined') {
+      showViewerFallback('Thư viện 3D chưa được tải.');
+      return;
+    }
     const canvas = document.getElementById(canvasId);
     if (!canvas) return;
 
-    const parent = canvas.parentElement;
-    const width = parent.clientWidth || 600;
-    const height = parent.clientHeight || 500;
+    try {
+      const parent = canvas.parentElement;
+      const width = (parent && parent.clientWidth) || 600;
+      const height = (parent && parent.clientHeight) || 500;
 
-    // 1. Scene
-    scene = new THREE.Scene();
-    
-    // Determine background color based on theme
-    const isLight = document.body.classList.contains('light-theme');
-    scene.background = new THREE.Color(isLight ? 0xF8F9FA : 0x0B0C0E);
-
-    // 2. Camera
-    camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
-    camera.position.set(0, 4.5, 12);
-
-    // 3. Renderer with high PBR fidelity
-    renderer = new THREE.WebGLRenderer({
-      canvas: canvas,
-      antialias: true,
-      alpha: true,
-      powerPreference: 'high-performance'
-    });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.1;
-
-    // 4. OrbitControls with Touch-Friendly configuration (ID-37: Does NOT freeze mobile scrolling)
-    if (typeof THREE.OrbitControls === 'function') {
-      controls = new THREE.OrbitControls(camera, renderer.domElement);
-      controls.enableDamping = true;
-      controls.dampingFactor = 0.05;
-      controls.maxPolarAngle = Math.PI / 2 + 0.05; // Không cho camera chìm dưới sàn
-      controls.minDistance = 4;
-      controls.maxDistance = 25;
-      controls.autoRotate = isAutoRotate;
-      controls.autoRotateSpeed = 1.2;
-      controls.enablePan = false;
-      // Tránh chặn touch cuộn trang dọc nếu không kéo ngang
-      controls.touches = {
-        ONE: THREE.TOUCH.ROTATE,
-        TWO: THREE.TOUCH.DOLLY_PAN
-      };
-    }
-
-    // 5. Realistic Studio 3-Point Lighting (No laser lights, ID-11)
-    setupStudioLights();
-
-    // 6. Contact Shadow Floor (Realistic Soft Shadow Plane)
-    setupContactShadow();
-
-    // 7. Build Model
-    loadModelGeometry(currentModelKey);
-
-    // 8. Animation Loop (Resource-Optimized: pauses render when tab is hidden)
-    function animate() {
-      animFrameId = requestAnimationFrame(animate);
-      const viewEl = document.getElementById('view-studio3d');
-      if (viewEl && viewEl.classList.contains('hidden')) {
-        return; // Don't waste GPU cycles when studio tab is hidden
+      // 1. Scene
+      scene = new THREE.Scene();
+      
+      // Determine background color based on theme
+      const isLight = document.body && document.body.classList && document.body.classList.contains('light-theme');
+      if (typeof THREE.Color === 'function') {
+        scene.background = new THREE.Color(isLight ? 0xF8F9FA : 0x0B0C0E);
       }
-      if (controls) controls.update();
-      if (renderer && scene && camera) renderer.render(scene, camera);
+
+      // 2. Camera
+      camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+      if (camera.position && typeof camera.position.set === 'function') {
+        camera.position.set(0, 4.5, 12);
+      }
+
+      // 3. Renderer with high PBR fidelity
+      renderer = new THREE.WebGLRenderer({
+        canvas: canvas,
+        antialias: true,
+        alpha: true,
+        powerPreference: 'high-performance'
+      });
+      if (renderer.setSize) renderer.setSize(width, height);
+      if (renderer.setPixelRatio && typeof window !== 'undefined') {
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+      }
+      if (renderer.shadowMap) {
+        renderer.shadowMap.enabled = true;
+        if (THREE.PCFSoftShadowMap) renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      }
+      if (renderer.toneMapping !== undefined && THREE.ACESFilmicToneMapping !== undefined) {
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.toneMappingExposure = 1.1;
+      }
+
+      // 4. OrbitControls with Touch-Friendly configuration (ID-37: Does NOT freeze mobile scrolling)
+      if (typeof THREE.OrbitControls === 'function') {
+        controls = new THREE.OrbitControls(camera, renderer.domElement);
+        controls.enableDamping = true;
+        controls.dampingFactor = 0.05;
+        controls.maxPolarAngle = Math.PI / 2 + 0.05; // Không cho camera chìm dưới sàn
+        controls.minDistance = 4;
+        controls.maxDistance = 25;
+        controls.autoRotate = isAutoRotate;
+        controls.autoRotateSpeed = 1.2;
+        controls.enablePan = false;
+        if (THREE.TOUCH) {
+          controls.touches = {
+            ONE: THREE.TOUCH.ROTATE,
+            TWO: THREE.TOUCH.DOLLY_PAN
+          };
+        }
+      }
+
+      // 5. Realistic Studio 3-Point Lighting (No laser lights, ID-11)
+      setupStudioLights();
+
+      // 6. Contact Shadow Floor (Realistic Soft Shadow Plane)
+      setupContactShadow();
+
+      // 7. Build Model
+      loadModelGeometry(currentModelKey);
+
+      // 8. Animation Loop (Resource-Optimized: pauses render when tab is hidden)
+      function animate() {
+        if (!renderer || viewerState === 'unavailable' || viewerState === 'lost') return;
+        animFrameId = requestAnimationFrame(animate);
+        const viewEl = document.getElementById('view-studio3d');
+        if (viewEl && viewEl.classList.contains('hidden')) {
+          return; // Don't waste GPU cycles when studio tab is hidden
+        }
+        if (controls && controls.update) controls.update();
+        if (renderer && scene && camera && renderer.render) renderer.render(scene, camera);
+      }
+      animate();
+
+      // Responsive resize
+      if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+        window.addEventListener('resize', onResize);
+      }
+
+      // Render palette switcher bar
+      renderPaletteToolbar();
+
+      viewerState = 'ready';
+    } catch (err) {
+      console.warn('[Viewer3D] WebGL khởi tạo không thành công hoặc không được hỗ trợ:', err);
+      showViewerFallback();
     }
-    animate();
-
-    // Responsive resize
-    window.addEventListener('resize', onResize);
-
-    // Render palette switcher bar
-    renderPaletteToolbar();
   }
 
   function setupStudioLights() {
@@ -154,6 +220,7 @@
 
   // Load Parametric Aesthetic 3D Models
   function loadModelGeometry(modelKey) {
+    if (!scene) return;
     if (activeMesh) {
       scene.remove(activeMesh);
       if (activeMesh.geometry) activeMesh.geometry.dispose();
@@ -410,53 +477,102 @@
   }
   window.onResize3DViewer = onResize;
 
+  // Tra cứu sản phẩm đang hoạt động trong Viewer (Codex Section 5.2 F02)
+  function resolveActiveViewerProduct() {
+    if (!activeViewerProductId) return null;
+    let product = null;
+    if (window.TTCatalogStore && typeof window.TTCatalogStore.getProductByIdSync === 'function') {
+      product = window.TTCatalogStore.getProductByIdSync(activeViewerProductId);
+    } else if (typeof window.getStoredProducts === 'function') {
+      const list = window.getStoredProducts();
+      product = list.find(p => p.id === activeViewerProductId) || null;
+    }
+    return product && product.status === 'active' && modelRegistry.has(product.modelKey) ? product : null;
+  }
+  window.resolveActiveViewerProduct = resolveActiveViewerProduct;
+
   // Update Action Bar at the bottom of 3D Viewport
   function update3DActionBar() {
-    const products = (typeof window.getStoredProducts === 'function' ? window.getStoredProducts() : []) || [];
-    const prod = products.find(p => p.modelKey === currentModelKey) || products[0];
+    const prod = resolveActiveViewerProduct();
 
     const titleEl = document.getElementById('viewer-active-model-title');
     const priceEl = document.getElementById('viewer-active-model-price');
     const colorEl = document.getElementById('viewer-active-model-color');
+    const addBtn = document.getElementById('viewer-btn-add-cart') || document.querySelector('button[onclick*="addActive3DModelToCart"]');
 
-    if (titleEl && prod) titleEl.textContent = prod.title;
-    if (priceEl && prod) priceEl.textContent = (prod.price || 109000).toLocaleString('vi-VN') + ' đ';
-    if (colorEl && currentPalette) colorEl.textContent = `Màu: ${currentPalette.name}`;
+    if (prod) {
+      if (titleEl) titleEl.textContent = prod.title;
+      if (priceEl) priceEl.textContent = (prod.price || 0).toLocaleString('vi-VN') + ' đ';
+      if (colorEl && currentPalette) colorEl.textContent = `Màu: ${currentPalette.name}`;
+      if (addBtn) {
+        addBtn.disabled = false;
+        addBtn.removeAttribute('disabled');
+        addBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+      }
+    } else {
+      if (titleEl) titleEl.textContent = 'Mẫu 3D Studio (Tham khảo)';
+      if (priceEl) priceEl.textContent = 'Mẫu tham khảo';
+      if (colorEl && currentPalette) colorEl.textContent = `Màu: ${currentPalette.name}`;
+      if (addBtn) {
+        addBtn.disabled = true;
+        addBtn.setAttribute('disabled', 'true');
+        addBtn.classList.add('opacity-50', 'cursor-not-allowed');
+      }
+    }
   }
   window.update3DActionBar = update3DActionBar;
 
-  // Add currently inspected 3D model directly to Cart
+  // Add currently inspected 3D model directly to Cart (F02, F03)
   window.addActive3DModelToCart = function () {
-    const products = (typeof window.getStoredProducts === 'function' ? window.getStoredProducts() : []) || [];
-    const prod = products.find(p => p.modelKey === currentModelKey) || products[0];
-    if (!prod) return;
+    const prod = resolveActiveViewerProduct();
+    if (!prod) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('Vui lòng chọn một sản phẩm từ Cửa Hàng để thêm vào giỏ hàng.');
+      }
+      return;
+    }
 
-    const activeMat = (prod.materials && prod.materials[0]) || { id: 'pla_matte', name: 'Bio-PLA Matte' };
-    const cartItem = {
-      id: `${prod.id}-${currentPalette.id}-${activeMat.id}`,
-      productId: prod.id,
-      title: prod.title,
-      price: prod.price,
-      qty: 1,
-      image: prod.image,
-      category: prod.category,
-      color: {
-        id: currentPalette.id,
-        name: currentPalette.name,
-        hex: currentPalette.hex
-      },
-      material: activeMat,
-      customText: '',
-      specs: prod.specs || {}
-    };
+    // Nếu sản phẩm cần cấu hình hoặc cá nhân hóa: chuyển sang modal để người dùng chọn chuẩn xác
+    if (typeof window.openProductDetailModal === 'function') {
+      window.openProductDetailModal(prod.id);
+      return;
+    }
 
-    if (window.TTStore && typeof window.TTStore.addToCart === 'function') {
-      window.TTStore.addToCart(cartItem);
+    let line = null;
+    if (window.TTPurchaseConfig && typeof window.TTPurchaseConfig.buildConfiguredLine === 'function') {
+      try {
+        let chosenColorId = currentPalette ? currentPalette.id : null;
+        if (prod.colors && Array.isArray(prod.colors) && prod.colors.length > 0) {
+          const matchInProd = prod.colors.find(c => c && c.id === chosenColorId);
+          chosenColorId = matchInProd ? matchInProd.id : prod.colors[0].id;
+        }
+
+        line = window.TTPurchaseConfig.buildConfiguredLine(prod.id, {
+          colorId: chosenColorId,
+          materialId: (prod.materials && prod.materials[0]) ? prod.materials[0].id : null,
+          qty: 1
+        });
+      } catch (err) {
+        if (typeof window.showToast === 'function') {
+          window.showToast(err.message || 'Lỗi cấu hình sản phẩm.');
+        }
+        return;
+      }
+    } else {
+      if (typeof window.showToast === 'function') {
+        window.showToast('Hệ thống cấu hình chưa sẵn sàng.');
+      }
+      return;
+    }
+
+    const cartService = window.TTCart || window.TTStore;
+    if (cartService && typeof cartService.addToCart === 'function') {
+      cartService.addToCart(line);
       if (window.TTCart && typeof window.TTCart.openCart === 'function') {
         window.TTCart.openCart();
       }
       if (typeof window.showToast === 'function') {
-        window.showToast(`Đã thêm "${prod.title} (${currentPalette.name})" vào giỏ hàng!`);
+        window.showToast(`Đã thêm "${prod.title} (${line.colorName})" vào giỏ hàng!`);
       }
     }
   };
@@ -467,8 +583,17 @@
     if (item) applyColorToActiveModel(item);
   };
 
-  window.switch3DModel = function (modelKey) {
+  window.switch3DModel = function (modelKey, resetActive = true) {
     currentModelKey = modelKey;
+    if (resetActive) {
+      // Chọn model demo trực tiếp luôn xóa activeViewerProductId (Codex Section 6.5)
+      activeViewerProductId = null;
+    }
+
+    if (!scene && typeof document !== 'undefined') {
+      initViewer('viewer-canvas');
+    }
+
     loadModelGeometry(modelKey);
     applyColorToActiveModel(currentPalette);
     update3DActionBar();
@@ -521,9 +646,8 @@
 
   // Request custom quote from active 3D Model (Cross-workspace transition R3 / Spec Section 3.1)
   window.requestQuoteFrom3DViewer = function () {
-    const products = (typeof window.getStoredProducts === 'function' ? window.getStoredProducts() : []) || [];
-    const prod = products.find(p => p.modelKey === currentModelKey) || products[0];
-    const modelTitle = prod ? prod.title : 'Mẫu 3D Studio';
+    const prod = resolveActiveViewerProduct();
+    const modelTitle = prod ? prod.title : 'Mẫu 3D Studio (Tham khảo)';
     const colorName = currentPalette ? currentPalette.name : 'Tiêu chuẩn';
 
     if (typeof window.switchWorkspace === 'function') {
@@ -540,11 +664,24 @@
     }
   };
 
-  // Launch 3D Viewer directly for a specific product
+  // Launch 3D Viewer directly for a specific product (Codex Section 5.2 F02)
   window.open3DViewerById = function (prodId) {
-    const products = (typeof window.getStoredProducts === 'function' ? window.getStoredProducts() : []) || [];
-    const prod = products.find(p => p.id === prodId);
-    const targetKey = (prod && prod.modelKey) || 'nfc_wifi';
+    let prod = null;
+    if (window.TTCatalogStore && typeof window.TTCatalogStore.getProductByIdSync === 'function') {
+      prod = window.TTCatalogStore.getProductByIdSync(prodId);
+    } else if (typeof window.getStoredProducts === 'function') {
+      const list = window.getStoredProducts();
+      prod = list.find(p => p.id === prodId) || null;
+    }
+
+    if (!prod || prod.status !== 'active' || !prod.modelKey || !modelRegistry.has(prod.modelKey)) {
+      if (typeof window.showToast === 'function') {
+        window.showToast('Sản phẩm hiện chưa có mô hình 3D tương tác.');
+      }
+      return false;
+    }
+
+    activeViewerProductId = prod.id;
 
     // 1. Transition to #view-studio3d dedicated tab
     if (typeof window.switchWorkspace === 'function') {
@@ -559,8 +696,8 @@
       if (match) currentPalette = match;
     }
 
-    // 2. Load model geometry and update action bar
-    window.switch3DModel(targetKey);
+    // 2. Load model geometry and update action bar without resetting activeViewerProductId
+    window.switch3DModel(prod.modelKey, false);
     update3DActionBar();
 
     // 3. Ensure proper canvas sizing and rendering
@@ -568,9 +705,15 @@
     requestAnimationFrame(onResize);
 
     if (typeof window.showToast === 'function') {
-      window.showToast(`Đang hiển thị mô hình 3D: ${prod ? prod.title : 'Sản phẩm'}`);
+      window.showToast(`Đang hiển thị mô hình 3D: ${prod.title}`);
     }
+    return true;
   };
+
+  // Lắng nghe cập nhật catalog để đồng bộ lại action bar
+  window.addEventListener('tt_products_updated', () => {
+    update3DActionBar();
+  });
 
   // Listen to Theme changes
   window.addEventListener('tt_theme_changed', (e) => {
@@ -582,8 +725,13 @@
 
   // Init on DOM ready
   document.addEventListener('DOMContentLoaded', () => {
-    initViewer('viewer-canvas');
-    update3DActionBar();
+    try {
+      initViewer('viewer-canvas');
+      update3DActionBar();
+    } catch (err) {
+      console.warn('[Viewer3D] DOMContentLoaded init error:', err);
+      showViewerFallback();
+    }
   });
 
 })();
