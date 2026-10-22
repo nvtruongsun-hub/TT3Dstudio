@@ -63,10 +63,10 @@
        2. FLOATING FROSTED APP-SHELL NAVBAR
        ========================================================================= -->
   <div class="floating-navbar-container sticky top-0 z-40 bg-[#F7F6F2]/90 backdrop-blur-md border-b border-[#DCDDD5]">
-    <header id="floating-navbar" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+    <header id="floating-navbar" class="floating-navbar max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="#store" data-nav-view="view-store" class="flex items-center gap-3 group">
+      <a href="#store" data-nav-view="view-store" onclick="window.switchWorkspace('view-store')" class="flex items-center gap-3 group">
         <img src="assets/images/logo-premium.svg?v=4.0" alt="T&amp;T 3D Labs" class="brand-logo w-[150px] sm:w-[185px] h-auto object-contain">
       </a>
 
@@ -78,6 +78,7 @@
                 aria-selected="true"
                 aria-controls="view-store"
                 data-nav-view="view-store" 
+                onclick="window.switchWorkspace('view-store')"
                 class="workspace-nav-tab active" 
                 title="Cửa hàng &amp; Bộ sưu tập chọn lọc">
           <i class="fa-solid fa-store text-xs mr-1.5"></i>
@@ -89,6 +90,7 @@
                 aria-selected="false"
                 aria-controls="view-personalize"
                 data-nav-view="view-personalize" 
+                onclick="window.switchWorkspace('view-personalize')"
                 class="workspace-nav-tab" 
                 title="Khắc tên, chọn màu &amp; xem minh họa 2D">
           <i class="fa-solid fa-wand-magic-sparkles text-xs mr-1.5 text-[#FF5C00]"></i>
@@ -101,6 +103,7 @@
                 aria-selected="false"
                 aria-controls="view-inspiration"
                 data-nav-view="view-inspiration" 
+                onclick="window.switchWorkspace('view-inspiration')"
                 class="workspace-nav-tab" 
                 title="Góc bàn làm việc, bàn trang điểm &amp; quầy cafe">
           <i class="fa-solid fa-compass-drafting text-xs mr-1.5"></i>
@@ -112,6 +115,7 @@
                 aria-selected="false"
                 aria-controls="view-tracking"
                 data-nav-view="view-tracking" 
+                onclick="window.switchWorkspace('view-tracking')"
                 class="workspace-nav-tab" 
                 title="Tra cứu tiến độ in 3D &amp; vận đơn thực tế">
           <i class="fa-solid fa-truck-fast text-xs mr-1.5 text-blue-600"></i>
@@ -123,6 +127,7 @@
                 aria-selected="false"
                 aria-controls="view-support"
                 data-nav-view="view-support" 
+                onclick="window.switchWorkspace('view-support')"
                 class="workspace-nav-tab" 
                 title="Hướng dẫn NFC, vật liệu, bảo quản &amp; đổi trả">
           <i class="fa-solid fa-circle-question text-xs mr-1.5"></i>
@@ -174,19 +179,19 @@
 
     <!-- Mobile Dropdown Nav Drawer -->
     <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-[#DCDDD5] px-5 py-4 space-y-2 bg-white shadow-lg">
-      <a href="#store" data-nav-view="view-store" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+      <a href="#store" data-nav-view="view-store" onclick="window.switchWorkspace('view-store'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
         <i class="fa-solid fa-store mr-2 text-[#FF5C00]"></i> Cửa Hàng &amp; Sản Phẩm
       </a>
-      <a href="#personalize" data-nav-view="view-personalize" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+      <a href="#personalize" data-nav-view="view-personalize" onclick="window.switchWorkspace('view-personalize'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
         <i class="fa-solid fa-wand-magic-sparkles mr-2 text-[#FF5C00]"></i> Cá Nhân Hóa (Khắc Tên &amp; Màu 2D)
       </a>
-      <a href="#inspiration" data-nav-view="view-inspiration" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+      <a href="#inspiration" data-nav-view="view-inspiration" onclick="window.switchWorkspace('view-inspiration'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
         <i class="fa-solid fa-compass-drafting mr-2 text-[#FF5C00]"></i> Góc Cảm Hứng (Mua Theo Bộ)
       </a>
-      <a href="#tracking" data-nav-view="view-tracking" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+      <a href="#tracking" data-nav-view="view-tracking" onclick="window.switchWorkspace('view-tracking'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
         <i class="fa-solid fa-truck-fast mr-2 text-[#FF5C00]"></i> Theo Dõi Đơn Hàng Thật
       </a>
-      <a href="#support" data-nav-view="view-support" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+      <a href="#support" data-nav-view="view-support" onclick="window.switchWorkspace('view-support'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
         <i class="fa-solid fa-circle-question mr-2 text-[#FF5C00]"></i> Hướng Dẫn NFC &amp; Hỗ Trợ
       </a>
       <div class="pt-2 border-t border-[#DCDDD5]">

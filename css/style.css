@@ -221,35 +221,27 @@ body {
   border-top: 1px solid var(--border-subtle);
 }
 
-/* --- 5. FLOATING FROSTED GLASS NAVBAR (Linear / Nothing Benchmark) --- */
+/* --- 5. TOP NAVBAR & WORKSPACE HEADER --- */
 .floating-navbar-container {
-  position: fixed;
-  top: 16px;
+  position: sticky;
+  top: 0;
   left: 0;
   right: 0;
   z-index: 50;
-  pointer-events: none;
-  display: flex;
-  justify-content: center;
-  padding: 0 16px;
+  pointer-events: auto;
+  width: 100%;
 }
 
+#floating-navbar,
 .floating-navbar {
   pointer-events: auto;
   width: 100%;
-  max-width: 1200px;
-  background: var(--bg-surface-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-subtle);
-  border-radius: 20px;
-  box-shadow: var(--shadow-card);
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
+#floating-navbar.scrolled,
 .floating-navbar.scrolled {
-  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.45);
-  border-color: var(--border-hover);
+  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.08);
 }
 
 /* --- WORKSPACE SEGMENTED NAV SWITCHER (Apple / Teenage Engineering Benchmark) --- */
@@ -1053,18 +1045,21 @@ body {
     transition: color 0.2s ease;
   }
 
-  .mobile-dock-btn.active {
-    color: var(--accent-primary);
-    background: rgba(255, 92, 0, 0.12);
+  .mobile-dock-btn.active,
+  .dock-item.active {
+    color: var(--accent-primary) !important;
+    background: rgba(255, 92, 0, 0.08);
   }
 
-  .mobile-dock-btn.active .dock-icon-wrap {
+  .mobile-dock-btn.active .dock-icon-wrap,
+  .dock-item.active i {
     transform: translateY(-1px);
-    color: var(--accent-primary);
+    color: var(--accent-primary) !important;
   }
 
-  .mobile-dock-btn.active .dock-label {
-    color: var(--accent-primary);
+  .mobile-dock-btn.active .dock-label,
+  .dock-item.active .dock-label {
+    color: var(--accent-primary) !important;
     font-weight: 700;
   }
 
