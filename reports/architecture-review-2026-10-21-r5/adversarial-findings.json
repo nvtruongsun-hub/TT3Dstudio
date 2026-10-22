@@ -1,7 +1,7 @@
 {
-  "recordedAt": "2026-10-22T03:16:36.171Z",
+  "recordedAt": "2026-10-22T04:05:16.417Z",
   "scope": "Synthetic VM and fixture build control flow; not browser E2E or real compiler execution",
-  "manifestSha256": "25e31cfc4267c109673eb4ba29c377d25c7ea000d8f1fda462057732fa42d21a",
+  "manifestSha256": "d83931e996241dcd4fb5c8392509dbd4c5ec123516def2c16f0917118e74a312",
   "findings": [
     {
       "scope": "source",
