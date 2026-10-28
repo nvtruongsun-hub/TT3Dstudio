@@ -45,12 +45,15 @@ const REQUIRED_PREFLIGHT_FILES = [
   'js/image-uploader.js',
   'js/purchase-config.js',
   'js/products-manager.js',
+  'js/product-experience.js',
   'js/visual-renderer.js',
   'js/viewer3d.js',
   'js/order-engine.js',
   'js/personalize-studio.js',
   'js/gift-quiz.js',
-  'js/admin.js'
+  'js/admin.js',
+  'js/automation-simulator.js',
+  'js/studio-state.js'
 ];
 
 for (const reqFile of REQUIRED_PREFLIGHT_FILES) {

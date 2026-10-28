@@ -1,0 +1,91 @@
+[
+  {
+    "name": "Initial catalog is eight unique products",
+    "passed": true
+  },
+  {
+    "name": "Saved dark preference cannot reactivate dark storefront",
+    "passed": true
+  },
+  {
+    "name": "Load more reveals sixteen products without duplicates",
+    "passed": true
+  },
+  {
+    "name": "Every active SKU remains reachable without duplication",
+    "passed": true
+  },
+  {
+    "name": "Ascending price sort uses actual catalog prices",
+    "passed": true
+  },
+  {
+    "name": "Category filter stays within requested category",
+    "passed": true
+  },
+  {
+    "name": "Final category page reaches all eleven products",
+    "passed": true
+  },
+  {
+    "name": "Search empty state has recovery action",
+    "passed": true
+  },
+  {
+    "name": "Clear search restores compact catalog",
+    "passed": true
+  },
+  {
+    "name": "Vietnamese search without accents finds products",
+    "passed": true
+  },
+  {
+    "name": "Product image opens an accessible detail dialog",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 375px",
+    "passed": true
+  },
+  {
+    "name": "Mobile menu exposes expanded state",
+    "passed": true
+  },
+  {
+    "name": "Escape closes mobile menu and restores focus",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 768px",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 1280px",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 1920px",
+    "passed": true
+  },
+  {
+    "name": "personalize navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "inspiration navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "tracking navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "support navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "No uncaught JavaScript exceptions during QA",
+    "passed": true,
+    "details": []
+  }
+]

@@ -153,10 +153,12 @@
     document.querySelectorAll('[data-nav-view]').forEach(btn => {
       if (btn.dataset.navView === targetViewId) {
         btn.classList.add('active');
-        btn.setAttribute('aria-selected', 'true');
+        if (btn.getAttribute('role') === 'tab') btn.setAttribute('aria-selected', 'true');
+        btn.setAttribute('aria-current', 'page');
       } else {
         btn.classList.remove('active');
         btn.removeAttribute('aria-selected');
+        btn.removeAttribute('aria-current');
       }
     });
 
@@ -194,6 +196,10 @@
       if (window.TTPersonalizeStudio && typeof window.TTPersonalizeStudio.init === 'function') {
         window.TTPersonalizeStudio.init();
       }
+    } else if (targetViewId === 'view-store') {
+      if (window.heroSimulator && typeof window.heroSimulator.resize === 'function') {
+        setTimeout(() => window.heroSimulator.resize(), 50);
+      }
     }
 
     // Close mobile dropdown drawer if open
@@ -201,7 +207,11 @@
     const toggleBtn = document.getElementById('mobile-menu-toggle-btn');
     if (drawer && !drawer.classList.contains('hidden')) {
       drawer.classList.add('hidden');
-      if (toggleBtn) toggleBtn.innerHTML = '<i class="fa-solid fa-bars text-sm"></i>';
+      if (toggleBtn) {
+        toggleBtn.innerHTML = '<i class="fa-solid fa-bars text-sm"></i>';
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.setAttribute('aria-label', 'Mở menu');
+      }
     }
   }
 
@@ -422,31 +432,220 @@
     }, { passive: true });
   }
 
-  // --- 4. THEME SYSTEM: WARM STONE LIGHT STUDIO (REBUILD SPEC 2026-10-22) ---
+  // --- 4. THEME SYSTEM: PRECISION CRAFT DUAL-THEME (OBSIDIAN TITANIUM / CERAMIC MIST) ---
+  // --- 4. THEME SWITCHER CONTROLLER (Tactile Linen Light & Roast Espresso Dark) ---
   function initThemeSwitcher() {
-    const THEME_KEY = 'tt_theme';
-
-    function applyTheme() {
-      document.body.classList.add('light-theme');
-      document.documentElement.classList.add('light-theme');
+    // One coherent light storefront, including visitors with a saved dark preference.
+    function applyLightTheme() {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
       document.body.classList.remove('dark-theme');
-      document.documentElement.classList.remove('dark-theme');
-      try {
-        localStorage.setItem(THEME_KEY, 'light');
-      } catch (_) {}
+      document.body.classList.add('light-theme');
+      try { localStorage.setItem('tt_theme', 'light'); } catch (_) {}
     }
+    applyLightTheme();
+    window.TTTheme = { getTheme: () => 'light', setTheme: applyLightTheme };
+  }
 
-    applyTheme();
+  // --- 4.1 ARTISAN HERO PRODUCT SHOWCASE CONTROLLER (Codex TT3D-HERO-20261024-R1) ---
+  const HERO_CURRENCY_FORMATTER = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+    maximumFractionDigits: 0
+  });
 
-    document.querySelectorAll('.theme-toggle-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        applyTheme();
-        if (window.showToast) {
-          window.showToast('Giao diện Warm Stone Studio mặc định');
+  // Approved catalog product IDs for Hero Spotlight with verified authentic imagery
+  const HERO_APPROVED_ITEMS = [
+    {
+      id: 'mw-cn-1646129',
+      tag: '✦ Best-seller Bàn Trang Điểm',
+      material: 'Bio-PLA Lụa Hữu Cơ'
+    },
+    {
+      id: 'mw-cn-1147539',
+      tag: '✦ Dấu Ấn Bàn Làm Việc',
+      material: 'Bio-PLA Đen Nhám & Vàng Đồng'
+    },
+    {
+      id: 'mw-cn-2235027',
+      tag: '✦ Tinh Hoa Tối Giản Washi',
+      material: 'Bio-PLA Trắng Ngà Ánh Sáng Ấm'
+    }
+  ];
+
+  let showcaseRequestCounter = 0;
+  let activeShowcaseProductId = 'mw-cn-1646129';
+
+  function getShowcaseProduct(productId) {
+    if (!window.TTCatalogStore || typeof window.TTCatalogStore.getProductByIdSync !== 'function') {
+      return null;
+    }
+    const product = window.TTCatalogStore.getProductByIdSync(productId);
+    if (!product || product.status !== 'active') {
+      return null;
+    }
+    return product;
+  }
+
+  function switchHeroShowcase(productId) {
+    const product = getShowcaseProduct(productId);
+    if (!product) return;
+
+    const approvedConfig = HERO_APPROVED_ITEMS.find(item => item.id === productId) || {
+      id: product.id,
+      tag: '✦ Chế Tác Thủ Công Hà Nội',
+      material: 'Bio-PLA Hữu Cơ 0.16mm'
+    };
+
+    const targetSrc = product.image || `assets/images/products/thumb_${product.id.replace('mw-cn-', '')}.png`;
+    const requestId = ++showcaseRequestCounter;
+
+    // Pre-load image to prevent broken visuals or race conditions
+    const preloader = new Image();
+    preloader.onload = () => {
+      if (requestId !== showcaseRequestCounter) return;
+
+      activeShowcaseProductId = product.id;
+
+      // Update Roving Tabindex & ARIA on tabs
+      const tabs = Array.from(document.querySelectorAll('#hero .hero-showcase-tab'));
+      tabs.forEach(tab => {
+        const isTarget = tab.dataset.heroTab === product.id;
+        tab.setAttribute('aria-selected', isTarget ? 'true' : 'false');
+        tab.setAttribute('tabindex', isTarget ? '0' : '-1');
+        tab.classList.toggle('active', isTarget);
+        tab.classList.toggle('bg-white', isTarget);
+        tab.classList.toggle('text-[#D45B34]', isTarget);
+        tab.classList.toggle('shadow-xs', isTarget);
+        tab.classList.toggle('text-[var(--text-secondary)]', !isTarget);
+      });
+
+      // Update DOM elements using textContent to prevent XSS
+      const imgEl = document.getElementById('hero-showcase-img');
+      const mediaEl = document.getElementById('hero-showcase-panel');
+      const titleEl = document.getElementById('hero-showcase-title');
+      const tagEl = document.getElementById('hero-showcase-tag');
+      const matEl = document.getElementById('hero-showcase-mat');
+      const priceEl = document.getElementById('hero-showcase-price');
+      const detailBtn = document.getElementById('hero-showcase-detail-btn');
+
+      if (imgEl) {
+        imgEl.src = targetSrc;
+        imgEl.alt = product.title || 'Sản phẩm chế tác T&T 3D';
+      }
+
+      if (mediaEl) {
+        mediaEl.setAttribute('aria-labelledby', `hero-tab-${product.id.replace('mw-cn-', '')}`);
+        mediaEl.classList.remove('is-entering');
+        void mediaEl.offsetWidth; // Trigger reflow for smooth fade
+        mediaEl.classList.add('is-entering');
+      }
+
+      if (titleEl) {
+        titleEl.textContent = ({'mw-cn-1646129':'Khay trang sức Nơ Lụa','mw-cn-1147539':'Biển tên để bàn','mw-cn-2235027':'Đèn bàn Washi'})[product.id] || product.title || '';
+        titleEl.title = product.title || '';
+      }
+      if (tagEl) tagEl.textContent = 'Lựa chọn từ xưởng';
+      if (matEl) matEl.textContent = 'Chọn mẫu · Chọn màu';
+      if (priceEl) {
+        priceEl.textContent = HERO_CURRENCY_FORMATTER.format(Number(product.price) || 0);
+      }
+
+      if (detailBtn) {
+        detailBtn.dataset.productId = product.id;
+      }
+    };
+
+    preloader.onerror = () => {
+      console.warn(`[T&T Hero] Failed to load image for showcase item ${productId}`);
+    };
+
+    preloader.src = targetSrc;
+  }
+  window.switchHeroShowcase = switchHeroShowcase;
+
+  function initHeroArtisanShowcase() {
+    const detailBtn = document.getElementById('hero-showcase-detail-btn');
+    if (detailBtn && !detailBtn.dataset.listenerAttached) {
+      detailBtn.dataset.listenerAttached = 'true';
+      detailBtn.addEventListener('click', () => {
+        const id = detailBtn.dataset.productId || activeShowcaseProductId;
+        const product = getShowcaseProduct(id);
+
+        if (!product) {
+          refreshHeroShowcase();
+          return;
+        }
+
+        if (typeof window.openProductDetailModal === 'function') {
+          window.openProductDetailModal(product.id);
         }
       });
-    });
+    }
+
+    // Keyboard navigation with roving tabindex for tablist
+    const tabList = document.querySelector('#hero [role="tablist"]');
+    if (tabList && !tabList.dataset.keysAttached) {
+      tabList.dataset.keysAttached = 'true';
+      const tabs = Array.from(tabList.querySelectorAll('[role="tab"]'));
+
+      tabList.addEventListener('keydown', (e) => {
+        const currentIdx = tabs.findIndex(t => t.getAttribute('aria-selected') === 'true');
+        if (currentIdx === -1) return;
+
+        let nextIdx = -1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          nextIdx = (currentIdx + 1) % tabs.length;
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          nextIdx = (currentIdx - 1 + tabs.length) % tabs.length;
+        } else if (e.key === 'Home') {
+          e.preventDefault();
+          nextIdx = 0;
+        } else if (e.key === 'End') {
+          e.preventDefault();
+          nextIdx = tabs.length - 1;
+        }
+
+        if (nextIdx !== -1) {
+          const nextTab = tabs[nextIdx];
+          nextTab.focus();
+          const targetId = nextTab.dataset.heroTab;
+          if (targetId) switchHeroShowcase(targetId);
+        }
+      });
+
+      tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+          e.preventDefault();
+          const targetId = tab.dataset.heroTab;
+          if (targetId) switchHeroShowcase(targetId);
+        });
+      });
+    }
+
+    refreshHeroShowcase();
   }
+
+  function refreshHeroShowcase() {
+    for (const item of HERO_APPROVED_ITEMS) {
+      const prod = getShowcaseProduct(item.id);
+      if (prod) {
+        switchHeroShowcase(prod.id);
+        return;
+      }
+    }
+    if (window.TTCatalogStore && typeof window.TTCatalogStore.getProductsSync === 'function') {
+      const allActive = window.TTCatalogStore.getProductsSync(true);
+      if (allActive && allActive.length > 0) {
+        switchHeroShowcase(allActive[0].id);
+      }
+    }
+  }
+  window.refreshHeroShowcase = refreshHeroShowcase;
+  window.initHeroArtisanShowcase = initHeroArtisanShowcase;
 
   // --- 5. SEGMENTED FILTER CONTROLS FOR STORE (ID-13) ---
   function initSegmentedFilters() {
@@ -471,11 +670,15 @@
 
     btn.addEventListener('click', () => {
       const isHidden = drawer.classList.contains('hidden');
+      btn.setAttribute('aria-expanded', String(isHidden));
+      btn.setAttribute('aria-label', isHidden ? 'Đóng menu' : 'Mở menu');
       if (isHidden) {
         drawer.classList.remove('hidden');
         btn.innerHTML = '<i class="fa-solid fa-xmark text-sm"></i>';
       } else {
         drawer.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Mở menu');
         btn.innerHTML = '<i class="fa-solid fa-bars text-sm"></i>';
       }
     });
@@ -483,8 +686,19 @@
     document.querySelectorAll('.mobile-nav-link').forEach(link => {
       link.addEventListener('click', () => {
         drawer.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Mở menu');
         btn.innerHTML = '<i class="fa-solid fa-bars text-sm"></i>';
       });
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !drawer.classList.contains('hidden')) {
+        drawer.classList.add('hidden');
+        btn.setAttribute('aria-expanded', 'false');
+        btn.setAttribute('aria-label', 'Mở menu');
+        btn.innerHTML = '<i class="fa-solid fa-bars text-sm"></i>';
+        btn.focus();
+      }
     });
   }
 
@@ -1220,6 +1434,28 @@
     initFaqAccordion();
     initOrderTracker();
     syncCentralConfig();
+    if (typeof initHeroArtisanShowcase === 'function') {
+      initHeroArtisanShowcase();
+    }
+
+    // Initialize Hero Layercraft 2.5D Automation Simulator (Codex WP3)
+    if (window.TTAutomationSimulator && document.getElementById('hero-layercraft-simulator')) {
+      const currentTheme = window.TTTheme ? window.TTTheme.getTheme() : 'dark';
+      window.heroSimulator = window.TTAutomationSimulator.create('#hero-layercraft-simulator', {
+        totalLayers: 120,
+        cycleDurationMs: 12000,
+        defaultColor: '#64E8F5',
+        defaultTheme: currentTheme,
+        autoPlay: true
+      });
+    }
+  });
+
+  // Lắng nghe thay đổi Theme để cập nhật Simulator
+  window.addEventListener('tt_theme_changed', (e) => {
+    if (window.heroSimulator && typeof window.heroSimulator.setTheme === 'function' && e.detail) {
+      window.heroSimulator.setTheme(e.detail.theme);
+    }
   });
 
   // Lắng nghe sự kiện cập nhật cấu hình cùng trang (Codex R5-02)
@@ -1231,6 +1467,13 @@
   window.addEventListener('storage', (e) => {
     if (!e || e.key === 'TT_STUDIO_CONFIG' || e.key === null) {
       syncCentralConfig();
+    }
+  });
+
+  // Lắng nghe cập nhật catalog để đồng bộ Hero Showcase (Codex TT3D-HERO-20261024-R1)
+  window.addEventListener('tt_products_updated', () => {
+    if (typeof refreshHeroShowcase === 'function') {
+      refreshHeroShowcase();
     }
   });
 

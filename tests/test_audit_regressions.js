@@ -300,7 +300,7 @@ async function run() {
   });
 
   // Ca G: Store tab navigation resets view to all categories
-  await test('Ca G (F09): Switching back to Store tab must reset category to all and render all 5 Hero spotlights', async () => {
+  await test('Ca G (F09): Returning to Store resets filters and shows a compact catalog without hiding the remaining products', async () => {
     const e = createEnvironment();
     e.win.TTCatalogStore = { getProductsSync: () => catalog };
     e.load('js/products-manager.js');
@@ -309,8 +309,11 @@ async function run() {
     e.win.switchWorkspace('view-studio3d');
     e.win.switchWorkspace('view-store');
     assert.strictEqual(e.win.location.hash, '#store');
-    const heroCount = (e.nodes.get('store-product-grid').innerHTML.match(/class="studio-hero-spotlight /g) || []).length;
-    assert.strictEqual(heroCount, 5, 'Must render 5 Hero spotlights when switching back to store');
+    const catalogHtml = e.nodes.get('store-product-grid').innerHTML;
+    const productCount = (catalogHtml.match(/<article /g) || []).length;
+    assert.strictEqual(productCount, 8, 'Store initially presents eight purchasable products');
+    assert.ok(catalogHtml.includes('data-action="load-more"'), 'Remaining catalog must be reachable through Load more');
+    assert.strictEqual(new Set(Array.from(catalogHtml.matchAll(/<article [^>]+data-product-id="([^"]+)"/g), match => match[1])).size, 8, 'Visible products must have distinct identities');
   });
 
   // Ca H: Swatch click uses DOM/dataset delegation, escaping injection payloads

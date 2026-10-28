@@ -1,0 +1,1279 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>T&amp;T 3D Labs — Decor &amp; quà tặng cá nhân hóa</title>
+  <meta name="description" content="Xưởng in 3D FDM &amp; chế tác số T&amp;T 3D Labs. Decor bàn làm việc, quà tặng cá nhân hóa, bảng tên NFC và thiết kế 3D theo yêu cầu tại Hà Nội.">
+  <link rel="icon" type="image/svg+xml" href="assets/images/logo-premium-mark.svg?v=4.0">
+
+  <!-- Google Fonts: Plus Jakarta Sans, JetBrains Mono & Space Grotesk -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Playfair+Display:ital,wght@0,600;1,600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Industrial Design System Compiled Tailwind Utilities -->
+  <link rel="stylesheet" href="css/tailwind.css?v=4.0">
+
+  <!-- Font Awesome Icons 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Core Storefront Stylesheet (Precision Craft Design System) -->
+  <link rel="stylesheet" href="css/style.css?v=4.1">
+
+  <link rel="stylesheet" href="css/minimal.css?v=20261027">
+
+  <!-- Central Runtime Engines -->
+  <script src="js/category-registry.js?v=4.0"></script>
+  <script src="js/art-presets.js?v=4.0"></script>
+  <script src="js/image-uploader.js?v=4.0"></script>
+  <script src="js/purchase-config.js?v=4.0"></script>
+  <script src="js/cart.js?v=4.0"></script>
+  <script src="js/checkout.js?v=4.0"></script>
+  <script src="js/order-engine.js?v=4.0"></script>
+  <script src="js/studio-state.js?v=4.1"></script>
+  <script src="js/personalize-studio.js?v=4.1"></script>
+  <script src="js/gift-quiz.js?v=4.0"></script>
+  <script src="js/visual-renderer.js?v=4.0"></script>
+  <script src="js/catalog-store.js?v=4.0"></script>
+  <script src="js/products-manager.js?v=4.0"></script>
+  <script src="js/viewer3d.js?v=4.0"></script>
+  <script src="js/calculator.js?v=4.0"></script>
+  <script src="js/config.js?v=4.0"></script>
+  <script src="js/automation-simulator.js?v=4.1"></script>
+  <script src="js/app.js?v=4.1" defer></script>
+</head>
+
+<body class="minimal-storefront bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col min-h-screen selection:bg-[#D45B34] selection:text-white antialiased">
+
+  <a class="skip-link" href="#app-workspace-container">Bỏ qua điều hướng</a>
+
+  <!-- =========================================================================
+       1. TOP WORKSHOP BENEFIT TICKER
+       ========================================================================= -->
+  <aside aria-label="Thông báo xưởng" class="store-announcement">Từ xưởng T&amp;T đến góc nhỏ của bạn <span aria-hidden="true">·</span> <span>Miễn phí vận chuyển đơn từ 300.000đ</span></aside>
+
+
+  <!-- =========================================================================
+       2. FLOATING FROSTED APP-SHELL NAVBAR
+       ========================================================================= -->
+  <div class="floating-navbar-container sticky top-0 z-40 bg-[var(--bg-surface-glass)] backdrop-blur-md border-b border-[var(--border-subtle)]">
+    <header id="floating-navbar" class="floating-navbar minimal-header max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-center justify-between">
+      
+      <!-- Brand Logo -->
+      <a href="#store" data-nav-view="view-store" onclick="window.switchWorkspace('view-store')" class="flex items-center gap-3 group">
+        <img src="assets/images/logo-premium.svg?v=4.0" alt="T&amp;T 3D Labs" class="brand-logo w-[150px] sm:w-[185px] h-auto object-contain">
+      </a>
+
+      <!-- Desktop 5 Primary Navigation Tabs -->
+      <nav class="store-main-nav" aria-label="Menu chính">
+        
+        <button type="button"
+                data-nav-view="view-store" 
+                onclick="window.switchWorkspace('view-store')"
+                class="workspace-nav-tab active" 
+                title="Cửa hàng &amp; Bộ sưu tập chọn lọc">
+          
+          <span>Cửa hàng</span>
+        </button>
+        
+        <button type="button"
+                data-nav-view="view-personalize" 
+                onclick="window.switchWorkspace('view-personalize')"
+                class="workspace-nav-tab" 
+                title="Chọn mẫu, màu sắc và nội dung riêng">
+          
+          <span>Cá nhân hóa</span>
+        </button>
+        
+        <button type="button"
+                data-nav-view="view-inspiration" 
+                onclick="window.switchWorkspace('view-inspiration')"
+                class="workspace-nav-tab" 
+                title="Góc bàn làm việc, bàn trang điểm &amp; quầy cafe">
+          
+          <span>Cảm hứng</span>
+        </button>
+
+        <button type="button"
+                data-nav-view="view-tracking" 
+                onclick="window.switchWorkspace('view-tracking')"
+                class="workspace-nav-tab" 
+                title="Tra cứu tiến độ in 3D &amp; vận đơn thực tế">
+          
+          <span>Tra đơn</span>
+        </button>
+        
+        <button type="button"
+                data-nav-view="view-support" 
+                onclick="window.switchWorkspace('view-support')"
+                class="workspace-nav-tab" 
+                title="Hướng dẫn NFC, vật liệu, bảo quản &amp; đổi trả">
+          
+          <span>Hỗ trợ</span>
+        </button>
+
+      </nav>
+
+      <!-- Right Action Controls -->
+      <div class="flex items-center gap-2 sm:gap-3">
+
+        <!-- Cart Drawer Button -->
+        <button type="button" 
+                class="open-cart-btn relative w-10 h-10 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] hover:border-[var(--accent-primary)] flex items-center justify-center text-[var(--text-primary)] transition-all shadow-sm" 
+                title="Xem giỏ hàng" 
+                aria-label="Giỏ hàng">
+          <i class="fa-solid fa-bag-shopping text-sm"></i>
+          <span class="cart-badge-count hidden absolute -top-1.5 -right-1.5 min-w-[18px] h-[18px] px-1 rounded-full bg-[#D45B34] text-white text-[10px] font-bold flex items-center justify-center font-mono shadow-sm">
+            0
+          </span>
+        </button>
+
+        <!-- Direct Zalo Hotline Pill -->
+        <a data-zalo-contact="true" 
+           class="hidden sm:inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[var(--bg-surface)] hover:bg-[#D45B34] text-[var(--text-primary)] hover:text-white border border-[var(--border-subtle)] hover:border-[#D45B34] text-xs font-semibold transition-all shadow-sm group cursor-pointer">
+          <i class="fa-solid fa-comment-dots text-xs text-[#D45B34] group-hover:text-white"></i>
+          <span>Zalo Xưởng</span>
+        </a>
+
+        <!-- Mobile Hamburger Menu Button -->
+        <button type="button" 
+                id="mobile-menu-toggle-btn" aria-controls="mobile-nav-drawer" aria-expanded="false" 
+                class="md:hidden w-10 h-10 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-primary)]" 
+                aria-label="Mở menu">
+          <i class="fa-solid fa-bars text-sm"></i>
+        </button>
+
+      </div>
+
+    </header>
+
+    <!-- Mobile Dropdown Nav Drawer -->
+    <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-[#DCDDD5] px-5 py-4 space-y-2 bg-white shadow-lg">
+      <a href="#store" data-nav-view="view-store" onclick="window.switchWorkspace('view-store'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+        <i class="fa-solid fa-store mr-2 text-[#FF5C00]"></i> Cửa Hàng &amp; Sản Phẩm
+      </a>
+      <a href="#personalize" data-nav-view="view-personalize" onclick="window.switchWorkspace('view-personalize'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-[#FF5C00]"></i> Cá nhân hóa
+      </a>
+      <a href="#inspiration" data-nav-view="view-inspiration" onclick="window.switchWorkspace('view-inspiration'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+        <i class="fa-solid fa-compass-drafting mr-2 text-[#FF5C00]"></i> Cảm hứng
+      </a>
+      <a href="#tracking" data-nav-view="view-tracking" onclick="window.switchWorkspace('view-tracking'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+        <i class="fa-solid fa-truck-fast mr-2 text-[#FF5C00]"></i> Tra cứu yêu cầu đặt hàng
+      </a>
+      <a href="#support" data-nav-view="view-support" onclick="window.switchWorkspace('view-support'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
+        <i class="fa-solid fa-circle-question mr-2 text-[#FF5C00]"></i> Hỗ trợ
+      </a>
+      <div class="pt-2 border-t border-[#DCDDD5]">
+        <a data-zalo-contact="true" class="w-full btn-primary text-xs !py-3 flex items-center justify-center gap-2">
+          <i class="fa-solid fa-comment-dots"></i>
+          <span>Liên hệ T&amp;T qua Zalo</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- =========================================================================
+       3. MAIN WORKSPACE CONTAINER (Discrete Multi-View App-Shell)
+       ========================================================================= -->
+  <main id="app-workspace-container" tabindex="-1" class="flex-1 w-full relative">
+
+    <!-- =======================================================================
+         VIEW 1: CỬA HÀNG & TRANG CHỦ MỚI (STORE & CURATED HIGHLIGHTS)
+         ======================================================================= -->
+    <div id="view-store" class="app-workspace active" role="tabpanel" tabindex="0" aria-label="Cửa Hàng">
+      
+      <!-- HERO SECTION: ARTISAN STUDIO & CURATED TACTILE SHOWCASE -->
+      <section id="hero" class="relative pt-10 pb-14 lg:pt-14 lg:pb-16 border-b border-[var(--border-subtle)] bg-[var(--bg-canvas)] overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
+            
+            <!-- Left Hero Copy & Actions -->
+            <div class="hero-copy lg:col-span-6 space-y-6 text-left">
+              
+              <p class="store-eyebrow">T&amp;T 3D LABS / MADE FOR YOUR SPACE</p>
+              <h1 class="minimal-hero-title">Một món nhỏ.<br><span>Góc sống có gu.</span></h1>
+              <p class="minimal-hero-description">Decor bàn làm việc và quà tặng mang dấu ấn riêng. Chọn mẫu bạn thích, thêm một màu sắc, một cái tên — và làm góc nhỏ trở thành của bạn.</p>
+              <div class="minimal-hero-actions">
+                <a href="#store-catalog" class="btn-primary">Khám phá sản phẩm <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                <button type="button" class="minimal-text-action" onclick="window.switchWorkspace('view-personalize')">Tạo dấu ấn riêng <span aria-hidden="true">↗</span></button>
+              </div>
+              <div class="minimal-hero-notes"><span>Chọn màu theo sở thích</span><span>Cá nhân hóa theo mẫu</span><span>Chế tác tại Hà Nội</span></div>
+            </div>
+
+            <!-- Right Hero: Interactive Artisan Showcase (Lifestyle Frame + Curated Switcher) -->
+            <div class="lg:col-span-6 relative w-full flex flex-col items-center">
+              <div class="hero-showcase-card rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 sm:p-5 shadow-[0_16px_40px_-12px_rgba(45,35,25,0.08)]">
+                
+                <!-- Showcase Top Switcher Pills with Roving Tabindex & ARIA -->
+                <div class="flex items-center justify-between gap-1.5 mb-3.5 p-1 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]" role="tablist" aria-label="Sản phẩm nổi bật">
+                  <button type="button" 
+                          id="hero-tab-1646129"
+                          role="tab"
+                          aria-selected="true"
+                          aria-controls="hero-showcase-panel"
+                          tabindex="0"
+                          data-hero-tab="mw-cn-1646129"
+                          class="hero-showcase-tab flex-1 py-1.5 px-2 rounded-lg text-xs font-bold transition-all text-center active bg-white text-[#D45B34] shadow-xs">
+                    Khay Nơ Lụa
+                  </button>
+                  <button type="button" 
+                          id="hero-tab-1147539"
+                          role="tab"
+                          aria-selected="false"
+                          aria-controls="hero-showcase-panel"
+                          tabindex="-1"
+                          data-hero-tab="mw-cn-1147539"
+                          class="hero-showcase-tab flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold text-[var(--text-secondary)] transition-all text-center hover:text-[var(--text-primary)]">
+                    Biển Tên Để Bàn
+                  </button>
+                  <button type="button" 
+                          id="hero-tab-2235027"
+                          role="tab"
+                          aria-selected="false"
+                          aria-controls="hero-showcase-panel"
+                          tabindex="-1"
+                          data-hero-tab="mw-cn-2235027"
+                          class="hero-showcase-tab flex-1 py-1.5 px-2 rounded-lg text-xs font-semibold text-[var(--text-secondary)] transition-all text-center hover:text-[var(--text-primary)]">
+                    Đèn Bàn Washi
+                  </button>
+                </div>
+
+                <!-- Showcase Main Real Photo Frame (Aspect 4:3) -->
+                <div id="hero-showcase-panel" 
+                     role="tabpanel" 
+                     aria-labelledby="hero-tab-1646129"
+                     class="hero-showcase-media rounded-2xl border border-[var(--border-subtle)] group">
+                  <img id="hero-showcase-img" 
+                       src="assets/images/products/thumb_1646129.png" width="700" height="525" fetchpriority="high" 
+                       alt="Khay đĩa lụa mềm thắt nơ Coquette" 
+                       class="w-full h-full object-cover object-center">
+                  
+                  <!-- Tag góc trên -->
+                  <div class="absolute top-3 left-3 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md border border-[#E8E2D8] text-[10px] font-mono font-bold text-[#D45B34] shadow-xs flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-[#D45B34]"></span>
+                    <span id="hero-showcase-tag">Lựa chọn từ xưởng</span>
+                  </div>
+                </div>
+
+                <!-- Showcase Bottom Floating Details & Action -->
+                <div class="hero-showcase-details mt-3.5 pt-3 border-t border-[var(--border-subtle)]">
+                  <div>
+                    <div id="hero-showcase-title" class="text-sm font-bold text-[var(--text-primary)] truncate">
+                      Khay trang sức Nơ Lụa
+                    </div>
+                    <div class="flex items-center gap-2 mt-0.5">
+                      <span id="hero-showcase-mat" class="text-[11px] font-mono text-[var(--text-secondary)]">
+                        Chọn mẫu · Chọn màu
+                      </span>
+                      <span class="text-slate-300">•</span>
+                      <span id="hero-showcase-price" class="text-xs font-bold text-[#D45B34]">
+                        119.000₫
+                      </span>
+                    </div>
+                  </div>
+
+                  <button type="button" 
+                          id="hero-showcase-detail-btn"
+                          data-product-id="mw-cn-1646129"
+                          class="shrink-0 px-3.5 py-2 rounded-xl bg-[var(--bg-surface-elevated)] hover:bg-[#D45B34] text-[var(--text-primary)] hover:text-white border border-[var(--border-subtle)] hover:border-[#D45B34] text-xs font-bold transition-all flex items-center gap-1.5 shadow-xs">
+                    <span>Xem chi tiết</span>
+                    <i class="fa-solid fa-arrow-right text-[10px]"></i>
+                  </button>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+          </div>
+        </div>
+      </section>
+
+
+      <section id="shop-by-need" class="minimal-needs">
+        <div class="minimal-container">
+          <div class="minimal-section-heading"><div><p class="store-eyebrow">TÌM MỘT MÓN HỢP VỚI BẠN</p><h2>Cho từng góc nhỏ.</h2></div><button type="button" class="minimal-text-action" onclick="window.TTGiftQuiz.open()">Gợi ý chọn quà <span aria-hidden="true">↗</span></button></div>
+          <div class="minimal-category-list">
+            <button type="button" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')"><i class="fa-solid fa-laptop" aria-hidden="true"></i><span>Bàn làm việc</span><span aria-hidden="true">↗</span></button>
+            <button type="button" onclick="window.navigateToCategory('Trang_Diem_Vanity')"><i class="fa-solid fa-gem" aria-hidden="true"></i><span>Bàn trang điểm</span><span aria-hidden="true">↗</span></button>
+            <button type="button" onclick="window.navigateToCategory('Decor_Den_Noi_That')"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span>Decor &amp; ánh sáng</span><span aria-hidden="true">↗</span></button>
+            <button type="button" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')"><i class="fa-solid fa-wifi" aria-hidden="true"></i><span>NFC &amp; cá nhân hóa</span><span aria-hidden="true">↗</span></button>
+            <button type="button" onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')"><i class="fa-solid fa-shapes" aria-hidden="true"></i><span>Móc khóa &amp; đồ chơi</span><span aria-hidden="true">↗</span></button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION: TOÀN BỘ CATALOG & CỬA HÀNG CÓ FILTER & SEARCH -->
+      <section id="store-catalog" aria-labelledby="collection-title" class="py-16 border-b border-[#DCDDD5] bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div class="space-y-4">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">BỘ SƯU TẬP T&amp;T</span>
+                <h2 id="collection-title" class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Thiết kế nhỏ. Cảm hứng lớn.</h2>
+                <p class="text-xs sm:text-sm text-[#586057] mt-1">Những món đồ để góc sống gọn gàng và có cá tính hơn.</p>
+              </div>
+
+              <!-- Quick Search Input -->
+              <div class="relative w-full sm:w-72 lg:w-80 shrink-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[#586057] text-xs pointer-events-none"></i>
+                <input type="text" 
+                       id="store-search-input" 
+                       placeholder="Tìm theo tên sản phẩm..." 
+                       aria-label="Tìm kiếm sản phẩm"
+                       class="w-full pl-9 pr-8 py-2.5 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] focus:border-[#FF5C00] focus:ring-1 focus:ring-[#FF5C00]/30 text-xs text-[#20231F] placeholder-[#586057] outline-none transition-all">
+                <button type="button" 
+                        id="store-search-clear" 
+                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[#586057] hover:text-[#20231F] text-xs" 
+                        title="Xóa tìm kiếm">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none pt-2" id="store-category-filters" role="group" aria-label="Bộ lọc danh mục">
+              <button type="button" class="segmented-pill active" data-category="all" aria-pressed="true">
+                <span>Tất Cả Mẫu</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Trang_Diem_Vanity" aria-pressed="false">
+                <span>Trang Điểm &amp; Nơ Lụa</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false">
+                <span>Decor &amp; Đèn Nội Thất</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false">
+                <span>Hộp Bàn &amp; Tiện Ích</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false">
+                <span>Cá Nhân Hóa &amp; NFC</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false">
+                <span>Móc Khóa &amp; Art Toy</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="minimal-catalog-toolbar">
+            <p id="store-results-count" role="status" aria-live="polite" aria-atomic="true"></p>
+            <label for="store-sort-input">Sắp xếp <select id="store-sort-input"><option value="curated">Đề xuất từ xưởng</option><option value="price-asc">Giá tăng dần</option><option value="price-desc">Giá giảm dần</option></select></label>
+          </div>
+          <!-- The Complete Grid (Populated by products-manager.js) -->
+          <div id="store-product-grid" class="min-h-[200px]"></div>
+
+        </div>
+      </section>
+
+
+      <section class="minimal-personalize-teaser">
+        <div class="minimal-container minimal-personalize-layout">
+          <div><p class="store-eyebrow">DÀNH RIÊNG CHO BẠN</p><h2>Một cái tên.<br>Một món quà riêng.</h2><p>Chọn mẫu, phối màu và xem trước nội dung cá nhân hóa. Một chi tiết nhỏ làm món quà trở nên đặc biệt.</p><button type="button" class="btn-primary" onclick="window.switchWorkspace('view-personalize')">Cá nhân hóa sản phẩm <span aria-hidden="true">↗</span></button></div>
+          <div class="minimal-personalize-image"><img src="assets/images/products/thumb_1147539.png" alt="Mẫu biển tên cá nhân hóa để bàn" width="700" height="525" loading="lazy"><span>Chọn mẫu → Thêm tên → Gửi yêu cầu</span></div>
+        </div>
+      </section>
+
+      <!-- SECTION: QUY TRÌNH TỪ XƯỞNG ĐẾN TAY BẠN (FROM LAB TO LIFE) -->
+      <section class="minimal-process"><div class="minimal-container"><div class="minimal-section-heading"><h2>Từ xưởng đến tay bạn.</h2><button class="minimal-text-action" type="button" onclick="window.switchWorkspace('view-tracking')">Tra cứu yêu cầu <span aria-hidden="true">↗</span></button></div><ol><li><span>01</span><div><h3>Chọn sản phẩm</h3><p>Chọn mẫu, màu và nội dung riêng nếu có.</p></div></li><li><span>02</span><div><h3>Xác nhận với xưởng</h3><p>Thống nhất thông tin và thời gian hoàn thiện.</p></div></li><li><span>03</span><div><h3>Chế tác &amp; kiểm tra</h3><p>Hoàn thiện sản phẩm theo nội dung đã chốt.</p></div></li><li><span>04</span><div><h3>Đóng gói &amp; giao hàng</h3><p>Nhận sản phẩm và hướng dẫn sử dụng.</p></div></li></ol></div></section>
+      <!-- SECTION: CÂU HỎI THƯỜNG GẶP (ACCESSIBLE FAQ) -->
+      <section class="py-16 border-b border-[#DCDDD5]">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div class="text-center space-y-2">
+            <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">Hỏi Đáp Nhanh</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F]">Bạn hỏi, T&amp;T giải đáp.</h2>
+          </div>
+
+          <div class="space-y-3">
+            <details class="support-accordion">
+              <summary>
+                <span>Sản phẩm in 3D có bền không và có chống nước được không?</span>
+                <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+              </summary>
+              <div class="accordion-content">
+                Sản phẩm T&amp;T 3D được in từ nhựa nguyên sinh sinh học Bio-PLA và PETG trên dàn máy Bambu Lab tốc độ cao với độ dày lớp 0.16mm mịn chắc. Các sản phẩm bình hoa và khay nước được xử lý kỹ thuật đùn kín nước; bạn có thể cắm hoa tươi và rửa nước thoải mái. Lưu ý không ngâm trong nước sôi trên 60°C.
+              </div>
+            </details>
+
+            <details class="support-accordion">
+              <summary>
+                <span>Thời gian chế tác và giao hàng mất bao lâu?</span>
+                <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+              </summary>
+              <div class="accordion-content">
+                Các mẫu có sẵn tại xưởng sẽ được đóng gói giao ngay trong ngày. Với các mẫu làm theo đơn hoặc khắc tên riêng, thời gian chế tác tại xưởng Hà Nội từ 1–2 ngày làm việc. Thời gian vận chuyển: nội thành Hà Nội 1–2 ngày; các tỉnh thành khác 2–3 ngày qua GHTK / Viettel Post.
+              </div>
+            </details>
+
+            <details class="support-accordion">
+              <summary>
+                <span>Chip NFC hoạt động như thế nào? Có cần sạc pin không?</span>
+                <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+              </summary>
+              <div class="accordion-content">
+                Chip NTAG215 được đúc chìm liền khối bên trong phôi nhựa, hoạt động theo cơ chế cảm ứng từ trường thụ động (Passive RFID/NFC) nên hoàn toàn không cần dùng pin và không bao giờ hết pin. Tương thích với tất cả điện thoại iPhone (từ Xs trở lên) và các dòng Android có bật NFC trong cài đặt.
+              </div>
+            </details>
+
+            <details class="support-accordion">
+              <summary>
+                <span>Chính sách đổi trả và bảo hành như thế nào?</span>
+                <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+              </summary>
+              <div class="accordion-content">
+                T&amp;T 3D Labs cam kết đổi mới 1-1 miễn phí trong vòng 7 ngày kể từ khi nhận hàng nếu sản phẩm có lỗi kỹ thuật in (nứt vỡ, bung lớp, sai màu sắc đã chốt) hoặc hư hỏng do quá trình vận chuyển bưu tá. Bạn chỉ cần gửi ảnh/video kiện hàng qua Zalo kỹ thuật viên xưởng.
+              </div>
+            </details>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+
+
+    <!-- =======================================================================
+         VIEW 2: CÁ NHÂN HÓA (2D CUSTOM STUDIO)
+         ======================================================================= -->
+    <div id="view-personalize" class="app-workspace hidden py-12" role="tabpanel" tabindex="0" aria-label="Cá Nhân Hóa">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-[#C44800] text-xs font-bold font-mono">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+            <span>CHỌN MẪU · THÊM DẤU ẤN RIÊNG</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F]">Tạo một món đồ mang tên bạn.</h2>
+          <p class="text-xs sm:text-sm text-[#586057] max-w-2xl leading-relaxed">
+            Chọn mẫu sản phẩm hỗ trợ, nhập tên riêng, lời chúc hoặc link WiFi NFC của bạn. Xem trực tiếp mô phỏng chữ nổi và màu sắc trước khi gửi yêu cầu cho xưởng.
+          </p>
+        </div>
+
+        <!-- Populated by js/personalize-studio.js -->
+        <div id="personalize-studio-container" class="min-h-[500px]"></div>
+
+      </div>
+    </div>
+
+
+    <!-- =======================================================================
+         VIEW 3: GÓC CẢM HỨNG (SHOPPABLE INSPIRATION CORNER)
+         ======================================================================= -->
+    <div id="view-inspiration" class="app-workspace hidden py-12" role="tabpanel" tabindex="0" aria-label="Góc Cảm Hứng">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+        
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#DCDDD5] text-xs font-bold font-mono text-[#586057]">
+            <i class="fa-solid fa-compass-drafting text-[#FF5C00]"></i>
+            <span>SETUP &amp; PHỐI CẢNH THỰC TẾ</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F]">Ý tưởng cho góc sống của bạn.</h2>
+          <p class="text-xs sm:text-sm text-[#586057] max-w-2xl leading-relaxed">
+            Khám phá các góc phối mẫu từ bàn làm việc công nghệ, bàn trang điểm Coquette đến quầy cafe thông minh. Mua trọn bộ để tiết kiệm 10% chi phí.
+          </p>
+        </div>
+
+        <div class="space-y-12">
+          
+          <!-- SETUP 1: BÀN LÀM VIỆC TỐI GIẢN -->
+          <div class="setup-card p-6 sm:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <div class="lg:col-span-7 rounded-2xl overflow-hidden border border-[#DCDDD5] aspect-[16/10] bg-slate-100">
+                <img src="assets/images/product-desk-dock.jpg" alt="Bàn làm việc tối giản công nghệ" class="w-full h-full object-cover">
+              </div>
+
+              <div class="lg:col-span-5 space-y-5">
+                <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">Setup 01 • Bàn Làm Việc</span>
+                <h3 class="text-xl sm:text-2xl font-bold text-[#20231F]">Góc Làm Việc Công Nghệ &amp; Tối Giản</h3>
+                <p class="text-xs text-[#586057] leading-relaxed">
+                  Thiết kế góc bàn làm việc ngăn nắp, triệt tiêu dây cáp rườm rà với khay để bàn vát góc, dock sạc thông minh và kệ module pegboard.
+                </p>
+
+                <!-- Hotspot items in this scene -->
+                <div class="space-y-2 pt-2 border-t border-slate-100">
+                  <div class="text-xs font-bold text-[#20231F]">Sản phẩm trong ảnh:</div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="setup-hotspot-pill cursor-pointer" onclick="window.openProductDetailModal('mw-cn-1971424')">
+                      <span>• Hộp để bàn module</span>
+                      <strong class="font-mono text-[#FF5C00]">149.000 đ</strong>
+                    </span>
+                    <span class="setup-hotspot-pill cursor-pointer" onclick="window.openProductDetailModal('mw-cn-1836100')">
+                      <span>• Đế sạc NFC TapConnect</span>
+                      <strong class="font-mono text-[#FF5C00]">109.000 đ</strong>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span class="text-[11px] text-[#586057] block">Giá trọn bộ 2 món (Giảm 10%):</span>
+                    <span class="text-xl font-mono font-bold text-[#FF5C00]">232.000 đ</span>
+                    <span class="text-xs text-slate-400 line-through ml-2">258.000 đ</span>
+                  </div>
+                  <button type="button" 
+                          onclick="window.TTCart.addItem({id:'mw-cn-1971424', title:'Hộp để bàn module', price:149000, qty:1}); window.TTCart.addItem({id:'mw-cn-1836100', title:'Đế sạc NFC TapConnect', price:109000, qty:1}); window.TTCart.openCart();" 
+                          class="btn-primary text-xs !py-3 !px-4">
+                    Mua Trọn Bộ
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SETUP 2: BÀN TRANG ĐIỂM COQUETTE NƠ LỤA -->
+          <div class="setup-card p-6 sm:p-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+              
+              <div class="lg:col-span-7 rounded-2xl overflow-hidden border border-[#DCDDD5] aspect-[16/10] bg-slate-100">
+                <img src="assets/images/product-pleated-vase.jpg" alt="Bàn trang điểm nơ lụa Coquette" class="w-full h-full object-cover">
+              </div>
+
+              <div class="lg:col-span-5 space-y-5">
+                <span class="text-xs font-mono font-bold text-rose-500 uppercase tracking-wider">Setup 02 • Bàn Trang Điểm</span>
+                <h3 class="text-xl sm:text-2xl font-bold text-[#20231F]">Góc Bàn Trang Điểm Nơ Lụa &amp; Coquette</h3>
+                <p class="text-xs text-[#586057] leading-relaxed">
+                  Tone hồng pastel và trắng ngọc trai dịu ngọt, kết hợp ống cắm cọ nếp lụa thắt nơ, bình hoa dập ly xếp nếp và khay trang sức lụa.
+                </p>
+
+                <!-- Hotspot items in this scene -->
+                <div class="space-y-2 pt-2 border-t border-slate-100">
+                  <div class="text-xs font-bold text-[#20231F]">Sản phẩm trong ảnh:</div>
+                  <div class="flex flex-wrap gap-2">
+                    <span class="setup-hotspot-pill cursor-pointer" onclick="window.openProductDetailModal('mw-cn-2084928')">
+                      <span>• Khay nơ lụa Sweet Silk</span>
+                      <strong class="font-mono text-[#FF5C00]">139.000 đ</strong>
+                    </span>
+                    <span class="setup-hotspot-pill cursor-pointer" onclick="window.openProductDetailModal('mw-cn-1646129')">
+                      <span>• Ống cắm cọ Coquette</span>
+                      <strong class="font-mono text-[#FF5C00]">129.000 đ</strong>
+                    </span>
+                  </div>
+                </div>
+
+                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
+                  <div>
+                    <span class="text-[11px] text-[#586057] block">Giá trọn bộ 2 món (Giảm 10%):</span>
+                    <span class="text-xl font-mono font-bold text-[#FF5C00]">241.000 đ</span>
+                    <span class="text-xs text-slate-400 line-through ml-2">268.000 đ</span>
+                  </div>
+                  <button type="button" 
+                          onclick="window.TTCart.addItem({id:'mw-cn-2084928', title:'Khay nơ lụa Sweet Silk', price:139000, qty:1}); window.TTCart.addItem({id:'mw-cn-1646129', title:'Ống cắm cọ Coquette', price:129000, qty:1}); window.TTCart.openCart();" 
+                          class="btn-primary text-xs !py-3 !px-4">
+                    Mua Trọn Bộ
+                  </button>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+    <!-- =======================================================================
+         VIEW 4: THEO DÕI ĐƠN HÀNG THẬT (REAL ORDER TRACKING PIPELINE)
+         ======================================================================= -->
+    <div id="view-tracking" class="app-workspace hidden py-12" role="tabpanel" tabindex="0" aria-label="Theo Dõi Đơn Hàng">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <!-- Header -->
+        <div class="text-center space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-200 text-xs font-bold font-mono text-blue-700">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>THÔNG TIN YÊU CẦU CỦA BẠN</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F]">Tra cứu yêu cầu đặt hàng.</h2>
+          <p class="text-xs sm:text-sm text-[#586057] max-w-lg mx-auto leading-relaxed">
+            Tra bản nháp đã lưu trên trình duyệt này bằng mã yêu cầu. Để xác nhận tiến độ sản xuất hoặc đơn đặt trên thiết bị khác, hãy liên hệ xưởng.
+          </p>
+        </div>
+
+        <!-- Tracking Lookup Form -->
+        <div class="bg-white rounded-3xl border border-[#DCDDD5] p-6 sm:p-8 shadow-sm space-y-5">
+          <form id="order-lookup-form" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end">
+              
+              <div class="sm:col-span-8 space-y-1.5">
+                <label for="order-lookup-input" class="text-xs font-bold text-[#20231F]">Mã đơn hàng hoặc link tra cứu:</label>
+                <div class="relative">
+                  <i class="fa-solid fa-hashtag absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                  <input type="text" 
+                         id="order-lookup-input" 
+                         placeholder="Ví dụ: TT3D-DEMO-2026 hoặc TT3D-XXXX" 
+                         class="w-full pl-9 pr-4 py-3 rounded-2xl bg-[#F7F6F2] border border-[#DCDDD5] focus:border-[#FF5C00] text-xs font-mono font-bold text-[#20231F] outline-none">
+                </div>
+              </div>
+
+              <div class="sm:col-span-4">
+                <button type="submit" class="w-full btn-primary !py-3 !rounded-2xl text-xs font-bold flex items-center justify-center gap-2 shadow-sm">
+                  <i class="fa-solid fa-magnifying-glass"></i>
+                  <span>Tra Cứu Tiến Độ</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- Quick sample demonstration links -->
+            <div class="pt-3 border-t border-slate-100 flex flex-wrap items-center gap-2 text-xs">
+              <span class="text-[#586057] text-[11px]">Xem thử với dữ liệu minh họa:</span>
+              <button type="button" 
+                      onclick="document.getElementById('order-lookup-input').value = 'TT3D-DEMO-2026'; document.getElementById('order-lookup-form').dispatchEvent(new Event('submit'));"
+                      class="px-2.5 py-1 rounded-lg bg-orange-50 border border-orange-200 text-[#C44800] text-[11px] font-mono hover:bg-orange-100 transition-colors">
+                Mẫu minh họa · Đang làm
+              </button>
+              <button type="button" 
+                      onclick="document.getElementById('order-lookup-input').value = 'TT3D-DEMO-NFC'; document.getElementById('order-lookup-form').dispatchEvent(new Event('submit'));"
+                      class="px-2.5 py-1 rounded-lg bg-blue-50 border border-blue-200 text-blue-700 text-[11px] font-mono hover:bg-blue-100 transition-colors">
+                Mẫu minh họa · Đang giao
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Order Results Container (Populated dynamically) -->
+        <div id="order-lookup-results" class="space-y-6"></div>
+
+      </div>
+    </div>
+
+
+    <!-- =======================================================================
+         VIEW 5: HƯỚNG DẪN & HỖ TRỢ (SUPPORT & USER GUIDES)
+         ======================================================================= -->
+    <div id="view-support" class="app-workspace hidden py-12" role="tabpanel" tabindex="0" aria-label="Hướng Dẫn & Hỗ Trợ">
+      <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+        
+        <div class="space-y-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-[#DCDDD5] text-xs font-bold font-mono text-[#586057]">
+            <i class="fa-solid fa-circle-question text-[#FF5C00]"></i>
+            <span>CẨM NANG SỬ DỤNG &amp; HỖ TRỢ</span>
+          </div>
+          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F]">Mọi điều bạn cần biết.</h2>
+          <p class="text-xs sm:text-sm text-[#586057] max-w-2xl leading-relaxed">
+            Tất cả những gì bạn cần biết để sử dụng bền lâu các sản phẩm decor in 3D và phụ kiện chip NFC thông minh.
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          
+          <!-- Guide 1: NFC -->
+          <details class="support-accordion" open>
+            <summary>
+              <span class="flex items-center gap-2.5">
+                <i class="fa-solid fa-wifi text-[#FF5C00]"></i>
+                <span>1. Hướng Dẫn Kích Hoạt &amp; Dùng Chip NFC 1-Chạm (iPhone &amp; Android)</span>
+              </span>
+              <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+            </summary>
+            <div class="accordion-content space-y-3">
+              <p>Chip NTAG215 đã được xưởng nạp sẵn thông tin WiFi hoặc link theo yêu cầu của bạn trước khi xuất xưởng.</p>
+              <ul class="list-disc pl-5 space-y-1.5 text-xs text-[#586057]">
+                <li><strong>Với iPhone (từ iPhone Xs/Xr trở lên):</strong> Bật sáng màn hình, chạm đỉnh đầu mặt lưng máy vào biểu tượng sóng NFC trên đế. Màn hình sẽ hiện thông báo kết nối WiFi tự động.</li>
+                <li><strong>Với Android (Samsung, Xiaomi, Oppo...):</strong> Vào Cài đặt &gt; Kết nối &gt; Bật NFC. Đặt phần giữa lưng máy vào đế để kích hoạt.</li>
+                <li><strong>Tự đổi mật khẩu WiFi sau này:</strong> Tải app miễn phí <em>NFC Tools</em> trên App Store / Google Play, chọn tab Write &gt; Add a record &gt; Wi-Fi network &gt; Nhập tên và pass mới rồi chạm máy vào đế để ghi đè.</li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Guide 2: Materials -->
+          <details class="support-accordion">
+            <summary>
+              <span class="flex items-center gap-2.5">
+                <i class="fa-solid fa-seedling text-emerald-600"></i>
+                <span>2. Cẩm Nang Vật Liệu In 3D: Nhựa Sinh Học Bio-PLA vs PETG Chịu Nhiệt</span>
+              </span>
+              <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+            </summary>
+            <div class="accordion-content space-y-3">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="p-3.5 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] space-y-1.5">
+                  <h4 class="font-bold text-xs text-[#20231F]">🌱 Nhựa Bio-PLA (Polylactic Acid)</h4>
+                  <p class="text-xs text-[#586057] leading-relaxed">
+                    Có nguồn gốc từ tinh bột ngô và mía đường hữu cơ. Bề mặt siêu mịn, không mùi nhựa độc hại, màu sắc óng ả (Silk) hoặc mờ mịn (Matte). Thích hợp nhất cho decor trong nhà, bàn học, bàn trang điểm.
+                  </p>
+                </div>
+                <div class="p-3.5 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] space-y-1.5">
+                  <h4 class="font-bold text-xs text-[#20231F]">💧 Nhựa Kỹ Thuật PETG</h4>
+                  <p class="text-xs text-[#586057] leading-relaxed">
+                    Chịu nhiệt tới 75°C, chống thấm nước tuyệt đối và chống va đập cao. Chuyên dùng cho đế WiFi quầy bar cafe, cốc đựng đồ ướt và khay để ngoài ban công.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <!-- Guide 3: Care -->
+          <details class="support-accordion">
+            <summary>
+              <span class="flex items-center gap-2.5">
+                <i class="fa-solid fa-soap text-blue-600"></i>
+                <span>3. Cách Vệ Sinh &amp; Bảo Quản Bền Đẹp</span>
+              </span>
+              <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+            </summary>
+            <div class="accordion-content space-y-2">
+              <p>Để sản phẩm luôn giữ được độ sáng bóng và thẩm mỹ nguyên bản:</p>
+              <ul class="list-disc pl-5 space-y-1 text-xs text-[#586057]">
+                <li>Lau chùi bụi bằng khăn mềm ẩm hoặc chổi cọ lông mềm.</li>
+                <li>Có thể rửa bằng nước xà phòng loãng ở nhiệt độ thường.</li>
+                <li>Không ngâm trong nước sôi trên 60°C hoặc rửa trong máy rửa chén bát nhiệt độ cao.</li>
+                <li>Tránh để gần bếp ga, lò nướng hoặc phơi nắng gắt mùa hè liên tục nhiều ngày.</li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Guide 4: Warranty & Delivery -->
+          <details class="support-accordion">
+            <summary>
+              <span class="flex items-center gap-2.5">
+                <i class="fa-solid fa-shield-halved text-purple-600"></i>
+                <span>4. Chính Sách Giao Hàng &amp; Đổi Trả Minh Bạch</span>
+              </span>
+              <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+            </summary>
+            <div class="accordion-content space-y-2">
+              <ul class="list-disc pl-5 space-y-1.5 text-xs text-[#586057]">
+                <li><strong>Freeship toàn quốc:</strong> Đơn hàng từ 300.000đ được miễn phí vận chuyển. Đơn dưới 300.000đ áp dụng phí vận chuyển đồng giá 25.000đ.</li>
+                <li><strong>Kiểm tra hàng trước khi thanh toán:</strong> Khách chọn thanh toán COD được mở hộp kiểm tra đúng mẫu, đúng màu sắc và nguyên vẹn trước khi nhận.</li>
+                <li><strong>Đổi mới 1-1 trong 7 ngày:</strong> Nếu sản phẩm có bất kỳ lỗi nứt vỡ, sai mẫu chữ khắc hoặc chip NFC không nhận diện, xưởng sản xuất lại và gửi đổi tận nơi miễn phí.</li>
+              </ul>
+            </div>
+          </details>
+
+          <!-- Guide 5: Workshop Contact -->
+          <details class="support-accordion">
+            <summary>
+              <span class="flex items-center gap-2.5">
+                <i class="fa-solid fa-phone text-emerald-600"></i>
+                <span>5. Thông Tin Xưởng &amp; Kênh Tiếp Nhận Hỗ Trợ</span>
+              </span>
+              <i class="fa-solid fa-chevron-down accordion-chevron"></i>
+            </summary>
+            <div class="accordion-content space-y-2">
+              <p class="text-xs text-[#586057]">Chúng tôi luôn sẵn sàng lắng nghe mọi ý kiến đóng góp của quý khách:</p>
+              <div class="p-3 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] space-y-1 text-xs font-mono">
+                <div><strong>Xưởng chế tác:</strong> T&amp;T 3D Labs Studio, Hà Nội</div>
+                <div><strong>Hotline kỹ thuật:</strong> <span class="dynamic-hotline-text">0986.888.333</span></div>
+                <div><strong>Zalo tư vấn:</strong> Nhắn trực tiếp qua biểu tượng Zalo trên website</div>
+                <div><strong>Giờ làm việc:</strong> 8:30 – 19:30 (Thứ 2 đến Thứ 7)</div>
+              </div>
+            </div>
+          </details>
+
+        </div>
+
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- =========================================================================
+       4. GLOBAL FOOTER
+       ========================================================================= -->
+  <footer class="bg-white border-t border-[#DCDDD5] pt-12 pb-24 md:pb-12 text-xs text-[#586057]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+      
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
+        
+        <div class="md:col-span-5 space-y-3">
+          <img src="assets/images/logo-premium.svg?v=4.0" alt="T&amp;T 3D Labs" class="w-[160px] h-auto object-contain">
+          <p class="text-xs leading-relaxed max-w-sm text-[#586057]">
+            Xưởng chế tác decor, phụ kiện bàn làm việc công thái học và quà tặng cá nhân hóa. Từng sản phẩm đều được tạo hình từ phôi nhựa sinh học cao cấp và kiểm định tại Hà Nội.
+          </p>
+          <div class="pt-1 text-[11px] font-mono text-slate-400">
+            © 2026 T&amp;T 3D Labs. Giữ toàn quyền tác quyền thiết kế.
+          </div>
+        </div>
+
+        <div class="md:col-span-2 space-y-2">
+          <div class="font-bold text-[#20231F] uppercase tracking-wider text-[11px] font-mono">Cửa Hàng</div>
+          <ul class="space-y-1.5">
+            <li><a href="#store" onclick="window.switchWorkspace('view-store')" class="hover:text-[#FF5C00]">Tất Cả Sản Phẩm</a></li>
+            <li><a href="#store" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')" class="hover:text-[#FF5C00]">Bàn Làm Việc</a></li>
+            <li><a href="#store" onclick="window.navigateToCategory('Trang_Diem_Vanity')" class="hover:text-[#FF5C00]">Bàn Trang Điểm</a></li>
+            <li><a href="#store" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')" class="hover:text-[#FF5C00]">Giải Pháp NFC</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-2 space-y-2">
+          <div class="font-bold text-[#20231F] uppercase tracking-wider text-[11px] font-mono">Trải Nghiệm</div>
+          <ul class="space-y-1.5">
+            <li><a href="#personalize" onclick="window.switchWorkspace('view-personalize')" class="hover:text-[#FF5C00]">Cá nhân hóa</a></li>
+            <li><a href="#inspiration" onclick="window.switchWorkspace('view-inspiration')" class="hover:text-[#FF5C00]">Góc Cảm Hứng</a></li>
+            <li><a href="#tracking" onclick="window.switchWorkspace('view-tracking')" class="hover:text-[#FF5C00]">Theo Dõi Đơn Hàng</a></li>
+            <li><a href="#support" onclick="window.switchWorkspace('view-support')" class="hover:text-[#FF5C00]">Hướng Dẫn Cài NFC</a></li>
+          </ul>
+        </div>
+
+        <div class="md:col-span-3 space-y-2">
+          <div class="font-bold text-[#20231F] uppercase tracking-wider text-[11px] font-mono">Xưởng Chế Tác</div>
+          <div class="space-y-1 text-xs">
+            <div>Địa chỉ: Hà Nội, Việt Nam</div>
+            <div>Hotline: <strong class="text-[#20231F] dynamic-hotline-text">0986.888.333</strong></div>
+            <div>Bảo hành: 1 đổi 1 trong 7 ngày</div>
+          </div>
+          <div class="pt-2">
+            <a data-zalo-contact="true" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-orange-50 border border-orange-200 text-[#C44800] font-bold text-[11px]">
+              <i class="fa-solid fa-comment-dots"></i>
+              <span>Tư Vấn Zalo 1-1</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </footer>
+
+
+  <!-- =========================================================================
+       5. MOBILE BOTTOM APPLICATION DOCK (ACCESSIBLE 5-ITEM DOCK)
+       ========================================================================= -->
+  <nav class="mobile-bottom-dock md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#DCDDD5] px-2 py-1 shadow-lg" aria-label="Điều hướng di động">
+    <div class="flex items-center justify-around">
+      
+      <button type="button" 
+              onclick="window.switchWorkspace('view-store')" 
+              data-nav-view="view-store" 
+              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              aria-label="Cửa Hàng">
+        <i class="fa-solid fa-store text-base"></i>
+        <span class="dock-label text-[10px] font-medium mt-0.5">Cửa Hàng</span>
+      </button>
+
+      <button type="button" 
+              onclick="window.switchWorkspace('view-inspiration')" 
+              data-nav-view="view-inspiration" 
+              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              aria-label="Góc Cảm Hứng">
+        <i class="fa-solid fa-compass-drafting text-base text-[#FF5C00]"></i>
+        <span class="dock-label text-[10px] font-medium mt-0.5">Cảm Hứng</span>
+      </button>
+
+      <button type="button" 
+              onclick="window.switchWorkspace('view-tracking')" 
+              data-nav-view="view-tracking" 
+              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              aria-label="Theo Dõi Đơn Hàng">
+        <i class="fa-solid fa-truck-fast text-base text-blue-600"></i>
+        <span class="dock-label text-[10px] font-medium mt-0.5">Đơn Hàng</span>
+      </button>
+
+      <button type="button" 
+              onclick="window.switchWorkspace('view-support')" 
+              data-nav-view="view-support" 
+              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              aria-label="Hướng Dẫn & Hỗ Trợ">
+        <i class="fa-solid fa-circle-question text-base text-emerald-600"></i>
+        <span class="dock-label text-[10px] font-medium mt-0.5">Hỗ Trợ</span>
+      </button>
+
+      <button type="button" 
+              onclick="window.TTCart.openCart()" 
+              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] relative"
+              aria-label="Xem Giỏ Hàng">
+        <div class="relative">
+          <i class="fa-solid fa-bag-shopping text-base"></i>
+          <span class="cart-badge-count hidden absolute -top-1 -right-2 min-w-[15px] h-[15px] px-1 rounded-full bg-[#FF5C00] text-white text-[9px] font-bold flex items-center justify-center font-mono">
+            0
+          </span>
+        </div>
+        <span class="dock-label text-[10px] font-medium mt-0.5">Giỏ Hàng</span>
+      </button>
+
+    </div>
+  </nav>
+
+
+  <!-- =========================================================================
+       6. GLOBAL OVERLAYS & MODALS
+       ========================================================================= -->
+
+  <!-- SLIDE-OVER CART DRAWER -->
+  <div id="cart-drawer-overlay" class="cart-drawer-overlay"></div>
+
+  <aside id="cart-slide-drawer" class="cart-slide-drawer">
+    <div class="p-5 border-b border-[#DCDDD5] flex items-center justify-between bg-white">
+      <div class="flex items-center gap-2.5">
+        <i class="fa-solid fa-bag-shopping text-[#FF5C00]"></i>
+        <h3 id="cart-drawer-title" class="text-sm font-bold text-[#20231F] font-mono">Giỏ Hàng (0)</h3>
+      </div>
+      <button type="button" id="cart-drawer-close-btn" class="w-8 h-8 rounded-lg bg-[#F7F6F2] text-[#586057] hover:text-[#20231F] flex items-center justify-center" aria-label="Đóng giỏ hàng">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Free Shipping Indicator -->
+    <div class="px-5 py-3 bg-[#F7F6F2] border-b border-[#DCDDD5] space-y-1.5">
+      <div id="cart-freeship-text" class="text-[11px] text-[#586057]">
+        Mua thêm <strong class="text-[#FF5C00] font-mono">300.000 đ</strong> để được <strong>Freeship toàn quốc</strong>
+      </div>
+      <div class="w-full h-1.5 rounded-full bg-slate-200 overflow-hidden">
+        <div id="cart-freeship-bar" class="h-full bg-[#FF5C00] transition-all duration-300" style="width: 0%"></div>
+      </div>
+    </div>
+
+    <!-- Items Scrollable Container -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-3 bg-white"></div>
+
+    <!-- Empty State -->
+    <div id="cart-empty-state" class="flex-1 flex flex-col items-center justify-center text-center p-8 space-y-3 bg-white">
+      <div class="w-16 h-16 rounded-2xl bg-[#F7F6F2] border border-[#DCDDD5] flex items-center justify-center text-2xl text-[#586057]">
+        <i class="fa-solid fa-box-open"></i>
+      </div>
+      <div class="text-sm font-bold text-[#20231F]">Giỏ hàng của bạn đang trống</div>
+      <p class="text-xs text-[#586057] max-w-xs">
+        Khám phá các sản phẩm đế NFC thông minh và đồ decor độc bản tại gian hàng.
+      </p>
+      <button type="button" onclick="window.TTCart.closeCart(); window.switchWorkspace('view-store')" class="btn-primary text-xs !py-2.5 !px-5 mt-2">
+        Xem Sản Phẩm Ngay
+      </button>
+    </div>
+
+    <!-- Footer Checkout Tray -->
+    <div id="cart-drawer-footer" class="p-5 border-t border-[#DCDDD5] bg-white space-y-3.5 hidden">
+      <!-- Coupon row -->
+      <div class="flex gap-2">
+        <input type="text" id="cart-coupon-input" placeholder="Mã ưu đãi (TT3D2026, SPECIAL10)" class="flex-1 px-3 py-2 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] text-xs text-[#20231F] uppercase font-mono focus:border-[#FF5C00] focus:outline-none">
+        <button type="button" id="cart-apply-coupon-btn" class="px-3.5 py-2 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] text-xs font-semibold hover:border-[#FF5C00] text-[#20231F] transition-colors">
+          Áp dụng
+        </button>
+      </div>
+
+      <!-- Pricing Summary -->
+      <div class="space-y-1.5 text-xs">
+        <div class="flex justify-between text-[#586057]">
+          <span>Tạm tính tiền hàng:</span>
+          <span id="cart-subtotal-val" class="font-mono text-[#20231F]">0 đ</span>
+        </div>
+        <div class="flex justify-between font-bold text-sm text-[#20231F] pt-1 border-t border-slate-100">
+          <span>Tổng đơn hàng:</span>
+          <span id="cart-grandtotal-val" class="font-mono text-[#FF5C00] text-base">0 đ</span>
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="space-y-2 pt-1">
+        <button type="button" id="cart-checkout-direct-btn" class="w-full btn-primary text-xs !py-3 !font-bold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-bolt text-sm"></i>
+          <span>Đặt Hàng &amp; Nhận Lịch In</span>
+        </button>
+
+        <a data-zalo-contact="true" class="w-full btn-secondary text-xs !py-2.5 !font-semibold flex items-center justify-center gap-2 text-center">
+          <i class="fa-solid fa-comment-dots text-xs text-[#FF5C00]"></i>
+          <span>Tư Vấn Thêm Qua Zalo</span>
+        </a>
+      </div>
+    </div>
+  </aside>
+
+
+  <!-- DIRECT CHECKOUT MODAL -->
+  <div id="checkout-modal" class="fixed inset-0 z-[140] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title">
+    <div class="w-full max-w-lg bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- Modal Header -->
+      <div class="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between shrink-0 bg-[var(--bg-surface)]">
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-[#D45B34]"></span>
+          <h3 id="checkout-modal-title" class="text-sm font-bold text-[var(--text-primary)]">Xác Nhận Đặt Hàng &amp; Nhận Lịch In</h3>
+        </div>
+        <button type="button" id="checkout-close-btn" onclick="window.TTCheckout.closeCheckoutModal()" class="w-8 h-8 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center" aria-label="Đóng bảng đặt hàng">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Section 1: Customer Form Input -->
+      <div id="checkout-form-section" class="p-6 overflow-y-auto space-y-4 flex-1">
+        
+        <!-- Summary Lines -->
+        <div class="p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] space-y-2">
+          <div class="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] font-bold">Mặt Hàng Đã Chọn:</div>
+          <div id="checkout-summary-lines" class="space-y-1"></div>
+          
+          <div class="pt-2 border-t border-[var(--border-subtle)] space-y-1 text-xs">
+            <div class="flex justify-between text-[var(--text-secondary)]">
+              <span>Tiền hàng:</span>
+              <span id="checkout-total-subtotal" class="font-mono text-[var(--text-primary)]">0 đ</span>
+            </div>
+            <div class="flex justify-between text-[var(--text-secondary)]">
+              <span>Ưu đãi:</span>
+              <span id="checkout-total-discount" class="font-mono text-[var(--status-success)] font-bold">0 đ</span>
+            </div>
+            <div class="flex justify-between text-[var(--text-secondary)]">
+              <span>Phí vận chuyển:</span>
+              <span id="checkout-total-shipping" class="font-mono text-[var(--text-primary)]">25.000 đ</span>
+            </div>
+            <div class="flex justify-between font-bold text-sm text-[var(--text-primary)] pt-1 border-t border-[var(--border-subtle)]">
+              <span>Tổng thanh toán:</span>
+              <span id="checkout-total-grand" class="font-mono text-[var(--accent-primary)] text-base font-bold">0 đ</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Customer Form -->
+        <div class="space-y-3 text-xs">
+          <div>
+            <label for="checkout-cust-name" class="font-bold text-[var(--text-primary)] block mb-1">Họ và Tên của bạn <span class="text-rose-500">*</span></label>
+            <input type="text" id="checkout-cust-name" placeholder="Nguyễn Văn A" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:border-[var(--accent-primary)] outline-none">
+          </div>
+
+          <div>
+            <label for="checkout-cust-phone" class="font-bold text-[var(--text-primary)] block mb-1">Số điện thoại liên hệ <span class="text-rose-500">*</span></label>
+            <input type="tel" id="checkout-cust-phone" placeholder="0986xxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] font-mono focus:border-[var(--accent-primary)] outline-none">
+          </div>
+
+          <div>
+            <label for="checkout-cust-address" class="font-bold text-[var(--text-primary)] block mb-1">Địa chỉ nhận hàng chi tiết <span class="text-rose-500">*</span></label>
+            <input type="text" id="checkout-cust-address" placeholder="Số nhà, ngõ/đường, Phường/Xã, Quận/Huyện, Tỉnh/TP" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:border-[var(--accent-primary)] outline-none">
+          </div>
+
+          <div>
+            <label for="checkout-cust-note" class="font-bold text-[var(--text-primary)] block mb-1">Ghi chú thêm cho xưởng (nếu có)</label>
+            <input type="text" id="checkout-cust-note" placeholder="Yêu cầu giờ giao, đóng gói quà tặng..." class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:border-[var(--accent-primary)] outline-none">
+          </div>
+
+          <div class="flex items-center gap-2 pt-1">
+            <input type="checkbox" id="checkout-remember-me" class="rounded text-[var(--accent-primary)] focus:ring-[var(--accent-primary)]">
+            <label for="checkout-remember-me" class="text-[11px] text-[var(--text-secondary)] cursor-pointer">Ghi nhớ thông tin cho lần mua sau trên thiết bị này</label>
+          </div>
+        </div>
+
+        <!-- Action Submit Buttons -->
+        <div class="space-y-2 pt-2 border-t border-[var(--border-subtle)]">
+          <button type="button" id="checkout-btn-submit-cod" onclick="window.TTCheckout.submitCheckout('cod')" class="w-full btn-primary text-xs !py-3 !font-bold flex items-center justify-center gap-2">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Xác Nhận Đặt Hàng COD (Kiểm Hàng Trước Khi Thanh Toán)</span>
+          </button>
+
+          <button type="button" id="checkout-btn-submit-zalo" onclick="window.TTCheckout.submitCheckout('zalo')" class="w-full btn-secondary text-xs !py-2.5 !font-semibold flex items-center justify-center gap-2">
+            <i class="fa-solid fa-comment-dots text-[var(--accent-primary)]"></i>
+            <span>Chuyển Đơn Qua Zalo Kỹ Thuật Viên</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Section 2: Order Result Screen -->
+      <div id="checkout-result-section" class="p-6 overflow-y-auto space-y-4 flex-1 hidden">
+        <div class="text-center space-y-2 py-2">
+          <div class="w-14 h-14 mx-auto rounded-full bg-[var(--status-success-subtle)] border border-[var(--status-success)]/30 flex items-center justify-center text-[var(--status-success)] text-2xl">
+            <i class="fa-solid fa-check"></i>
+          </div>
+          <h4 id="checkout-result-title" class="text-base font-bold text-[var(--text-primary)]">Đã Ghi Nhận Đơn Hàng Thành Công!</h4>
+          <p class="text-xs text-[var(--text-secondary)]">
+            Mã đơn của bạn: <span id="checkout-res-order-id" class="font-mono font-bold text-[var(--accent-primary)] text-sm">TT3D-XXXX</span>
+          </p>
+          <p id="checkout-result-msg" class="text-xs text-[var(--text-secondary)] max-w-sm mx-auto leading-relaxed">
+            Yêu cầu đã được lưu vào hệ thống xưởng. Kỹ thuật viên sẽ kiểm tra phôi in và liên hệ với bạn trong vòng 15 phút.
+          </p>
+        </div>
+
+        <!-- Message Box -->
+        <div class="space-y-1.5">
+          <div class="flex items-center justify-between text-xs text-[var(--text-secondary)]">
+            <span class="font-semibold">Nội dung chi tiết đơn hàng:</span>
+            <span class="text-[11px]">Đã tạo mã tra cứu riêng</span>
+          </div>
+          <pre id="checkout-res-msg-preview" class="p-3.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[11px] font-mono text-[var(--text-primary)] whitespace-pre-wrap max-h-40 overflow-y-auto select-all leading-relaxed"></pre>
+          <textarea id="checkout-fallback-copy-box" class="w-full h-20 p-2 text-xs font-mono bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-[var(--text-primary)] rounded-lg hidden" readonly></textarea>
+        </div>
+
+        <!-- Action Handoffs -->
+        <div class="space-y-2 pt-2">
+          <button type="button" 
+                  onclick="window.TTCheckout.closeCheckoutModal(); window.switchWorkspace('view-tracking');" 
+                  class="w-full btn-primary text-xs !py-3 !font-bold flex items-center justify-center gap-2">
+            <i class="fa-solid fa-truck-fast"></i>
+            <span>Tra cứu yêu cầu đặt hàng. Ngay</span>
+          </button>
+
+          <a id="checkout-btn-open-zalo" aria-disabled="true" class="w-full btn-secondary text-xs !py-2.5 !font-semibold flex items-center justify-center gap-2 text-center">
+            <i class="fa-solid fa-comment-dots text-[var(--accent-primary)]"></i>
+            <span>Mở Zalo Trao Đổi Thêm</span>
+          </a>
+
+          <button type="button" id="checkout-btn-copy-msg" class="w-full px-3 py-2 rounded-xl text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors font-mono">
+            <i class="fa-regular fa-copy mr-1"></i> Sao chép nội dung đơn
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- PRODUCT DETAIL MODAL (WITH PER-SKU OPTIONS) -->
+  <div id="order-modal" 
+       class="fixed inset-0 z-[130] hidden items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm" 
+       role="dialog" 
+       aria-modal="true" 
+       aria-labelledby="order-prod-title">
+    <div id="order-modal-container" 
+         class="w-full max-w-4xl max-h-[92vh] sm:max-h-[88vh] bg-white rounded-3xl border border-[#DCDDD5] shadow-2xl overflow-hidden flex flex-col relative">
+      
+      <!-- Modal Header -->
+      <div class="px-5 py-3.5 sm:px-6 sm:py-4 border-b border-[#DCDDD5] flex items-center justify-between shrink-0 bg-white">
+        <div class="flex items-center gap-2.5">
+          <span class="w-2 h-2 rounded-full bg-[#FF5C00] animate-pulse"></span>
+          <span class="text-xs font-mono font-bold tracking-wider text-[#586057] uppercase">T&amp;T 3D Labs • Cấu Hình Sản Phẩm</span>
+        </div>
+        <button type="button" 
+                id="order-modal-close-btn"
+                onclick="window.closeProductDetailModal()" 
+                class="w-8 h-8 rounded-xl bg-[#F7F6F2] text-[#586057] hover:text-[#20231F] flex items-center justify-center transition-colors"
+                aria-label="Đóng bảng cấu hình sản phẩm">
+          <i class="fa-solid fa-xmark text-sm"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body (Two-Column on Desktop) -->
+      <div class="p-5 sm:p-7 overflow-y-auto flex-1 grid grid-cols-1 md:grid-cols-12 gap-6 sm:gap-8 items-start">
+        
+        <!-- Left: Image & Specs (5 cols) -->
+        <div class="md:col-span-5 flex flex-col gap-4">
+          <div id="modal-visual-frame" class="relative w-full aspect-square rounded-2xl overflow-hidden bg-[#F7F6F2] border border-[#DCDDD5] group select-none">
+            <img id="order-prod-img" 
+                 src="" 
+                 alt="Product Showcase" 
+                 class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                 onerror="this.src='assets/images/logo-premium-mark.svg';">
+
+            <div class="absolute top-3 left-3 z-10">
+              <span id="order-prod-badge" class="px-2.5 py-1 rounded-md text-[10px] font-bold font-mono bg-white/90 border border-[#DCDDD5] text-[#20231F] shadow-sm">
+                ✦ Studio Craft
+              </span>
+            </div>
+
+            <!-- Legacy 3D Button (Preserved hidden for regression contract) -->
+            <button type="button" id="order-modal-3d-btn" class="hidden" hidden disabled aria-hidden="true"></button>
+          </div>
+
+          <!-- Specs Sheet -->
+          <div class="p-4 rounded-2xl bg-[#F7F6F2] border border-[#DCDDD5]">
+            <h5 class="text-[11px] font-mono uppercase tracking-wider text-[#586057] font-bold mb-3 flex items-center gap-1.5">
+              <i class="fa-solid fa-ruler-combined text-[#FF5C00]"></i>
+              <span>Thông Số Kỹ Thuật</span>
+            </h5>
+            <dl id="order-prod-specs-box" class="grid grid-cols-2 gap-3 text-xs"></dl>
+          </div>
+        </div>
+
+        <!-- Right: Options (7 cols) -->
+        <div class="md:col-span-7 space-y-5">
+          <div class="space-y-1.5 border-b border-[#DCDDD5] pb-4">
+            <h4 id="order-prod-title" class="text-lg sm:text-xl font-extrabold text-[#20231F] tracking-tight leading-snug">
+              Tên sản phẩm
+            </h4>
+            <div class="flex items-baseline gap-3">
+              <span id="order-prod-price" class="text-2xl font-black font-mono text-[#FF5C00]">0 đ</span>
+              <span id="order-prod-unit-label" class="text-xs text-[#586057] font-mono">/ 1 sản phẩm hoàn thiện</span>
+            </div>
+            <p id="order-prod-desc" class="text-xs text-[#586057] leading-relaxed"></p>
+          </div>
+
+          <!-- Color Swatches -->
+          <div id="order-swatches-box" class="space-y-2"></div>
+
+          <!-- Material Selection -->
+          <div id="order-materials-box" class="space-y-2"></div>
+
+          <!-- Per-SKU Custom Text Engraving Input (Hidden if SKU does not support) -->
+          <div id="order-custom-text-container" class="space-y-1.5">
+            <div class="flex items-center justify-between">
+              <label for="order-custom-text-input" id="order-custom-text-label" class="text-xs font-semibold text-[#20231F] flex items-center gap-1.5">
+                <i class="fa-solid fa-pen-nib text-[#FF5C00]"></i>
+                <span>Cá nhân hóa (Khắc tên / Cài link WiFi NFC):</span>
+              </label>
+              <span class="text-[10px] text-slate-400 font-mono" id="order-custom-text-count">0/100</span>
+            </div>
+            <input type="text" 
+                   id="order-custom-text-input" 
+                   maxlength="100"
+                   placeholder="Nhập tên riêng, thông điệp hoặc link WiFi..." 
+                   class="w-full px-3.5 py-2.5 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] text-xs text-[#20231F] focus:border-[#FF5C00] outline-none transition-colors">
+          </div>
+
+          <!-- Quantity Stepper -->
+          <div class="flex items-center justify-between pt-3 border-t border-[#DCDDD5]">
+            <div>
+              <span class="text-xs font-bold text-[#20231F] block">Số lượng đặt:</span>
+              <span class="text-[11px] text-[#586057]">Miễn phí vận chuyển khi đơn từ 300K</span>
+            </div>
+            <div class="flex items-center border border-[#DCDDD5] rounded-xl bg-[#F7F6F2] overflow-hidden">
+              <button type="button" 
+                      onclick="window.changeModalQty(-1)" 
+                      class="w-9 h-9 flex items-center justify-center text-sm text-[#586057] hover:text-[#20231F] hover:bg-black/5 active:scale-95 transition-all"
+                      aria-label="Giảm số lượng">-</button>
+              <span id="modal-qty-val" class="w-10 text-center font-mono font-bold text-sm text-[#20231F] select-none">1</span>
+              <button type="button" 
+                      onclick="window.changeModalQty(1)" 
+                      class="w-9 h-9 flex items-center justify-center text-sm text-[#586057] hover:text-[#20231F] hover:bg-black/5 active:scale-95 transition-all"
+                      aria-label="Tăng số lượng">+</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="px-5 py-4 sm:px-6 sm:py-4 border-t border-[#DCDDD5] bg-white flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0">
+        <div class="text-left w-full sm:w-auto">
+          <span class="text-[11px] text-[#586057] block">Tạm tính:</span>
+          <div class="flex items-baseline gap-2">
+            <span id="modal-summary-subtotal" class="text-lg font-black font-mono text-[#FF5C00]">0 đ</span>
+            <span id="modal-summary-shipping-note" class="text-[10px] text-emerald-700 font-mono font-semibold">(Freeship đơn ≥ 300K)</span>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+          <button type="button" 
+                  id="modal-btn-add-cart"
+                  onclick="window.submitModalAddToCart()" 
+                  class="btn-secondary text-xs !py-3 !px-4 flex-1 sm:flex-none flex items-center justify-center gap-2 font-bold">
+            <i class="fa-solid fa-bag-shopping text-xs"></i>
+            <span id="modal-submit-cart-label">Thêm Vào Giỏ</span>
+          </button>
+          
+          <button type="button" 
+                  id="modal-btn-direct-checkout"
+                  onclick="window.submitModalDirectCheckout()" 
+                  class="btn-primary text-xs !py-3 !px-5 rounded-xl flex-1 sm:flex-none flex items-center justify-center gap-2 shadow-md font-bold">
+            <i class="fa-solid fa-bolt text-xs"></i>
+            <span id="modal-submit-direct-label">Đặt Hàng Ngay</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- GIFT QUIZ MODAL ("CHỌN QUÀ TRONG 1 PHÚT") -->
+  <div id="gift-quiz-modal" class="fixed inset-0 z-[145] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="gift-quiz-modal-title">
+    <div class="w-full max-w-2xl bg-white rounded-3xl border border-[#DCDDD5] shadow-2xl p-6 sm:p-8 relative max-h-[92vh] overflow-y-auto">
+      
+      <!-- Close Button -->
+      <button type="button" onclick="window.TTGiftQuiz.close()" class="absolute top-5 right-5 w-8 h-8 rounded-xl bg-[#F7F6F2] text-[#586057] hover:text-[#20231F] flex items-center justify-center" aria-label="Đóng chọn quà">
+        <i class="fa-solid fa-xmark text-sm"></i>
+      </button>
+
+      <!-- Quiz Content (Populated by gift-quiz.js) -->
+      <div id="gift-quiz-content"></div>
+
+    </div>
+  </div>
+
+</body>
+</html>
