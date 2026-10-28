@@ -291,7 +291,10 @@
       const opt = [];
       if (item.colorName) opt.push(`Màu: ${item.colorName}`);
       if (item.materialName) opt.push(`Vật liệu: ${item.materialName}`);
-      if (item.customText) opt.push(`Khắc tên: "${item.customText}"`);
+      if (item.customText) {
+        const fontNote = item.fontId ? ` [Font: ${item.fontId}]` : '';
+        opt.push(`Khắc tên: "${item.customText}"${fontNote}`);
+      }
       const optStr = opt.length > 0 ? ` (${opt.join(', ')})` : '';
 
       lines.push(`${idx + 1}. ${item.title}${optStr}`);
@@ -381,6 +384,8 @@
       colorName: item.colorName || null,
       materialId: item.materialId || null,
       materialName: item.materialName || null,
+      fontId: item.fontId || null,
+      fontName: item.fontName || null,
       customText: item.customText ? String(item.customText).trim().slice(0, 100) : null
     }));
 
@@ -597,6 +602,8 @@
         materialId: i.materialId || null,
         materialName: i.materialName || null,
         customText: i.customText || null,
+        fontId: i.fontId || null,
+        fontName: i.fontName || null,
         qty: i.qty,
         price: i.price
       })),

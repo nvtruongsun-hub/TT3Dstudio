@@ -30,15 +30,19 @@
   }
 
   /**
-   * Tạo Line ID dạng tuple có cấu trúc an toàn
+   * Tạo Line ID dạng tuple có cấu trúc an toàn (bảo toàn fontId)
    */
-  function buildLineId(productId, colorId, materialId, customText) {
-    return JSON.stringify([
+  function buildLineId(productId, colorId, materialId, customText, fontId) {
+    const parts = [
       String(productId || ''),
       String(colorId || ''),
       String(materialId || ''),
       String(customText || '').trim().normalize('NFC')
-    ]);
+    ];
+    if (fontId) {
+      parts.push(String(fontId).trim());
+    }
+    return JSON.stringify(parts);
   }
 
   // Khởi tạo giỏ hàng từ localStorage (có migration an toàn từ v1)
@@ -51,8 +55,9 @@
           const cId = (item.color && item.color.id) || item.colorId || '';
           const mId = (item.material && item.material.id) || item.materialId || '';
           const cText = item.customText || '';
+          const fId = item.fontId ? String(item.fontId).trim() : '';
           return {
-            cartItemId: item.cartItemId || buildLineId(item.id, cId, mId, cText),
+            cartItemId: buildLineId(item.id, cId, mId, cText, fId),
             id: item.id,
             title: item.title,
             price: item.price,
@@ -65,6 +70,7 @@
             materialId: mId,
             materialName: (item.material && (item.material.label || item.material.name)) || item.materialName || '',
             customText: cText,
+            fontId: fId || null,
             category: item.category || 'general'
           };
         });
@@ -131,7 +137,8 @@
     const cId = (item.color && item.color.id) || item.colorId || '';
     const mId = (item.material && item.material.id) || item.materialId || '';
     const cText = (typeof item.customText === 'string') ? item.customText.trim().normalize('NFC').slice(0, 100) : '';
-    const lineId = buildLineId(item.id, cId, mId, cText);
+    const fId = item.fontId ? String(item.fontId).trim() : '';
+    const lineId = buildLineId(item.id, cId, mId, cText, fId);
 
     const existingIndex = cart.findIndex(i => i.cartItemId === lineId);
     if (existingIndex > -1) {
@@ -152,6 +159,7 @@
         materialId: mId,
         materialName: (item.material && (item.material.label || item.material.name)) || item.materialName || '',
         customText: cText,
+        fontId: item.fontId || null,
         category: item.category || 'general'
       });
     }

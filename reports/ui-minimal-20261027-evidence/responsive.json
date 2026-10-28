@@ -1,0 +1,26 @@
+[
+  {
+    "width": 375,
+    "documentWidth": 375,
+    "height": 5379,
+    "navVisible": false
+  },
+  {
+    "width": 768,
+    "documentWidth": 760,
+    "height": 4472,
+    "navVisible": false
+  },
+  {
+    "width": 1280,
+    "documentWidth": 1272,
+    "height": 3753,
+    "navVisible": true
+  },
+  {
+    "width": 1920,
+    "documentWidth": 1912,
+    "height": 3763,
+    "navVisible": true
+  }
+]

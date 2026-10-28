@@ -20,6 +20,10 @@
         { id: 'silk_pearl_white', name: 'Trắng Ngọc Trai', hex: '#F5F2EB' },
         { id: 'silk_champagne', name: 'Vàng Champagne', hex: '#EED9A7' },
         { id: 'silk_matte_black', name: 'Đen Obsidian', hex: '#26282B' }
+      ],
+      materials: [
+        { id: 'pla_matte', name: 'PLA Matte Tiêu Chuẩn', label: 'PLA Matte Tiêu Chuẩn', priceModifier: 0 },
+        { id: 'pla_silk', name: 'PLA Silk Cao Cấp', label: 'PLA Silk Cao Cấp', priceModifier: 25000 }
       ]
     },
     {
@@ -35,6 +39,10 @@
         { id: 'matte_black', name: 'Đen Nhám Obsidian', hex: '#20231F' },
         { id: 'nordic_white', name: 'Trắng Sứ Bắc Âu', hex: '#F7F6F2' },
         { id: 'craft_orange', name: 'Cam Craft T&T', hex: '#FF5C00' }
+      ],
+      materials: [
+        { id: 'pla_matte', name: 'PLA Matte Tiêu Chuẩn', label: 'PLA Matte Tiêu Chuẩn', priceModifier: 0 },
+        { id: 'pla_silk', name: 'PLA Silk Cao Cấp', label: 'PLA Silk Cao Cấp', priceModifier: 25000 }
       ]
     },
     {
@@ -49,12 +57,19 @@
         { id: 'slate_black', name: 'Đen Khói Than Chì', hex: '#22252A' },
         { id: 'pearl_white', name: 'Trắng Tuyết', hex: '#F8F9FA' },
         { id: 'safety_orange', name: 'Cam Công Nghệ', hex: '#FF5C00' }
+      ],
+      materials: [
+        { id: 'pla_matte', name: 'PLA Matte Tiêu Chuẩn', label: 'PLA Matte Tiêu Chuẩn', priceModifier: 0 },
+        { id: 'pla_silk', name: 'PLA Silk Cao Cấp', label: 'PLA Silk Cao Cấp', priceModifier: 25000 }
       ]
     },
     {
       id: 'mw-cn-1702306',
       title: 'Móc Khóa Monogram Khắc Tên 3D',
       category: 'Do_Choi_Moc_Khoa',
+      type: 'monogram',
+      requiresCustomText: true,
+      specs: { requireCustomText: true },
       price: 89000,
       image: 'assets/images/product-monogram.jpg',
       headlineBenefit: 'Móc chìa khóa, balo in chữ lồng 3D cá tính chống thất lạc.',
@@ -64,6 +79,10 @@
         { id: 'cyan_blue', name: 'Xanh Mint Pastel', hex: '#6EE7B7' },
         { id: 'neon_pink', name: 'Hồng Phấn', hex: '#F472B6' },
         { id: 'obsidian', name: 'Đen Huyền', hex: '#18181B' }
+      ],
+      materials: [
+        { id: 'pla_matte', name: 'PLA Matte Tiêu Chuẩn', label: 'PLA Matte Tiêu Chuẩn', priceModifier: 0 },
+        { id: 'pla_silk', name: 'PLA Silk Cao Cấp', label: 'PLA Silk Cao Cấp', priceModifier: 25000 }
       ]
     }
   ];
@@ -73,7 +92,23 @@
   let selectedFont = 'sans'; // 'serif', 'sans', 'script'
   let customText = selectedProduct.defaultText;
 
+  function syncStudioToState() {
+    if (window.TTStudioState && typeof window.TTStudioState.setProduct === 'function') {
+      window.TTStudioState.setProduct(selectedProduct);
+      if (typeof window.TTStudioState.setColor === 'function' && selectedColor) {
+        window.TTStudioState.setColor(selectedColor.id, selectedColor.name);
+      }
+      if (typeof window.TTStudioState.setFont === 'function') {
+        window.TTStudioState.setFont(selectedFont);
+      }
+      if (typeof window.TTStudioState.setCustomText === 'function') {
+        window.TTStudioState.setCustomText(customText);
+      }
+    }
+  }
+
   function renderPersonalizeUI() {
+    syncStudioToState();
     const root = document.getElementById('personalize-studio-container');
     if (!root) return;
 
@@ -254,6 +289,7 @@
           selectedProduct = CUSTOM_PRODUCTS[idx];
           selectedColor = selectedProduct.colors[0];
           customText = selectedProduct.defaultText;
+          syncStudioToState();
           renderPersonalizeUI();
         }
       });
@@ -266,6 +302,9 @@
       txtInput.addEventListener('input', () => {
         customText = txtInput.value;
         if (charCount) charCount.textContent = `${customText.length}/40 ký tự`;
+        if (window.TTStudioState && typeof window.TTStudioState.setCustomText === 'function') {
+          window.TTStudioState.setCustomText(customText);
+        }
         draw2DPreview();
       });
     }
@@ -280,6 +319,9 @@
         });
         btn.classList.add('border-[#FF5C00]', 'bg-orange-50', 'font-bold', 'text-[#FF5C00]');
         btn.classList.remove('border-[#DCDDD5]', 'text-[#20231F]');
+        if (window.TTStudioState && typeof window.TTStudioState.setFont === 'function') {
+          window.TTStudioState.setFont(selectedFont);
+        }
         draw2DPreview();
       });
     });
@@ -300,34 +342,55 @@
           });
           btn.classList.add('border-[#FF5C00]', 'scale-110', 'ring-2', 'ring-[#FF5C00]/30');
           btn.classList.remove('border-white');
+          if (window.TTStudioState && typeof window.TTStudioState.setColor === 'function') {
+            window.TTStudioState.setColor(selectedColor.id, selectedColor.name);
+          }
           draw2DPreview();
         }
       });
     });
 
-    // Submit Action -> Direct Checkout Handoff
+    // Submit Action -> Direct Checkout Handoff (Unified Snapshot via TTStudioState)
     const submitBtn = document.getElementById('btn-personalize-submit');
     if (submitBtn) {
       submitBtn.addEventListener('click', () => {
-        const itemPayload = {
-          id: selectedProduct.id,
-          title: selectedProduct.title,
-          price: selectedProduct.price,
-          qty: 1,
-          colorId: selectedColor.id,
-          colorName: selectedColor.name,
-          materialId: 'pla_matte',
-          materialName: 'PLA Matte Tiêu Chuẩn',
-          customText: customText.trim()
-        };
+        syncStudioToState();
 
-        if (window.TTCheckout && typeof window.TTCheckout.openDirectCheckout === 'function') {
-          window.TTCheckout.openDirectCheckout(itemPayload);
-        } else if (window.TTCart && typeof window.TTCart.addItem === 'function') {
-          window.TTCart.addItem(itemPayload);
-          window.TTCart.openCart();
-        } else {
-          alert('Đã sẵn sàng chuyển tiếp! Kỹ thuật viên sẽ hỗ trợ bạn.');
+        if (!window.TTStudioState || typeof window.TTStudioState.createSnapshot !== 'function') {
+          const errMsg = 'Hệ thống Studio State chưa sẵn sàng. Vui lòng tải lại trang.';
+          if (typeof window.showToast === 'function') {
+            window.showToast(errMsg);
+          } else if (typeof alert === 'function') {
+            alert(errMsg);
+          }
+          return;
+        }
+
+        const snapshot = window.TTStudioState.createSnapshot();
+        if (!snapshot) {
+          // Strict Validation Guard: Halt immediately, do NOT bypass with fabricated payload
+          const state = window.TTStudioState.getState();
+          const errMsg = (state && state.validationError) || 'Cấu hình cá nhân hóa chưa hợp lệ. Vui lòng kiểm tra lại.';
+          if (typeof window.showToast === 'function') {
+            window.showToast(errMsg);
+          } else if (typeof alert === 'function') {
+            alert(errMsg);
+          }
+          return;
+        }
+
+        const itemPayload = snapshot;
+
+        // Handoff to Checkout or Cart with exact signatures
+        if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
+          window.TTCheckout.openCheckout([itemPayload], 0, { source: 'direct' });
+        } else if (window.TTCheckout && typeof window.TTCheckout.openCheckoutModal === 'function') {
+          window.TTCheckout.openCheckoutModal([itemPayload], 0, { source: 'direct' });
+        } else if (window.TTCart && typeof window.TTCart.addToCart === 'function') {
+          window.TTCart.addToCart(itemPayload);
+          if (typeof window.TTCart.openCart === 'function') {
+            window.TTCart.openCart();
+          }
         }
       });
     }

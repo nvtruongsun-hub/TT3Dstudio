@@ -67,6 +67,8 @@
 
   let currentCategoryFilter = 'all';
   let currentSearchKeyword = '';
+  let visibleProductLimit = 8;
+  let currentSortMode = 'curated';
   window.cardSelectedColors = window.cardSelectedColors || {};
 
   // 2. HELPER FUNCTIONS & SANITIZERS
@@ -196,9 +198,9 @@
     const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
 
     return `
-      <article class="studio-product-card group cursor-pointer" data-product-id="${escapeHTML(item.id)}">
+      <article class="minimal-product-card studio-product-card group cursor-pointer" data-product-id="${escapeHTML(item.id)}">
         <!-- Clean Product Visual Frame -->
-        <div class="product-image-box relative overflow-hidden group">
+        <button type="button" aria-label="Xem ${escapeHTML(cleanTitle)}" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" class="product-image-box relative overflow-hidden group">
           <img src="${safeImage}" 
                width="600" 
                height="600" 
@@ -225,14 +227,14 @@
               </span>
             </div>
           ` : '')}
-        </div>
+        </button>
 
         <!-- Card Content Body -->
         <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between gap-3 sm:gap-4">
           <div class="space-y-2">
             
             <!-- Color Swatches Row (Interactive) -->
-            <div class="flex items-center justify-between">
+            <div class="product-card-colors flex items-center justify-between">
               <div class="swatch-group">
                 ${swatches.map((c) => {
                   const safeHex = isValidHex(c.hex) ? c.hex : '#26282B';
@@ -246,7 +248,7 @@
                             data-product-id="${escapeHTML(item.id)}"
                             data-swatch-id="${escapeHTML(c.id)}"
                             data-swatch-name="${escapeHTML(c.name)}"
-                            aria-label="Chọn màu ${escapeHTML(c.name)}"></button>
+                            aria-label="Chọn màu ${escapeHTML(c.name)}" aria-pressed="${isActive}"></button>
                   `;
                 }).join('')}
               </div>
@@ -256,12 +258,12 @@
             </div>
 
             <!-- Product Title (Clean, short, readable) -->
-            <h3 class="text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-1 group-hover:text-[#FF5C00] transition-colors" title="${escapeHTML(cleanTitle)}">
+            <h3 class="product-card-title text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-2 group-hover:text-[#FF5C00] transition-colors" title="${escapeHTML(cleanTitle)}">
               ${escapeHTML(cleanTitle)}
             </h3>
 
             <!-- 1-Line Headline Benefit -->
-            <p class="text-[11px] sm:text-xs text-secondary-color line-clamp-2 leading-relaxed">
+            <p class="product-card-benefit text-secondary-color line-clamp-2 leading-relaxed">
               ${escapeHTML(item.headlineBenefit || item.desc || '')}
             </p>
 
@@ -281,11 +283,11 @@
             <!-- Quick Add to Cart Button -->
             <button type="button" 
                     class="btn-primary text-[11px] sm:text-xs !py-2 !px-3 sm:!px-4 shrink-0" 
-                    data-action="quick-add-cart"
+                    data-action="configure-product"
                     data-product-id="${escapeHTML(item.id)}"
-                    title="Thêm vào giỏ">
-              <i class="fa-solid fa-bag-shopping text-xs pointer-events-none"></i>
-              <span class="pointer-events-none">Thêm vào giỏ</span>
+                    title="Xem và chọn phiên bản">
+              <i class="fa-solid fa-arrow-right text-xs pointer-events-none"></i>
+              <span class="pointer-events-none">Xem &amp; chọn</span>
             </button>
           </div>
         </div>
@@ -400,208 +402,28 @@
   }
 
   // 4. MAIN STORE RENDER DISPATCHER
-  function renderStoreProducts(filter = currentCategoryFilter) {
+  function renderStoreProducts(filter = currentCategoryFilter, keepPage = false) {
     currentCategoryFilter = filter;
+    if (!keepPage) visibleProductLimit = 8;
     const container = document.getElementById('store-product-grid');
     if (!container) return;
-
-    const allProducts = getStoredProducts();
-    const activeProducts = allProducts.filter(p => (p.status || 'active') === 'active');
-
-    // Case A: SEARCH QUERY ACTIVE
-    if (currentSearchKeyword) {
-      const kw = removeVietnameseDiacritics(currentSearchKeyword);
-      let searchResults = activeProducts.filter(p => {
-        const titleMatch = removeVietnameseDiacritics(p.title).includes(kw);
-        const descMatch = removeVietnameseDiacritics(p.desc || '').includes(kw);
-        const idMatch = String(p.modelId || p.id).includes(kw);
-        return titleMatch || descMatch || idMatch;
-      });
-
-      if (filter !== 'all') {
-        searchResults = searchResults.filter(p => p.category === filter);
-      }
-
-      if (searchResults.length === 0) {
-        container.innerHTML = `
-          <div class="py-20 text-center space-y-4">
-            <div class="w-16 h-16 mx-auto rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-2xl text-secondary-color">
-              <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
-            <div class="space-y-1">
-              <p class="text-sm font-bold text-primary-color">Không tìm thấy sản phẩm nào khớp với từ khóa "${escapeHTML(currentSearchKeyword)}"</p>
-              <p class="text-xs text-secondary-color">Thử tìm theo tên tiếng Việt hoặc mã Model ID MakerWorld (ví dụ: 1646129)</p>
-            </div>
-            <button type="button" 
-                    data-action="clear-search" 
-                    class="btn-secondary text-xs !py-2 !px-4 mx-auto">
-              <i class="fa-solid fa-xmark mr-1.5"></i> Xóa bộ lọc tìm kiếm
-            </button>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = `
-        <div class="space-y-6">
-          <div class="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
-            <div class="flex items-center gap-2 text-xs font-mono text-secondary-color">
-              <i class="fa-solid fa-magnifying-glass text-[#FF5C00]"></i>
-              <span>Kết quả tìm kiếm cho <strong class="text-primary-color">"${escapeHTML(currentSearchKeyword)}"</strong>:</span>
-              <span class="px-2 py-0.5 rounded-full bg-[var(--bg-surface-elevated)] text-[#FF5C00] font-bold">${searchResults.length} sản phẩm</span>
-            </div>
-            <button type="button" data-action="clear-search" class="text-xs text-secondary-color hover:text-primary-color flex items-center gap-1 font-mono">
-              <i class="fa-solid fa-xmark"></i> Xóa tìm kiếm
-            </button>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            ${searchResults.map(buildProductCardHTML).join('')}
-          </div>
-        </div>
-      `;
+    const keyword = removeVietnameseDiacritics(currentSearchKeyword).trim();
+    let matches = getStoredProducts().filter(product => {
+      if ((product.status || 'active') !== 'active') return false;
+      if (filter !== 'all' && product.category !== filter) return false;
+      return !keyword || removeVietnameseDiacritics([product.title, product.desc, product.modelId, product.id].filter(Boolean).join(' ')).includes(keyword);
+    });
+    if (currentSortMode === 'price-asc') matches.sort((a,b) => a.price - b.price);
+    if (currentSortMode === 'price-desc') matches.sort((a,b) => b.price - a.price);
+    const count = document.getElementById('store-results-count');
+    const visible = matches.slice(0, visibleProductLimit);
+    if (count) count.textContent = matches.length ? `${matches.length} sản phẩm · Đang hiển thị ${visible.length}` : 'Không có sản phẩm phù hợp';
+    if (!matches.length) {
+      container.innerHTML = `<div class="minimal-empty"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><h3>Chưa tìm thấy món bạn cần.</h3><p>Thử một tên khác hoặc bỏ bớt bộ lọc.</p><button type="button" data-action="clear-search" class="btn-secondary">Xóa tìm kiếm</button><button type="button" data-action="view-category" data-category="all" class="minimal-text-action">Xem tất cả danh mục</button></div>`;
       return;
     }
-
-    // Case B: CHẾ ĐỘ TẤT CẢ (ALL CATEGORIES - CATEGORY HUB OVERVIEW)
-    if (filter === 'all') {
-      const categories = Object.keys(CATEGORY_REGISTRY);
-
-      container.innerHTML = categories.map(catId => {
-        const catMeta = CATEGORY_REGISTRY[catId];
-        const catProducts = activeProducts.filter(p => p.category === catId);
-        if (catProducts.length === 0) return '';
-
-        const hero = getCategoryHero(catId, catProducts);
-        // Exclude hero from the grid to avoid duplicate rendering (Codex Directive)
-        const gridProducts = hero ? catProducts.filter(p => p.id !== hero.id) : catProducts;
-
-        return `
-          <div class="category-showcase-block space-y-6" id="category-block-${escapeHTML(catId)}">
-            
-            <!-- Category Header Bar -->
-            <div class="category-header-bar">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-xl flex items-center justify-center text-sm shadow-sm" style="background-color: ${catMeta.accentColor}20; color: ${catMeta.accentColor};">
-                  <i class="fa-solid ${catMeta.icon}"></i>
-                </div>
-                <div>
-                  <h3 class="text-sm sm:text-base font-extrabold text-primary-color flex items-center gap-2">
-                    <span>${escapeHTML(catMeta.shortName)}</span>
-                    <span class="text-[11px] font-mono font-medium text-secondary-color">(${catProducts.length} mẫu)</span>
-                  </h3>
-                  <p class="text-[11px] sm:text-xs text-secondary-color line-clamp-1 max-w-xl">
-                    ${escapeHTML(catMeta.title)}
-                  </p>
-                </div>
-              </div>
-
-              <!-- View All Category Button -->
-              <button type="button" 
-                      class="shrink-0 text-xs font-semibold text-[#FF5C00] hover:text-[#E05200] flex items-center gap-1.5 transition-colors" 
-                      data-action="view-category" 
-                      data-category="${escapeHTML(catId)}"
-                      title="Xem toàn bộ sản phẩm danh mục này">
-                <span>Xem tất cả ${catProducts.length} mẫu</span>
-                <i class="fa-solid fa-arrow-right text-[10px] pointer-events-none"></i>
-              </button>
-            </div>
-
-            <!-- Spotlight Hero Item for this Category -->
-            ${hero ? buildHeroSpotlightHTML(hero, catMeta) : ''}
-
-            <!-- 10 Remaining Products in Category Grid -->
-            ${gridProducts.length > 0 ? `
-              <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-                ${gridProducts.map(buildProductCardHTML).join('')}
-              </div>
-            ` : ''}
-
-          </div>
-        `;
-      }).join('');
-      return;
-    }
-
-    // Case C: CHẾ ĐỘ MỘT DANH MỤC (SINGLE CATEGORY HUB)
-    const catMeta = CATEGORY_REGISTRY[filter];
-    const catProducts = activeProducts.filter(p => p.category === filter);
-
-    if (catProducts.length === 0) {
-      container.innerHTML = `
-        <div class="py-20 text-center space-y-4">
-          <div class="w-16 h-16 mx-auto rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] flex items-center justify-center text-2xl text-secondary-color">
-            <i class="fa-solid fa-box-open"></i>
-          </div>
-          <p class="text-sm font-medium text-secondary-color">Chưa có sản phẩm nào trong danh mục này.</p>
-          <button type="button" data-action="view-category" data-category="all" class="btn-secondary text-xs !py-2 !px-4 mx-auto">
-            <i class="fa-solid fa-arrow-left mr-1.5"></i> Quay lại Tất Cả Danh Mục
-          </button>
-        </div>
-      `;
-      return;
-    }
-
-    const hero = getCategoryHero(filter, catProducts);
-    const gridProducts = hero ? catProducts.filter(p => p.id !== hero.id) : catProducts;
-
-    container.innerHTML = `
-      <div class="category-showcase-block space-y-8">
-        
-        <!-- Navigation Breadcrumb & Category Title -->
-        <div class="space-y-4">
-          <div class="flex items-center justify-between">
-            <button type="button" 
-                    data-action="view-category" 
-                    data-category="all" 
-                    class="text-xs font-semibold text-secondary-color hover:text-primary-color flex items-center gap-2 transition-colors">
-              <i class="fa-solid fa-arrow-left pointer-events-none"></i>
-              <span class="pointer-events-none">Quay lại Tất Cả Danh Mục</span>
-            </button>
-            <span class="text-xs font-mono text-secondary-color font-medium">
-              Đang hiển thị <strong class="text-primary-color">${catProducts.length}</strong> sản phẩm
-            </span>
-          </div>
-
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 sm:p-5 rounded-2xl bg-[var(--bg-surface)] border border-[var(--border-subtle)]">
-            <div class="flex items-center gap-3.5">
-              <div class="w-11 h-11 rounded-2xl flex items-center justify-center text-lg shadow-sm" style="background-color: ${catMeta ? catMeta.accentColor : '#FF5C00'}20; color: ${catMeta ? catMeta.accentColor : '#FF5C00'};">
-                <i class="fa-solid ${catMeta ? catMeta.icon : 'fa-shapes'}"></i>
-              </div>
-              <div>
-                <h3 class="text-base sm:text-lg font-extrabold text-primary-color">
-                  ${escapeHTML(catMeta ? catMeta.shortName : filter)}
-                </h3>
-                <p class="text-xs text-secondary-color max-w-xl">
-                  ${escapeHTML(catMeta ? catMeta.title : '')}
-                </p>
-              </div>
-            </div>
-
-            <div class="flex items-center gap-2">
-              <span class="px-3 py-1 rounded-full text-xs font-mono font-bold bg-[#FF5C00]/15 text-[#FF5C00]">
-                ${escapeHTML(catMeta ? catMeta.badgeText : '✦ Curated 2026')}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Spotlight Hero Item -->
-        ${hero ? buildHeroSpotlightHTML(hero, catMeta) : ''}
-
-        <!-- 10 Remaining Products in Category Grid -->
-        ${gridProducts.length > 0 ? `
-          <div class="space-y-4">
-            <h4 class="text-xs font-mono uppercase tracking-wider text-muted font-semibold">
-              Các thiết kế khác trong danh mục (${gridProducts.length} mẫu)
-            </h4>
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-              ${gridProducts.map(buildProductCardHTML).join('')}
-            </div>
-          </div>
-        ` : ''}
-
-      </div>
-    `;
+    const extra = matches.length - visible.length;
+    container.innerHTML = `<div class="minimal-product-grid">${visible.map(buildProductCardHTML).join('')}</div><div class="minimal-pagination">${extra > 0 ? `<button type="button" class="btn-secondary" data-action="load-more">Xem thêm ${Math.min(8, extra)} sản phẩm <span aria-hidden="true">↓</span></button>` : '<span>Bạn đã xem hết các sản phẩm phù hợp.</span>'}</div>`;
   }
 
   // 5. EVENT DELEGATION ON CONTAINER (Zero Inline Onclick XSS Vulnerability)
@@ -609,7 +431,29 @@
     const container = document.getElementById('store-product-grid');
     if (!container) return;
 
+    const sortInput = document.getElementById('store-sort-input');
+    if (sortInput) sortInput.addEventListener('change', () => {
+      currentSortMode = ['price-asc', 'price-desc'].includes(sortInput.value) ? sortInput.value : 'curated';
+      renderStoreProducts(currentCategoryFilter);
+    });
     container.addEventListener('click', (e) => {
+      if (e.target.closest('[data-action="load-more"]')) {
+        const previousCount = visibleProductLimit;
+        visibleProductLimit += 8;
+        renderStoreProducts(currentCategoryFilter, true);
+        // Re-render replaces the clicked button: place focus on the first new card.
+        const nextCard = container.querySelectorAll('.studio-product-card')[previousCount];
+        const target = nextCard && nextCard.querySelector('[data-action="open-detail"]');
+        if (target) target.focus({ preventScroll: true });
+        return;
+      }
+
+      const configureButton = e.target.closest('[data-action="configure-product"]');
+      if (configureButton) {
+        e.stopPropagation();
+        if (configureButton.dataset.productId) window.openProductDetailModal(configureButton.dataset.productId);
+        return;
+      }
       // 1. Swatch selection on card
       const swatchBtn = e.target.closest('[data-action="swatch-select"]');
       if (swatchBtn) {
@@ -622,8 +466,9 @@
 
         const parentGroup = swatchBtn.parentElement;
         if (parentGroup) {
-          parentGroup.querySelectorAll('.swatch-dot').forEach(d => d.classList.remove('active'));
+          parentGroup.querySelectorAll('.swatch-dot').forEach(d => { d.classList.remove('active'); d.setAttribute('aria-pressed', 'false'); });
           swatchBtn.classList.add('active');
+          swatchBtn.setAttribute('aria-pressed', 'true');
         }
 
         const nameLabel = document.getElementById(`swatch-name-${prodId}`);
@@ -807,6 +652,7 @@
 
     if (imgEl) {
       imgEl.src = sanitizeImageUrl(item.image);
+      imgEl.alt = item.imageAlt || getCleanTitle(item.title) || 'Ảnh sản phẩm';
       imgEl.onerror = function () {
         this.onerror = null;
         this.src = 'assets/images/logo-premium-mark.svg';
@@ -833,12 +679,6 @@
     // Khởi tạo chế độ xem mặc định Studio
     if (typeof window.setModalImageViewMode === 'function') {
       window.setModalImageViewMode('studio');
-    }
-
-    // Kích hoạt kính lúp soi chi tiết vân in 0.16mm (Retina Macro Loupe)
-    const frameEl = document.getElementById('modal-visual-frame');
-    if (frameEl && imgEl && window.TT3DVisualRenderer && typeof window.TT3DVisualRenderer.attachMacroLoupe === 'function') {
-      window.TT3DVisualRenderer.attachMacroLoupe(frameEl, imgEl);
     }
 
     if (titleEl) titleEl.textContent = getCleanTitle(item.title);
@@ -894,10 +734,10 @@
     if (specsEl) {
       const sp = item.specs || {};
       const specsList = [
-        { label: 'Kích thước', val: sp.dimensions || 'Tiêu chuẩn xưởng' },
-        { label: 'Trọng lượng', val: sp.weight || 'Tiêu chuẩn xưởng' },
-        { label: 'Độ mịn lớp', val: sp.layer || '0.16mm High-Detail' },
-        { label: 'Bảo hành', val: sp.warranty || 'Đổi mới 1-1' }
+        { label: 'Dài × rộng × cao', val: sp.dimensions || 'Chưa có số đo — cần xác nhận với xưởng' },
+        { label: 'Khối lượng', val: sp.weight || 'Xưởng xác nhận theo mẫu' },
+        { label: 'Vật liệu đang chọn', val: initialMat.label || initialMat.name, kind: 'material' },
+        { label: 'Đổi trả', val: sp.warranty || 'Theo chính sách của xưởng' }
       ];
 
       if (sp.nfc) {
@@ -916,6 +756,7 @@
         const dd = document.createElement('dd');
         dd.className = `font-mono font-semibold ${s.isAccent ? 'text-[#FF5C00]' : 'text-primary-color'} truncate`;
         dd.textContent = s.val;
+        if (s.kind) dd.dataset.specKind = s.kind;
 
         wrap.appendChild(dt);
         wrap.appendChild(dd);
@@ -945,6 +786,7 @@
           btn.className = `modal-color-btn px-3 py-1.5 rounded-xl border text-xs font-medium flex items-center gap-2 transition-all ${c.id === initialColor.id ? 'border-[#FF5C00] bg-[rgba(255,92,0,0.12)] text-primary-color ring-2 ring-[#FF5C00]/30' : 'border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] text-secondary-color hover:border-slate-500'}`;
           btn.dataset.action = 'modal-select-color';
           btn.dataset.colorId = c.id;
+          btn.setAttribute('aria-pressed', String(c.id === initialColor.id));
 
           const dot = document.createElement('span');
           dot.className = 'w-3.5 h-3.5 rounded-full border border-black/20 shrink-0';
@@ -976,6 +818,7 @@
           btn.className = `modal-mat-btn w-full p-3 rounded-xl border text-left transition-all flex items-center justify-between ${i === 0 ? 'border-[#FF5C00] bg-[var(--bg-surface-elevated)] ring-1 ring-[#FF5C00]/40' : 'border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-slate-600'}`;
           btn.dataset.action = 'modal-select-material';
           btn.dataset.matId = m.id;
+          btn.setAttribute('aria-pressed', String(i === 0));
 
           const left = document.createElement('div');
           const header = document.createElement('div');
@@ -1034,6 +877,7 @@
     window.updateModalPriceSummary();
     modal.classList.remove('hidden');
     modal.classList.add('flex', 'active');
+    if (window.TTProductExperience) window.TTProductExperience.refresh(item);
     if (document.body && document.body.style) {
       document.body.style.overflow = 'hidden';
     }
@@ -1052,12 +896,15 @@
     window.modalSelectedColor = matched;
     const label = document.getElementById('modal-color-name');
     if (label) label.textContent = matched.name;
+    if (window.TTProductExperience) window.TTProductExperience.updateSelection();
 
     document.querySelectorAll('.modal-color-btn').forEach(b => {
       b.classList.remove('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
       b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
+      b.setAttribute('aria-pressed', 'false');
     });
     if (btn) {
+      btn.setAttribute('aria-pressed', 'true');
       btn.classList.add('border-[#FF5C00]', 'bg-[rgba(255,92,0,0.12)]', 'text-primary-color', 'ring-2', 'ring-[#FF5C00]/30');
       btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface-elevated)]', 'text-secondary-color');
     }
@@ -1133,8 +980,10 @@
     document.querySelectorAll('.modal-mat-btn').forEach(b => {
       b.classList.remove('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
       b.classList.add('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
+      b.setAttribute('aria-pressed', 'false');
     });
     if (btn) {
+      btn.setAttribute('aria-pressed', 'true');
       btn.classList.add('border-[#FF5C00]', 'bg-[var(--bg-surface-elevated)]', 'ring-1', 'ring-[#FF5C00]/40');
       btn.classList.remove('border-[var(--border-subtle)]', 'bg-[var(--bg-surface)]');
     }
@@ -1161,7 +1010,8 @@
 
     if (priceEl) priceEl.textContent = formatMoney(unitPrice);
     if (subtotalEl) subtotalEl.textContent = formatMoney(total);
-    if (directBtnLabel) directBtnLabel.textContent = `Đặt Hàng Ngay • ${formatMoney(total)}`;
+    if (window.TTProductExperience) window.TTProductExperience.updateSelection();
+    if (directBtnLabel) directBtnLabel.textContent = 'Đặt hàng ngay';
 
     if (shippingNoteEl) {
       if (total >= 300000) {
@@ -1258,6 +1108,8 @@
   };
 
   window.closeProductDetailModal = function () {
+    const imageDialog = document.getElementById('product-image-dialog');
+    if (imageDialog && imageDialog.open) imageDialog.close();
     const modal = document.getElementById('order-modal');
     if (modal) {
       modal.classList.add('hidden');
@@ -1409,6 +1261,8 @@
 
     document.addEventListener('keydown', (e) => {
       if (e.key === 'Escape') {
+        const imageDialog = document.getElementById('product-image-dialog');
+        if (imageDialog && imageDialog.open) return;
         window.closeProductDetailModal();
       }
     });

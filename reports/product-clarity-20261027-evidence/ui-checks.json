@@ -1,0 +1,147 @@
+[
+  {
+    "name": "Initial catalog is eight unique products",
+    "passed": true
+  },
+  {
+    "name": "Saved dark preference cannot reactivate dark storefront",
+    "passed": true
+  },
+  {
+    "name": "Cards explain product use and show the complete photograph",
+    "passed": true
+  },
+  {
+    "name": "Load more reveals sixteen products without duplicates",
+    "passed": true
+  },
+  {
+    "name": "Every active SKU remains reachable without duplication",
+    "passed": true
+  },
+  {
+    "name": "Ascending price sort uses actual catalog prices",
+    "passed": true
+  },
+  {
+    "name": "Category filter stays within requested category",
+    "passed": true
+  },
+  {
+    "name": "Final category page reaches all eleven products",
+    "passed": true
+  },
+  {
+    "name": "Search empty state has recovery action",
+    "passed": true
+  },
+  {
+    "name": "Clear search restores compact catalog",
+    "passed": true
+  },
+  {
+    "name": "Vietnamese search without accents finds products",
+    "passed": true
+  },
+  {
+    "name": "Product image opens an accessible detail dialog",
+    "passed": true
+  },
+  {
+    "name": "Dimensions are disclosed as missing instead of fabricated",
+    "passed": true
+  },
+  {
+    "name": "Modal image has product-specific alternative text and is not cropped",
+    "passed": true
+  },
+  {
+    "name": "Photo opens as a native full-size modal",
+    "passed": true
+  },
+  {
+    "name": "Zoom enlarges the same image with a stated zoom level",
+    "passed": true
+  },
+  {
+    "name": "Browser zoom shortcuts are not intercepted by the image viewer",
+    "passed": true
+  },
+  {
+    "name": "Escape closes only photo viewer and restores detail focus",
+    "passed": true
+  },
+  {
+    "name": "Chosen colour and material are stated and reflected in price",
+    "passed": true
+  },
+  {
+    "name": "Cart receives exactly the chosen product, colour, material and quantity",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 375px",
+    "passed": true
+  },
+  {
+    "name": "Phone defaults to a single large product image column",
+    "passed": true
+  },
+  {
+    "name": "Compact phone layout uses two columns without resetting filters",
+    "passed": true
+  },
+  {
+    "name": "Phone detail actions stay inside the visible viewport",
+    "passed": true
+  },
+  {
+    "name": "Phone detail body can scroll independently",
+    "passed": true
+  },
+  {
+    "name": "Mobile menu exposes expanded state",
+    "passed": true
+  },
+  {
+    "name": "Escape closes mobile menu and restores focus",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 768px",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 1280px",
+    "passed": true
+  },
+  {
+    "name": "No document overflow at 1920px",
+    "passed": true
+  },
+  {
+    "name": "personalize navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "inspiration navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "tracking navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "support navigation displays its view",
+    "passed": true
+  },
+  {
+    "name": "Purchase actions remain reachable on a short phone screen",
+    "passed": true
+  },
+  {
+    "name": "No uncaught JavaScript exceptions during QA",
+    "passed": true,
+    "details": []
+  }
+]

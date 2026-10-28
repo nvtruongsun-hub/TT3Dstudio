@@ -1,51 +1,62 @@
 /* ==========================================================================
-   T&T 3D LABS - MODERN INDUSTRIAL CRAFT & TACTILE MINIMALISM
-   Design System Standards (Benchmark: Bambu Lab, Teenage Engineering, Grovemade, Linear)
+   T&T 3D LABS - WARM TACTILE MINIMALISM & ARTISAN CRAFTSMANSHIP
+   Design System Standards (Benchmark: Muji, Grovemade, Teenage Engineering, Apple)
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap');
 
-/* --- 1. DESIGN TOKENS & COLOR PALETTE (WARM LIGHT STUDIO DEFAULT) --- */
-:root {
-  /* Warm Stone Light Studio Defaults (Audited Standard 2026-10-22) */
-  --bg-canvas: #F7F6F2;
+/* --- 1. DESIGN TOKENS & COLOR PALETTE (WARM LINEN & ARTISAN TERRACOTTA DEFAULT) --- */
+:root,
+html,
+body,
+html[data-theme="light"],
+html.light,
+html.light-theme,
+body.light-theme {
+  /* Warm Natural Linen Canvas & Tactile Paper Surfaces */
+  --bg-canvas: #FAF8F5;
   --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #FFFFFF;
-  --bg-surface-glass: rgba(255, 255, 255, 0.94);
-  --border-subtle: #DCDDD5;
-  --border-hover: #C5C6BC;
-  --border-active: #FF5C00;
+  --bg-surface-elevated: #F4F0EA;
+  --bg-surface-glass: rgba(250, 248, 245, 0.94);
+  --border-subtle: #E8E2D8;
+  --border-hover: #D6CEC2;
+  --border-active: #D45B34;
   
-  --text-primary: #20231F;
-  --text-secondary: #586057;
-  --text-muted: #7E857C;
+  --text-primary: #1F2421;        /* Deep Charcoal Stone - êm mắt, tương phản >= 12:1 */
+  --text-secondary: #58635D;      /* Warm Earth Slate - tương phản >= 5.2:1 */
+  --text-tertiary: #6E7973;       /* Warm Ash Gray - tương phản >= 4.6:1 (WCAG AA) */
+  --text-muted: #6E7973;
   --text-inverse: #FFFFFF;
 
-  /* Accent Color: Signature Craft Orange */
-  --accent-primary: #FF5C00;
-  --accent-hover: #E05200;
-  --accent-active: #C44800;
+  /* Signature Artisan Accent: Warm Terracotta Clay (Đất nung thủ công) */
+  --accent-primary: #D45B34;
+  --accent-hover: #BD4A26;
+  --accent-active: #A63C1B;
   --button-primary-fg: #FFFFFF;
-  --accent-text: #C44800; /* WCAG AA >= 4.5:1 on light canvas #F7F6F2 */
-  --accent-subtle: #FFF7ED;
-  --accent-ring: rgba(255, 92, 0, 0.25);
+  --accent-text: #D45B34;
+  --accent-subtle: rgba(212, 91, 52, 0.08);
+  --accent-ring: rgba(212, 91, 52, 0.25);
 
-  /* Functional status */
-  --status-success: #10B981;
-  --status-success-subtle: #ECFDF5;
-  --status-warning: #F59E0B;
-  --status-error: #EF4444;
+  /* Warm Craft Clay Tone */
+  --accent-craft-orange: #D45B34;
+  --accent-craft-orange-subtle: #FFF5F0;
+
+  /* Natural Botanical Status */
+  --status-success: #2D6A4F;       /* Forest Sage Green */
+  --status-success-subtle: #EBF5F0;
+  --status-warning: #995B00;
+  --status-error: #B42336;
 
   /* Typography */
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Plus Jakarta Sans', system-ui, sans-serif;
+  --font-display: 'Space Grotesk', 'Plus Jakarta Sans', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', 'SFMono-Regular', Consolas, monospace;
 
-  /* Shadows */
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04);
-  --shadow-card: 0 4px 16px -2px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 12px 28px -4px rgba(0, 0, 0, 0.1);
-  --shadow-modal: 0 20px 50px -10px rgba(0, 0, 0, 0.15);
+  /* Soft Diffused Organic Shadows */
+  --shadow-subtle: 0 1px 3px rgba(45, 35, 25, 0.04);
+  --shadow-card: 0 4px 16px -2px rgba(45, 35, 25, 0.05);
+  --shadow-card-hover: 0 12px 28px -4px rgba(45, 35, 25, 0.09);
+  --shadow-modal: 0 20px 50px -10px rgba(45, 35, 25, 0.14);
 
   /* Radius */
   --radius-sm: 8px;
@@ -55,46 +66,83 @@
   --radius-pill: 9999px;
 }
 
-/* Brand logo: Always light version on warm background */
-.brand-logo-dark { display: none !important; }
-.brand-logo-light { display: block !important; }
+/* --- 2. WARM ROAST ESPRESSO SLATE (Gentle Dark Mode - Không chói lóa, không Cyber Neon) --- */
+html[data-theme="dark"],
+html.dark,
+body.dark-theme {
+  --bg-canvas: #191614;
+  --bg-surface: #231F1C;
+  --bg-surface-elevated: #2E2925;
+  --bg-surface-glass: rgba(35, 31, 28, 0.92);
+  --border-subtle: #3D3630;
+  --border-hover: #5A5148;
+  --border-active: #E06D46;
 
-/* --- 2. NORDIC LIGHT STUDIO MODE (Toggleable via .light-theme) --- */
-.light-theme,
-html.light-theme,
-body.light-theme {
-  --bg-canvas: #F8F9FA;
-  --bg-surface: #FFFFFF;
-  --bg-surface-elevated: #F1F3F5;
-  --bg-surface-glass: rgba(255, 255, 255, 0.88);
-  --border-subtle: rgba(0, 0, 0, 0.08);
-  --border-hover: rgba(0, 0, 0, 0.16);
-  --border-active: rgba(255, 92, 0, 0.45);
+  --text-primary: #F8F5EE;
+  --text-secondary: #BDB5A8;
+  --text-tertiary: #8C8476;
+  --text-muted: #8C8476;
+  --text-inverse: #191614;
 
-  --text-primary: #121316;
-  --text-secondary: #63666F;
-  --text-muted: #8A8F98;
-  --text-inverse: #FFFFFF;
+  --accent-primary: #E06D46;
+  --accent-hover: #EC7C55;
+  --accent-active: #C85932;
+  --button-primary-fg: #FFFFFF;
+  --accent-text: #E06D46;
+  --accent-subtle: rgba(224, 109, 70, 0.14);
+  --accent-ring: rgba(224, 109, 70, 0.35);
 
-  --accent-primary: #FF5C00;
-  --accent-hover: #E05200;
-  --accent-active: #E05200;
-  --button-primary-fg: #0B0C0E;
-  --accent-text: #C44800; /* WCAG AA >= 4.5:1 on light canvas #F8F9FA */
-  --accent-subtle: #FFF7ED;
-  --accent-ring: rgba(255, 92, 0, 0.25);
+  --accent-craft-orange: #E06D46;
+  --accent-craft-orange-subtle: rgba(224, 109, 70, 0.18);
 
-  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 8px 24px -6px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 16px 36px -8px rgba(0, 0, 0, 0.1);
-  --shadow-modal: 0 25px 60px -15px rgba(0, 0, 0, 0.18);
+  --status-success: #4E9A74;
+  --status-success-subtle: rgba(78, 154, 116, 0.15);
+  --status-warning: #E0A045;
+  --status-error: #F06A78;
+
+  --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.45);
+  --shadow-card: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+  --shadow-card-hover: 0 14px 34px -4px rgba(0, 0, 0, 0.65);
+  --shadow-modal: 0 25px 60px -10px rgba(0, 0, 0, 0.75);
 }
 
-/* Light Theme Accent Text Rule (Codex R2-02: Đạt 5.0:1 tương phản trên nền sáng) */
+/* Brand logo adaptive visibility */
+html[data-theme="dark"] .brand-logo-dark,
+html.dark .brand-logo-dark {
+  display: none !important;
+}
+html[data-theme="dark"] .brand-logo-light,
+html.dark .brand-logo-light {
+  display: block !important;
+}
+
+html[data-theme="light"] .brand-logo-dark,
+html.light .brand-logo-dark,
+html.light-theme .brand-logo-dark,
+:root .brand-logo-dark {
+  display: block !important;
+}
+html[data-theme="light"] .brand-logo-light,
+html.light .brand-logo-light,
+html.light-theme .brand-logo-light,
+:root .brand-logo-light {
+  display: none !important;
+}
+
+/* Light Theme Accent Text Rule (Codex R2-02: Đạt >= 5.0:1 tương phản trên nền sáng) */
 .light-theme .text-\[\#FF5C00\],
 html.light-theme .text-\[\#FF5C00\],
-body.light-theme .text-\[\#FF5C00\] {
-  color: #C44800 !important;
+html[data-theme="light"] .text-\[\#FF5C00\],
+body.light-theme .text-\[\#FF5C00\],
+.text-\[\#FF5C00\] {
+  color: #D45B34 !important;
+}
+
+/* Global Form Placeholders complying with token contrast */
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-tertiary) !important;
+  opacity: 1;
 }
 
 /* --- 3. GLOBAL RESET & BASE STYLES --- */
@@ -1496,6 +1544,224 @@ details.support-accordion .accordion-content {
   color: var(--text-secondary);
   border-top: 1px solid #F0F1EA;
   padding-top: 1rem;
+}
+
+/* ==========================================================================
+   LAYERCRAFT ENGINE 2.5D SIMULATOR & PRECISION CRAFT HUD (AUTOMATION CORE)
+   ========================================================================== */
+.precision-grid-bg {
+  background-size: 28px 28px;
+  background-image: 
+    linear-gradient(to right, rgba(100, 232, 245, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(100, 232, 245, 0.05) 1px, transparent 1px);
+}
+
+html[data-theme="light"] .precision-grid-bg,
+html.light-theme .precision-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(0, 107, 122, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 107, 122, 0.06) 1px, transparent 1px);
+}
+
+.layercraft-viewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  min-height: 380px;
+  max-height: 540px;
+  background: radial-gradient(circle at 50% 40%, #161D26 0%, #080B10 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.8), inset 0 0 40px rgba(0, 0, 0, 0.6);
+  user-select: none;
+}
+
+html[data-theme="light"] .layercraft-viewport,
+html.light-theme .layercraft-viewport {
+  background: radial-gradient(circle at 50% 40%, #FFFFFF 0%, #E8EFF4 100%);
+  box-shadow: 0 16px 36px -10px rgba(0, 0, 0, 0.1), inset 0 0 30px rgba(0, 0, 0, 0.02);
+}
+
+.layercraft-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: pan-y;
+}
+
+.layercraft-hud {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  pointer-events: none;
+  z-index: 10;
+  gap: 10px;
+}
+
+.layercraft-hud-badge {
+  background: rgba(18, 24, 32, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 6px 12px;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  color: var(--text-primary);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  pointer-events: auto;
+}
+
+html[data-theme="light"] .layercraft-hud-badge,
+html.light-theme .layercraft-hud-badge {
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+}
+
+.layercraft-controls-bar {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  background: rgba(18, 24, 32, 0.88);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  z-index: 10;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="light"] .layercraft-controls-bar,
+html.light-theme .layercraft-controls-bar {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.layercraft-seek-slider {
+  flex: 1;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--border-subtle);
+  outline: none;
+  cursor: pointer;
+}
+
+.layercraft-seek-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--accent-primary);
+  box-shadow: 0 0 10px var(--accent-primary);
+  cursor: pointer;
+  border: 2px solid #080B10;
+  transition: transform 0.15s ease;
+}
+
+.layercraft-seek-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+}
+
+.glow-cyan {
+  box-shadow: 0 4px 16px -2px rgba(212, 91, 52, 0.18);
+}
+
+.glow-orange {
+  box-shadow: 0 4px 16px -2px rgba(212, 91, 52, 0.22);
+}
+
+/* --- HERO RE-BALANCING & SHOWCASE GEOMETRY (Codex TT3D-HERO-20261024-R1) --- */
+#hero .hero-copy,
+#hero .hero-showcase-card {
+  min-width: 0;
+}
+
+#hero .hero-showcase-card {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 460px;
+  margin-inline: auto;
+}
+
+#hero .hero-showcase-media {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #f4f0ea;
+}
+
+#hero .hero-showcase-media > img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+#hero .hero-showcase-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 12px;
+}
+
+#hero .hero-showcase-details > :first-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+#hero .hero-showcase-tab {
+  min-width: 0;
+  min-height: 44px;
+  white-space: normal;
+  line-height: 1.35;
+}
+
+#hero .hero-showcase-media.is-entering > img {
+  animation: hero-image-enter 250ms ease-out both;
+}
+
+@keyframes hero-image-enter {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@media (max-width: 479px) {
+  #hero .hero-showcase-details {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #hero .hero-showcase-details > button {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #hero .hero-showcase-media > img {
+    animation: none;
+    transition: none;
+  }
 }
 
 /* 5. Reduced-Motion Guardrail */
