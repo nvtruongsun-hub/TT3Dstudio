@@ -1,0 +1,381 @@
+/**
+ * T&T 3D Labs - World-Class Tactile Editorial & Precision Craft Design System
+ * Inspired by Grovemade, Teenage Engineering, Aesop & Bambu Lab
+ */
+
+:root {
+  /* Surface Palette - Warm Architectural Minimalism */
+  --bg-canvas: #F7F6F2;
+  --bg-surface: #EFECE6;
+  --bg-elevated: #FFFFFF;
+  --bg-obsidian: #141413;
+  --bg-obsidian-card: #1C1C1A;
+
+  /* Typography Colors */
+  --text-primary: #141413;
+  --text-secondary: #575653;
+  --text-muted: #8A8884;
+  --text-on-dark: #F7F6F2;
+
+  /* Brand & Semantic Accents */
+  --accent-craft: #C85A32;      /* Terracotta ấm áp, cao cấp */
+  --accent-craft-hover: #B04B25;
+  --accent-emerald: #10B981;    /* Trạng thái Sẵn hàng / Bảo hành */
+  
+  /* Hairline Borders - Chuẩn Linear / Teenage Engineering */
+  --border-subtle: rgba(20, 20, 19, 0.08);
+  --border-strong: rgba(20, 20, 19, 0.16);
+  --border-dark-subtle: rgba(255, 255, 255, 0.08);
+
+  /* Typography Stacks */
+  --font-sans: 'Plus Jakarta Sans', 'Be Vietnam Pro', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Radii & Transitions */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 1. Technical Spec & Price Typography */
+.spec-code,
+.product-price,
+.badge-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+/* 2. Technical Marquee Ticker (32px) */
+.artisan-marquee {
+  height: 34px;
+  overflow: hidden;
+  background: var(--bg-surface);
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.marquee-track {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: marqueeScroll 28s linear infinite;
+  gap: 2rem;
+}
+
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.marquee-dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--accent-craft);
+}
+
+/* 3. Bento Grid: 5 Categories Asymmetric Layout */
+.bento-categories {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-auto-rows: 220px;
+  gap: 14px;
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.bento-card {
+  position: relative;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: transform 0.4s var(--ease-out-expo), border-color 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  text-align: left;
+}
+
+.bento-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--border-strong);
+  box-shadow: 0 12px 24px -8px rgba(20, 20, 19, 0.08);
+}
+
+.bento-card-bg-img {
+  position: absolute;
+  right: -10px;
+  bottom: -15px;
+  width: 55%;
+  max-width: 220px;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  transition: transform 0.5s var(--ease-out-expo);
+  filter: drop-shadow(0 10px 16px rgba(0,0,0,0.06));
+  pointer-events: none;
+}
+
+.bento-card:hover .bento-card-bg-img {
+  transform: scale(1.08) translateY(-4px);
+}
+
+.bento-card-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-primary);
+  width: fit-content;
+}
+
+/* Category grid allocation */
+.bento-card:nth-child(1) { grid-column: span 7; } /* Desk Setup & Cơ khí */
+.bento-card:nth-child(2) { grid-column: span 5; } /* Khay & Decor Coquette */
+.bento-card:nth-child(3) { grid-column: span 4; } /* Quà tặng khắc tên */
+.bento-card:nth-child(4) { grid-column: span 4; } /* Thẻ & Standee NFC */
+.bento-card:nth-child(5) { grid-column: span 4; } /* Bình hoa & Chậu cây */
+
+@media (max-width: 768px) {
+  .bento-categories {
+    grid-template-columns: 1fr 1fr;
+    grid-auto-rows: 155px;
+    gap: 10px;
+  }
+  .bento-card:nth-child(1) { grid-column: span 2; }
+  .bento-card:nth-child(n+2) { grid-column: span 1; }
+  .bento-card { padding: 14px; }
+  .bento-card-bg-img { width: 50%; max-width: 110px; right: -5px; bottom: -5px; }
+}
+
+/* 4. World-Class Product Card */
+.tt-product-card {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: border-color 0.25s ease, box-shadow 0.35s var(--ease-out-expo);
+}
+
+.tt-product-card:hover {
+  border-color: var(--border-strong);
+  box-shadow: 0 12px 32px -12px rgba(20, 20, 19, 0.08);
+}
+
+.tt-product-media {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+.tt-product-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s var(--ease-out-expo);
+}
+
+.tt-product-card:hover .tt-product-media img {
+  transform: scale(1.04);
+}
+
+.tt-spec-pill {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: rgba(247, 246, 242, 0.92);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border-subtle);
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  z-index: 2;
+  letter-spacing: -0.01em;
+}
+
+.tt-product-body {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: space-between;
+}
+
+@media (min-width: 640px) {
+  .tt-product-body { padding: 14px; }
+}
+
+.tt-swatch-row {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 6px;
+}
+
+.tt-swatch-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.tt-swatch-dot:hover {
+  transform: scale(1.3);
+  border-color: var(--text-primary);
+}
+
+.tt-product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+/* 5. Sticky Catalog Filter Header */
+.sticky-catalog-header {
+  position: sticky;
+  top: 56px;
+  z-index: 25;
+  background: rgba(247, 246, 242, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: all 0.2s ease;
+}
+
+/* 6. Shop The Look: Interactive Hotspots */
+.look-hotspot-container {
+  position: relative;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface);
+}
+
+.hotspot-dot {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid var(--accent-craft);
+  box-shadow: 0 0 0 4px rgba(200, 90, 50, 0.25);
+  cursor: pointer;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s var(--ease-out-expo), box-shadow 0.3s ease;
+  z-index: 10;
+}
+
+.hotspot-dot::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent-craft);
+}
+
+.hotspot-dot:hover, .hotspot-dot.active {
+  transform: translate(-50%, -50%) scale(1.25);
+  box-shadow: 0 0 0 7px rgba(200, 90, 50, 0.35);
+}
+
+.hotspot-popover {
+  position: absolute;
+  bottom: calc(100% + 12px);
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  background: #FFFFFF;
+  border: 1px solid var(--border-strong);
+  border-radius: 10px;
+  padding: 8px 12px;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.12);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: all 0.25s var(--ease-out-expo);
+  z-index: 20;
+}
+
+.hotspot-dot:hover .hotspot-popover,
+.hotspot-dot:focus .hotspot-popover,
+.hotspot-dot.active .hotspot-popover {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  pointer-events: auto;
+}
+
+/* 7. Obsidian Dark Live Customizer Block */
+.obsidian-customizer-block {
+  background: var(--bg-obsidian);
+  color: var(--text-on-dark);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-dark-subtle);
+  overflow: hidden;
+  box-shadow: 0 20px 48px -12px rgba(0,0,0,0.3);
+}
+
+.obsidian-preview-plate {
+  background: linear-gradient(145deg, #1A1A18 0%, #0F0F0E 100%);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 14px;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1), 0 12px 28px rgba(0, 0, 0, 0.4);
+}
+
+/* 8. Mobile Zalo Sticky Bottom Action Bar */
+.zalo-sticky-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--border-subtle);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 45;
+  box-shadow: 0 -4px 16px rgba(0,0,0,0.05);
+}

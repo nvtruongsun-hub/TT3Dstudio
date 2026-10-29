@@ -226,10 +226,13 @@
     const badgeTheme = item.badgeTheme || 'default';
     const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
 
+    const specPillText = isNFC ? 'NFC · 0.12MM' : (item.category === 'Hop_De_Ban_Tien_Ich' ? '360° MECH · 0.12MM' : (item.category === 'Trang_Diem_Vanity' ? '0.12MM · SILK PLA' : '0.12MM · BIO-PLA'));
+
     return `
-      <article class="minimal-product-card studio-product-card group cursor-pointer flex flex-col justify-between" data-product-id="${escapeHTML(item.id)}" onclick="if(!event.target.closest('[data-action]')) window.openProductDetailModal('${escapeHTML(item.id)}')">
+      <article class="tt-product-card minimal-product-card studio-product-card group cursor-pointer flex flex-col justify-between" data-product-id="${escapeHTML(item.id)}" onclick="if(!event.target.closest('[data-action]')) window.openProductDetailModal('${escapeHTML(item.id)}')">
         <!-- Clean Product Visual Frame (Aspect 1:1) -->
-        <button type="button" aria-label="Xem ${escapeHTML(cleanTitle)}" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" class="product-image-box relative overflow-hidden group aspect-square block w-full bg-[#F2F0EA]">
+        <button type="button" aria-label="Xem ${escapeHTML(cleanTitle)}" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" class="tt-product-media product-image-box relative overflow-hidden group aspect-square block w-full bg-[#F2F0EA]">
+          <span class="tt-spec-pill spec-code">${specPillText}</span>
           <img src="${safeImage}" 
                width="400" 
                height="400" 
@@ -242,14 +245,14 @@
           
           <!-- Archetype & Engineering Badge (Compact Studio Pill) -->
           ${badgeText ? `
-            <div class="absolute top-1.5 left-1.5 pointer-events-none z-10 max-w-[85%]">
+            <div class="absolute bottom-2 left-2 pointer-events-none z-10 max-w-[85%]">
               <span class="px-1.5 py-0.5 rounded-md text-[9px] font-bold ${getBadgeThemeClass(badgeTheme)} shadow-xs flex items-center gap-1 border backdrop-blur-xs bg-opacity-95 truncate">
                 <span class="w-1.5 h-1.5 rounded-full shrink-0 ${getBadgeDotClass(badgeTheme)}"></span>
                 <span class="truncate">${escapeHTML(badgeText)}</span>
               </span>
             </div>
           ` : (isNFC ? `
-            <div class="absolute top-1.5 left-1.5 pointer-events-none z-10">
+            <div class="absolute bottom-2 left-2 pointer-events-none z-10">
               <span class="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-[#FAF5FF]/95 text-[#6B21A8] border border-[#E9D5FF] shadow-xs flex items-center gap-1">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#6B21A8] shrink-0"></span>
                 <span>NFC 1-Chạm</span>
@@ -259,9 +262,17 @@
         </button>
 
         <!-- Card Content Body (Compact Ergonomic Padding) -->
-        <div class="p-2 sm:p-3.5 flex flex-col flex-1 justify-between gap-1.5">
+        <div class="tt-product-body p-2 sm:p-3.5 flex flex-col flex-1 justify-between gap-1.5">
           <div class="space-y-1">
             
+            <!-- Color Swatches Row (Tactile preview) -->
+            <div class="tt-swatch-row" aria-label="Màu sắc có sẵn">
+              ${swatches.slice(0, 3).map(s => `
+                <span class="tt-swatch-dot" style="background: ${s.hex};" title="${escapeHTML(s.name)}"></span>
+              `).join('')}
+              ${swatches.length > 3 ? `<span class="spec-code text-[9.5px] text-[#8A8884]">+${swatches.length - 3} màu</span>` : ''}
+            </div>
+
             <!-- Micro-Eyebrow Context (Truncated 1 line) -->
             ${item.useCaseEyebrow ? `
               <div class="text-[9px] sm:text-[9.5px] font-mono font-bold tracking-wider uppercase text-[#8C6218] truncate">
@@ -281,15 +292,15 @@
           </div>
 
           <!-- Price & Action Row -->
-          <div class="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-1 mt-auto">
+          <div class="tt-product-footer pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-1 mt-auto">
             <div class="truncate">
-              <div class="price-display leading-none text-xs sm:text-sm font-bold font-mono text-[#D45B34]">${priceFormatted}</div>
+              <div class="price-display product-price leading-none text-xs sm:text-sm font-bold font-mono tabular-nums text-[#D45B34]">${priceFormatted}</div>
               ${originalPriceFormatted ? `<div class="text-[9px] sm:text-[10px] text-muted line-through mt-0.5">${originalPriceFormatted}</div>` : ''}
             </div>
 
             <!-- Sleek Action Button -->
             <button type="button" 
-                    class="w-7 h-7 sm:w-auto sm:h-auto sm:py-1.5 sm:px-2.5 rounded-lg bg-[#F7F6F2] hover:bg-[#D45B34] text-[#20231F] hover:text-white border border-[#E5E4DE] hover:border-[#D45B34] flex items-center justify-center text-xs font-bold transition-all relative shrink-0 cursor-pointer" 
+                    class="badge-mono w-7 h-7 sm:w-auto sm:h-auto sm:py-1.5 sm:px-2.5 rounded-lg bg-[#F7F6F2] hover:bg-[#D45B34] text-[#20231F] hover:text-white border border-[#E5E4DE] hover:border-[#D45B34] flex items-center justify-center text-xs font-bold transition-all relative shrink-0 cursor-pointer" 
                     data-action="configure-product"
                     data-product-id="${escapeHTML(item.id)}"
                     title="Xem &amp; chọn">
