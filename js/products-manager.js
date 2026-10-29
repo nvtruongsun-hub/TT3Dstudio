@@ -66,6 +66,33 @@
   const CATEGORY_REGISTRY = getCategoryRegistry();
 
   let currentCategoryFilter = 'all';
+  let currentSubCategoryFilter = 'all';
+
+  function getBadgeThemeClass(theme) {
+    switch (theme) {
+      case 'terracotta': return 'badge-theme-terracotta';
+      case 'amber': return 'badge-theme-amber';
+      case 'rose': return 'badge-theme-rose';
+      case 'slate': return 'badge-theme-slate';
+      case 'forest': return 'badge-theme-forest';
+      case 'sky': return 'badge-theme-sky';
+      case 'purple': return 'badge-theme-purple';
+      default: return 'badge-theme-default';
+    }
+  }
+
+  function getBadgeDotClass(theme) {
+    switch (theme) {
+      case 'terracotta': return 'bg-[#C84B24]';
+      case 'amber': return 'bg-[#8C6218]';
+      case 'rose': return 'bg-[#E11D48]';
+      case 'slate': return 'bg-[#475569]';
+      case 'forest': return 'bg-[#166534]';
+      case 'sky': return 'bg-[#0369A1]';
+      case 'purple': return 'bg-[#6B21A8]';
+      default: return 'bg-[#FF5C00]';
+    }
+  }
   let currentSearchKeyword = '';
   let visibleProductLimit = 8;
   let currentSortMode = 'curated';
@@ -191,10 +218,12 @@
     const currentSwatchId = window.cardSelectedColors[item.id] || swatches[0].id;
     const currentSwatch = swatches.find(s => s.id === currentSwatchId) || swatches[0];
 
-    const cleanTitle = getCleanTitle(item.title);
+    const cleanTitle = item.cleanTitle || getCleanTitle(item.title);
     const sp = item.specs || {};
-    const specLine = item.specLine || (sp.dimensions ? `📐 ${sp.dimensions} • ${sp.material || 'Bio-PLA'}` : '🌱 Nhựa Bio-PLA • 0.16mm');
+    const specLine = item.microSpecs || item.specLine || (sp.dimensions ? `📐 ${sp.dimensions} • ${sp.material || 'Bio-PLA'}` : '🌱 Nhựa Bio-PLA • 0.16mm');
 
+    const badgeText = item.archetypeBadge || item.badge;
+    const badgeTheme = item.badgeTheme || 'default';
     const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
 
     return `
@@ -211,18 +240,18 @@
                class="studio-crisp-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
           
-          <!-- Subtle clean badge (if item has special badge) -->
-          ${item.badge ? `
+          <!-- Archetype & Engineering Badge (Unique per item) -->
+          ${badgeText ? `
             <div class="absolute top-2.5 left-2.5 pointer-events-none z-10">
-              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white/95 backdrop-blur-md text-[#20231F] border border-[#DCDDD5] shadow-sm flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#FF5C00]"></span>
-                <span>${escapeHTML(item.badge)}</span>
+              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${getBadgeThemeClass(badgeTheme)} shadow-xs flex items-center gap-1.5 border">
+                <span class="w-1.5 h-1.5 rounded-full ${getBadgeDotClass(badgeTheme)}"></span>
+                <span>${escapeHTML(badgeText)}</span>
               </span>
             </div>
           ` : (isNFC ? `
             <div class="absolute top-2.5 left-2.5 pointer-events-none z-10">
-              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-white/95 backdrop-blur-md text-purple-700 border border-purple-200 shadow-sm flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-purple-500"></span>
+              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#FAF5FF] text-[#6B21A8] border border-[#E9D5FF] shadow-xs flex items-center gap-1.5">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#6B21A8]"></span>
                 <span>Chip NFC 1-Chạm</span>
               </span>
             </div>
@@ -231,7 +260,7 @@
 
         <!-- Card Content Body -->
         <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between gap-3 sm:gap-4">
-          <div class="space-y-2">
+          <div class="space-y-1.5">
             
             <!-- Color Swatches Row (Interactive) -->
             <div class="product-card-colors flex items-center justify-between">
@@ -257,17 +286,24 @@
               </span>
             </div>
 
+            <!-- Micro-Eyebrow Context (Use Case & Placement) -->
+            ${item.useCaseEyebrow ? `
+              <div class="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#8C6218] truncate pt-1">
+                ${escapeHTML(item.useCaseEyebrow)}
+              </div>
+            ` : ''}
+
             <!-- Product Title (Clean, short, readable) -->
             <h3 class="product-card-title text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-2 group-hover:text-[#FF5C00] transition-colors" title="${escapeHTML(cleanTitle)}">
               ${escapeHTML(cleanTitle)}
             </h3>
 
             <!-- 1-Line Headline Benefit -->
-            <p class="product-card-benefit text-secondary-color line-clamp-2 leading-relaxed">
+            <p class="product-card-benefit text-secondary-color line-clamp-2 leading-relaxed text-xs">
               ${escapeHTML(item.headlineBenefit || item.desc || '')}
             </p>
 
-            <!-- Clean Spec Line -->
+            <!-- Micro-Specs Line -->
             <div class="text-[10px] sm:text-[11px] font-mono text-muted pt-0.5 truncate">
               ${escapeHTML(specLine)}
             </div>
@@ -402,16 +438,84 @@
   }
 
   // 4. MAIN STORE RENDER DISPATCHER
-  function renderStoreProducts(filter = currentCategoryFilter, keepPage = false) {
-    currentCategoryFilter = filter;
+  function renderSubCategoryFilters(currentCategory) {
+    const subFilterContainer = document.getElementById('store-sub-filters');
+    if (!subFilterContainer) return;
+
+    const allProducts = getStoredProducts().filter(p => (p.status || 'active') === 'active');
+    const relevantProducts = currentCategory === 'all' 
+      ? allProducts 
+      : allProducts.filter(p => p.category === currentCategory);
+
+    // Collect distinct subCategories with count
+    const subCatMap = new Map();
+    relevantProducts.forEach(p => {
+      if (p.subCategory && p.subCategoryName) {
+        if (!subCatMap.has(p.subCategory)) {
+          subCatMap.set(p.subCategory, { name: p.subCategoryName, count: 0 });
+        }
+        subCatMap.get(p.subCategory).count++;
+      }
+    });
+
+    if (subCatMap.size <= 1 && currentCategory !== 'all') {
+      subFilterContainer.innerHTML = '';
+      subFilterContainer.classList.add('hidden');
+      return;
+    }
+    subFilterContainer.classList.remove('hidden');
+
+    const totalCount = relevantProducts.length;
+    let html = `
+      <button type="button" 
+              class="sub-filter-pill ${currentSubCategoryFilter === 'all' ? 'active' : ''}" 
+              data-sub-category="all" 
+              aria-pressed="${currentSubCategoryFilter === 'all'}">
+        <span>Tất Cả</span>
+        <span class="sub-pill-count">${totalCount}</span>
+      </button>
+    `;
+
+    subCatMap.forEach((meta, subId) => {
+      const isActive = currentSubCategoryFilter === subId;
+      html += `
+        <button type="button" 
+                class="sub-filter-pill ${isActive ? 'active' : ''}" 
+                data-sub-category="${escapeHTML(subId)}" 
+                aria-pressed="${isActive}">
+          <span>${escapeHTML(meta.name)}</span>
+          <span class="sub-pill-count">${meta.count}</span>
+        </button>
+      `;
+    });
+
+    subFilterContainer.innerHTML = html;
+  }
+
+  function renderStoreProducts(filter = currentCategoryFilter, keepPage = false, updateSubFilters = true) {
+    if (filter !== currentCategoryFilter) {
+      currentCategoryFilter = filter;
+      currentSubCategoryFilter = 'all';
+    } else {
+      currentCategoryFilter = filter;
+    }
+
     if (!keepPage) visibleProductLimit = 8;
+    if (updateSubFilters) {
+      renderSubCategoryFilters(currentCategoryFilter);
+    }
+
     const container = document.getElementById('store-product-grid');
     if (!container) return;
     const keyword = removeVietnameseDiacritics(currentSearchKeyword).trim();
     let matches = getStoredProducts().filter(product => {
       if ((product.status || 'active') !== 'active') return false;
-      if (filter !== 'all' && product.category !== filter) return false;
-      return !keyword || removeVietnameseDiacritics([product.title, product.desc, product.modelId, product.id].filter(Boolean).join(' ')).includes(keyword);
+      if (currentCategoryFilter !== 'all' && product.category !== currentCategoryFilter) return false;
+      if (currentSubCategoryFilter !== 'all' && product.subCategory !== currentSubCategoryFilter) return false;
+      return !keyword || removeVietnameseDiacritics([
+        product.title, product.cleanTitle, product.desc, product.modelId, product.id,
+        product.useCaseEyebrow, product.archetypeBadge, product.subCategoryName
+      ].filter(Boolean).join(' ')).includes(keyword);
     });
     if (currentSortMode === 'price-asc') matches.sort((a,b) => a.price - b.price);
     if (currentSortMode === 'price-desc') matches.sort((a,b) => b.price - a.price);
@@ -430,6 +534,24 @@
   function initEventDelegation() {
     const container = document.getElementById('store-product-grid');
     if (!container) return;
+    const subFilterContainer = document.getElementById('store-sub-filters');
+    if (subFilterContainer && !subFilterContainer.dataset.bound) {
+      subFilterContainer.dataset.bound = 'true';
+      subFilterContainer.addEventListener('click', (e) => {
+        const pill = e.target.closest('.sub-filter-pill');
+        if (!pill) return;
+        const subCat = pill.dataset.subCategory || 'all';
+        currentSubCategoryFilter = subCat;
+        visibleProductLimit = 8;
+        renderStoreProducts(currentCategoryFilter, false, false);
+        subFilterContainer.querySelectorAll('.sub-filter-pill').forEach(p => {
+          const isActive = (p.dataset.subCategory || 'all') === subCat;
+          p.classList.toggle('active', isActive);
+          p.setAttribute('aria-pressed', String(isActive));
+        });
+      });
+    }
+
 
     const sortInput = document.getElementById('store-sort-input');
     if (sortInput) sortInput.addEventListener('change', () => {

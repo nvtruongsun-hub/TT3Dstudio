@@ -13,7 +13,7 @@
   const EVENT_NAME = 'tt_products_updated';
   const FALLBACK_URL = 'products.json';
   const CURRENT_SCHEMA_VERSION = 5;
-  const CURRENT_CATALOG_REVISION = 'mw-55-v2';
+  const CURRENT_CATALOG_REVISION = 'mw-55-v3';
 
   // 6 Sản phẩm legacy chuẩn làm fixture làm giàu dữ liệu cũ (Codex Directive)
   const LEGACY_FIXTURE_PRODUCTS = [
@@ -377,6 +377,13 @@
       commercialStatus: String(p.commercialStatus || 'Chua_ro').trim(),
       isHero: Boolean(p.isHero),
       specLine: String(p.specLine || '').trim(),
+      cleanTitle: p.cleanTitle ? String(p.cleanTitle).trim() : null,
+      archetypeBadge: p.archetypeBadge ? String(p.archetypeBadge).trim() : null,
+      badgeTheme: p.badgeTheme ? String(p.badgeTheme).trim() : 'default',
+      useCaseEyebrow: p.useCaseEyebrow ? String(p.useCaseEyebrow).trim() : null,
+      subCategory: p.subCategory ? String(p.subCategory).trim() : null,
+      subCategoryName: p.subCategoryName ? String(p.subCategoryName).trim() : null,
+      microSpecs: p.microSpecs ? String(p.microSpecs).trim() : null,
       specs: (p.specs && typeof p.specs === 'object' && !Array.isArray(p.specs)) ? { ...p.specs } : {},
       colors: Array.isArray(p.colors) ? p.colors.map(c => ({
         id: String(c.id || 'c_default').trim(),
