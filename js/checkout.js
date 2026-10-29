@@ -489,6 +489,11 @@
       document.body.style.overflow = 'hidden';
     }
 
+    // Gửi sự kiện phân tích begin_checkout an toàn
+    if (typeof window !== 'undefined' && window.TTAnalytics && typeof window.TTAnalytics.beginCheckout === 'function') {
+      window.TTAnalytics.beginCheckout(items, totals.finalTotal);
+    }
+
     // Reset view trạng thái kết quả
     const formSection = document.getElementById('checkout-form-section') || document.getElementById('checkout-step-input');
     const resultSection = document.getElementById('checkout-result-section') || document.getElementById('checkout-step-result');
@@ -623,6 +628,16 @@
 
     saveCustomerPreferences({ name, phone: cleanPhone, address }, remember);
     currentCheckoutContext.state = 'handoff_ready';
+
+    // Gửi sự kiện phân tích purchase / order_submitted an toàn
+    if (typeof window !== 'undefined' && window.TTAnalytics && typeof window.TTAnalytics.purchase === 'function') {
+      window.TTAnalytics.purchase(orderRecord);
+    }
+
+    // Đồng bộ đơn hàng lên Cloud Firestore đám mây (nếu có kết nối)
+    if (typeof window !== 'undefined' && window.TTFirestore && typeof window.TTFirestore.saveOrder === 'function') {
+      window.TTFirestore.saveOrder(orderRecord);
+    }
 
     // Tạo tin nhắn chuyển tiếp
     const messageText = buildOrderMessage(orderRecord);

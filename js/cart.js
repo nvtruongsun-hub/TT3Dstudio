@@ -164,6 +164,9 @@
       });
     }
     saveCart();
+    if (typeof window !== 'undefined' && window.TTAnalytics && typeof window.TTAnalytics.addToCart === 'function') {
+      window.TTAnalytics.addToCart(item);
+    }
     return true;
   }
 
@@ -172,7 +175,11 @@
     if (idx > -1) {
       const targetQty = cart[idx].qty + delta;
       if (targetQty <= 0) {
+        const removed = cart[idx];
         cart.splice(idx, 1);
+        if (typeof window !== 'undefined' && window.TTAnalytics && typeof window.TTAnalytics.removeFromCart === 'function') {
+          window.TTAnalytics.removeFromCart(removed);
+        }
       } else {
         cart[idx].qty = Math.min(99, targetQty);
       }
@@ -181,8 +188,12 @@
   }
 
   function removeCartItem(cartItemId) {
+    const itemToRemove = cart.find(i => i.cartItemId === cartItemId || i.id === cartItemId);
     cart = cart.filter(i => i.cartItemId !== cartItemId && i.id !== cartItemId);
     saveCart();
+    if (itemToRemove && typeof window !== 'undefined' && window.TTAnalytics && typeof window.TTAnalytics.removeFromCart === 'function') {
+      window.TTAnalytics.removeFromCart(itemToRemove);
+    }
   }
 
   function clearCart() {
@@ -551,6 +562,7 @@
   // Export API
   window.TTCart = {
     addToCart,
+    addItem: addToCart,
     updateQty: updateItemQty,
     removeItem: removeCartItem,
     clearCart,

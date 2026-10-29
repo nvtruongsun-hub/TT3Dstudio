@@ -444,8 +444,10 @@
       document.body.classList.add('light-theme');
       try { localStorage.setItem('tt_theme', 'light'); } catch (_) {}
     }
+    function applyTheme(theme = 'light') { applyLightTheme(); }
     applyLightTheme();
-    window.TTTheme = { getTheme: () => 'light', setTheme: applyLightTheme };
+    window.applyTheme = applyTheme;
+    window.TTTheme = { getTheme: () => 'light', setTheme: applyLightTheme, applyTheme: applyTheme };
   }
 
   // --- 4.1 ARTISAN HERO PRODUCT SHOWCASE CONTROLLER (Codex TT3D-HERO-20261024-R1) ---

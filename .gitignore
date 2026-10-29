@@ -16,6 +16,7 @@ $RECYCLE.BIN/
 *.tmp
 *.backup.html
 reports/**/build-fixtures*
+reports/*-backup-*/
 
 # Dependencies & Build Output
 node_modules/

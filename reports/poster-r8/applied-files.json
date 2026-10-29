@@ -1,0 +1,53 @@
+{
+  "backup": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\reports\\poster-r8-backup-20261028-113145",
+  "files": [
+    {
+      "path": "poster-artisan-stall.html",
+      "sha256": "9088c30a94cd06d73a6d62b62068467fa61d89ef849422834a5946f00ab94d2c"
+    },
+    {
+      "path": "tests/test_poster_stall_verification.js",
+      "sha256": "654f2b9fc2f928a21bbf4a248d910c46c217830466f3843b58194e298396d854"
+    },
+    {
+      "path": "data/poster-r8.json",
+      "sha256": "d5c5c4b623e5a46fc1c3328b6e3d4559811078a42a2e291c1f7f8df3d5214523"
+    },
+    {
+      "path": "assets/images/poster-r8/mascot-keycap.svg",
+      "sha256": "07af894f79c491020500c61707001e532111e1683eb1dc18ec43eebcde14a518"
+    },
+    {
+      "path": "reports\\poster-r8\\a2-pdf.png",
+      "sha256": "dac525ab0f35eaaafaa5921597ca1daf8ac7911c55865fd8b9d74f610b6432e6"
+    },
+    {
+      "path": "reports\\poster-r8\\banner-pdf.png",
+      "sha256": "ff3525a18663605669dff79c79c84e84682a03c5284261564fa0f23369606b18"
+    },
+    {
+      "path": "reports\\poster-r8\\checks.json",
+      "sha256": "36f0a3ef99458ad40761e574e2e945a896b41291d52fdb88e5816f4c03e217a6"
+    },
+    {
+      "path": "reports\\poster-r8\\pdf-checks.json",
+      "sha256": "1b8028ca86a51f8ba56150ede6611504150b8e00c8a65cf1de72db5c07d4c064"
+    },
+    {
+      "path": "reports\\poster-r8\\qr-checks.json",
+      "sha256": "e606f0ec0dc7ae2ac082f33f2233b2f12a782d6cbae8c2b95dd9f75ec4fa850a"
+    },
+    {
+      "path": "reports\\poster-r8\\README.md",
+      "sha256": "c0774393a1c20f9d7ff5946f131faf9267a468ee7208db0cb87cf129a884fee8"
+    },
+    {
+      "path": "reports\\poster-r8\\TT3D-banner-1200x600.pdf",
+      "sha256": "29278d62f6cb2fba2912ac6ded8ccdb70840919afa24187daf09153d7dcb443e"
+    },
+    {
+      "path": "reports\\poster-r8\\TT3D-poster-A2.pdf",
+      "sha256": "7896343c62bd2a72cdaf17b389394c8c224acd2d8bd12d11be05555e4f9d70dd"
+    }
+  ]
+}

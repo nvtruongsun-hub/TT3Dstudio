@@ -1,0 +1,41 @@
+{
+  "revision": "R7",
+  "concept": "Góc nhỏ. Gu riêng.",
+  "palette": {
+    "paper": "#f5f1e8",
+    "olive": "#283f34",
+    "terracotta": "#a55238"
+  },
+  "items": [
+    {
+      "id": "mw-cn-2327403",
+      "name": "Đèn nấm vân dệt",
+      "price": 239000,
+      "label": "Ánh sáng cho góc thư giãn",
+      "image": "assets/images/products/thumb_2327403.png"
+    },
+    {
+      "id": "mw-cn-2331892",
+      "name": "Clicker kem ốc quế",
+      "price": 49000,
+      "label": "Bấm vui, mang theo mỗi ngày",
+      "image": "assets/images/products/thumb_2331892.png"
+    },
+    {
+      "id": "mw-cn-1753199",
+      "name": "Clicker quả bơ",
+      "price": 69000,
+      "label": "Móc khóa nhỏ, điểm nhấn xinh",
+      "image": "assets/images/products/thumb_1753199.png"
+    },
+    {
+      "id": "mw-cn-1433737",
+      "name": "Móc khóa mèo mini",
+      "price": 29000,
+      "label": "Mèo khớp động, xinh bỏ túi",
+      "image": "assets/images/products/thumb_1433737.png"
+    }
+  ],
+  "source": "products.json; catalog prices captured 2026-10-28",
+  "imageNote": "Existing catalog reference images; no synthesized product photos."
+}

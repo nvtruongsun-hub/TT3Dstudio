@@ -1,0 +1,57 @@
+{
+  "backup": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\reports\\poster-r10-backup-20261029-100307",
+  "files": [
+    {
+      "path": "poster-artisan-stall.html",
+      "sha256": "93f8eefa2455bec1b33bb942bc7c4955a75e642ef1160557aae112ac6a8b0435"
+    },
+    {
+      "path": "tests/test_poster_stall_verification.js",
+      "sha256": "8a9c947f91c51a987a34e82249add988584c8738408d1ba1da993d4ac45014bb"
+    },
+    {
+      "path": "data/poster-r10.json",
+      "sha256": "75c010e8bc8001cb4d393c8c2b0961b7511fb95b8790c4155dfa125576223d45"
+    },
+    {
+      "path": "assets/images/poster-r10/tactile-trio.png",
+      "sha256": "118e1ad9621a8da70159c34e19507d228acc0cc6c7c715bbc33f7ae45c757d47"
+    },
+    {
+      "path": "reports\\poster-r10\\a2-pdf.png",
+      "sha256": "a955529a2da5447cae2676ce9191292677f9af83feac324d719e3fcc46228068"
+    },
+    {
+      "path": "reports\\poster-r10\\banner-pdf.png",
+      "sha256": "00497230739ee15703f55807e0f1c2d4fc28372ca20854b1b1ec7a5c357db70e"
+    },
+    {
+      "path": "reports\\poster-r10\\checks.json",
+      "sha256": "3490c2dbcb383d671a22786d5b007d7bb1583a6a8e4a772842863b783ee39949"
+    },
+    {
+      "path": "reports\\poster-r10\\IMAGE-PROMPT.md",
+      "sha256": "891741d93999aa6fc11638aa1abf1f2289a51cad7b684c2f424ecfe1a5ccf1d4"
+    },
+    {
+      "path": "reports\\poster-r10\\pdf-checks.json",
+      "sha256": "d79e69cbb8b53e9242b82c704c780ea23a68c81c8618d668da3314de8467fd65"
+    },
+    {
+      "path": "reports\\poster-r10\\qr-checks.json",
+      "sha256": "e606f0ec0dc7ae2ac082f33f2233b2f12a782d6cbae8c2b95dd9f75ec4fa850a"
+    },
+    {
+      "path": "reports\\poster-r10\\README.md",
+      "sha256": "0c69c753933213faa5a6d9d228b0a8d249087ced40e7a8943bab438493612524"
+    },
+    {
+      "path": "reports\\poster-r10\\TT3D-banner-1200x600.pdf",
+      "sha256": "482a779399f0bcd6e1143aa1d5c6ac8cda9c77d326af45cbb30b07d353c030aa"
+    },
+    {
+      "path": "reports\\poster-r10\\TT3D-poster-A2.pdf",
+      "sha256": "e5b9e9f25ecca31c49f539856d60b0ca6bd7cae831a5370c352b536b81dadf46"
+    }
+  ]
+}

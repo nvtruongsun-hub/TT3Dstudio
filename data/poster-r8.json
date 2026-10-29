@@ -1,0 +1,40 @@
+{
+  "revision": "R8",
+  "concept": "Móc xinh. Bấm vui.",
+  "mascot": "Bé Tí — phím bấm có khoen móc khóa; hình minh họa nhận diện, không phải ảnh sản phẩm",
+  "items": [
+    {
+      "id": "mw-cn-1433737",
+      "name": "Mèo mini",
+      "price": 29000,
+      "label": "Móc khóa khớp động",
+      "image": "assets/images/products/thumb_1433737.png",
+      "color": "pink"
+    },
+    {
+      "id": "mw-cn-2370777",
+      "name": "Clicker cơ học",
+      "price": 39000,
+      "label": "Nhỏ gọn, bấm vui",
+      "image": "assets/images/products/thumb_2370777.png",
+      "color": "mint"
+    },
+    {
+      "id": "mw-cn-2331892",
+      "name": "Clicker kem",
+      "price": 49000,
+      "label": "Kem xinh, vui tay",
+      "image": "assets/images/products/thumb_2331892.png",
+      "color": "lilac"
+    },
+    {
+      "id": "mw-cn-1753199",
+      "name": "Clicker quả bơ",
+      "price": 69000,
+      "label": "Móc khóa đáng yêu",
+      "image": "assets/images/products/thumb_1753199.png",
+      "color": "yellow"
+    }
+  ],
+  "source": "products.json; catalog prices captured 2026-10-28"
+}

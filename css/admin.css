@@ -1,95 +1,305 @@
 /* ==========================================================================
    T&T 3D Labs - Admin Studio OS Design System
-   Benchmark: Linear, Raycast, Vercel Dashboard Standards
-   Scope: Scoped strictly to Admin UI components
+   Specification: Anti-Vibecoding / Refined Dark SaaS UI
+   Palette: Neutral Matte Dark (#0C0C0E, #111114, #16161A), Hairline Borders
    ========================================================================== */
 
-/* Custom Scrollbar for Admin */
+:root {
+  --admin-bg-base: #0C0C0E;
+  --admin-bg-sidebar: #111114;
+  --admin-bg-surface: #16161A;
+  --admin-bg-elevated: #1C1C22;
+  --admin-bg-input: #121215;
+  
+  --admin-border-subtle: rgba(255, 255, 255, 0.07);
+  --admin-border-hover: rgba(255, 255, 255, 0.14);
+  --admin-border-focus: rgba(255, 92, 0, 0.45);
+  
+  --admin-text-primary: #F4F4F5;
+  --admin-text-secondary: #A1A1AA;
+  --admin-text-muted: #71717A;
+  
+  --admin-accent-primary: #FF5C00;
+  --admin-accent-emerald: #10B981;
+  --admin-accent-amber: #F59E0B;
+  --admin-accent-rose: #F43F5E;
+  --admin-accent-sky: #38BDF8;
+}
+
+/* Enforce tabular figures for all data, metrics and mono elements */
+.tabular-nums,
+.font-mono,
+[data-num],
+.stat-number,
+.kpi-value,
+td {
+  font-variant-numeric: tabular-nums;
+  -webkit-font-feature-settings: "tnum" 1;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Base Body Styles */
+body.admin-body {
+  background-color: var(--admin-bg-base);
+  color: var(--admin-text-primary);
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  letter-spacing: -0.011em;
+}
+
+/* Custom Matte Scrollbar */
 .admin-scroll::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
 }
 .admin-scroll::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: var(--admin-bg-base);
 }
 .admin-scroll::-webkit-scrollbar-thumb {
-  background: rgba(51, 65, 85, 0.8);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 9999px;
 }
 .admin-scroll::-webkit-scrollbar-thumb:hover {
-  background: rgba(100, 116, 139, 1);
+  background: rgba(255, 255, 255, 0.22);
 }
 
-/* Glassmorphism Surface */
+/* Standardized Refined Dark SaaS Surface */
 .admin-card {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(51, 65, 85, 0.6);
-  border-radius: 1rem;
+  background: var(--admin-bg-surface);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 14px;
+  padding: 24px; /* Strict 24px inner padding */
+  transition: border-color 0.18s ease;
+}
+
+.admin-card:hover {
+  border-color: var(--admin-border-hover);
 }
 
 .admin-card-elevated {
-  background: rgba(30, 41, 59, 0.5);
-  border: 1px solid rgba(71, 85, 105, 0.5);
+  background: var(--admin-bg-elevated);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 12px;
+}
+
+/* Primary Action Button (Refined Matte Studio Orange) */
+.btn-orange-primary {
+  background: #FF5C00;
+  color: #FFFFFF;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  transition: all 0.18s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.btn-orange-primary:hover {
+  background: #E05200;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-orange-primary:active {
+  transform: translateY(1px);
+}
+
+/* Secondary Neutral Action Button */
+.btn-neutral-subtle {
+  background: var(--admin-bg-elevated);
+  color: var(--admin-text-secondary);
+  border: 1px solid var(--admin-border-subtle);
+  border-radius: 10px;
+  font-weight: 500;
+  transition: all 0.18s ease;
+}
+
+.btn-neutral-subtle:hover {
+  color: var(--admin-text-primary);
+  border-color: var(--admin-border-hover);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Form Controls (Refined Hairline Inputs) */
+.admin-input,
+.admin-select,
+.admin-textarea {
+  background: var(--admin-bg-input);
+  border: 1px solid var(--admin-border-subtle);
+  color: var(--admin-text-primary);
+  border-radius: 10px;
+  font-size: 0.8125rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.admin-input:focus,
+.admin-select:focus,
+.admin-textarea:focus {
+  outline: none;
+  border-color: var(--admin-accent-primary);
+  box-shadow: 0 0 0 1px rgba(255, 92, 0, 0.3);
+}
+
+.admin-input::placeholder,
+.admin-textarea::placeholder {
+  color: var(--admin-text-muted);
+}
+
+/* Sidebar Links (Refined Minimal Tab Items) */
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 10px;
+  color: var(--admin-text-secondary);
+  background: transparent;
+  border: 1px solid transparent;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition: all 0.15s ease;
+  user-select: none;
+}
+
+.sidebar-link:hover {
+  color: var(--admin-text-primary);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sidebar-link.active {
+  background: var(--admin-bg-elevated);
+  color: var(--admin-text-primary);
+  border-color: var(--admin-border-subtle);
+  font-weight: 600;
+}
+
+.sidebar-link.active .sidebar-icon {
+  color: var(--admin-accent-primary);
+}
+
+/* Right-aligned tabular numbers in sidebar */
+.sidebar-tab-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--admin-text-muted);
+  font-variant-numeric: tabular-nums;
+  margin-left: auto;
+  font-weight: 500;
 }
 
 /* Image Upload Dropzone */
 .image-dropzone {
-  border: 2px dashed rgba(71, 85, 105, 0.8);
-  border-radius: 0.875rem;
-  background: rgba(15, 23, 42, 0.5);
-  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  border: 1px dashed var(--admin-border-hover);
+  border-radius: 12px;
+  background: var(--admin-bg-input);
+  transition: all 0.2s ease;
 }
+
 .image-dropzone:hover,
 .image-dropzone.dragover {
-  border-color: #FF5C00;
-  background: rgba(255, 92, 0, 0.05);
+  border-color: var(--admin-accent-primary);
+  background: rgba(255, 92, 0, 0.03);
 }
 
 /* Preset Art Card */
 .preset-art-card {
   position: relative;
-  border-radius: 0.75rem;
+  border-radius: 12px;
   overflow: hidden;
-  border: 1px solid rgba(51, 65, 85, 0.6);
-  background: #0B0C0E;
-  transition: all 0.2s ease;
+  border: 1px solid var(--admin-border-subtle);
+  background: var(--admin-bg-surface);
+  transition: all 0.18s ease;
   cursor: pointer;
 }
+
 .preset-art-card:hover {
-  border-color: #FF5C00;
+  border-color: var(--admin-border-hover);
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px -4px rgba(255, 92, 0, 0.2);
 }
+
 .preset-art-card.selected {
-  border-color: #FF5C00;
-  box-shadow: 0 0 0 2px #FF5C00;
+  border-color: var(--admin-accent-primary);
+  box-shadow: 0 0 0 2px rgba(255, 92, 0, 0.4);
 }
 
-/* Tab indicator */
-.sidebar-link.active {
-  background: rgba(255, 92, 0, 0.12);
-  color: #FFFFFF;
-  border-color: rgba(255, 92, 0, 0.4);
-}
-.sidebar-link.active i {
-  color: #FF5C00;
+/* Clean 6px Dot Indicators */
+.status-dot-6 {
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  display: inline-block;
+  shrink: 0;
 }
 
-/* Status Badges */
-.badge-active {
-  background: rgba(16, 185, 129, 0.12);
-  border: 1px solid rgba(16, 185, 129, 0.3);
-  color: #34d399;
+/* Refined Minimal Status Badges */
+.badge-clean {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--admin-border-subtle);
+  background: var(--admin-bg-input);
+  color: var(--admin-text-secondary);
 }
-.badge-draft {
-  background: rgba(245, 158, 11, 0.12);
-  border: 1px solid rgba(245, 158, 11, 0.3);
-  color: #fbbf24;
+
+.badge-clean.badge-active {
+  color: var(--admin-accent-emerald);
+  border-color: rgba(16, 185, 129, 0.2);
 }
-.badge-archived {
-  background: rgba(100, 116, 139, 0.12);
-  border: 1px solid rgba(100, 116, 139, 0.3);
-  color: #94a3b8;
+
+.badge-clean.badge-draft {
+  color: var(--admin-accent-amber);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.badge-clean.badge-archived {
+  color: var(--admin-text-muted);
+}
+
+/* Data Spline Chart Styles */
+.spline-chart-container {
+  position: relative;
+  width: 100%;
+  height: 260px;
+}
+
+.spline-grid-line {
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-dasharray: 4 4;
+  stroke-width: 1;
+}
+
+.spline-axis-text {
+  fill: var(--admin-text-muted);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.spline-path-line {
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke-width 0.15s ease, opacity 0.15s ease;
+}
+
+.spline-path-area {
+  transition: opacity 0.15s ease;
+}
+
+.spline-tooltip {
+  position: absolute;
+  pointer-events: none;
+  background: rgba(22, 22, 26, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 11px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 30;
+  transform: translate(-50%, -100%);
+  margin-top: -10px;
+  transition: opacity 0.1s ease, transform 0.1s ease;
 }
