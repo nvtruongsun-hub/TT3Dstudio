@@ -26,6 +26,17 @@ const TT_DEFAULT_CONFIG = {
     allowCustomerNotes: true
   },
 
+  // Cấu hình Firebase & Google Analytics
+  firebase: {
+    apiKey: "AIzaSyDq99rkCb_I8WeeG-qc_uhBnfAPep1emls",
+    authDomain: "tt3dlabs.firebaseapp.com",
+    projectId: "tt3dlabs",
+    storageBucket: "tt3dlabs.firebasestorage.app",
+    messagingSenderId: "851317729039",
+    appId: "1:851317729039:web:96c5e9f91be1246442c07a",
+    measurementId: "G-GWCNJ0W537"
+  },
+
   // Cấu hình biểu giá động (Dynamic Pricing Engine)
   pricing: {
     materialRates: {

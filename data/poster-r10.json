@@ -1,0 +1,34 @@
+{
+  "revision": "R10",
+  "concept": "Tactile Play — Bấm vui. Mang theo.",
+  "heroAsset": "assets/images/poster-r10/tactile-trio.png",
+  "generated": true,
+  "imageDimensions": [
+    1536,
+    1024
+  ],
+  "imageMode": "built-in image_gen",
+  "items": [
+    {
+      "id": "mw-cn-1433737",
+      "name": "Mèo mini khớp động",
+      "price": 29000
+    },
+    {
+      "id": "mw-cn-2370777",
+      "name": "Clicker cơ học",
+      "price": 39000
+    },
+    {
+      "id": "mw-cn-2331892",
+      "name": "Clicker kem",
+      "price": 49000
+    },
+    {
+      "id": "mw-cn-1753199",
+      "name": "Clicker quả bơ",
+      "price": 69000
+    }
+  ],
+  "pricing": "Bottom table lists actual catalog SKUs and base prices. Generated illustration is labeled as concept; cat price is for articulated mini cat, not a new mechanical cat."
+}

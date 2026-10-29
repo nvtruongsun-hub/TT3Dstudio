@@ -1,0 +1,16 @@
+[
+  {
+    "file": "TT3D-poster-A2.pdf",
+    "pages": 1,
+    "widthMm": 420,
+    "heightMm": 594,
+    "headlinePresent": true
+  },
+  {
+    "file": "TT3D-banner-1200x600.pdf",
+    "pages": 1,
+    "widthMm": 1200,
+    "heightMm": 600,
+    "headlinePresent": true
+  }
+]

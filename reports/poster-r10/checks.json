@@ -1,0 +1,114 @@
+[
+  {
+    "success": true,
+    "revision": "R10",
+    "format": "a2",
+    "width": 840,
+    "height": 1188,
+    "widthMm": 420,
+    "heightMm": 594,
+    "imageCount": 2
+  },
+  {
+    "format": "a2",
+    "sheet": {
+      "x": 330,
+      "y": 98,
+      "width": 840,
+      "height": 1188,
+      "top": 98,
+      "right": 1170,
+      "bottom": 1286,
+      "left": 330
+    },
+    "width": 840,
+    "height": 1188,
+    "overflow": false,
+    "images": true,
+    "font": true
+  },
+  {
+    "success": true,
+    "revision": "R10",
+    "format": "banner",
+    "width": 1200,
+    "height": 600,
+    "widthMm": 1200,
+    "heightMm": 600,
+    "imageCount": 2
+  },
+  {
+    "format": "banner",
+    "sheet": {
+      "x": 150,
+      "y": 98,
+      "width": 1200,
+      "height": 600,
+      "top": 98,
+      "right": 1350,
+      "bottom": 698,
+      "left": 150
+    },
+    "width": 1200,
+    "height": 600,
+    "overflow": false,
+    "images": true,
+    "font": true
+  },
+  {
+    "viewport": 375,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 375,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 768,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 768,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1280,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1280,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1920,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1920,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  }
+]

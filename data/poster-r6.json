@@ -1,0 +1,99 @@
+{
+  "revision": "R6",
+  "theme": "Tactile Craft & Ambient Lifestyle",
+  "tagline": "Chạm vui. Sống đẹp.",
+  "campaign": {
+    "name": "Ưu đãi tại quầy: 49K → 35K/món",
+    "scope": "Áp dụng: Clicker kem, móc khóa robot mecha và móc khóa Spotify NFC."
+  },
+  "items": [
+    {
+      "id": "mw-cn-2331892",
+      "name": "Clicker kem ốc quế",
+      "subtitle": "Phím cơ tactile bấm giòn • Nhựa sinh học Bio-PLA",
+      "role": "hero-product",
+      "originalPrice": 49000,
+      "salePrice": 35000,
+      "priceDisplay": "35K",
+      "isSale": true,
+      "image": "assets/images/poster-r6/icecream-clicker.png"
+    },
+    {
+      "id": "mw-cn-1433737",
+      "name": "Mèo mini khớp động",
+      "subtitle": "Khớp cử động linh hoạt",
+      "role": "supporting-product",
+      "originalPrice": 29000,
+      "salePrice": null,
+      "priceDisplay": "29K",
+      "isSale": false,
+      "image": "assets/images/poster-r6/mini-cat.png"
+    },
+    {
+      "id": "mw-cn-1646129",
+      "name": "Khay nơ Coquette",
+      "subtitle": "Dáng nơ lụa mềm mại • Đựng trang sức & chìa khóa",
+      "role": "decor",
+      "originalPrice": 119000,
+      "salePrice": null,
+      "priceDisplay": "119K",
+      "isSale": false,
+      "image": "assets/images/poster-r6/tray-hero.png"
+    },
+    {
+      "id": "mw-cn-2084928",
+      "name": "Ống cắm cọ nơ lụa",
+      "subtitle": "Nếp gấp lụa satin thanh lịch",
+      "role": "decor",
+      "originalPrice": 139000,
+      "salePrice": null,
+      "priceDisplay": "139K",
+      "isSale": false,
+      "image": "assets/images/poster-r6/brush-pot.png"
+    },
+    {
+      "id": "mw-cn-2235027",
+      "name": "Đèn Washi KŌHAKU",
+      "subtitle": "Giấy Washi tối giản Nhật Bản",
+      "role": "decor",
+      "originalPrice": 289000,
+      "salePrice": null,
+      "priceDisplay": "289K",
+      "isSale": false,
+      "image": "assets/images/poster-r6/washi-lamp.png"
+    },
+    {
+      "id": "mw-cn-1438306",
+      "name": "Đèn mây phi hành gia",
+      "subtitle": "Ánh sáng dịu nhẹ bồng bềnh",
+      "role": "decor",
+      "originalPrice": 129000,
+      "salePrice": null,
+      "priceDisplay": "129K",
+      "isSale": false,
+      "image": "assets/images/poster-r6/cloud-lamp.png"
+    },
+    {
+      "id": "mw-cn-704003",
+      "name": "Móc khóa robot mecha",
+      "subtitle": "Khớp cử động in liền khối",
+      "role": "accessory",
+      "originalPrice": 49000,
+      "salePrice": 35000,
+      "priceDisplay": "35K",
+      "isSale": true,
+      "image": "assets/images/poster-r6/robot-keychain.png"
+    },
+    {
+      "id": "mw-cn-939925",
+      "name": "Móc khóa đĩa than NFC",
+      "subtitle": "Chạm mở nhạc Spotify thông minh",
+      "role": "accessory",
+      "originalPrice": 49000,
+      "salePrice": 35000,
+      "priceDisplay": "35K",
+      "isSale": true,
+      "image": "assets/images/poster-r6/spotify-nfc.png"
+    }
+  ]
+}

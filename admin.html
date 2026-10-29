@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>T&T 3D Labs | Bảng Điều Khiển Quản Trị (Admin Portal)</title>
+  <title>T&amp;T 3D Labs | Bảng Điều Khiển Quản Trị (Admin Portal)</title>
   <link rel="icon" type="image/svg+xml" href="assets/images/logo-premium-mark.svg?v=2.2">
 
   <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Industrial Design System Compiled Tailwind Utilities -->
   <link rel="stylesheet" href="css/tailwind.css?v=3.2">
@@ -17,254 +17,370 @@
   <!-- Font Awesome Icons 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-  <!-- Scoped Admin Stylesheet -->
-  <link rel="stylesheet" href="css/admin.css?v=3.1">
-
-  <style>
-    body {
-      background-color: #07090e;
-      color: #e2e8f0;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-    }
-    .btn-orange-primary {
-      background: linear-gradient(135deg, #FF5C00 0%, #D84315 100%);
-      color: #ffffff;
-      font-weight: 700;
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .btn-orange-primary:hover {
-      filter: brightness(1.1);
-      transform: translateY(-1px);
-    }
-  </style>
+  <!-- Refined Dark SaaS Stylesheet -->
+  <link rel="stylesheet" href="css/admin.css?v=4.0">
 </head>
 
-<body class="bg-[#07090e] text-slate-100 min-h-screen flex flex-col antialiased selection:bg-[#FF5C00] selection:text-white admin-scroll">
+<body class="admin-body min-h-screen flex flex-col antialiased selection:bg-[#FF5C00] selection:text-white admin-scroll">
 
   <!-- =========================================================================
        1. SECURITY LOCK SCREEN (PIN PROTECTION: 2026)
        ========================================================================= -->
-  <div id="admin-lock-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#07090e]/95 backdrop-blur-xl">
-    <div class="w-full max-w-sm p-8 rounded-3xl admin-card border border-slate-800 text-center space-y-6 shadow-2xl">
-      <div class="w-16 h-16 mx-auto rounded-2xl bg-[rgba(255,92,0,0.12)] border border-[#FF5C00]/30 flex items-center justify-center text-[#FF5C00] text-2xl shadow-lg">
-        <i class="fa-solid fa-lock"></i>
+  <div id="admin-lock-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0C0C0E]/95 backdrop-blur-xl">
+    <div class="w-full max-w-sm p-6 rounded-2xl admin-card border border-[rgba(255,255,255,0.07)] text-center space-y-6 shadow-2xl bg-[#16161A]">
+      <div class="w-14 h-14 mx-auto rounded-xl bg-[rgba(255,92,0,0.1)] border border-[#FF5C00]/30 flex items-center justify-center text-[#FF5C00] text-xl shadow-sm">
+        <i class="fa-solid fa-shield-halved"></i>
       </div>
 
-      <div class="space-y-1">
-        <h1 class="text-lg font-bold text-white tracking-tight">T&amp;T 3D Labs Studio OS</h1>
-        <p class="text-xs text-slate-400">Nhập mã PIN quản trị xưởng để tiếp tục</p>
+      <div class="space-y-1.5">
+        <h1 class="text-base font-bold text-[#F4F4F5] tracking-tight">T&amp;T 3D Labs Studio OS</h1>
+        <p class="text-xs text-[#A1A1AA]">Nhập mã PIN quản trị xưởng để tiếp tục</p>
       </div>
 
       <form id="pin-form" class="space-y-4">
         <div>
           <input type="password" id="admin-pin-input" maxlength="6" autofocus placeholder="••••" 
-                 class="w-full px-4 py-3 rounded-2xl bg-slate-900 border border-slate-700 text-center text-xl font-mono tracking-widest text-white focus:border-[#FF5C00] focus:outline-none">
-          <p id="pin-error" class="text-rose-400 text-xs mt-2 hidden">Mã PIN không chính xác. Mặc định là 2026.</p>
+                 class="w-full px-4 py-2.5 rounded-xl admin-input text-center text-lg font-mono tracking-widest text-[#F4F4F5] focus:outline-none">
+          <p id="pin-error" class="text-[#F43F5E] text-xs mt-2 hidden">Mã PIN không chính xác. Mặc định là 2026.</p>
         </div>
 
-        <button type="submit" class="w-full py-3 rounded-2xl btn-orange-primary text-xs uppercase tracking-wider">
-          Xác Thực Truy Cập
+        <button type="submit" class="w-full py-2.5 rounded-xl btn-orange-primary text-xs font-semibold">
+          Xác thực truy cập
         </button>
       </form>
 
-      <div class="text-[11px] text-slate-500 font-mono">
-        Bảo mật nội bộ • Cổng Admin T&amp;T 3D Labs
+      <div class="text-[11px] text-[#71717A] font-mono flex items-center justify-center gap-2">
+        <span class="status-dot-6 bg-[#10B981]"></span>
+        <span>Bảo mật nội bộ • Cổng Admin T&amp;T 3D Labs</span>
       </div>
     </div>
   </div>
 
 
   <!-- =========================================================================
-       2. MAIN APPLICATION INTERFACE (WORKSPACE DASHBOARD)
+       2. MAIN APPLICATION INTERFACE (REFINED DARK SAAS DASHBOARD)
        ========================================================================= -->
-  <div id="admin-app" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+  <div id="admin-app" class="hidden flex-1 flex flex-col md:flex-row min-h-screen bg-[#0C0C0E]">
 
-    <!-- A. SIDEBAR NAVIGATION -->
-    <aside class="w-full md:w-64 bg-slate-950/95 border-b md:border-b-0 md:border-r border-slate-800/80 flex flex-col shrink-0">
-      <div class="p-5 border-b border-slate-800/80 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-          <img src="assets/images/logo-premium-dark.svg?v=2.2" alt="T&amp;T 3D Labs" class="w-[145px] h-auto object-contain object-left shrink-0">
-          <span class="text-[9px] font-mono tracking-wide text-slate-400">ADMIN</span>
+    <!-- A. SIDEBAR NAVIGATION (Normalized: 16px padding, muted tabular-nums) -->
+    <aside class="w-full md:w-64 bg-[#111114] border-b md:border-b-0 md:border-r border-[rgba(255,255,255,0.07)] flex flex-col shrink-0 px-4">
+      
+      <!-- Brand & Version Header -->
+      <div class="py-5 border-b border-[rgba(255,255,255,0.07)] flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <img src="assets/images/logo-premium-dark.svg?v=2.2" alt="T&amp;T 3D Labs" class="w-[138px] h-auto object-contain object-left shrink-0">
+          <span class="text-[10px] font-mono tracking-wide text-[#71717A] px-1.5 py-0.5 rounded border border-[rgba(255,255,255,0.07)] bg-[#16161A]">v2.6</span>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
-      <nav id="sidebar-nav" class="p-4 space-y-1.5 flex-1">
-        <div class="text-[10px] font-mono uppercase tracking-wider text-slate-500 px-3 py-1">Quản Trị Trung Tâm</div>
+      <nav id="sidebar-nav" class="py-4 space-y-1 flex-1">
+        <div class="text-[11px] font-medium text-[#71717A] px-3 py-1">Quản trị hệ thống</div>
 
-        <!-- Tab 1: Tổng Quan -->
-        <button data-tab-target="overview" class="sidebar-link active w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
-          <i class="fa-solid fa-chart-pie w-4 text-center"></i>
-          <span>1. Tổng Quan Xưởng</span>
+        <!-- Tab 1: Tổng quan -->
+        <button data-tab-target="overview" class="sidebar-link active w-full text-left">
+          <i class="fa-solid fa-chart-line w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Tổng quan</span>
+          <span class="sidebar-tab-num" id="sidebar-count-overview">—</span>
         </button>
 
-        <!-- Tab 2: Quản Lý Sản Phẩm -->
-        <button data-tab-target="products" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
-          <i class="fa-solid fa-boxes-stacked w-4 text-center"></i>
-          <span>2. Quản Lý Sản Phẩm</span>
+        <!-- Tab 2: Quản lý sản phẩm -->
+        <button data-tab-target="products" class="sidebar-link w-full text-left">
+          <i class="fa-solid fa-cube w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Sản phẩm</span>
+          <span class="sidebar-tab-num" id="sidebar-count-products">55</span>
         </button>
 
-        <!-- Tab 3: Kho Ảnh Studio Presets -->
-        <button data-tab-target="presets" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
-          <i class="fa-solid fa-images w-4 text-center"></i>
-          <span>3. Kho Ảnh Studio Presets</span>
+        <!-- Tab 3: Kho ảnh presets -->
+        <button data-tab-target="presets" class="sidebar-link w-full text-left">
+          <i class="fa-regular fa-image w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Kho ảnh presets</span>
+          <span class="sidebar-tab-num" id="sidebar-count-presets">8</span>
         </button>
 
-        <!-- Tab 4: Yêu Cầu Đơn Hàng -->
-        <button data-tab-target="orders" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
-          <i class="fa-solid fa-clipboard-list w-4 text-center"></i>
-          <span>4. Yêu Cầu Đơn Hàng</span>
+        <!-- Tab 4: Yêu cầu đơn hàng -->
+        <button data-tab-target="orders" class="sidebar-link w-full text-left">
+          <i class="fa-regular fa-file-lines w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Đơn hàng</span>
+          <span class="sidebar-tab-num" id="sidebar-count-orders">0</span>
         </button>
 
-        <!-- Tab 5: Cấu Hình Bảng Giá -->
-        <button data-tab-target="pricing" class="sidebar-link w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs text-slate-300 hover:text-white transition-colors text-left">
-          <i class="fa-solid fa-calculator w-4 text-center"></i>
-          <span>5. Cấu Hình Bảng Giá</span>
+        <!-- Tab 5: Cấu hình bảng giá -->
+        <button data-tab-target="pricing" class="sidebar-link w-full text-left">
+          <i class="fa-solid fa-sliders w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Bảng giá</span>
+          <span class="sidebar-tab-num" id="sidebar-count-pricing">3</span>
         </button>
 
-        <div class="pt-4 mt-4 border-t border-slate-800/80 text-[10px] font-mono uppercase tracking-wider text-slate-500 px-3 py-1">Thao Tác Nhanh</div>
+        <!-- Quick Operations Section -->
+        <div class="pt-4 mt-3 border-t border-[rgba(255,255,255,0.07)] text-[11px] font-medium text-[#71717A] px-3 py-1">
+          Thao tác nhanh
+        </div>
 
-        <a href="index.html" target="_blank" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-[#FF5C00] transition-colors">
-          <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center"></i>
-          <span>Xem Website Store</span>
+        <a href="index.html" target="_blank" class="sidebar-link w-full text-left">
+          <i class="fa-solid fa-arrow-up-right-from-square w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Xem website store</span>
         </a>
 
-        <button id="btn-export-quick" class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-emerald-400 transition-colors text-left">
-          <i class="fa-solid fa-download w-4 text-center"></i>
-          <span>Xuất products.json</span>
+        <button id="btn-export-quick" class="sidebar-link w-full text-left">
+          <i class="fa-solid fa-download w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Xuất dữ liệu catalog</span>
         </button>
 
-        <label class="w-full flex items-center gap-3 px-3.5 py-2 rounded-xl text-xs text-slate-400 hover:text-cyan-400 transition-colors cursor-pointer">
-          <i class="fa-solid fa-upload w-4 text-center"></i>
-          <span>Nhập products.json</span>
+        <label class="sidebar-link w-full text-left cursor-pointer">
+          <i class="fa-solid fa-upload w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Nhập dữ liệu catalog</span>
           <input type="file" id="input-import-json" accept=".json" class="hidden">
         </label>
       </nav>
 
-      <!-- Sidebar Footer -->
-      <div class="p-4 border-t border-slate-800/80 bg-slate-950/60 space-y-3">
-        <div class="flex items-center justify-between text-xs">
-          <span class="text-slate-400 flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Phiên làm việc
+      <!-- Sidebar Footer (Refined Status) -->
+      <div class="py-4 border-t border-[rgba(255,255,255,0.07)] space-y-3">
+        <div class="flex items-center justify-between text-xs px-2">
+          <span class="text-[#71717A] flex items-center gap-2">
+            <span class="status-dot-6 bg-[#10B981]"></span>
+            <span>Trạng thái xưởng</span>
           </span>
-          <span class="font-mono text-[#FF5C00] font-bold">Admin #2026</span>
+          <span class="font-mono tabular-nums text-[#A1A1AA] text-[11px]">Sẵn sàng</span>
         </div>
 
-        <button id="btn-logout" class="w-full py-2 px-3 rounded-xl border border-rose-500/30 text-rose-300 hover:bg-rose-500/10 text-xs font-semibold flex items-center justify-center gap-2 transition-all">
-          <i class="fa-solid fa-right-from-bracket"></i>
-          <span>Khóa Phiên (Đăng Xuất)</span>
+        <button id="btn-logout" class="w-full py-2 px-3 rounded-lg border border-[rgba(255,255,255,0.07)] hover:border-[rgba(255,255,255,0.14)] text-[#A1A1AA] hover:text-[#F4F4F5] bg-[#16161A] text-xs font-medium flex items-center justify-center gap-2 transition-all">
+          <i class="fa-solid fa-arrow-right-from-bracket text-[11px]"></i>
+          <span>Khóa phiên làm việc</span>
         </button>
       </div>
     </aside>
 
-    <!-- B. MAIN CONTENT -->
-    <main class="flex-1 flex flex-col overflow-y-auto max-h-screen bg-[#07090e] admin-scroll">
-      <!-- Top Bar Header -->
-      <header class="p-5 border-b border-slate-800/80 bg-slate-950/60 sticky top-0 z-20 backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
+    <!-- B. MAIN CONTENT AREA (28px gap separation, 24px inner padding cards) -->
+    <main class="flex-1 flex flex-col overflow-y-auto max-h-screen bg-[#0C0C0E] admin-scroll">
+      
+      <!-- Top Bar Header (Refined Sentence Case Context) -->
+      <header class="px-7 py-4 border-b border-[rgba(255,255,255,0.07)] bg-[#0C0C0E]/90 sticky top-0 z-20 backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
         <div>
-          <h2 id="page-title" class="text-lg font-bold text-white tracking-tight flex items-center gap-2">
-            <span>Tổng Quan Hệ Thống Studio</span>
+          <h2 id="page-title" class="text-base font-bold text-[#F4F4F5] tracking-tight flex items-center gap-2">
+            <span>Tổng quan vận hành xưởng</span>
           </h2>
-          <p id="page-subtitle" class="text-xs text-slate-400 mt-0.5">Giám sát số lượng sản phẩm, dung lượng lưu trữ và trạng thái xưởng</p>
+          <p id="page-subtitle" class="text-xs text-[#71717A] mt-0.5">Giám sát thông số sản phẩm, tiến độ đơn và dung lượng lưu trữ</p>
         </div>
 
-        <div class="flex items-center gap-2.5">
-          <span class="hidden sm:inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-[11px] font-mono text-emerald-300">
-            <i class="fa-solid fa-shield-halved"></i> GitHub Pages Serverless
+        <div class="flex items-center gap-3">
+          <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#16161A] border border-[rgba(255,255,255,0.07)] text-[11px] font-mono text-[#A1A1AA]">
+            <span class="status-dot-6 bg-[#10B981]"></span>
+            <span>GitHub Pages Serverless</span>
           </span>
-          <button onclick="window.TTAdmin.exportProductsJson()" class="btn-orange-primary px-3.5 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5">
-            <i class="fa-solid fa-download"></i>
-            <span class="hidden sm:inline">Tải</span> products.json
+          <button onclick="window.TTAdmin.exportProductsJson()" class="btn-orange-primary px-3.5 py-1.5 text-xs flex items-center gap-2">
+            <i class="fa-solid fa-download text-[11px]"></i>
+            <span>Tải file catalog</span>
           </button>
         </div>
       </header>
 
-      <div class="p-5 sm:p-7 space-y-6 flex-1">
+      <!-- Main Scrollable Content Container (28px gap) -->
+      <div class="p-7 space-y-[28px] flex-1">
 
         <!-- ===================================================================
-             TAB 1: TỔNG QUAN (OVERVIEW)
+             TAB 1: TỔNG QUAN (OVERVIEW) & TELEMETRY
              =================================================================== -->
-        <section id="tab-overview" class="tab-panel space-y-6">
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <section id="tab-overview" class="tab-panel space-y-[28px]">
+          
+          <!-- 1. KPI CARDS GRID (Strict 24px inner padding, tabular-nums) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             
-            <div class="p-5 rounded-2xl admin-card space-y-2">
-              <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Tổng Sản Phẩm</span>
-                <div class="w-8 h-8 rounded-lg bg-[#FF5C00]/10 text-[#FF5C00] flex items-center justify-center">
-                  <i class="fa-solid fa-boxes-stacked"></i>
-                </div>
+            <!-- Card 1: Tổng sản phẩm -->
+            <div class="admin-card space-y-2">
+              <div class="flex items-center justify-between text-xs text-[#71717A]">
+                <span class="font-medium text-[#A1A1AA]">Tổng sản phẩm</span>
+                <span class="status-dot-6 bg-[#A1A1AA]"></span>
               </div>
-              <div class="text-2xl font-bold font-mono text-white" id="stat-total-products">0</div>
-              <p class="text-[11px] text-slate-400">Trong kho dữ liệu</p>
+              <div class="text-2xl font-bold font-mono tabular-nums text-[#F4F4F5]" id="stat-total-products">0</div>
+              <p class="text-[11px] text-[#71717A]">Trong kho catalog</p>
             </div>
 
-            <div class="p-5 rounded-2xl admin-card space-y-2">
-              <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Đang Hoạt Động (Store)</span>
-                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center">
-                  <i class="fa-solid fa-circle-check"></i>
-                </div>
+            <!-- Card 2: Đang hiển thị Store -->
+            <div class="admin-card space-y-2">
+              <div class="flex items-center justify-between text-xs text-[#71717A]">
+                <span class="font-medium text-[#A1A1AA]">Đang hiển thị store</span>
+                <span class="status-dot-6 bg-[#10B981]"></span>
               </div>
-              <div class="text-2xl font-bold font-mono text-emerald-400" id="stat-active-products">0</div>
-              <p class="text-[11px] text-slate-400">Hiển thị ở trang Store</p>
+              <div class="text-2xl font-bold font-mono tabular-nums text-[#10B981]" id="stat-active-products">0</div>
+              <p class="text-[11px] text-[#71717A]">Sẵn sàng nhận đơn</p>
             </div>
 
-            <div class="p-5 rounded-2xl admin-card space-y-2">
-              <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Yêu Cầu Đơn Hàng</span>
-                <div class="w-8 h-8 rounded-lg bg-cyan-500/10 text-cyan-400 flex items-center justify-center">
-                  <i class="fa-solid fa-clipboard-list"></i>
-                </div>
+            <!-- Card 3: Yêu cầu đơn hàng -->
+            <div class="admin-card space-y-2">
+              <div class="flex items-center justify-between text-xs text-[#71717A]">
+                <span class="font-medium text-[#A1A1AA]">Yêu cầu đơn hàng</span>
+                <span class="status-dot-6 bg-[#38BDF8]"></span>
               </div>
-              <div class="text-2xl font-bold font-mono text-cyan-300" id="stat-total-orders">0</div>
-              <p class="text-[11px] text-slate-400">Lưu trên trình duyệt</p>
+              <div class="text-2xl font-bold font-mono tabular-nums text-[#38BDF8]" id="stat-total-orders">0</div>
+              <p class="text-[11px] text-[#71717A]">Lưu trữ trên trình duyệt</p>
             </div>
 
-            <div class="p-5 rounded-2xl admin-card space-y-2">
-              <div class="flex items-center justify-between text-xs text-slate-400">
-                <span class="font-medium">Dung Lượng Bộ Nhớ</span>
-                <div class="w-8 h-8 rounded-lg bg-purple-500/10 text-purple-400 flex items-center justify-center">
-                  <i class="fa-solid fa-hard-drive"></i>
-                </div>
+            <!-- Card 4: Dung lượng bộ nhớ -->
+            <div class="admin-card space-y-2">
+              <div class="flex items-center justify-between text-xs text-[#71717A]">
+                <span class="font-medium text-[#A1A1AA]">Bộ nhớ cục bộ</span>
+                <span class="status-dot-6 bg-[#F59E0B]"></span>
               </div>
-              <div class="text-sm font-bold font-mono text-white mt-1" id="stat-storage-gauge">0 KB / 3.5 MB</div>
-              <div class="w-full bg-slate-800 rounded-full h-1.5 overflow-hidden">
-                <div id="stat-storage-bar" class="bg-emerald-500 h-1.5 rounded-full" style="width: 5%"></div>
+              <div class="text-sm font-bold font-mono tabular-nums text-[#F4F4F5] mt-1" id="stat-storage-gauge">0 KB / 3.5 MB</div>
+              <div class="w-full bg-[#111114] border border-[rgba(255,255,255,0.07)] rounded-full h-1.5 overflow-hidden">
+                <div id="stat-storage-bar" class="bg-[#10B981] h-1.5 rounded-full transition-all duration-300" style="width: 5%"></div>
               </div>
-              <p class="text-[10px] text-slate-400">Ngưỡng an toàn LocalStorage</p>
+              <p class="text-[10px] text-[#71717A]">Hạn mức an toàn LocalStorage</p>
             </div>
 
           </div>
 
-          <!-- Recent Products Preview Card -->
-          <div class="p-6 rounded-3xl admin-card space-y-4">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-clock-rotate-left text-[#FF5C00]"></i> Sản Phẩm Gần Đây
+          <!-- 2. DATA VISUALIZATION: MULTI-SERIES SMOOTH SPLINE CHART -->
+          <div class="admin-card space-y-5" id="workshop-spline-card">
+            
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[rgba(255,255,255,0.07)]">
+              <div>
+                <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
+                  <span class="status-dot-6 bg-[#FF5C00]"></span>
+                  <span>Sản lượng in &amp; Nhu cầu theo danh mục</span>
+                </h3>
+                <p class="text-xs text-[#71717A] mt-0.5">Xu hướng sản xuất và truy vấn đơn 14 ngày qua (chuẩn spline đa chuỗi)</p>
+              </div>
+
+              <!-- Timeframe & Meta Badge -->
+              <div class="flex items-center gap-2">
+                <span class="px-2.5 py-1 rounded-md bg-[#111114] border border-[rgba(255,255,255,0.07)] text-[11px] font-mono tabular-nums text-[#A1A1AA]">
+                  14 ngày gần nhất
+                </span>
+              </div>
+            </div>
+
+            <!-- Smooth Spline Chart Interactive Container -->
+            <div class="spline-chart-container" id="spline-chart-wrapper">
+              <svg id="spline-chart-svg" class="w-full h-full overflow-visible" preserveAspectRatio="none" viewBox="0 0 800 260">
+                <!-- SVG Defs (Subtle Gradient Fills) -->
+                <defs>
+                  <linearGradient id="grad-nfc" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#FF5C00" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="#FF5C00" stop-opacity="0.0"/>
+                  </linearGradient>
+                  <linearGradient id="grad-ambient" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="#F59E0B" stop-opacity="0.0"/>
+                  </linearGradient>
+                  <linearGradient id="grad-vanity" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#F43F5E" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="#F43F5E" stop-opacity="0.0"/>
+                  </linearGradient>
+                  <linearGradient id="grad-fidget" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#10B981" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="#10B981" stop-opacity="0.0"/>
+                  </linearGradient>
+                  <linearGradient id="grad-desk" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="#38BDF8" stop-opacity="0.12"/>
+                    <stop offset="100%" stop-color="#38BDF8" stop-opacity="0.0"/>
+                  </linearGradient>
+                </defs>
+
+                <!-- Horizontal Dashed Gridlines (subtle hairline) -->
+                <g class="grid-lines">
+                  <line x1="40" y1="30" x2="780" y2="30" class="spline-grid-line"/>
+                  <line x1="40" y1="85" x2="780" y2="85" class="spline-grid-line"/>
+                  <line x1="40" y1="140" x2="780" y2="140" class="spline-grid-line"/>
+                  <line x1="40" y1="195" x2="780" y2="195" class="spline-grid-line"/>
+                  <line x1="40" y1="230" x2="780" y2="230" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+                </g>
+
+                <!-- Y-Axis Tabular Labels -->
+                <text x="32" y="34" text-anchor="end" class="spline-axis-text">120</text>
+                <text x="32" y="89" text-anchor="end" class="spline-axis-text">90</text>
+                <text x="32" y="144" text-anchor="end" class="spline-axis-text">60</text>
+                <text x="32" y="199" text-anchor="end" class="spline-axis-text">30</text>
+                <text x="32" y="234" text-anchor="end" class="spline-axis-text">0</text>
+
+                <!-- Chart Paths will be injected dynamically by js/admin.js -->
+                <g id="spline-chart-paths"></g>
+
+                <!-- Interactive Crosshair & Cursor Dot -->
+                <line id="spline-crosshair" x1="0" y1="30" x2="0" y2="230" stroke="rgba(255,255,255,0.18)" stroke-width="1" stroke-dasharray="2 2" class="hidden"/>
+                <g id="spline-focus-dots" class="hidden"></g>
+              </svg>
+
+              <!-- Floating Micro-Tooltip -->
+              <div id="spline-tooltip" class="spline-tooltip opacity-0"></div>
+            </div>
+
+            <!-- Synchronized Chart Legend with Sidebar Category Colors -->
+            <div class="pt-3 border-t border-[rgba(255,255,255,0.07)] flex flex-wrap items-center justify-between gap-3 text-xs">
+              <div class="flex flex-wrap items-center gap-5">
+                
+                <div class="flex items-center gap-2">
+                  <span class="status-dot-6 bg-[#FF5C00]"></span>
+                  <span class="text-[#A1A1AA]">Cá nhân hóa &amp; NFC:</span>
+                  <span class="font-mono tabular-nums text-[#F4F4F5] text-xs font-semibold" id="legend-count-nfc">11</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="status-dot-6 bg-[#F59E0B]"></span>
+                  <span class="text-[#A1A1AA]">Decor &amp; Đèn nội thất:</span>
+                  <span class="font-mono tabular-nums text-[#F4F4F5] text-xs font-semibold" id="legend-count-ambient">11</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="status-dot-6 bg-[#F43F5E]"></span>
+                  <span class="text-[#A1A1AA]">Trang điểm &amp; Vanity:</span>
+                  <span class="font-mono tabular-nums text-[#F4F4F5] text-xs font-semibold" id="legend-count-vanity">11</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="status-dot-6 bg-[#10B981]"></span>
+                  <span class="text-[#A1A1AA]">Fidget &amp; Khớp động:</span>
+                  <span class="font-mono tabular-nums text-[#F4F4F5] text-xs font-semibold" id="legend-count-fidget">11</span>
+                </div>
+
+                <div class="flex items-center gap-2">
+                  <span class="status-dot-6 bg-[#38BDF8]"></span>
+                  <span class="text-[#A1A1AA]">Hộp bàn &amp; Tiện ích:</span>
+                  <span class="font-mono tabular-nums text-[#F4F4F5] text-xs font-semibold" id="legend-count-desk">11</span>
+                </div>
+
+              </div>
+
+              <div class="text-[11px] text-[#71717A] font-mono tabular-nums">
+                Tổng 55 mẫu catalog
+              </div>
+            </div>
+
+          </div>
+
+          <!-- 3. RECENT PRODUCTS PREVIEW CARD -->
+          <div class="admin-card space-y-4">
+            <div class="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.07)]">
+              <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
+                <i class="fa-regular fa-clock text-[#71717A]"></i>
+                <span>Sản phẩm cập nhật gần đây</span>
               </h3>
-              <button onclick="document.querySelector('.sidebar-link[data-tab-target=\'products\']').click()" class="text-xs text-[#FF5C00] hover:underline">
+              <button onclick="document.querySelector('.sidebar-link[data-tab-target=\'products\']').click()" class="text-xs text-[#FF5C00] hover:underline font-medium">
                 Xem toàn bộ catalog &rarr;
               </button>
             </div>
             <div id="overview-recent-products" class="space-y-2"></div>
           </div>
+
         </section>
+
 
         <!-- ===================================================================
              TAB 2: QUẢN LÝ SẢN PHẨM & MEDIA (CRUD)
              =================================================================== -->
-        <section id="tab-products" class="tab-panel hidden space-y-6">
+        <section id="tab-products" class="tab-panel hidden space-y-[28px]">
 
-          <!-- Product CRUD Form -->
-          <div class="p-6 rounded-3xl admin-card space-y-6">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <!-- Product CRUD Form Card (24px padding) -->
+          <div class="admin-card space-y-6">
+            <div class="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.07)]">
               <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-[#FF5C00]/10 text-[#FF5C00] flex items-center justify-center">
-                  <i class="fa-solid fa-pen-nib"></i>
+                <div class="w-8 h-8 rounded-lg bg-[#1C1C22] border border-[rgba(255,255,255,0.07)] text-[#FF5C00] flex items-center justify-center">
+                  <i class="fa-solid fa-pen-to-square text-xs"></i>
                 </div>
                 <div>
-                  <h3 id="form-heading" class="text-sm font-bold text-white">Thêm Sản Phẩm Mới</h3>
-                  <p class="text-[11px] text-slate-400">Thiết kế thông số, tùy chỉnh ảnh từ máy hoặc kho nghệ thuật</p>
+                  <h3 id="form-heading" class="text-sm font-bold text-[#F4F4F5]">Thêm sản phẩm mới</h3>
+                  <p class="text-[11px] text-[#71717A]">Thông số kỹ thuật, hình ảnh độ nét cao và phân loại danh mục</p>
                 </div>
               </div>
             </div>
@@ -273,25 +389,25 @@
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 
                 <div class="space-y-1.5 sm:col-span-2">
-                  <label for="prod-title" class="text-xs font-mono text-slate-300">Tên Sản Phẩm *</label>
-                  <input type="text" id="prod-title" required placeholder="Ví dụ: Bình Hoa Dập Ly Origami Watertight" 
-                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                  <label for="prod-title" class="text-xs text-[#A1A1AA] font-medium">Tên sản phẩm *</label>
+                  <input type="text" id="prod-title" required placeholder="Ví dụ: Bình hoa dập ly Origami Watertight" 
+                         class="w-full px-3.5 py-2 admin-input text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                  <label for="prod-category" class="text-xs font-mono text-slate-300">Danh Mục *</label>
-                  <select id="prod-category" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
-                    <option value="Trang_Diem_Vanity">Trang Điểm &amp; Nơ Lụa (Vanity)</option>
-                    <option value="Decor_Den_Noi_That">Đèn &amp; Bình Hoa Decor (Home Ambient)</option>
-                    <option value="Do_Choi_Moc_Khoa">Khớp Động &amp; Fidget (Toys &amp; Keychains)</option>
-                    <option value="Hop_De_Ban_Tien_Ich">Hộp Bàn &amp; Bánh Răng (Desk Organization)</option>
-                    <option value="Ca_Nhan_Hoa_NFC">Cá Nhân Hóa &amp; NFC (Custom &amp; NFC)</option>
+                  <label for="prod-category" class="text-xs text-[#A1A1AA] font-medium">Danh mục *</label>
+                  <select id="prod-category" class="w-full px-3.5 py-2 admin-select text-xs">
+                    <option value="Trang_Diem_Vanity">Trang điểm &amp; Nơ lụa (Vanity)</option>
+                    <option value="Decor_Den_Noi_That">Đèn &amp; Bình hoa decor (Ambient)</option>
+                    <option value="Do_Choi_Moc_Khoa">Khớp động &amp; Fidget (Toys)</option>
+                    <option value="Hop_De_Ban_Tien_Ich">Hộp bàn &amp; Tiện ích (Desk)</option>
+                    <option value="Ca_Nhan_Hoa_NFC">Cá nhân hóa &amp; NFC (Custom)</option>
                   </select>
                 </div>
 
                 <div class="space-y-1.5">
-                  <label for="prod-status" class="text-xs font-mono text-slate-300">Trạng Thái Hiển Thị</label>
-                  <select id="prod-status" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                  <label for="prod-status" class="text-xs text-[#A1A1AA] font-medium">Trạng thái hiển thị</label>
+                  <select id="prod-status" class="w-full px-3.5 py-2 admin-select text-xs">
                     <option value="active">Hoạt động (Hiển thị Store)</option>
                     <option value="draft">Bản nháp (Ẩn khỏi Store)</option>
                     <option value="archived">Lưu trữ (Tạm dừng)</option>
@@ -299,30 +415,30 @@
                 </div>
 
                 <div class="space-y-1.5">
-                  <label for="prod-price" class="text-xs font-mono text-slate-300">Giá Bán (đ) *</label>
+                  <label for="prod-price" class="text-xs text-[#A1A1AA] font-medium">Giá bán (đ) *</label>
                   <input type="number" id="prod-price" required min="1000" step="1000" placeholder="109000" 
-                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
+                         class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                  <label for="prod-original-price" class="text-xs font-mono text-slate-300">Giá Gốc Niêm Yết (đ)</label>
+                  <label for="prod-original-price" class="text-xs text-[#A1A1AA] font-medium">Giá gốc niêm yết (đ)</label>
                   <input type="number" id="prod-original-price" min="1000" step="1000" placeholder="149000" 
-                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-slate-400 font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
+                         class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs text-[#71717A]">
                 </div>
 
                 <div class="space-y-1.5">
-                  <label for="prod-badge" class="text-xs font-mono text-slate-300">Badge Điểm Nhấn</label>
-                  <input type="text" id="prod-badge" placeholder="⚡ NTAG215 hoặc 💧 Watertight" 
-                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                  <label for="prod-badge" class="text-xs text-[#A1A1AA] font-medium">Huy hiệu điểm nhấn</label>
+                  <input type="text" id="prod-badge" placeholder="NTAG215 hoặc Watertight" 
+                         class="w-full px-3.5 py-2 admin-input text-xs">
                 </div>
 
                 <div class="space-y-1.5">
-                  <label for="prod-model-key" class="text-xs font-mono text-slate-300">Khối Hình Học 3D Studio</label>
-                  <select id="prod-model-key" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                  <label for="prod-model-key" class="text-xs text-[#A1A1AA] font-medium">Mô hình 3D studio</label>
+                  <select id="prod-model-key" class="w-full px-3.5 py-2 admin-select text-xs">
                     <option value="">Không có 3D (Ẩn nút Soi 3D)</option>
                     <option value="nfc_wifi">Đế WiFi NFC</option>
-                    <option value="pleated_vase">Bình Hoa Origami</option>
-                    <option value="soft_lamp">Đèn Xoắn Kem</option>
+                    <option value="pleated_vase">Bình hoa Origami</option>
+                    <option value="soft_lamp">Đèn xoắn kem</option>
                     <option value="desk_dock">Kệ Desk Dock 5-in-1</option>
                     <option value="pegboard">Bảng Hexa Pegboard</option>
                     <option value="monogram">Chữ Monogram Typo</option>
@@ -330,14 +446,14 @@
                 </div>
 
                 <div class="space-y-1.5 sm:col-span-2">
-                  <label for="prod-headline" class="text-xs font-mono text-slate-300">Lợi Điểm Nổi Bật (1 dòng ngắn)</label>
+                  <label for="prod-headline" class="text-xs text-[#A1A1AA] font-medium">Điểm nổi bật ngắn</label>
                   <input type="text" id="prod-headline" placeholder="Ví dụ: Tăng trải nghiệm khách gọi món chỉ với 1 cú chạm điện thoại" 
-                         class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                         class="w-full px-3.5 py-2 admin-input text-xs">
                 </div>
 
                 <div class="space-y-1.5 sm:col-span-2">
-                  <label for="prod-type" class="text-xs font-mono text-slate-300">Phân Loại Dịch Vụ</label>
-                  <select id="prod-type" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                  <label for="prod-type" class="text-xs text-[#A1A1AA] font-medium">Phân loại sản phẩm</label>
+                  <select id="prod-type" class="w-full px-3.5 py-2 admin-select text-xs">
                     <option value="standard">Sản phẩm tiêu chuẩn xưởng</option>
                     <option value="nfc">Sản phẩm tích hợp chip NFC</option>
                     <option value="monogram">Sản phẩm cá nhân hóa Monogram</option>
@@ -346,128 +462,128 @@
 
               </div>
 
-              <!-- =============================================================
-                   IMAGE CUSTOMIZATION SUITE (UPLOAD / URL / PRESET)
-                   ============================================================= -->
-              <div class="p-4 rounded-2xl admin-card-elevated space-y-4">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+              <!-- Media Selection Suite -->
+              <div class="p-4 rounded-xl admin-card-elevated space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[rgba(255,255,255,0.07)] pb-3">
                   <div>
-                    <h4 class="text-xs font-bold text-white flex items-center gap-2">
-                      <i class="fa-solid fa-palette text-[#FF5C00]"></i> Tùy Chỉnh Hình Ảnh Nghệ Thuật (Studio Visuals)
+                    <h4 class="text-xs font-bold text-[#F4F4F5] flex items-center gap-2">
+                      <span class="status-dot-6 bg-[#FF5C00]"></span>
+                      <span>Hình ảnh sản phẩm (Studio Visuals)</span>
                     </h4>
-                    <p class="text-[11px] text-slate-400">Chọn tải ảnh từ máy, dán URL hoặc chọn từ kho ảnh mẫu tuyển chọn</p>
+                    <p class="text-[11px] text-[#71717A]">Tải ảnh từ máy, nhập đường dẫn URL hoặc chọn từ kho nghệ thuật</p>
                   </div>
 
                   <!-- Source Switcher Tabs -->
-                  <div class="flex items-center gap-1 p-1 rounded-xl bg-slate-950 border border-slate-800 shrink-0">
-                    <button type="button" id="img-tab-upload" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#FF5C00] text-white shadow-sm">
-                      <i class="fa-solid fa-upload"></i> Tải Từ Máy
+                  <div class="flex items-center gap-1 p-1 rounded-lg bg-[#121215] border border-[rgba(255,255,255,0.07)] shrink-0">
+                    <button type="button" id="img-tab-upload" class="px-3 py-1 rounded-md text-xs font-medium bg-[#FF5C00] text-white">
+                      Tải từ máy
                     </button>
-                    <button type="button" id="img-tab-url" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-colors">
-                      <i class="fa-solid fa-link"></i> Nhập URL
+                    <button type="button" id="img-tab-url" class="px-3 py-1 rounded-md text-xs font-medium text-[#71717A] hover:text-[#F4F4F5] transition-colors">
+                      Nhập URL
                     </button>
-                    <button type="button" id="img-tab-preset" class="px-3 py-1.5 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition-colors">
-                      <i class="fa-solid fa-sparkles"></i> Thư Viện Mẫu
+                    <button type="button" id="img-tab-preset" class="px-3 py-1 rounded-md text-xs font-medium text-[#71717A] hover:text-[#F4F4F5] transition-colors">
+                      Kho mẫu
                     </button>
                   </div>
                 </div>
 
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 items-start">
                   
-                  <!-- Left: Input Controls for Active Tab -->
+                  <!-- Left Controls -->
                   <div class="lg:col-span-2">
                     
-                    <!-- Pane 1: File Upload (Drag & Drop + Canvas Compressor) -->
                     <div id="img-pane-upload" class="space-y-2">
-                      <div id="image-dropzone" class="image-dropzone p-6 text-center cursor-pointer space-y-2">
-                        <i class="fa-solid fa-cloud-arrow-up text-3xl text-slate-400"></i>
-                        <div class="text-xs font-bold text-white">Kéo thả tệp ảnh vào đây hoặc bấm để tải lên</div>
-                        <p class="text-[11px] text-slate-400" id="upload-status-text">Hỗ trợ JPG, PNG, WEBP (Tự động nén tối ưu WebP 1200px)</p>
+                      <div id="image-dropzone" class="image-dropzone p-5 text-center cursor-pointer space-y-1.5">
+                        <i class="fa-solid fa-arrow-up-from-bracket text-2xl text-[#71717A]"></i>
+                        <div class="text-xs font-medium text-[#F4F4F5]">Kéo thả tệp ảnh vào đây hoặc bấm để tải lên</div>
+                        <p class="text-[11px] text-[#71717A]" id="upload-status-text">Hỗ trợ JPG, PNG, WEBP (nén tự động 1200px)</p>
                         <input type="file" id="image-file-input" accept="image/jpeg,image/png,image/webp" class="hidden">
                       </div>
                     </div>
 
-                    <!-- Pane 2: URL Input -->
                     <div id="img-pane-url" class="space-y-2 hidden">
-                      <label for="prod-image-url" class="text-xs text-slate-300">Dán đường dẫn ảnh HTTPS:</label>
+                      <label for="prod-image-url" class="text-xs text-[#A1A1AA]">Đường dẫn ảnh HTTPS:</label>
                       <div class="flex gap-2">
-                        <input type="url" id="prod-image-url" placeholder="https://images.unsplash.com/... hoặc assets/images/..." 
-                               class="flex-1 px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
-                        <button type="button" id="btn-test-url" class="px-4 py-2 rounded-xl bg-slate-800 text-slate-200 hover:text-white text-xs font-semibold">
-                          Xem Ảnh
+                        <input type="url" id="prod-image-url" placeholder="https://... hoặc assets/images/..." 
+                               class="flex-1 px-3.5 py-2 admin-input text-xs">
+                        <button type="button" id="btn-test-url" class="btn-neutral-subtle px-3.5 py-2 text-xs">
+                          Xem ảnh
                         </button>
                       </div>
                     </div>
 
-                    <!-- Pane 3: Preset Selector -->
                     <div id="img-pane-preset" class="space-y-2 hidden">
-                      <div class="text-xs text-slate-300 mb-2">Bấm vào ảnh bất kỳ để áp dụng ngay:</div>
+                      <div class="text-xs text-[#A1A1AA] mb-1.5">Bấm vào ảnh bất kỳ để áp dụng:</div>
                       <div id="preset-selector-grid" class="grid grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1 admin-scroll"></div>
                     </div>
 
                   </div>
 
-                  <!-- Right: Live Image Preview Box -->
-                  <div class="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center gap-3.5">
-                    <div class="w-16 h-16 rounded-xl overflow-hidden bg-slate-900 border border-slate-700 shrink-0">
+                  <!-- Right Preview Box -->
+                  <div class="p-3 rounded-xl bg-[#121215] border border-[rgba(255,255,255,0.07)] flex items-center gap-3">
+                    <div class="w-14 h-14 rounded-lg overflow-hidden bg-[#16161A] border border-[rgba(255,255,255,0.07)] shrink-0">
                       <img id="form-img-preview" src="assets/images/product-nfc-wifi.jpg" alt="Preview" class="w-full h-full object-cover" onerror="this.src='assets/images/logo-premium-mark.svg';">
                     </div>
                     <div class="min-w-0 flex-1">
-                      <div class="text-xs font-bold text-white truncate">Xem Trước Hình Ảnh</div>
-                      <div class="text-[11px] text-slate-400 truncate" id="form-img-label">Ảnh mặc định</div>
-                      <div class="text-[10px] text-emerald-400 mt-0.5">✦ Đồng bộ Store</div>
+                      <div class="text-xs font-semibold text-[#F4F4F5] truncate">Xem trước ảnh</div>
+                      <div class="text-[11px] text-[#71717A] truncate" id="form-img-label">Ảnh mặc định</div>
+                      <div class="text-[10px] text-[#10B981] mt-0.5 flex items-center gap-1.5">
+                        <span class="status-dot-6 bg-[#10B981]"></span>
+                        <span>Đồng bộ Store</span>
+                      </div>
                     </div>
                   </div>
 
                 </div>
               </div>
 
-              <!-- Mô tả sản phẩm -->
+              <!-- Mô tả chi tiết -->
               <div class="space-y-1.5">
-                <label for="prod-desc" class="text-xs font-mono text-slate-300">Mô Tả Chi Tiết Sản Phẩm</label>
-                <textarea id="prod-desc" rows="2" placeholder="Mô tả công năng, ứng dụng và cảm xúc xúc giác..." 
-                          class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none resize-none"></textarea>
+                <label for="prod-desc" class="text-xs text-[#A1A1AA] font-medium">Mô tả sản phẩm</label>
+                <textarea id="prod-desc" rows="2" placeholder="Mô tả công năng, ứng dụng và hoàn thiện bề mặt..." 
+                          class="w-full px-3.5 py-2 admin-textarea text-xs resize-none"></textarea>
               </div>
 
-              <!-- Submit Buttons -->
+              <!-- Action Buttons -->
               <div class="flex items-center justify-end gap-3 pt-2">
-                <button type="button" id="btn-form-reset" class="px-5 py-2.5 rounded-xl border border-slate-700 text-slate-300 hover:text-white text-xs font-medium transition-colors">
-                  Làm Mới Form
+                <button type="button" id="btn-form-reset" class="btn-neutral-subtle px-4 py-2 text-xs">
+                  Đặt lại form
                 </button>
-                <button type="submit" id="btn-form-submit" class="btn-orange-primary px-6 py-2.5 rounded-xl text-xs uppercase tracking-wider flex items-center gap-2">
-                  <i class="fa-solid fa-floppy-disk"></i>
-                  <span>Lưu Vào Catalog</span>
+                <button type="submit" id="btn-form-submit" class="btn-orange-primary px-5 py-2 text-xs flex items-center gap-2">
+                  <i class="fa-solid fa-floppy-disk text-[11px]"></i>
+                  <span>Lưu sản phẩm</span>
                 </button>
               </div>
             </form>
           </div>
 
-          <!-- Product List Table Header & Search -->
-          <div class="p-6 rounded-3xl admin-card space-y-4">
+          <!-- Product Table Card (24px padding) -->
+          <div class="admin-card space-y-4">
             <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
               <div class="flex items-center gap-2">
-                <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                  <i class="fa-solid fa-list-check text-[#FF5C00]"></i> Danh Sách Sản Phẩm Trong Catalog
+                <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
+                  <i class="fa-solid fa-boxes-stacked text-[#71717A] text-xs"></i>
+                  <span>Danh sách sản phẩm</span>
                 </h3>
               </div>
 
               <div class="flex flex-wrap items-center gap-2">
                 <div class="relative flex-1 sm:w-56">
-                  <input type="text" id="prod-search-input" placeholder="Tìm theo tên sản phẩm..." 
-                         class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
-                  <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2.5 text-slate-500 text-xs"></i>
+                  <input type="text" id="prod-search-input" placeholder="Tìm kiếm sản phẩm..." 
+                         class="w-full pl-8 pr-3 py-1.5 admin-input text-xs">
+                  <i class="fa-solid fa-magnifying-glass absolute left-2.5 top-2 text-[#71717A] text-xs"></i>
                 </div>
 
-                <select id="filter-category-select" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                <select id="filter-category-select" class="px-3 py-1.5 admin-select text-xs">
                   <option value="all">Tất cả danh mục (55 mẫu)</option>
-                  <option value="Trang_Diem_Vanity">Trang Điểm &amp; Nơ Lụa</option>
-                  <option value="Decor_Den_Noi_That">Đèn &amp; Bình Hoa</option>
-                  <option value="Do_Choi_Moc_Khoa">Khớp Động &amp; Fidget</option>
-                  <option value="Hop_De_Ban_Tien_Ich">Hộp Bàn &amp; Bánh Răng</option>
-                  <option value="Ca_Nhan_Hoa_NFC">Cá Nhân Hóa &amp; NFC</option>
+                  <option value="Trang_Diem_Vanity">Trang điểm &amp; Nơ lụa</option>
+                  <option value="Decor_Den_Noi_That">Đèn &amp; Bình hoa</option>
+                  <option value="Do_Choi_Moc_Khoa">Khớp động &amp; Fidget</option>
+                  <option value="Hop_De_Ban_Tien_Ich">Hộp bàn &amp; Tiện ích</option>
+                  <option value="Ca_Nhan_Hoa_NFC">Cá nhân hóa &amp; NFC</option>
                 </select>
 
-                <select id="filter-status-select" class="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-700 text-white text-xs focus:border-[#FF5C00] focus:outline-none">
+                <select id="filter-status-select" class="px-3 py-1.5 admin-select text-xs">
                   <option value="all">Tất cả trạng thái</option>
                   <option value="active">Hoạt động (Active)</option>
                   <option value="draft">Bản nháp (Draft)</option>
@@ -476,69 +592,73 @@
               </div>
             </div>
 
-            <div class="overflow-x-auto rounded-xl border border-slate-800/80">
+            <div class="overflow-x-auto rounded-lg border border-[rgba(255,255,255,0.07)]">
               <table class="w-full text-left text-xs">
-                <thead class="bg-slate-950/80 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
+                <thead class="bg-[#111114] text-[#71717A] font-mono text-[11px] border-b border-[rgba(255,255,255,0.07)]">
                   <tr>
                     <th class="p-3 w-14 text-center">Ảnh</th>
-                    <th class="p-3">Tên &amp; Lợi Điểm</th>
-                    <th class="p-3">Đơn Giá</th>
-                    <th class="p-3">Danh Mục</th>
-                    <th class="p-3 text-center">Trạng Thái</th>
-                    <th class="p-3 text-center w-24">Thao Tác</th>
+                    <th class="p-3">Tên &amp; Mô tả ngắn</th>
+                    <th class="p-3">Đơn giá</th>
+                    <th class="p-3">Danh mục</th>
+                    <th class="p-3 text-center">Trạng thái</th>
+                    <th class="p-3 text-center w-24">Thao tác</th>
                   </tr>
                 </thead>
-                <tbody id="products-table-body" class="divide-y divide-slate-800/80 text-slate-200"></tbody>
+                <tbody id="products-table-body" class="divide-y divide-[rgba(255,255,255,0.07)] text-[#E4E4E7]"></tbody>
               </table>
             </div>
           </div>
 
         </section>
 
+
         <!-- ===================================================================
              TAB 3: KHO ẢNH STUDIO PRESETS
              =================================================================== -->
-        <section id="tab-presets" class="tab-panel hidden space-y-6">
-          <div class="p-6 rounded-3xl admin-card space-y-2">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-sparkles text-[#FF5C00]"></i> Thư Viện Hình Ảnh Nghệ Thuật (Curated Editorial Studio Gallery)
+        <section id="tab-presets" class="tab-panel hidden space-y-[28px]">
+          <div class="admin-card space-y-2">
+            <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
+              <i class="fa-regular fa-image text-[#71717A]"></i>
+              <span>Kho ảnh nghệ thuật tuyển chọn</span>
             </h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Bộ sưu tập hình ảnh in 3D phong cách tối giản cao cấp (Tactile Minimalism). Bấm "Gán Vào Form Sản Phẩm" để lập tức cập nhật ảnh mẫu cho sản phẩm đang chỉnh sửa.
+            <p class="text-xs text-[#A1A1AA] leading-relaxed">
+              Bộ sưu tập hình ảnh in 3D phong cách tối giản (Tactile Minimalism). Bấm "Gán vào form" để cập nhật ngay cho sản phẩm đang chỉnh sửa.
             </p>
           </div>
 
           <div id="art-presets-full-gallery" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5"></div>
         </section>
 
+
         <!-- ===================================================================
              TAB 4: YÊU CẦU ĐƠN HÀNG (DIRECT ORDERS)
              =================================================================== -->
-        <section id="tab-orders" class="tab-panel hidden space-y-6">
-          <div class="p-6 rounded-3xl admin-card space-y-2">
-            <h3 class="text-sm font-bold text-white flex items-center gap-2">
-              <i class="fa-solid fa-clipboard-list text-[#FF5C00]"></i> Yêu Cầu Đơn Hàng (Lưu Trên Trình Duyệt Này)
+        <section id="tab-orders" class="tab-panel hidden space-y-[28px]">
+          <div class="admin-card space-y-2">
+            <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
+              <i class="fa-regular fa-file-lines text-[#71717A]"></i>
+              <span>Danh sách yêu cầu đơn hàng</span>
             </h3>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Danh sách các đơn hàng khách đã chuẩn bị và kích hoạt chuyển tiếp qua Zalo hoặc yêu cầu COD. Dữ liệu lưu trong kho <code class="text-[#FF5C00]">TT_DIRECT_ORDER_DRAFTS_V1</code>.
+            <p class="text-xs text-[#A1A1AA] leading-relaxed">
+              Các đơn hàng khách đã kích hoạt chuyển tiếp Zalo hoặc yêu cầu COD. Dữ liệu lưu trữ an toàn trong kho <code class="text-[#FF5C00] font-mono tabular-nums">TT_DIRECT_ORDER_DRAFTS_V1</code>.
             </p>
           </div>
 
-          <div class="admin-card overflow-hidden rounded-2xl border border-slate-800">
+          <div class="admin-card overflow-hidden !p-0">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs">
-                <thead class="bg-slate-950/80 text-slate-400 uppercase font-mono text-[11px] border-b border-slate-800">
+                <thead class="bg-[#111114] text-[#71717A] font-mono text-[11px] border-b border-[rgba(255,255,255,0.07)]">
                   <tr>
-                    <th class="p-3">Mã Đơn Hàng</th>
-                    <th class="p-3">Khách Hàng &amp; SĐT</th>
-                    <th class="p-3">Mặt Hàng &amp; Yêu Cầu</th>
-                    <th class="p-3">Tổng Tiền</th>
-                    <th class="p-3 text-center">Tiến Độ Thực Tế</th>
-                    <th class="p-3 text-center">Dự Kiến (ETA)</th>
-                    <th class="p-3 text-center w-36">Thao Tác Xưởng</th>
+                    <th class="p-3">Mã đơn</th>
+                    <th class="p-3">Khách hàng &amp; SĐT</th>
+                    <th class="p-3">Mặt hàng &amp; Yêu cầu</th>
+                    <th class="p-3">Tổng tiền</th>
+                    <th class="p-3 text-center">Tiến độ thực tế</th>
+                    <th class="p-3 text-center">Dự kiến (ETA)</th>
+                    <th class="p-3 text-center w-36">Thao tác</th>
                   </tr>
                 </thead>
-                <tbody id="orders-table-body" class="divide-y divide-slate-800/80 text-slate-200"></tbody>
+                <tbody id="orders-table-body" class="divide-y divide-[rgba(255,255,255,0.07)] text-[#E4E4E7]"></tbody>
               </table>
             </div>
           </div>
@@ -546,132 +666,143 @@
 
         <!-- MODAL CẬP NHẬT TRẠNG THÁI & TIẾN ĐỘ ĐƠN HÀNG (WORKSHOP PIPELINE) -->
         <div id="admin-order-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
-          <div class="w-full max-w-xl admin-card rounded-3xl border border-slate-700 p-6 space-y-5 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+          <div class="w-full max-w-xl admin-card border border-[rgba(255,255,255,0.12)] space-y-5 max-h-[90vh] overflow-y-auto bg-[#16161A]">
+            <div class="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.07)]">
               <div class="flex items-center gap-2">
-                <i class="fa-solid fa-cube text-[#FF5C00]"></i>
-                <h3 class="text-sm font-bold text-white">Cập Nhật Tiến Độ Đơn: <span id="admin-modal-order-id" class="font-mono text-[#FF5C00]"></span></h3>
+                <span class="status-dot-6 bg-[#FF5C00]"></span>
+                <h3 class="text-sm font-bold text-[#F4F4F5]">Cập nhật tiến độ đơn: <span id="admin-modal-order-id" class="font-mono tabular-nums text-[#FF5C00]"></span></h3>
               </div>
-              <button type="button" onclick="window.closeAdminOrderModal()" class="w-7 h-7 rounded-lg bg-slate-800 text-slate-400 hover:text-white flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
+              <button type="button" onclick="window.closeAdminOrderModal()" class="w-7 h-7 rounded-md bg-[#1C1C22] text-[#A1A1AA] hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-xs"></i>
               </button>
             </div>
 
             <div class="space-y-4 text-xs">
-              <!-- Chọn trạng thái -->
+              
+              <!-- Chọn trạng thái (Sentence case, no emojis) -->
               <div class="space-y-1.5">
-                <label class="font-bold text-slate-200 block">Trạng Thái Quy Trình Xưởng:</label>
-                <select id="admin-modal-status-select" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-[#FF5C00] focus:outline-none">
+                <label class="font-medium text-[#A1A1AA] block">Trạng thái quy trình xưởng</label>
+                <select id="admin-modal-status-select" class="w-full px-3.5 py-2 admin-select font-mono text-xs">
                   <option value="request_received">1. Đã nhận yêu cầu (Tiếp nhận hệ thống)</option>
-                  <option value="confirmed">2. Xưởng xác nhận (Đã duyệt phôi in & xếp lịch)</option>
-                  <option value="in_production">3. Đang làm (Đang in 3D Bambu & xử lý bề mặt)</option>
-                  <option value="quality_check">4. Kiểm tra chất lượng (QC độ mịn & chip NFC)</option>
+                  <option value="confirmed">2. Xưởng xác nhận (Đã duyệt phôi in &amp; xếp lịch)</option>
+                  <option value="in_production">3. Đang sản xuất (Đang in 3D &amp; xử lý bề mặt)</option>
+                  <option value="quality_check">4. Kiểm tra chất lượng (QC độ mịn &amp; chip NFC)</option>
                   <option value="shipped">5. Đang giao hàng (Đã bàn giao bưu chính)</option>
                   <option value="delivered">6. Đã nhận hàng (Hoàn tất thành công)</option>
-                  <option value="awaiting_customer">⚠️ Chờ khách xác nhận (Màu sắc / Mẫu chữ)</option>
-                  <option value="on_hold">⏸ Tạm hoãn đơn</option>
-                  <option value="cancelled">❌ Đã hủy đơn</option>
+                  <option value="awaiting_customer">Chờ khách xác nhận (Màu sắc / Mẫu chữ)</option>
+                  <option value="on_hold">Tạm hoãn đơn</option>
+                  <option value="cancelled">Đã hủy đơn</option>
                 </select>
               </div>
 
               <!-- Ngày dự kiến (ETA) -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div class="space-y-1.5">
-                  <label class="font-bold text-slate-200 block">Ngày Hoàn Thiện Dự Kiến (ETA):</label>
-                  <input type="text" id="admin-modal-eta-input" placeholder="Ví dụ: 24/10/2026 hoặc Chiều mai" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                  <label class="font-medium text-[#A1A1AA] block">Ngày hoàn thiện dự kiến (ETA)</label>
+                  <input type="text" id="admin-modal-eta-input" placeholder="Ví dụ: 24/10/2026 hoặc Chiều mai" class="w-full px-3.5 py-2 admin-input text-xs">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="font-bold text-slate-200 block">Đơn Vị Vận Chuyển:</label>
-                  <select id="admin-modal-carrier-select" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                  <label class="font-medium text-[#A1A1AA] block">Đơn vị vận chuyển</label>
+                  <select id="admin-modal-carrier-select" class="w-full px-3.5 py-2 admin-select text-xs">
                     <option value="">Chưa có / Tự giao</option>
                     <option value="Giao Hàng Tiết Kiệm (GHTK)">GHTK (Giao Hàng Tiết Kiệm)</option>
                     <option value="Viettel Post">Viettel Post</option>
                     <option value="Shopee Xpress">Shopee Xpress</option>
-                    <option value="GrabExpress / AhaMove">Hỏa Tốc (Grab / AhaMove)</option>
+                    <option value="GrabExpress / AhaMove">Hỏa tốc (Grab / AhaMove)</option>
                   </select>
                 </div>
               </div>
 
               <!-- Mã vận đơn -->
               <div class="space-y-1.5">
-                <label class="font-bold text-slate-200 block">Mã Vận Đơn Bưu Cục (nếu có):</label>
-                <input type="text" id="admin-modal-carrier-code" placeholder="Ví dụ: S224899120.VN" class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono focus:border-[#FF5C00] focus:outline-none">
+                <label class="font-medium text-[#A1A1AA] block">Mã vận đơn bưu cục (nếu có)</label>
+                <input type="text" id="admin-modal-carrier-code" placeholder="Ví dụ: S224899120.VN" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
               </div>
 
               <!-- Thông báo hành động gửi khách -->
               <div class="space-y-1.5">
-                <label class="font-bold text-slate-200 block">Thông Báo Cho Khách Trên Trang Tra Cứu:</label>
-                <input type="text" id="admin-modal-alert-input" placeholder="Ví dụ: Đã in xong phôi lụa, đang sấy nhiệt và kiểm tra QC trước khi gửi." class="w-full px-3.5 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                <label class="font-medium text-[#A1A1AA] block">Thông báo tiến độ gửi khách</label>
+                <input type="text" id="admin-modal-alert-input" placeholder="Ví dụ: Đã in xong phôi lụa, đang sấy nhiệt và kiểm tra QC trước khi gửi" class="w-full px-3.5 py-2 admin-input text-xs">
               </div>
 
               <!-- Ghi chú nội bộ -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div class="space-y-1.5">
-                  <label class="font-mono text-slate-400 block">Ghi chú công khai (Public):</label>
-                  <input type="text" id="admin-modal-public-note" placeholder="Hiển thị cho khách xem" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                  <label class="text-[#71717A] block">Ghi chú công khai (Khách xem)</label>
+                  <input type="text" id="admin-modal-public-note" placeholder="Hiển thị cho khách xem" class="w-full px-3 py-2 admin-input text-xs">
                 </div>
                 <div class="space-y-1.5">
-                  <label class="font-mono text-slate-400 block">Ghi chú nội bộ thợ in (Private):</label>
-                  <input type="text" id="admin-modal-private-note" placeholder="Chỉ thợ xưởng thấy" class="w-full px-3 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white focus:border-[#FF5C00] focus:outline-none">
+                  <label class="text-[#71717A] block">Ghi chú nội bộ (Thợ xưởng)</label>
+                  <input type="text" id="admin-modal-private-note" placeholder="Chỉ thợ xưởng thấy" class="w-full px-3 py-2 admin-input text-xs">
                 </div>
               </div>
 
               <!-- Lịch sử tiến độ -->
-              <div class="space-y-2 pt-2 border-t border-slate-800">
-                <label class="font-bold text-slate-300 block">Lịch Sử Cập Nhật Đơn Hàng (Audit Trail):</label>
-                <div id="admin-modal-history-list" class="space-y-2 max-h-36 overflow-y-auto pr-1"></div>
+              <div class="space-y-2 pt-2 border-t border-[rgba(255,255,255,0.07)]">
+                <label class="font-medium text-[#A1A1AA] block">Lịch sử cập nhật tiến độ (Audit Trail)</label>
+                <div id="admin-modal-history-list" class="space-y-2 max-h-36 overflow-y-auto pr-1 admin-scroll"></div>
               </div>
             </div>
 
             <!-- Footer Actions -->
-            <div class="flex items-center justify-end gap-3 pt-3 border-t border-slate-800">
-              <button type="button" onclick="window.closeAdminOrderModal()" class="px-4 py-2 rounded-xl border border-slate-700 text-slate-300 hover:text-white text-xs">
+            <div class="flex items-center justify-end gap-3 pt-3 border-t border-[rgba(255,255,255,0.07)]">
+              <button type="button" onclick="window.closeAdminOrderModal()" class="btn-neutral-subtle px-4 py-2 text-xs">
                 Đóng
               </button>
-              <button type="button" onclick="window.saveAdminOrderUpdate()" class="btn-orange-primary px-5 py-2 rounded-xl text-xs uppercase tracking-wider flex items-center gap-1.5">
-                <i class="fa-solid fa-floppy-disk"></i>
-                <span>Lưu Cập Nhật Tiến Độ</span>
+              <button type="button" onclick="window.saveAdminOrderUpdate()" class="btn-orange-primary px-5 py-2 text-xs flex items-center gap-1.5">
+                <i class="fa-solid fa-floppy-disk text-[11px]"></i>
+                <span>Lưu cập nhật</span>
               </button>
             </div>
           </div>
         </div>
 
+
         <!-- ===================================================================
              TAB 5: CẤU HÌNH BẢNG GIÁ IN 3D
              =================================================================== -->
-        <section id="tab-pricing" class="tab-panel hidden space-y-6">
-          <div class="p-6 rounded-3xl admin-card border border-emerald-500/20 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <section id="tab-pricing" class="tab-panel hidden space-y-[28px]">
+          <div class="admin-card flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div class="flex items-center gap-3">
-              <div class="w-10 h-10 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-xl shrink-0">
-                <i class="fa-solid fa-calculator"></i>
+              <div class="w-8 h-8 rounded-lg bg-[#1C1C22] border border-[rgba(255,255,255,0.07)] text-[#10B981] flex items-center justify-center text-sm shrink-0">
+                <i class="fa-solid fa-sliders"></i>
               </div>
               <div>
-                <h3 class="text-sm font-bold text-white">Cấu Hình Động Bộ Tính Giá In 3D</h3>
-                <p class="text-xs text-slate-400">Đơn giá vật liệu theo gram và phí vận hành máy in</p>
+                <h3 class="text-sm font-bold text-[#F4F4F5]">Cấu hình bảng giá vật liệu in 3D</h3>
+                <p class="text-xs text-[#71717A]">Đơn giá nhựa và resin theo gram phục vụ bộ tính giá tự động</p>
               </div>
             </div>
-            <button onclick="window.TTAdmin.showToast('Đã cập nhật bảng giá vật liệu thành công!')" class="btn-orange-primary px-5 py-2 rounded-xl text-xs uppercase tracking-wider">
-              Lưu Bảng Giá
+            <button onclick="window.TTAdmin.showToast('Đã cập nhật bảng giá vật liệu thành công')" class="btn-orange-primary px-4 py-2 text-xs">
+              Lưu bảng giá
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <div class="p-4 rounded-2xl admin-card space-y-1.5">
-              <label class="text-xs font-mono text-cyan-300 font-bold">1. PLA+ Matte (đ/g)</label>
-              <input type="number" value="1200" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
-              <span class="text-[10px] text-slate-400">Mặc định: 1.200 đ/g</span>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            <div class="admin-card space-y-2">
+              <label class="text-xs font-mono text-[#F4F4F5] font-semibold flex items-center gap-2">
+                <span class="status-dot-6 bg-[#38BDF8]"></span>
+                <span>PLA+ Matte (đ/g)</span>
+              </label>
+              <input type="number" value="1200" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+              <span class="text-[11px] text-[#71717A] font-mono tabular-nums">Mặc định: 1.200 đ/g</span>
             </div>
 
-            <div class="p-4 rounded-2xl admin-card space-y-1.5">
-              <label class="text-xs font-mono text-amber-300 font-bold">2. PETG Chống Nước (đ/g)</label>
-              <input type="number" value="1500" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
-              <span class="text-[10px] text-slate-400">Mặc định: 1.500 đ/g</span>
+            <div class="admin-card space-y-2">
+              <label class="text-xs font-mono text-[#F4F4F5] font-semibold flex items-center gap-2">
+                <span class="status-dot-6 bg-[#F59E0B]"></span>
+                <span>PETG Chống nước (đ/g)</span>
+              </label>
+              <input type="number" value="1500" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+              <span class="text-[11px] text-[#71717A] font-mono tabular-nums">Mặc định: 1.500 đ/g</span>
             </div>
 
-            <div class="p-4 rounded-2xl admin-card space-y-1.5">
-              <label class="text-xs font-mono text-emerald-300 font-bold">3. Resin SLA 8K (đ/g)</label>
-              <input type="number" value="2400" class="w-full px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 text-white font-mono text-xs focus:border-[#FF5C00] focus:outline-none">
-              <span class="text-[10px] text-slate-400">Mặc định: 2.400 đ/g</span>
+            <div class="admin-card space-y-2">
+              <label class="text-xs font-mono text-[#F4F4F5] font-semibold flex items-center gap-2">
+                <span class="status-dot-6 bg-[#10B981]"></span>
+                <span>Resin SLA 8K (đ/g)</span>
+              </label>
+              <input type="number" value="2400" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+              <span class="text-[11px] text-[#71717A] font-mono tabular-nums">Mặc định: 2.400 đ/g</span>
             </div>
           </div>
         </section>
@@ -683,6 +814,9 @@
   <!-- Toast Notification Container -->
   <div id="admin-toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
+  <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
+  <script type="module" src="js/firebase-init.js?v=1.0"></script>
+
   <!-- Central Engines Scripts -->
   <script src="js/config.js?v=3.2"></script>
   <script src="js/category-registry.js?v=3.2"></script>
@@ -691,7 +825,7 @@
   <script src="js/image-uploader.js?v=3.2"></script>
   <script src="js/order-engine.js?v=4.0"></script>
   <script src="js/checkout.js?v=3.2"></script>
-  <script src="js/admin.js?v=3.2"></script>
+  <script src="js/admin.js?v=4.0"></script>
 
 </body>
 </html>

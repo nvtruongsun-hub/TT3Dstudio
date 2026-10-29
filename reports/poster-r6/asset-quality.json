@@ -1,0 +1,58 @@
+[
+  {
+    "id": "mw-cn-2331892",
+    "name": "Clicker kem ốc quế",
+    "image": "assets/images/poster-r6/icecream-clicker.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "1000x750"
+  },
+  {
+    "id": "mw-cn-1433737",
+    "name": "Mèo mini khớp động",
+    "image": "assets/images/poster-r6/mini-cat.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "564x1000"
+  },
+  {
+    "id": "mw-cn-1646129",
+    "name": "Khay nơ Coquette",
+    "image": "assets/images/poster-r6/tray-hero.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "1000x750"
+  },
+  {
+    "id": "mw-cn-2084928",
+    "name": "Ống cắm cọ nơ lụa",
+    "image": "assets/images/poster-r6/brush-pot.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "1000x750"
+  },
+  {
+    "id": "mw-cn-2235027",
+    "name": "Đèn Washi KŌHAKU",
+    "image": "assets/images/poster-r6/washi-lamp.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "750x1000"
+  },
+  {
+    "id": "mw-cn-1438306",
+    "name": "Đèn mây phi hành gia",
+    "image": "assets/images/poster-r6/cloud-lamp.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "1000x752"
+  },
+  {
+    "id": "mw-cn-704003",
+    "name": "Móc khóa robot mecha",
+    "image": "assets/images/poster-r6/robot-keychain.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "1000x750"
+  },
+  {
+    "id": "mw-cn-939925",
+    "name": "Móc khóa đĩa than NFC",
+    "image": "assets/images/poster-r6/spotify-nfc.png",
+    "sourceResolution": "1000x1000",
+    "productBBox": "1000x750"
+  }
+]

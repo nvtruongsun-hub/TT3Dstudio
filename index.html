@@ -23,12 +23,15 @@
 
   <link rel="stylesheet" href="css/minimal.css?v=20261027-clarity">
 
+  <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
+  <script type="module" src="js/firebase-init.js?v=1.0"></script>
+
   <!-- Central Runtime Engines -->
   <script src="js/category-registry.js?v=4.0"></script>
   <script src="js/art-presets.js?v=4.0"></script>
   <script src="js/image-uploader.js?v=4.0"></script>
   <script src="js/purchase-config.js?v=4.0"></script>
-  <script src="js/cart.js?v=4.0"></script>
+  <script src="js/cart.js?v=4.1"></script>
   <script src="js/checkout.js?v=4.0"></script>
   <script src="js/order-engine.js?v=4.0"></script>
   <script src="js/studio-state.js?v=4.1"></script>
@@ -292,11 +295,6 @@
         </div>
       </section>
 
-          </div>
-        </div>
-      </section>
-
-
       <section id="shop-by-need" class="minimal-needs">
         <div class="minimal-container">
           <div class="minimal-section-heading"><div><p class="store-eyebrow">TÌM MỘT MÓN HỢP VỚI BẠN</p><h2>Cho từng góc nhỏ.</h2></div><button type="button" class="minimal-text-action" onclick="window.TTGiftQuiz.open()">Gợi ý chọn quà <span aria-hidden="true">↗</span></button></div>
@@ -311,6 +309,27 @@
       </section>
 
       <!-- SECTION: TOÀN BỘ CATALOG & CỬA HÀNG CÓ FILTER & SEARCH -->
+      <!-- SECTION: SẢN PHẨM ĐƯỢC CHỌN (CURATED 6-8 HERO ITEMS CHO TRANG CHỦ GỌN) -->
+      <section class="py-12 sm:py-16 border-b border-[#DCDDD5]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">Tuyển Chọn Nổi Bật</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Sản Phẩm Đang Được Yêu Thích</h2>
+              <p class="text-xs sm:text-sm text-[#586057] mt-1">Các thiết kế tinh xảo, tỷ lệ hoàn thiện sắc nét nhất tại xưởng T&amp;T.</p>
+            </div>
+
+            <a href="#store-catalog" class="inline-flex items-center gap-2 text-xs font-bold text-[#FF5C00] hover:text-[#C44800] transition-colors shrink-0">
+              <span>Xem toàn bộ 55+ sản phẩm</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+
+          <!-- Curated Grid (Populated by products-manager.js) -->
+          <div id="curated-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"></div>
+        </div>
+      </section>
+
       <section id="store-catalog" aria-labelledby="collection-title" class="py-16 border-b border-[#DCDDD5] bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           
@@ -845,24 +864,46 @@
 
 
   <!-- =========================================================================
-       5. MOBILE BOTTOM APPLICATION DOCK (ACCESSIBLE 5-ITEM DOCK)
+       5. MOBILE BOTTOM APPLICATION DOCK (ACCESSIBLE 5-VIEW APP DOCK + FLOATING CART FAB)
        ========================================================================= -->
-  <nav class="mobile-bottom-dock md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#DCDDD5] px-2 py-1 shadow-lg" aria-label="Điều hướng di động">
-    <div class="flex items-center justify-around">
+  <button type="button" 
+          onclick="window.TTCart.openCart()" 
+          class="floating-cart-fab md:hidden fixed bottom-20 right-4 z-40 w-12 h-12 rounded-full bg-[#D45B34] text-white shadow-[0_10px_25px_-5px_rgba(212,91,52,0.45)] flex items-center justify-center transition-transform active:scale-95 border-2 border-white focus:outline-none focus:ring-2 focus:ring-[#D45B34]" 
+          title="Xem giỏ hàng" 
+          aria-label="Xem Giỏ Hàng">
+    <div class="relative flex items-center justify-center">
+      <i class="fa-solid fa-bag-shopping text-base"></i>
+      <span class="cart-badge-count hidden absolute -top-2.5 -right-3 min-w-[18px] h-[18px] px-1 rounded-full bg-[#111114] text-white text-[10px] font-bold flex items-center justify-center font-mono border border-white">
+        0
+      </span>
+    </div>
+  </button>
+
+  <nav class="mobile-bottom-dock md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#DCDDD5] px-1 py-1 shadow-lg" aria-label="Điều hướng di động">
+    <div class="grid grid-cols-5 items-center justify-around">
       
       <button type="button" 
               onclick="window.switchWorkspace('view-store')" 
               data-nav-view="view-store" 
-              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
               aria-label="Cửa Hàng">
         <i class="fa-solid fa-store text-base"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Cửa Hàng</span>
       </button>
 
       <button type="button" 
+              onclick="window.switchWorkspace('view-personalize')" 
+              data-nav-view="view-personalize" 
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
+              aria-label="Cá Nhân Hóa">
+        <i class="fa-solid fa-wand-magic-sparkles text-base text-[#D45B34]"></i>
+        <span class="dock-label text-[10px] font-medium mt-0.5">Tùy Biến</span>
+      </button>
+
+      <button type="button" 
               onclick="window.switchWorkspace('view-inspiration')" 
               data-nav-view="view-inspiration" 
-              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
               aria-label="Góc Cảm Hứng">
         <i class="fa-solid fa-compass-drafting text-base text-[#FF5C00]"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Cảm Hứng</span>
@@ -871,7 +912,7 @@
       <button type="button" 
               onclick="window.switchWorkspace('view-tracking')" 
               data-nav-view="view-tracking" 
-              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
               aria-label="Theo Dõi Đơn Hàng">
         <i class="fa-solid fa-truck-fast text-base text-blue-600"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Đơn Hàng</span>
@@ -880,23 +921,10 @@
       <button type="button" 
               onclick="window.switchWorkspace('view-support')" 
               data-nav-view="view-support" 
-              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
               aria-label="Hướng Dẫn & Hỗ Trợ">
         <i class="fa-solid fa-circle-question text-base text-emerald-600"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Hỗ Trợ</span>
-      </button>
-
-      <button type="button" 
-              onclick="window.TTCart.openCart()" 
-              class="dock-item flex flex-col items-center py-1.5 px-2 text-[#586057] relative"
-              aria-label="Xem Giỏ Hàng">
-        <div class="relative">
-          <i class="fa-solid fa-bag-shopping text-base"></i>
-          <span class="cart-badge-count hidden absolute -top-1 -right-2 min-w-[15px] h-[15px] px-1 rounded-full bg-[#FF5C00] text-white text-[9px] font-bold flex items-center justify-center font-mono">
-            0
-          </span>
-        </div>
-        <span class="dock-label text-[10px] font-medium mt-0.5">Giỏ Hàng</span>
       </button>
 
     </div>
