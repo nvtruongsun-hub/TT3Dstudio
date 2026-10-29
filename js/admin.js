@@ -746,7 +746,15 @@
 
         try {
           await window.TTCatalogStore.upsertProduct(productData);
-          showToast(currentEditingProductId ? 'Đã cập nhật sản phẩm thành công!' : 'Đã thêm sản phẩm mới vào catalog!');
+
+          // Push to Cloud Firestore if connected
+          if (window.TTFirestore && typeof window.TTFirestore.upsertProduct === 'function') {
+            window.TTFirestore.upsertProduct(productData).catch(err => {
+              console.warn('[Admin] Background Firestore upsert warning:', err);
+            });
+          }
+
+          showToast(currentEditingProductId ? 'Đã cập nhật sản phẩm thành công.' : 'Đã thêm sản phẩm mới vào catalog.');
           resetProductForm();
           renderProductsTable();
           loadOverviewStats();
@@ -841,6 +849,14 @@
 
     if (confirm(`Bạn có chắc chắn muốn xóa "${p.title}" khỏi catalog?`)) {
       await window.TTCatalogStore.deleteProduct(productId);
+
+      // Remove from Cloud Firestore if connected
+      if (window.TTFirestore && typeof window.TTFirestore.deleteProduct === 'function') {
+        window.TTFirestore.deleteProduct(productId).catch(err => {
+          console.warn('[Admin] Background Firestore delete warning:', err);
+        });
+      }
+
       showToast(`Đã xóa "${p.title}" thành công.`);
       renderProductsTable();
       loadOverviewStats();
@@ -910,7 +926,44 @@
     showToast(`Đã gán ảnh "${presetName}" vào Form soạn thảo!`);
   }
 
-  // 7. ORDER REQUESTS (DRAFTS) TAB - DOM Safe (Codex R02, R03)
+  // 7. ORDER REQUESTS (DRAFTS) TAB & FIRESTORE REALTIME SYNC - DOM Safe (Codex R02, R03)
+  let cloudOrders = [];
+  let isFirestoreOrdersListening = false;
+
+  function initFirestoreLiveFeed() {
+    if (isFirestoreOrdersListening) return;
+
+    const attachListener = () => {
+      if (!window.TTFirestore || typeof window.TTFirestore.listenOrders !== 'function') return;
+      isFirestoreOrdersListening = true;
+      console.log('[Admin] Subscribing to Cloud Firestore live orders feed...');
+
+      const statusDot = document.getElementById('cloud-status-dot');
+      const statusText = document.getElementById('cloud-status-text');
+      if (statusDot) statusDot.className = 'status-dot-6 bg-[#10B981]';
+      if (statusText) statusText.textContent = 'Cloud Firestore: Đã kết nối';
+
+      window.TTFirestore.listenOrders((orders) => {
+        if (Array.isArray(orders)) {
+          cloudOrders = orders;
+          const sbOrders = document.getElementById('sidebar-count-orders');
+          const statOrders = document.getElementById('stat-total-orders');
+          if (sbOrders) sbOrders.textContent = String(orders.length);
+          if (statOrders) statOrders.textContent = String(orders.length);
+          renderOrdersTable();
+        }
+      });
+    };
+
+    if (window.TTFirestore && window.TTFirestore.db) {
+      attachListener();
+    } else {
+      window.addEventListener('tt:firebase-ready', () => {
+        attachListener();
+      });
+    }
+  }
+
   function renderOrdersTable() {
     const tableBody = document.getElementById('orders-table-body');
     if (!tableBody) return;
@@ -922,7 +975,23 @@
       ? window.TTCheckout.getDraftOrders()
       : [];
 
-    const orders = engineOrders || checkoutOrders;
+    const localOrders = engineOrders || checkoutOrders;
+
+    // Merge cloudOrders with localOrders (prefer cloud order if exists, avoid duplicates by ID)
+    const orderMap = new Map();
+    (localOrders || []).forEach(o => {
+      const id = o.orderId || o.clientRequestId;
+      if (id) orderMap.set(id, o);
+    });
+    (cloudOrders || []).forEach(o => {
+      const id = o.orderId || o.clientRequestId || o.id;
+      if (id) {
+        const local = orderMap.get(id);
+        orderMap.set(id, { ...local, ...o });
+      }
+    });
+
+    const orders = Array.from(orderMap.values());
 
     if (!Array.isArray(orders) || orders.length === 0) {
       tableBody.innerHTML = `
@@ -1246,7 +1315,49 @@
     );
   }
 
-  // 8. EXPORT / IMPORT PRODUCTS.JSON
+  // 8. EXPORT / IMPORT PRODUCTS.JSON & FIRESTORE DATABASE SYNC
+  async function syncCatalogToFirestore() {
+    const btn = document.getElementById('btn-sync-cloud-db');
+    const badge = document.getElementById('cloud-sync-badge');
+    const statusDot = document.getElementById('cloud-status-dot');
+    const statusText = document.getElementById('cloud-status-text');
+
+    if (!window.TTFirestore || typeof window.TTFirestore.syncAllProducts !== 'function') {
+      showToast('Firebase Cloud Firestore chưa sẵn sàng hoặc đang ở chế độ ngoại tuyến.', 'error');
+      return;
+    }
+
+    try {
+      if (btn) btn.classList.add('opacity-70', 'pointer-events-none');
+      if (badge) badge.textContent = 'Đang đồng bộ...';
+      if (statusText) statusText.textContent = 'Đang đẩy dữ liệu lên Firestore...';
+      showToast('Đang tiến hành đồng bộ 55 sản phẩm lên Cloud Firestore...');
+
+      const products = await window.TTCatalogStore.getProducts(false);
+      const result = await window.TTFirestore.syncAllProducts(products);
+
+      if (result.ok) {
+        showToast(`Đồng bộ thành công ${result.success} sản phẩm và metadata lên Cloud Firestore.`);
+        if (badge) {
+          badge.textContent = 'Đã đồng bộ';
+          badge.className = 'sidebar-tab-num text-[10px] text-[#10B981]';
+        }
+        if (statusDot) statusDot.className = 'status-dot-6 bg-[#10B981]';
+        if (statusText) statusText.textContent = 'Cloud Firestore: Đã kết nối';
+      } else {
+        showToast(`Đã đồng bộ ${result.success} sản phẩm. Lỗi ${result.failed} mục.`, 'error');
+        if (badge) {
+          badge.textContent = 'Lỗi';
+          badge.className = 'sidebar-tab-num text-[10px] text-[#F43F5E]';
+        }
+      }
+    } catch (err) {
+      showToast('Lỗi đồng bộ Cloud Firestore: ' + err.message, 'error');
+    } finally {
+      if (btn) btn.classList.remove('opacity-70', 'pointer-events-none');
+    }
+  }
+
   function exportProductsJson() {
     const products = window.TTCatalogStore.getProductsSync(false);
     const jsonStr = JSON.stringify(products, null, 2);
@@ -1289,6 +1400,7 @@
     await window.TTCatalogStore.init();
     loadOverviewStats();
     renderProductsTable();
+    initFirestoreLiveFeed();
   }
 
   function init() {
@@ -1299,6 +1411,10 @@
     // Export button
     const btnExport = document.getElementById('btn-export-quick');
     if (btnExport) btnExport.addEventListener('click', exportProductsJson);
+
+    // Sync to Cloud Firestore button
+    const btnSyncCloud = document.getElementById('btn-sync-cloud-db');
+    if (btnSyncCloud) btnSyncCloud.addEventListener('click', syncCatalogToFirestore);
 
     // Import file picker
     const fileImport = document.getElementById('input-import-json');
@@ -1353,6 +1469,7 @@
     renderWorkshopSplineChart,
     loadOverviewStats,
     exportProductsJson,
+    syncCatalogToFirestore,
     showToast
   };
 

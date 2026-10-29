@@ -127,6 +127,12 @@
           <span>Xuất dữ liệu catalog</span>
         </button>
 
+        <button id="btn-sync-cloud-db" class="sidebar-link w-full text-left">
+          <i class="fa-solid fa-cloud-arrow-up w-4 text-center sidebar-icon text-[#71717A]"></i>
+          <span>Đồng bộ Cloud Firestore</span>
+          <span id="cloud-sync-badge" class="sidebar-tab-num text-[10px] text-[#10B981]">Live</span>
+        </button>
+
         <label class="sidebar-link w-full text-left cursor-pointer">
           <i class="fa-solid fa-upload w-4 text-center sidebar-icon text-[#71717A]"></i>
           <span>Nhập dữ liệu catalog</span>
@@ -164,6 +170,10 @@
         </div>
 
         <div class="flex items-center gap-3">
+          <span class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#16161A] border border-[rgba(255,255,255,0.07)] text-[11px] font-mono text-[#A1A1AA]">
+            <span id="cloud-status-dot" class="status-dot-6 bg-[#10B981]"></span>
+            <span id="cloud-status-text">Cloud Firestore: Đã kết nối</span>
+          </span>
           <span class="hidden sm:inline-flex items-center gap-2 px-3 py-1 rounded-md bg-[#16161A] border border-[rgba(255,255,255,0.07)] text-[11px] font-mono text-[#A1A1AA]">
             <span class="status-dot-6 bg-[#10B981]"></span>
             <span>GitHub Pages Serverless</span>
