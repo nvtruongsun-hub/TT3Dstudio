@@ -227,12 +227,12 @@
     const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
 
     return `
-      <article class="minimal-product-card studio-product-card group cursor-pointer" data-product-id="${escapeHTML(item.id)}">
-        <!-- Clean Product Visual Frame -->
-        <button type="button" aria-label="Xem ${escapeHTML(cleanTitle)}" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" class="product-image-box relative overflow-hidden group">
+      <article class="minimal-product-card studio-product-card group cursor-pointer flex flex-col justify-between" data-product-id="${escapeHTML(item.id)}" onclick="if(!event.target.closest('[data-action]')) window.openProductDetailModal('${escapeHTML(item.id)}')">
+        <!-- Clean Product Visual Frame (Aspect 1:1) -->
+        <button type="button" aria-label="Xem ${escapeHTML(cleanTitle)}" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" class="product-image-box relative overflow-hidden group aspect-square block w-full bg-[#F2F0EA]">
           <img src="${safeImage}" 
-               width="600" 
-               height="600" 
+               width="400" 
+               height="400" 
                loading="lazy" 
                decoding="async" 
                alt="${escapeHTML(item.imageAlt || cleanTitle)}" 
@@ -240,90 +240,61 @@
                class="studio-crisp-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
           
-          <!-- Archetype & Engineering Badge (Unique per item) -->
+          <!-- Archetype & Engineering Badge (Compact Studio Pill) -->
           ${badgeText ? `
-            <div class="absolute top-2.5 left-2.5 pointer-events-none z-10">
-              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold ${getBadgeThemeClass(badgeTheme)} shadow-xs flex items-center gap-1.5 border">
-                <span class="w-1.5 h-1.5 rounded-full ${getBadgeDotClass(badgeTheme)}"></span>
-                <span>${escapeHTML(badgeText)}</span>
+            <div class="absolute top-1.5 left-1.5 pointer-events-none z-10 max-w-[85%]">
+              <span class="px-1.5 py-0.5 rounded-md text-[9px] font-bold ${getBadgeThemeClass(badgeTheme)} shadow-xs flex items-center gap-1 border backdrop-blur-xs bg-opacity-95 truncate">
+                <span class="w-1.5 h-1.5 rounded-full shrink-0 ${getBadgeDotClass(badgeTheme)}"></span>
+                <span class="truncate">${escapeHTML(badgeText)}</span>
               </span>
             </div>
           ` : (isNFC ? `
-            <div class="absolute top-2.5 left-2.5 pointer-events-none z-10">
-              <span class="px-2.5 py-1 rounded-lg text-[10px] font-bold bg-[#FAF5FF] text-[#6B21A8] border border-[#E9D5FF] shadow-xs flex items-center gap-1.5">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#6B21A8]"></span>
-                <span>Chip NFC 1-Chạm</span>
+            <div class="absolute top-1.5 left-1.5 pointer-events-none z-10">
+              <span class="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-[#FAF5FF]/95 text-[#6B21A8] border border-[#E9D5FF] shadow-xs flex items-center gap-1">
+                <span class="w-1.5 h-1.5 rounded-full bg-[#6B21A8] shrink-0"></span>
+                <span>NFC 1-Chạm</span>
               </span>
             </div>
           ` : '')}
         </button>
 
-        <!-- Card Content Body -->
-        <div class="p-4 sm:p-5 flex flex-col flex-1 justify-between gap-3 sm:gap-4">
-          <div class="space-y-1.5">
+        <!-- Card Content Body (Compact Ergonomic Padding) -->
+        <div class="p-2 sm:p-3.5 flex flex-col flex-1 justify-between gap-1.5">
+          <div class="space-y-1">
             
-            <!-- Color Swatches Row (Interactive) -->
-            <div class="product-card-colors flex items-center justify-between">
-              <div class="swatch-group">
-                ${swatches.map((c) => {
-                  const safeHex = isValidHex(c.hex) ? c.hex : '#26282B';
-                  const isActive = c.id === currentSwatch.id;
-                  return `
-                    <button type="button" 
-                            class="swatch-dot ${isActive ? 'active' : ''}" 
-                            style="background-color: ${safeHex};" 
-                            title="${escapeHTML(c.name)}" 
-                            data-action="swatch-select"
-                            data-product-id="${escapeHTML(item.id)}"
-                            data-swatch-id="${escapeHTML(c.id)}"
-                            data-swatch-name="${escapeHTML(c.name)}"
-                            aria-label="Chọn màu ${escapeHTML(c.name)}" aria-pressed="${isActive}"></button>
-                  `;
-                }).join('')}
-              </div>
-              <span class="text-[11px] font-medium text-secondary-color truncate max-w-[120px]" id="swatch-name-${escapeHTML(item.id)}">
-                ${escapeHTML(currentSwatch.name)}
-              </span>
-            </div>
-
-            <!-- Micro-Eyebrow Context (Use Case & Placement) -->
+            <!-- Micro-Eyebrow Context (Truncated 1 line) -->
             ${item.useCaseEyebrow ? `
-              <div class="text-[9px] sm:text-[10px] font-mono font-bold tracking-wider uppercase text-[#8C6218] truncate pt-1">
+              <div class="text-[9px] sm:text-[9.5px] font-mono font-bold tracking-wider uppercase text-[#8C6218] truncate">
                 ${escapeHTML(item.useCaseEyebrow)}
               </div>
             ` : ''}
 
-            <!-- Product Title (Clean, short, readable) -->
-            <h3 class="product-card-title text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-2 group-hover:text-[#FF5C00] transition-colors" title="${escapeHTML(cleanTitle)}">
+            <!-- Product Title (Clean, short, readable, 2-line uniform height) -->
+            <h3 class="product-card-title text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-2 min-h-[32px] sm:min-h-[38px] group-hover:text-[#FF5C00] transition-colors leading-snug" title="${escapeHTML(cleanTitle)}">
               ${escapeHTML(cleanTitle)}
             </h3>
 
-            <!-- 1-Line Headline Benefit -->
-            <p class="product-card-benefit text-secondary-color line-clamp-2 leading-relaxed text-xs">
-              ${escapeHTML(item.headlineBenefit || item.desc || '')}
-            </p>
-
-            <!-- Micro-Specs Line -->
-            <div class="text-[10px] sm:text-[11px] font-mono text-muted pt-0.5 truncate">
+            <!-- Micro-Specs Line (Compact 1 line) -->
+            <div class="text-[9.5px] sm:text-[10.5px] font-mono text-[#78736A] truncate">
               ${escapeHTML(specLine)}
             </div>
           </div>
 
-          <!-- Price & Action Button Row -->
-          <div class="pt-3 border-t border-[var(--border-subtle)] flex items-center justify-between gap-2 mt-auto">
-            <div>
-              <div class="price-display leading-none text-xs sm:text-sm font-bold font-mono text-[#FF5C00]">${priceFormatted}</div>
-              ${originalPriceFormatted ? `<div class="text-[10px] sm:text-[11px] text-muted line-through mt-0.5">${originalPriceFormatted}</div>` : ''}
+          <!-- Price & Action Row -->
+          <div class="pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-1 mt-auto">
+            <div class="truncate">
+              <div class="price-display leading-none text-xs sm:text-sm font-bold font-mono text-[#D45B34]">${priceFormatted}</div>
+              ${originalPriceFormatted ? `<div class="text-[9px] sm:text-[10px] text-muted line-through mt-0.5">${originalPriceFormatted}</div>` : ''}
             </div>
 
-            <!-- Quick Add to Cart Button -->
+            <!-- Sleek Action Button -->
             <button type="button" 
-                    class="btn-primary text-[11px] sm:text-xs !py-2 !px-3 sm:!px-4 shrink-0" 
+                    class="w-7 h-7 sm:w-auto sm:h-auto sm:py-1.5 sm:px-2.5 rounded-lg bg-[#F7F6F2] hover:bg-[#D45B34] text-[#20231F] hover:text-white border border-[#E5E4DE] hover:border-[#D45B34] flex items-center justify-center text-xs font-bold transition-all relative shrink-0 cursor-pointer" 
                     data-action="configure-product"
                     data-product-id="${escapeHTML(item.id)}"
-                    title="Xem và chọn phiên bản">
-              <i class="fa-solid fa-arrow-right text-xs pointer-events-none"></i>
-              <span class="pointer-events-none">Xem &amp; chọn</span>
+                    title="Xem &amp; chọn">
+              <i class="fa-solid fa-arrow-right text-[10px] pointer-events-none"></i>
+              <span class="hidden sm:inline pointer-events-none ml-1 text-[11px]">Xem</span>
             </button>
           </div>
         </div>
