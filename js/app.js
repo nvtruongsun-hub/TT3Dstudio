@@ -567,6 +567,25 @@
   }
   window.switchHeroShowcase = switchHeroShowcase;
 
+  function switchHeroColor(colorId, colorName, hex) {
+    const nameEl = document.getElementById('hero-selected-color-name');
+    if (nameEl) nameEl.textContent = colorName;
+
+    document.querySelectorAll('.hero-swatch-dot').forEach(dot => {
+      if (dot.dataset.heroColor === colorId) {
+        dot.classList.add('active', 'ring-1', 'ring-[#D45B34]');
+      } else {
+        dot.classList.remove('active', 'ring-1', 'ring-[#D45B34]');
+      }
+    });
+
+    const img = document.getElementById('hero-showcase-img');
+    if (img) {
+      img.style.filter = `drop-shadow(0 8px 20px ${hex}35)`;
+    }
+  }
+  window.switchHeroColor = switchHeroColor;
+
   function initHeroArtisanShowcase() {
     const detailBtn = document.getElementById('hero-showcase-detail-btn');
     if (detailBtn && !detailBtn.dataset.listenerAttached) {
@@ -1478,5 +1497,73 @@
       refreshHeroShowcase();
     }
   });
+
+  // --- 8. WORLD-CLASS ZALO QUICK ACTION & CLIPBOARD CONVERSION HELPER ---
+  window.copyZaloOrder = function(orderText, customZaloUrl) {
+    const textToCopy = orderText || 'Xin chào T&T 3D Labs! Tôi muốn tư vấn & đặt mẫu chế tác in 3D này.';
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        if (typeof window.showToast === 'function') {
+          window.showToast('Đã sao chép cấu hình sản phẩm vào clipboard. Đang mở Zalo...');
+        } else if (window.TTAdmin && typeof window.TTAdmin.showToast === 'function') {
+          window.TTAdmin.showToast('Đã sao chép cấu hình sản phẩm vào clipboard.');
+        } else {
+          alert('Đã sao chép thông tin sản phẩm vào bộ nhớ tạm. Hãy dán vào khung chat Zalo!');
+        }
+      }).catch(err => {
+        console.warn('Clipboard write failed:', err);
+      });
+    }
+
+    const defaultZalo = (window.TT_DEFAULT_CONFIG && window.TT_DEFAULT_CONFIG.store && window.TT_DEFAULT_CONFIG.store.zaloUrl) || 'https://zalo.me/0987654321';
+    const targetUrl = customZaloUrl || defaultZalo;
+    setTimeout(() => {
+      window.open(targetUrl, '_blank');
+    }, 350);
+  };
+
+  // Connect helper functions for Live Customizer & Lookbook Combo
+  window.addLookbookComboToCart = function(setupId) {
+    const comboItems = [
+      { id: 'mw-cn-1971424', title: 'Hộp bánh xe đu quay Ferris xoay cơ học 360°', price: 170000, qty: 1, image: 'assets/images/products/thumb_1971424.png' },
+      { id: 'mw-cn-1404920', title: 'Hệ module ngăn kéo xếp chồng mini Pork3D', price: 143000, qty: 1, image: 'assets/images/products/thumb_1404920.png' },
+      { id: 'mw-cn-701384', title: 'Kẹp cáp bàn IKEA Skadis phong cách tối giản', price: 62000, qty: 1, image: 'assets/images/products/thumb_701384.png' }
+    ];
+    if (window.TTCart && typeof window.TTCart.addItem === 'function') {
+      comboItems.forEach(item => window.TTCart.addItem(item));
+      if (typeof window.openCartModal === 'function') {
+        window.openCartModal();
+      }
+    }
+  };
+
+  window.updateLiveCustomizerPreview = function(text) {
+    const previewEl = document.getElementById('obsidian-preview-text');
+    if (previewEl) {
+      previewEl.textContent = text && text.trim() ? text.trim() : 'MINH TRIET';
+    }
+  };
+
+  window.setLiveCustomizerColor = function(bgHex, textHex) {
+    const plate = document.getElementById('obsidian-preview-plate');
+    const textEl = document.getElementById('obsidian-preview-text');
+    if (plate) plate.style.background = bgHex;
+    if (textEl) textEl.style.color = textHex;
+  };
+
+  window.openFullCustomizerFromHome = function() {
+    const input = document.getElementById('live-custom-input');
+    const text = input ? input.value : '';
+    if (typeof window.switchWorkspace === 'function') {
+      window.switchWorkspace('view-personalize');
+    }
+    setTimeout(() => {
+      const studioInput = document.getElementById('custom-text-input') || document.querySelector('[data-custom-text]');
+      if (studioInput) {
+        studioInput.value = text;
+        studioInput.dispatchEvent(new Event('input', { bubbles: true }));
+      }
+    }, 120);
+  };
 
 })();

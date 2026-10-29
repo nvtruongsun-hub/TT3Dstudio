@@ -22,6 +22,7 @@
   <link rel="stylesheet" href="css/style.css?v=4.1">
 
   <link rel="stylesheet" href="css/minimal.css?v=20261027-clarity">
+  <link rel="stylesheet" href="css/world-class-upgrade.css?v=1.0">
 
   <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
   <script type="module" src="js/firebase-init.js?v=1.0"></script>
@@ -188,36 +189,20 @@
          VIEW 1: CỬA HÀNG & TRANG CHỦ MỚI (STORE & CURATED HIGHLIGHTS)
          ======================================================================= -->
     <div id="view-store" class="app-workspace active" role="tabpanel" tabindex="0" aria-label="Cửa Hàng">
-      <!-- ARTISAN TRUST STRIP (ZERO EMOJI • MONOLINE SVG • STUDIO VERIFIED) -->
-      <div id="artisan-trust-strip" class="artisan-trust-strip bg-[#EFECE6] border-b border-[#E5E4DE] py-2 px-3 sm:px-6">
-        <div class="max-w-7xl mx-auto flex items-center justify-between sm:justify-center gap-3 sm:gap-8 overflow-x-auto scrollbar-none text-[10.5px] font-mono text-[#586057] uppercase tracking-wider whitespace-nowrap">
-          <div class="flex items-center gap-1.5 shrink-0">
-            <svg class="w-3.5 h-3.5 text-[#D45B34]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-            </svg>
-            <span class="font-bold text-[#20231F]">IN 3D CHUẨN 0.1MM</span>
-          </div>
-          <span class="text-[#D45B34] hidden sm:inline">•</span>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <svg class="w-3.5 h-3.5 text-[#D45B34]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0z" />
-            </svg>
-            <span>NHỰA SINH HỌC BIO-PLA</span>
-          </div>
-          <span class="text-[#D45B34] hidden sm:inline">•</span>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <svg class="w-3.5 h-3.5 text-[#D45B34]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-            </svg>
-            <span>BẢO HÀNH LỖI IN 1:1</span>
-          </div>
-          <span class="text-[#D45B34] hidden sm:inline">•</span>
-          <div class="flex items-center gap-1.5 shrink-0">
-            <svg class="w-3.5 h-3.5 text-[#D45B34]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.75">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.948c0-.621-.504-1.125-1.125-1.125H4.875c-.621 0-1.125.504-1.125 1.125v10.328c0 .621.504 1.125 1.125 1.125h.375m11.25-10.428h2.625c.621 0 1.125.504 1.125 1.125v3.188c0 .621-.504 1.125-1.125 1.125H16.5" />
-            </svg>
-            <span>GIAO HOẢ TỐC 24/7</span>
-          </div>
+      <!-- TECHNICAL MARQUEE TICKER (34px • PRECISION MONOSPACE • ZERO EMOJI) -->
+      <div id="artisan-trust-strip" class="artisan-trust-strip artisan-marquee bg-[#EFECE6] border-b border-[#E5E4DE] h-[34px] overflow-hidden" aria-label="Thông điệp xưởng chế tác">
+        <div class="marquee-track">
+          <span class="marquee-item"><span class="marquee-dot"></span> 0.12–0.16MM LAYER PRECISION</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> BIO-PLA &amp; PETG CHUẨN XƯỞNG</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> ĐỔI MỚI 1:1 TRONG 7 NGÀY NẾU LỖI IN</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> FREESHIP TOÀN QUỐC ĐƠN TỪ 300K</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> CHẾ TÁC &amp; KHẮC TÊN THEO YÊU CẦU</span>
+          <!-- Duplicate for infinite smooth scroll -->
+          <span class="marquee-item"><span class="marquee-dot"></span> 0.12–0.16MM LAYER PRECISION</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> BIO-PLA &amp; PETG CHUẨN XƯỞNG</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> ĐỔI MỚI 1:1 TRONG 7 NGÀY NẾU LỖI IN</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> FREESHIP TOÀN QUỐC ĐƠN TỪ 300K</span>
+          <span class="marquee-item"><span class="marquee-dot"></span> CHẾ TÁC &amp; KHẮC TÊN THEO YÊU CẦU</span>
         </div>
       </div>
 
@@ -306,9 +291,19 @@
                         Chọn mẫu · Chọn màu
                       </span>
                       <span class="text-slate-300">•</span>
-                      <span id="hero-showcase-price" class="text-xs font-bold text-[#D45B34]">
+                      <span id="hero-showcase-price" class="text-xs font-bold font-mono tabular-nums text-[#D45B34]">
                         119.000₫
                       </span>
+                    </div>
+
+                    <!-- Interactive Color Swatch Row (Real-time Tactile Switcher) -->
+                    <div class="hero-swatch-row flex items-center gap-1.5 mt-2" aria-label="Màu nhựa chế tác thực tế">
+                      <span class="text-[10px] font-mono text-[var(--text-muted)]">Màu sắc:</span>
+                      <button type="button" class="hero-swatch-dot w-3.5 h-3.5 rounded-full border border-black/20 transition-transform hover:scale-125 focus:scale-125 active ring-1 ring-[#D45B34]" style="background: #F4C2C2;" title="Silk Pink (Hồng Lụa)" data-hero-color="silk-pink" data-hero-color-name="Silk Pink" onclick="window.switchHeroColor('silk-pink', 'Silk Pink', '#F4C2C2')"></button>
+                      <button type="button" class="hero-swatch-dot w-3.5 h-3.5 rounded-full border border-black/20 transition-transform hover:scale-125 focus:scale-125" style="background: #F5F2EB;" title="Matte Ivory (Trắng Kem)" data-hero-color="matte-ivory" data-hero-color-name="Matte Ivory" onclick="window.switchHeroColor('matte-ivory', 'Matte Ivory', '#F5F2EB')"></button>
+                      <button type="button" class="hero-swatch-dot w-3.5 h-3.5 rounded-full border border-black/20 transition-transform hover:scale-125 focus:scale-125" style="background: #708238;" title="Olive (Xanh Olive)" data-hero-color="olive" data-hero-color-name="Olive" onclick="window.switchHeroColor('olive', 'Olive', '#708238')"></button>
+                      <button type="button" class="hero-swatch-dot w-3.5 h-3.5 rounded-full border border-black/20 transition-transform hover:scale-125 focus:scale-125" style="background: #36454F;" title="Charcoal (Than Chì)" data-hero-color="charcoal" data-hero-color-name="Charcoal" onclick="window.switchHeroColor('charcoal', 'Charcoal', '#36454F')"></button>
+                      <span id="hero-selected-color-name" class="text-[10px] font-mono font-bold text-[#D45B34]">Silk Pink</span>
                     </div>
                   </div>
 
@@ -328,85 +323,70 @@
         </div>
       </section>
 
-      <!-- STORE BIRDS-EYE HUB (5 SQUIRCLE CATEGORIES • 1-TOUCH STORE OVERVIEW) -->
-      <section id="store-birdseye-hub" class="py-3 sm:py-4 bg-white border-b border-[#E5E4DE]">
-        <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-          <div class="flex items-center justify-between pb-2">
-            <div class="flex items-center gap-2">
-              <span class="w-1.5 h-1.5 rounded-full bg-[#D45B34]"></span>
-              <span class="text-[11px] sm:text-xs font-bold font-mono text-[#20231F] uppercase tracking-wider">KHÁM PHÁ 55 THIẾT KẾ ĐỘC BẢN</span>
+      <!-- ASYMMETRIC BENTO GRID: 5 SPATIAL CATEGORIES (ELIMINATES IA REDUNDANCY) -->
+      <section id="store-birdseye-hub" class="py-8 sm:py-14 bg-white border-b border-[#E5E4DE]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
+            <div>
+              <span class="text-xs font-mono font-bold text-[#D45B34] uppercase tracking-wider">KHÁM PHÁ THEO KHÔNG GIAN SỐNG</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#141413] mt-1">Cho từng góc nhỏ có gu.</h2>
+              <p class="text-xs sm:text-sm text-[#575653] mt-0.5">5 danh mục chế tác độc bản — Chạm vào từng ô để lọc nhanh catalog bên dưới.</p>
             </div>
-            <span class="text-[10px] sm:text-[11px] font-mono text-[#8A847C]">5 Danh Mục Chế Tác</span>
-          </div>
-
-          <div class="grid grid-cols-5 gap-1.5 sm:gap-3 overflow-x-auto scrollbar-none pb-0.5">
-            <!-- 1. Trang Điểm & Nơ Lụa -->
-            <button type="button" 
-                    onclick="window.navigateToCategory('Trang_Diem_Vanity')" 
-                    class="group flex flex-col items-center p-1.5 sm:p-2 rounded-xl bg-[#F7F6F2] hover:bg-rose-50/60 border border-[#E5E4DE] hover:border-rose-300 transition-all text-center relative cursor-pointer">
-              <span class="absolute top-1 right-1 px-1 rounded-full bg-white text-[8.5px] font-mono font-bold text-rose-500 border border-rose-200">11</span>
-              <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-white border border-[#E5E4DE] flex items-center justify-center text-rose-500 group-hover:scale-105 transition-transform overflow-hidden p-0.5">
-                <img src="assets/images/products/thumb_2084928.png" alt="Trang Điểm" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-              </div>
-              <span class="mt-1 text-[9.5px] sm:text-xs font-bold text-[#20231F] group-hover:text-rose-600 truncate w-full">Trang Điểm</span>
-            </button>
-
-            <!-- 2. Đèn & Decor -->
-            <button type="button" 
-                    onclick="window.navigateToCategory('Decor_Den_Noi_That')" 
-                    class="group flex flex-col items-center p-1.5 sm:p-2 rounded-xl bg-[#F7F6F2] hover:bg-amber-50/60 border border-[#E5E4DE] hover:border-amber-300 transition-all text-center relative cursor-pointer">
-              <span class="absolute top-1 right-1 px-1 rounded-full bg-white text-[8.5px] font-mono font-bold text-amber-600 border border-amber-200">11</span>
-              <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-white border border-[#E5E4DE] flex items-center justify-center text-amber-500 group-hover:scale-105 transition-transform overflow-hidden p-0.5">
-                <img src="assets/images/products/thumb_1438306.png" alt="Đèn Decor" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-              </div>
-              <span class="mt-1 text-[9.5px] sm:text-xs font-bold text-[#20231F] group-hover:text-amber-700 truncate w-full">Đèn Decor</span>
-            </button>
-
-            <!-- 3. Hộp Bàn Tiện Ích -->
-            <button type="button" 
-                    onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')" 
-                    class="group flex flex-col items-center p-1.5 sm:p-2 rounded-xl bg-[#F7F6F2] hover:bg-emerald-50/60 border border-[#E5E4DE] hover:border-emerald-300 transition-all text-center relative cursor-pointer">
-              <span class="absolute top-1 right-1 px-1 rounded-full bg-white text-[8.5px] font-mono font-bold text-emerald-600 border border-emerald-200">11</span>
-              <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-white border border-[#E5E4DE] flex items-center justify-center text-emerald-500 group-hover:scale-105 transition-transform overflow-hidden p-0.5">
-                <img src="assets/images/products/thumb_1971424.png" alt="Hộp Bàn" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-              </div>
-              <span class="mt-1 text-[9.5px] sm:text-xs font-bold text-[#20231F] group-hover:text-emerald-700 truncate w-full">Hộp Bàn</span>
-            </button>
-
-            <!-- 4. Ô Tô & NFC -->
-            <button type="button" 
-                    onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')" 
-                    class="group flex flex-col items-center p-1.5 sm:p-2 rounded-xl bg-[#F7F6F2] hover:bg-sky-50/60 border border-[#E5E4DE] hover:border-sky-300 transition-all text-center relative cursor-pointer">
-              <span class="absolute top-1 right-1 px-1 rounded-full bg-white text-[8.5px] font-mono font-bold text-sky-600 border border-sky-200">11</span>
-              <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-white border border-[#E5E4DE] flex items-center justify-center text-sky-500 group-hover:scale-105 transition-transform overflow-hidden p-0.5">
-                <img src="assets/images/products/thumb_1896792.png" alt="Ô Tô & NFC" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-              </div>
-              <span class="mt-1 text-[9.5px] sm:text-xs font-bold text-[#20231F] group-hover:text-sky-700 truncate w-full">Ô Tô &amp; NFC</span>
-            </button>
-
-            <!-- 5. Fidget & Toy -->
-            <button type="button" 
-                    onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')" 
-                    class="group flex flex-col items-center p-1.5 sm:p-2 rounded-xl bg-[#F7F6F2] hover:bg-indigo-50/60 border border-[#E5E4DE] hover:border-indigo-300 transition-all text-center relative cursor-pointer">
-              <span class="absolute top-1 right-1 px-1 rounded-full bg-white text-[8.5px] font-mono font-bold text-indigo-600 border border-indigo-200">11</span>
-              <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-lg bg-white border border-[#E5E4DE] flex items-center justify-center text-indigo-500 group-hover:scale-105 transition-transform overflow-hidden p-0.5">
-                <img src="assets/images/products/thumb_1795991.png" alt="Fidget" class="w-full h-full object-cover rounded-md" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-              </div>
-              <span class="mt-1 text-[9.5px] sm:text-xs font-bold text-[#20231F] group-hover:text-indigo-700 truncate w-full">Fidget Cơ</span>
+            <button type="button" class="minimal-text-action self-start sm:self-auto" onclick="window.TTGiftQuiz?.open()">
+              <i class="fa-solid fa-gift mr-1 text-[#D45B34]"></i> Gợi ý chọn quà 1 phút <span aria-hidden="true">↗</span>
             </button>
           </div>
-        </div>
-      </section>
 
-      <section id="shop-by-need" class="minimal-needs">
-        <div class="minimal-container">
-          <div class="minimal-section-heading"><div><p class="store-eyebrow">TÌM MỘT MÓN HỢP VỚI BẠN</p><h2>Cho từng góc nhỏ.</h2></div><button type="button" class="minimal-text-action" onclick="window.TTGiftQuiz.open()">Gợi ý chọn quà <span aria-hidden="true">↗</span></button></div>
-          <div class="minimal-category-list">
-            <button type="button" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')"><i class="fa-solid fa-laptop" aria-hidden="true"></i><span>Bàn làm việc</span><span aria-hidden="true">↗</span></button>
-            <button type="button" onclick="window.navigateToCategory('Trang_Diem_Vanity')"><i class="fa-solid fa-gem" aria-hidden="true"></i><span>Bàn trang điểm</span><span aria-hidden="true">↗</span></button>
-            <button type="button" onclick="window.navigateToCategory('Decor_Den_Noi_That')"><i class="fa-solid fa-lightbulb" aria-hidden="true"></i><span>Decor &amp; ánh sáng</span><span aria-hidden="true">↗</span></button>
-            <button type="button" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')"><i class="fa-solid fa-wifi" aria-hidden="true"></i><span>NFC &amp; cá nhân hóa</span><span aria-hidden="true">↗</span></button>
-            <button type="button" onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')"><i class="fa-solid fa-shapes" aria-hidden="true"></i><span>Móc khóa &amp; đồ chơi</span><span aria-hidden="true">↗</span></button>
+          <div class="bento-categories">
+            <!-- 1. Desk Setup & Cơ khí (span 7) -->
+            <div class="bento-card group" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')">
+              <span class="bento-card-badge">11 MẪU · 360° MECH</span>
+              <div class="space-y-1 z-10 max-w-[65%] sm:max-w-[70%]">
+                <h3 class="text-base sm:text-lg font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Bàn Làm Việc &amp; Cơ Khí</h3>
+                <p class="text-xs text-[#575653] line-clamp-2">Hộp đu quay xoay 360°, Module Pork3D xếp chồng và kẹp cáp Skadis.</p>
+              </div>
+              <img src="assets/images/products/thumb_1971424.png" alt="Bàn làm việc & Cơ khí" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+            </div>
+
+            <!-- 2. Khay & Decor Coquette (span 5) -->
+            <div class="bento-card group" onclick="window.navigateToCategory('Trang_Diem_Vanity')">
+              <span class="bento-card-badge">11 MẪU · COQUETTE SILK</span>
+              <div class="space-y-1 z-10 max-w-[65%] sm:max-w-[70%]">
+                <h3 class="text-base sm:text-lg font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Góc Trang Điểm &amp; Nơ Lụa</h3>
+                <p class="text-xs text-[#575653] line-clamp-2">Khay nơ satin, hộp vỏ sò ngọc trai, ống cắm cọ Ballet mềm mại.</p>
+              </div>
+              <img src="assets/images/products/thumb_1646129.png" alt="Góc trang điểm Coquette" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+            </div>
+
+            <!-- 3. Quà tặng khắc tên riêng (span 4) -->
+            <div class="bento-card group" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')">
+              <span class="bento-card-badge">11 MẪU · PERSONALIZED</span>
+              <div class="space-y-1 z-10 max-w-[75%]">
+                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Quà Tặng &amp; Khắc Tên</h3>
+                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Biển tên để bàn cao cấp, biển số đỗ xe ô tô giấu số xoay.</p>
+              </div>
+              <img src="assets/images/products/thumb_1147539.png" alt="Quà tặng khắc tên" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+            </div>
+
+            <!-- 4. Thẻ & Standee NFC (span 4) -->
+            <div class="bento-card group" onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')">
+              <span class="bento-card-badge">11 MẪU · TACTILE &amp; NFC</span>
+              <div class="space-y-1 z-10 max-w-[75%]">
+                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Móc Khóa &amp; Fidget Cơ</h3>
+                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Đĩa than NFC phát nhạc 1 chạm, Clicker ASMR phím cơ.</p>
+              </div>
+              <img src="assets/images/products/thumb_1795991.png" alt="Móc khóa & Fidget cơ" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+            </div>
+
+            <!-- 5. Đèn Decor & Bình Hoa (span 4) -->
+            <div class="bento-card group" onclick="window.navigateToCategory('Decor_Den_Noi_That')">
+              <span class="bento-card-badge">11 MẪU · AMBIENT LIGHT</span>
+              <div class="space-y-1 z-10 max-w-[75%]">
+                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Đèn Decor &amp; Ánh Sáng</h3>
+                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Đèn giấy Washi KŌHAKU, bình hoa túi giấy nhăn, đĩa lụa nếp gấp.</p>
+              </div>
+              <img src="assets/images/products/thumb_2235027.png" alt="Đèn Decor & Bình hoa" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+            </div>
           </div>
         </div>
       </section>
@@ -433,10 +413,174 @@
         </div>
       </section>
 
+      <!-- SHOP THE LOOK: INTERACTIVE LIFESTYLE HOTSPOTS (AOV MULTIPLIER) -->
+      <section id="home-shop-the-look" class="py-10 sm:py-16 bg-[#F7F6F2] border-b border-[#E5E4DE]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+            <div>
+              <span class="text-xs font-mono font-bold text-[#D45B34] uppercase tracking-wider">SHOP THE LOOK / GÓC CẢM HỨNG</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#141413] mt-1">Góc Bàn Làm Việc "Zen Desk Setup"</h2>
+              <p class="text-xs sm:text-sm text-[#575653] mt-1">Chạm vào từng điểm nhấp nháy trên bàn để khám phá chi tiết hoặc mua trọn combo tiết kiệm 10%.</p>
+            </div>
+            <button type="button" onclick="window.switchWorkspace('view-inspiration')" class="inline-flex items-center gap-2 text-xs font-bold text-[#D45B34] hover:text-[#B04B25] transition-colors shrink-0">
+              <span>Xem thêm 4 góc setup khác</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <!-- Interactive Lifestyle Canvas with 3 Hotspots -->
+            <div class="lg:col-span-8 look-hotspot-container rounded-2xl overflow-hidden relative shadow-sm aspect-[16/10] sm:aspect-[16/9]">
+              <img src="assets/images/setups/setup-desk-zen.jpg" 
+                   alt="Góc làm việc Zen Desk Setup" 
+                   class="w-full h-full object-cover object-center"
+                   onerror="this.onerror=null; this.src='assets/images/products/thumb_1971424.png';">
+
+              <!-- Hotspot 1: Hộp đu quay Ferris (top: 38%, left: 32%) -->
+              <div class="hotspot-dot" style="top: 38%; left: 32%;" tabindex="0" role="button" aria-label="Hộp bánh xe đu quay Ferris">
+                <div class="hotspot-popover">
+                  <div class="text-[10px] font-mono text-[#D45B34] font-bold uppercase">Desk Mech · 0.12MM</div>
+                  <div class="text-xs font-bold text-[#141413]">Hộp bánh xe Ferris 360°</div>
+                  <div class="text-[11px] font-mono font-semibold text-[#D45B34]">189.000₫</div>
+                </div>
+              </div>
+
+              <!-- Hotspot 2: Ngăn kéo module Pork3D (top: 54%, left: 66%) -->
+              <div class="hotspot-dot" style="top: 54%; left: 66%;" tabindex="0" role="button" aria-label="Ngăn kéo xếp chồng Pork3D">
+                <div class="hotspot-popover">
+                  <div class="text-[10px] font-mono text-[#D45B34] font-bold uppercase">Modular Desk</div>
+                  <div class="text-xs font-bold text-[#141413]">Module ngăn kéo Pork3D</div>
+                  <div class="text-[11px] font-mono font-semibold text-[#D45B34]">159.000₫</div>
+                </div>
+              </div>
+
+              <!-- Hotspot 3: Kẹp cáp Skadis (top: 72%, left: 45%) -->
+              <div class="hotspot-dot" style="top: 72%; left: 45%;" tabindex="0" role="button" aria-label="Kẹp cáp bàn IKEA Skadis">
+                <div class="hotspot-popover">
+                  <div class="text-[10px] font-mono text-[#D45B34] font-bold uppercase">Cable Clean</div>
+                  <div class="text-xs font-bold text-[#141413]">Kẹp giữ cáp Skadis</div>
+                  <div class="text-[11px] font-mono font-semibold text-[#D45B34]">69.000₫</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Combo Summary Card -->
+            <div class="lg:col-span-4 rounded-2xl bg-white border border-[#E5E4DE] p-6 space-y-5 shadow-xs">
+              <div class="space-y-1">
+                <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-[#FEF2F2] border border-[#FECACA] text-[10px] font-mono font-bold text-[#DC2626]">
+                  ƯU ĐÃI COMBO -10%
+                </span>
+                <h3 class="text-lg font-bold text-[#141413]">Trọn Bộ Setup Bàn Làm Việc Zen</h3>
+                <p class="text-xs text-[#575653]">Gồm Hộp đu quay Ferris xoay 360°, Ngăn kéo Pork3D mini và Kẹp cáp Skadis chống rối.</p>
+              </div>
+
+              <div class="space-y-2 py-3 border-y border-[#E5E4DE] text-xs">
+                <div class="flex items-center justify-between text-[#575653]">
+                  <span>Hộp đu quay Ferris 360°</span>
+                  <span class="font-mono tabular-nums">189.000₫</span>
+                </div>
+                <div class="flex items-center justify-between text-[#575653]">
+                  <span>Module ngăn kéo Pork3D</span>
+                  <span class="font-mono tabular-nums">159.000₫</span>
+                </div>
+                <div class="flex items-center justify-between text-[#575653]">
+                  <span>Kẹp cáp Skadis</span>
+                  <span class="font-mono tabular-nums">69.000₫</span>
+                </div>
+              </div>
+
+              <div class="flex items-baseline justify-between">
+                <div>
+                  <span class="text-xs text-[#8A8884] line-through font-mono">417.000₫</span>
+                  <div class="text-xl font-bold font-mono text-[#D45B34] tabular-nums">375.000₫</div>
+                </div>
+                <span class="text-[11px] font-mono text-emerald-600 font-semibold">Tiết kiệm 42.000₫</span>
+              </div>
+
+              <button type="button" 
+                      class="combo-buy-btn w-full py-3 px-4 rounded-xl bg-[#141413] hover:bg-[#2E2E2B] text-white text-xs font-bold font-mono tracking-wide transition-all shadow-md flex items-center justify-center gap-2 cursor-pointer"
+                      onclick="window.addLookbookComboToCart('setup-desk-zen')">
+                <i class="fa-solid fa-bag-shopping text-xs"></i>
+                <span>Mua trọn Set (-10% • 375.000₫)</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- LIVE CUSTOMIZER PREVIEW: OBSIDIAN DARK ARCHITECTURAL BLOCK -->
+      <section id="home-live-customizer" class="py-12 sm:py-16 bg-[#141413] text-[#F7F6F2] border-b border-[#2A2A28]">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          <div class="text-center max-w-2xl mx-auto space-y-2">
+            <span class="text-xs font-mono font-bold text-[#C85A32] uppercase tracking-wider">TRẠM CÁ NHÂN HÓA / LIVE PREVIEW</span>
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Khắc Tên &amp; Tạo Dấu Ấn Riêng</h2>
+            <p class="text-xs sm:text-sm text-[#A1A1AA]">Thử gõ tên bạn hoặc thông điệp bên dưới để xem trước biển tên chế tác in 3D thời gian thực.</p>
+          </div>
+
+          <div class="obsidian-customizer-block p-6 sm:p-8 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#1A1A18] max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <!-- Left: Inputs -->
+            <div class="md:col-span-6 space-y-4 text-left">
+              <div>
+                <label for="live-custom-input" class="block text-xs font-mono font-semibold text-[#D4D4D8] mb-1.5">
+                  Nội dung khắc nổi (Tên / Số điện thoại):
+                </label>
+                <input type="text" 
+                       id="live-custom-input" 
+                       maxlength="24" 
+                       value="MINH TRIET"
+                       placeholder="Ví dụ: NGUYEN VAN A" 
+                       class="w-full px-4 py-2.5 rounded-xl bg-[#0C0C0E] border border-[rgba(255,255,255,0.12)] text-white font-mono text-sm tracking-wider focus:outline-none focus:border-[#C85A32] transition-colors"
+                       oninput="window.updateLiveCustomizerPreview(this.value)">
+              </div>
+
+              <!-- Color Palette for Preview -->
+              <div>
+                <label class="block text-[11px] font-mono text-[#A1A1AA] mb-1.5">Màu nền biển chế tác:</label>
+                <div class="flex items-center gap-2">
+                  <button type="button" class="w-6 h-6 rounded-full border border-white/20 active ring-2 ring-[#C85A32]" style="background: #1C1B18;" title="Obsidian Black" onclick="window.setLiveCustomizerColor('#1C1B18', '#F5F2EB')"></button>
+                  <button type="button" class="w-6 h-6 rounded-full border border-white/20" style="background: #F5F2EB;" title="Matte Ivory" onclick="window.setLiveCustomizerColor('#F5F2EB', '#1C1B18')"></button>
+                  <button type="button" class="w-6 h-6 rounded-full border border-white/20" style="background: #C85A32;" title="Terracotta" onclick="window.setLiveCustomizerColor('#C85A32', '#F5F2EB')"></button>
+                  <button type="button" class="w-6 h-6 rounded-full border border-white/20" style="background: #1E3A2F;" title="Forest Green" onclick="window.setLiveCustomizerColor('#1E3A2F', '#F5F2EB')"></button>
+                </div>
+              </div>
+
+              <div class="pt-2">
+                <button type="button" 
+                        onclick="window.openFullCustomizerFromHome()" 
+                        class="btn-primary w-full py-3 px-4 rounded-xl text-xs font-bold font-mono tracking-wide flex items-center justify-center gap-2 shadow-lg cursor-pointer">
+                  <span>Tiếp tục tùy chỉnh 3D &amp; Đặt hàng riêng</span>
+                  <i class="fa-solid fa-arrow-right text-[11px]"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Right: Real-time 3D Plate Simulation -->
+            <div class="md:col-span-6 flex flex-col items-center">
+              <div id="obsidian-preview-plate" class="obsidian-preview-plate w-full max-w-xs aspect-[16/9] rounded-xl p-6 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300">
+                <div class="w-full flex items-center justify-between text-[9px] font-mono tracking-widest text-[#A1A1AA] uppercase">
+                  <span>T&amp;T STUDIO</span>
+                  <span>0.12MM PRECISION</span>
+                </div>
+
+                <div id="obsidian-preview-text" class="font-mono text-xl sm:text-2xl font-bold tracking-widest text-[#F5F2EB] drop-shadow-sm transition-all duration-200">
+                  MINH TRIET
+                </div>
+
+                <div class="w-full flex items-center justify-between text-[9px] font-mono text-[#A1A1AA]">
+                  <span>NTAG215 CHIP READY</span>
+                  <span class="text-[#C85A32]">BIO-PLA</span>
+                </div>
+              </div>
+              <span class="text-[11px] font-mono text-[#71717A] mt-2.5">Mô phỏng chữ in nổi 3D đa lớp</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section id="store-catalog" aria-labelledby="collection-title" class="py-6 sm:py-12 border-b border-[#DCDDD5] bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           
-          <div class="space-y-4">
+          <div class="space-y-4 sticky-catalog-header pt-3 pb-3">
             <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
               <div>
                 <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">BỘ SƯU TẬP T&amp;T</span>
