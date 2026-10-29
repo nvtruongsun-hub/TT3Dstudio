@@ -14,6 +14,8 @@ import {
   setDoc, 
   getDoc, 
   getDocs, 
+  deleteDoc,
+  writeBatch,
   onSnapshot, 
   query, 
   orderBy, 
@@ -297,6 +299,85 @@ export const TTFirestore = {
       console.warn('[Firestore] Failed to fetch products:', err.message);
       return null;
     }
+  },
+
+  /**
+   * Upsert a Single Product in Cloud Firestore
+   */
+  async upsertProduct(product) {
+    if (!db || !product || !product.id) return { ok: false, error: 'Invalid product or database' };
+    try {
+      const prodRef = doc(db, 'products', product.id);
+      await setDoc(prodRef, {
+        ...product,
+        cloudUpdatedAt: new Date().toISOString()
+      }, { merge: true });
+      return { ok: true, id: product.id };
+    } catch (err) {
+      console.warn('[Firestore] Failed to upsert product:', err.message);
+      return { ok: false, error: err.message };
+    }
+  },
+
+  /**
+   * Delete a Single Product from Cloud Firestore
+   */
+  async deleteProduct(productId) {
+    if (!db || !productId) return false;
+    try {
+      const prodRef = doc(db, 'products', productId);
+      await deleteDoc(prodRef);
+      return true;
+    } catch (err) {
+      console.warn('[Firestore] Failed to delete product:', err.message);
+      return false;
+    }
+  },
+
+  /**
+   * Batch Sync All Products to Cloud Firestore
+   */
+  async syncAllProducts(productsList) {
+    if (!db) return { ok: false, error: 'Database not initialized' };
+    const list = Array.isArray(productsList) ? productsList : [];
+    if (list.length === 0) return { ok: false, error: 'Empty products list' };
+
+    let success = 0;
+    let failed = 0;
+    const errors = [];
+
+    const CHUNK_SIZE = 10;
+    for (let i = 0; i < list.length; i += CHUNK_SIZE) {
+      const chunk = list.slice(i, i + CHUNK_SIZE);
+      await Promise.all(chunk.map(async (p) => {
+        try {
+          const prodRef = doc(db, 'products', p.id);
+          await setDoc(prodRef, {
+            ...p,
+            cloudUpdatedAt: new Date().toISOString()
+          }, { merge: true });
+          success++;
+        } catch (err) {
+          failed++;
+          errors.push(`${p.id}: ${err.message}`);
+        }
+      }));
+    }
+
+    // Update catalog metadata
+    try {
+      const metaRef = doc(db, 'metadata', 'catalog');
+      await setDoc(metaRef, {
+        totalProducts: success,
+        revision: 'mw-55-v2',
+        lastSync: new Date().toISOString(),
+        source: 'T&T 3D Labs Studio Admin Portal'
+      }, { merge: true });
+    } catch (metaErr) {
+      console.warn('[Firestore] Metadata sync warning:', metaErr.message);
+    }
+
+    return { ok: failed === 0, success, failed, errors };
   }
 };
 
