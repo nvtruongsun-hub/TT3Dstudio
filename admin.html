@@ -644,22 +644,121 @@
              TAB 4: YÊU CẦU ĐƠN HÀNG (DIRECT ORDERS)
              =================================================================== -->
         <section id="tab-orders" class="tab-panel hidden space-y-[28px]">
-          <div class="admin-card space-y-2">
-            <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
-              <i class="fa-regular fa-file-lines text-[#71717A]"></i>
-              <span>Danh sách yêu cầu đơn hàng</span>
-            </h3>
-            <p class="text-xs text-[#A1A1AA] leading-relaxed">
-              Các đơn hàng khách đã kích hoạt chuyển tiếp Zalo hoặc yêu cầu COD. Dữ liệu lưu trữ an toàn trong kho <code class="text-[#FF5C00] font-mono tabular-nums">TT_DIRECT_ORDER_DRAFTS_V1</code>.
-            </p>
+          <!-- Card Tiêu đề & Cấu hình Telegram Button -->
+          <div class="admin-card flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <h3 class="text-sm font-bold text-[#F4F4F5] flex items-center gap-2">
+                <i class="fa-regular fa-file-lines text-[#71717A]"></i>
+                <span>Quản lý &amp; Tổng kết đơn hàng</span>
+              </h3>
+              <p class="text-xs text-[#A1A1AA] leading-relaxed">
+                Theo dõi toàn bộ đơn hàng Zalo &amp; COD, thống kê theo ngày/tháng/năm và tự động gửi thông báo về Chatbot Telegram.
+              </p>
+            </div>
+            <div class="flex items-center gap-2">
+              <button type="button" id="btn-open-telegram-modal" class="btn-neutral-subtle px-3 py-1.5 text-xs flex items-center gap-1.5 text-[#38BDF8] border-[rgba(56,189,248,0.25)] hover:border-[#38BDF8]">
+                <i class="fa-brands fa-telegram text-sm"></i>
+                <span>Cấu hình Telegram Bot</span>
+              </button>
+            </div>
           </div>
 
+          <!-- Bộ 4 thẻ KPI Động tổng kết đơn hàng theo kỳ chọn -->
+          <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- 1. Doanh thu -->
+            <div class="admin-card space-y-1.5">
+              <div class="flex items-center justify-between text-[#71717A]">
+                <span class="text-xs font-medium">Doanh thu kỳ chọn</span>
+                <i class="fa-solid fa-coins text-xs text-[#10B981]"></i>
+              </div>
+              <div id="order-kpi-revenue" class="text-xl font-bold font-mono tabular-nums text-[#10B981]">0₫</div>
+              <span id="order-kpi-revenue-sub" class="text-[11px] text-[#71717A] font-mono tabular-nums">Toàn thời gian</span>
+            </div>
+
+            <!-- 2. Tổng đơn -->
+            <div class="admin-card space-y-1.5">
+              <div class="flex items-center justify-between text-[#71717A]">
+                <span class="text-xs font-medium">Tổng số đơn hàng</span>
+                <i class="fa-solid fa-cart-shopping text-xs text-[#38BDF8]"></i>
+              </div>
+              <div id="order-kpi-count" class="text-xl font-bold font-mono tabular-nums text-[#F4F4F5]">0</div>
+              <span id="order-kpi-count-sub" class="text-[11px] text-[#71717A] font-mono tabular-nums">0 đơn hợp lệ</span>
+            </div>
+
+            <!-- 3. Đang xử lý / In 3D -->
+            <div class="admin-card space-y-1.5">
+              <div class="flex items-center justify-between text-[#71717A]">
+                <span class="text-xs font-medium">Đang in 3D &amp; Xử lý</span>
+                <i class="fa-solid fa-cube text-xs text-[#FF5C00]"></i>
+              </div>
+              <div id="order-kpi-processing" class="text-xl font-bold font-mono tabular-nums text-[#FF5C00]">0</div>
+              <span class="text-[11px] text-[#71717A] font-mono tabular-nums">Cần xưởng chế tác</span>
+            </div>
+
+            <!-- 4. Giá trị đơn trung bình (AOV) -->
+            <div class="admin-card space-y-1.5">
+              <div class="flex items-center justify-between text-[#71717A]">
+                <span class="text-xs font-medium">Giá trị đơn TB (AOV)</span>
+                <i class="fa-solid fa-chart-line text-xs text-[#F59E0B]"></i>
+              </div>
+              <div id="order-kpi-aov" class="text-xl font-bold font-mono tabular-nums text-[#F59E0B]">0₫</div>
+              <span class="text-[11px] text-[#71717A] font-mono tabular-nums">Doanh thu / Đơn</span>
+            </div>
+          </div>
+
+          <!-- Bộ lọc thời gian (Ngày / Tháng / Năm) + Tìm kiếm tức thì + Lọc trạng thái -->
+          <div class="admin-card space-y-4">
+            <!-- Hàng 1: Nút bấm thời gian nhanh -->
+            <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[rgba(255,255,255,0.07)]">
+              <div class="flex flex-wrap items-center gap-1.5" id="order-time-filter-group">
+                <span class="text-xs text-[#71717A] mr-1.5">Thời gian:</span>
+                <button type="button" data-order-time-filter="all" class="px-2.5 py-1 rounded text-xs font-mono font-medium border border-[#FF5C00] bg-[#FF5C00]/15 text-[#FF5C00] transition-colors">Tất cả</button>
+                <button type="button" data-order-time-filter="today" class="px-2.5 py-1 rounded text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors">Hôm nay</button>
+                <button type="button" data-order-time-filter="yesterday" class="px-2.5 py-1 rounded text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors">Hôm qua</button>
+                <button type="button" data-order-time-filter="7days" class="px-2.5 py-1 rounded text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors">7 ngày qua</button>
+                <button type="button" data-order-time-filter="this_month" class="px-2.5 py-1 rounded text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors">Tháng này</button>
+                <button type="button" data-order-time-filter="this_year" class="px-2.5 py-1 rounded text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors">Năm nay</button>
+              </div>
+
+              <!-- Lọc ngày tuỳ chọn -->
+              <div class="flex items-center gap-2 text-xs">
+                <span class="text-[#71717A] text-[11px]">Từ</span>
+                <input type="date" id="order-date-from" class="px-2 py-1 rounded bg-[#111114] border border-[rgba(255,255,255,0.07)] text-[#F4F4F5] text-xs font-mono">
+                <span class="text-[#71717A] text-[11px]">Đến</span>
+                <input type="date" id="order-date-to" class="px-2 py-1 rounded bg-[#111114] border border-[rgba(255,255,255,0.07)] text-[#F4F4F5] text-xs font-mono">
+                <button type="button" id="btn-apply-custom-date" class="px-2.5 py-1 rounded bg-[#16161A] border border-[rgba(255,255,255,0.12)] text-[#F4F4F5] hover:border-[#FF5C00] text-xs">Lọc</button>
+              </div>
+            </div>
+
+            <!-- Hàng 2: Tìm kiếm tức thì & Lọc trạng thái -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <div class="md:col-span-2 relative">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A] text-xs pointer-events-none"></i>
+                <input type="text" id="search-orders-input" placeholder="Tìm kiếm tức thì theo mã đơn (TT3D-...), tên khách hàng, số điện thoại..." class="w-full pl-9 pr-3.5 py-2 admin-input text-xs font-mono">
+              </div>
+              <div>
+                <select id="filter-order-status" class="w-full px-3.5 py-2 admin-select text-xs font-mono">
+                  <option value="">Tất cả trạng thái</option>
+                  <option value="handoff_ready">Chờ xưởng xác nhận (Zalo/COD)</option>
+                  <option value="confirmed">Đã duyệt (Xếp lịch in)</option>
+                  <option value="in_production">Đang in 3D &amp; Xử lý</option>
+                  <option value="quality_check">Kiểm tra QC</option>
+                  <option value="shipped">Đang giao hàng</option>
+                  <option value="delivered">Hoàn tất thành công</option>
+                  <option value="cancelled">Đã hủy</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bảng đơn hàng -->
           <div class="admin-card overflow-hidden !p-0">
             <div class="overflow-x-auto">
               <table class="w-full text-left text-xs">
                 <thead class="bg-[#111114] text-[#71717A] font-mono text-[11px] border-b border-[rgba(255,255,255,0.07)]">
                   <tr>
                     <th class="p-3">Mã đơn</th>
+                    <th class="p-3">Thời gian</th>
                     <th class="p-3">Khách hàng &amp; SĐT</th>
                     <th class="p-3">Mặt hàng &amp; Yêu cầu</th>
                     <th class="p-3">Tổng tiền</th>
@@ -669,6 +768,31 @@
                   </tr>
                 </thead>
                 <tbody id="orders-table-body" class="divide-y divide-[rgba(255,255,255,0.07)] text-[#E4E4E7]"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Bảng tổng kết gom nhóm theo Ngày / Tháng (Breakdown Summary) -->
+          <div class="admin-card space-y-3" id="order-breakdown-card">
+            <div class="flex items-center justify-between">
+              <h4 class="text-xs font-bold text-[#F4F4F5] flex items-center gap-2">
+                <i class="fa-solid fa-calendar-days text-[#71717A]"></i>
+                <span>Bảng tổng kết doanh số theo Ngày &amp; Tháng</span>
+              </h4>
+              <span class="text-[11px] text-[#71717A] font-mono">Tự động gom nhóm theo mốc thời gian</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-xs">
+                <thead class="bg-[#111114] text-[#71717A] font-mono text-[11px] border-b border-[rgba(255,255,255,0.07)]">
+                  <tr>
+                    <th class="p-2.5">Thời gian (Ngày / Tháng)</th>
+                    <th class="p-2.5 text-center">Số lượng đơn</th>
+                    <th class="p-2.5 text-center">Đơn hoàn tất</th>
+                    <th class="p-2.5 text-right">Doanh thu ghi nhận</th>
+                  </tr>
+                </thead>
+                <tbody id="orders-breakdown-tbody" class="divide-y divide-[rgba(255,255,255,0.07)] font-mono tabular-nums text-xs">
+                </tbody>
               </table>
             </div>
           </div>
@@ -693,6 +817,7 @@
               <div class="space-y-1.5">
                 <label class="font-medium text-[#A1A1AA] block">Trạng thái quy trình xưởng</label>
                 <select id="admin-modal-status-select" class="w-full px-3.5 py-2 admin-select font-mono text-xs">
+                  <option value="handoff_ready">Chờ xưởng xác nhận (Zalo / COD)</option>
                   <option value="request_received">1. Đã nhận yêu cầu (Tiếp nhận hệ thống)</option>
                   <option value="confirmed">2. Xưởng xác nhận (Đã duyệt phôi in &amp; xếp lịch)</option>
                   <option value="in_production">3. Đang sản xuất (Đang in 3D &amp; xử lý bề mặt)</option>
@@ -767,6 +892,105 @@
           </div>
         </div>
 
+        <!-- MODAL CẤU HÌNH CHATBOT TELEGRAM -->
+        <div id="admin-telegram-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div class="w-full max-w-lg admin-card border border-[rgba(255,255,255,0.12)] space-y-5 bg-[#16161A]">
+            <div class="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.07)]">
+              <div class="flex items-center gap-2">
+                <span class="status-dot-6 bg-[#38BDF8]"></span>
+                <h3 class="text-sm font-bold text-[#F4F4F5]">Cấu hình Chatbot Telegram</h3>
+              </div>
+              <button type="button" id="btn-close-telegram-modal" class="w-7 h-7 rounded-md bg-[#1C1C22] text-[#A1A1AA] hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-xs"></i>
+              </button>
+            </div>
+
+            <div class="space-y-4 text-xs">
+              <p class="text-[#A1A1AA] leading-relaxed text-[11px]">
+                Nhận tin nhắn thông báo tức thì lên điện thoại khi khách đặt hàng thành công qua Zalo hoặc COD.
+              </p>
+
+              <!-- Telegram Bot Token -->
+              <div class="space-y-1.5">
+                <label class="font-medium text-[#A1A1AA] block">Telegram Bot Token</label>
+                <input type="password" id="telegram-bot-token" placeholder="Ví dụ: 123456789:ABCdefGhIJKlmNoPQRstuVWXyz" class="w-full px-3.5 py-2 admin-input font-mono text-xs">
+                <p class="text-[10px] text-[#71717A]">Tạo bot mới và lấy token bảo mật từ tài khoản <span class="text-[#38BDF8]">@BotFather</span> trên Telegram.</p>
+              </div>
+
+              <!-- Telegram Chat ID -->
+              <div class="space-y-1.5">
+                <label class="font-medium text-[#A1A1AA] block">Telegram Chat ID (Người nhận hoặc Nhóm xưởng)</label>
+                <input type="text" id="telegram-chat-id" placeholder="Ví dụ: 987654321 hoặc -100123456789" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+                <p class="text-[10px] text-[#71717A]">Chat với bot <span class="text-[#38BDF8]">@userinfobot</span> để lấy ID cá nhân của bạn hoặc ID của nhóm Telegram.</p>
+              </div>
+
+              <!-- Toggle Kích hoạt -->
+              <div class="flex items-center justify-between p-3 rounded bg-[#111114] border border-[rgba(255,255,255,0.07)]">
+                <div>
+                  <div class="font-medium text-[#F4F4F5]">Tự động gửi thông báo khi có đơn mới</div>
+                  <div class="text-[11px] text-[#71717A]">Chạy ngầm ngay khi khách hoàn tất đặt hàng</div>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="telegram-notify-enabled" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-[#27272A] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#FF5C00]"></div>
+                </label>
+              </div>
+
+              <!-- Feedback box -->
+              <div id="telegram-test-result" class="hidden p-3 rounded text-xs font-mono"></div>
+            </div>
+
+            <!-- Footer Buttons -->
+            <div class="flex items-center justify-between pt-3 border-t border-[rgba(255,255,255,0.07)]">
+              <button type="button" id="btn-test-telegram" class="px-3 py-2 rounded bg-[#16161A] hover:bg-[#1C1C22] border border-[rgba(255,255,255,0.12)] text-[#38BDF8] hover:text-[#7DD3FC] text-xs font-semibold flex items-center gap-1.5 transition-all">
+                <i class="fa-solid fa-paper-plane text-[10px]"></i>
+                <span>Kiểm tra kết nối</span>
+              </button>
+
+              <div class="flex items-center gap-2">
+                <button type="button" id="btn-cancel-telegram-modal" class="btn-neutral-subtle px-3 py-2 text-xs">
+                  Hủy
+                </button>
+                <button type="button" id="btn-save-telegram" class="btn-orange-primary px-4 py-2 text-xs flex items-center gap-1.5">
+                  <i class="fa-solid fa-floppy-disk text-[11px]"></i>
+                  <span>Lưu cấu hình</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAL XEM CHI TIẾT ĐƠN HÀNG TOÀN DIỆN -->
+        <div id="admin-order-detail-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div class="w-full max-w-2xl admin-card border border-[rgba(255,255,255,0.12)] space-y-4 max-h-[90vh] overflow-y-auto bg-[#16161A]">
+            <div class="flex items-center justify-between pb-3 border-b border-[rgba(255,255,255,0.07)]">
+              <div class="flex items-center gap-2">
+                <span class="status-dot-6 bg-[#10B981]"></span>
+                <h3 class="text-sm font-bold text-[#F4F4F5]">Chi tiết đơn hàng: <span id="detail-modal-order-id" class="font-mono tabular-nums text-[#FF5C00]"></span></h3>
+              </div>
+              <button type="button" id="btn-close-detail-modal" class="w-7 h-7 rounded-md bg-[#1C1C22] text-[#A1A1AA] hover:text-white flex items-center justify-center">
+                <i class="fa-solid fa-xmark text-xs"></i>
+              </button>
+            </div>
+
+            <div id="detail-modal-content" class="space-y-4 text-xs">
+              <!-- Rendered dynamically by admin.js -->
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-[rgba(255,255,255,0.07)]">
+              <div class="flex items-center gap-2">
+                <button type="button" id="btn-detail-send-tg" class="px-3 py-1.5 rounded bg-[#1C1C22] hover:bg-[#38BDF8]/10 text-[#38BDF8] border border-[rgba(56,189,248,0.2)] text-xs flex items-center gap-1.5">
+                  <i class="fa-brands fa-telegram text-xs"></i>
+                  <span>Gửi tin nhắn Telegram</span>
+                </button>
+              </div>
+              <button type="button" id="btn-detail-close" class="btn-neutral-subtle px-4 py-2 text-xs">
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+
 
         <!-- ===================================================================
              TAB 5: CẤU HÌNH BẢNG GIÁ IN 3D
@@ -835,6 +1059,7 @@
   <script src="js/image-uploader.js?v=3.2"></script>
   <script src="js/order-engine.js?v=4.0"></script>
   <script src="js/checkout.js?v=3.2"></script>
+  <script src="js/telegram-notifier.js?v=4.0"></script>
   <script src="js/admin.js?v=4.0"></script>
 
 </body>

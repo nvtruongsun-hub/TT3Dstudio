@@ -22,7 +22,7 @@
   <link rel="stylesheet" href="css/style.css?v=4.1">
 
   <link rel="stylesheet" href="css/minimal.css?v=20261027-clarity">
-  <link rel="stylesheet" href="css/world-class-upgrade.css?v=1.0">
+  <link rel="stylesheet" href="css/world-class-upgrade.css?v=20261030-studio">
 
   <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
   <script type="module" src="js/firebase-init.js?v=1.0"></script>
@@ -33,6 +33,7 @@
   <script src="js/image-uploader.js?v=4.0"></script>
   <script src="js/purchase-config.js?v=4.0"></script>
   <script src="js/cart.js?v=4.1"></script>
+  <script src="js/telegram-notifier.js?v=4.0"></script>
   <script src="js/checkout.js?v=4.0"></script>
   <script src="js/order-engine.js?v=4.0"></script>
   <script src="js/studio-state.js?v=4.1"></script>
@@ -40,13 +41,14 @@
   <script src="js/gift-quiz.js?v=4.0"></script>
   <script src="js/visual-renderer.js?v=4.0"></script>
   <script src="js/catalog-store.js?v=4.2"></script>
-  <script src="js/products-manager.js?v=4.2"></script>
+  <script src="js/products-manager.js?v=20261030-studio"></script>
   <script src="js/viewer3d.js?v=4.0"></script>
   <script src="js/calculator.js?v=4.0"></script>
   <script src="js/config.js?v=4.0"></script>
   <script src="js/automation-simulator.js?v=4.1"></script>
-  <script src="js/product-experience.js?v=20261027" defer></script>
+  <script src="js/product-experience.js?v=20261030-studio" defer></script>
   <script src="js/app.js?v=4.1" defer></script>
+  <script src="js/studio-experience.js?v=20261030" defer></script>
 </head>
 
 <body class="minimal-storefront bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col min-h-screen selection:bg-[#D45B34] selection:text-white antialiased">
@@ -56,7 +58,7 @@
   <!-- =========================================================================
        1. TOP WORKSHOP BENEFIT TICKER
        ========================================================================= -->
-  <aside aria-label="Thông báo xưởng" class="store-announcement">Từ xưởng T&amp;T đến góc nhỏ của bạn <span aria-hidden="true">·</span> <span>Miễn phí vận chuyển đơn từ 300.000đ</span></aside>
+  <aside aria-label="Thông báo xưởng" class="store-announcement">Thiết kế tại T&amp;T. Chế tác cho riêng bạn. <span aria-hidden="true">·</span> <span>Miễn phí vận chuyển đơn từ 300.000đ</span></aside>
 
 
   <!-- =========================================================================
@@ -190,22 +192,6 @@
          ======================================================================= -->
     <div id="view-store" class="app-workspace active" role="tabpanel" tabindex="0" aria-label="Cửa Hàng">
       <!-- TECHNICAL MARQUEE TICKER (34px • PRECISION MONOSPACE • ZERO EMOJI) -->
-      <div id="artisan-trust-strip" class="artisan-trust-strip artisan-marquee bg-[#EFECE6] border-b border-[#E5E4DE] h-[34px] overflow-hidden" aria-label="Thông điệp xưởng chế tác">
-        <div class="marquee-track">
-          <span class="marquee-item"><span class="marquee-dot"></span> 0.12–0.16MM LAYER PRECISION</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> BIO-PLA &amp; PETG CHUẨN XƯỞNG</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> ĐỔI MỚI 1:1 TRONG 7 NGÀY NẾU LỖI IN</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> FREESHIP TOÀN QUỐC ĐƠN TỪ 300K</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> CHẾ TÁC &amp; KHẮC TÊN THEO YÊU CẦU</span>
-          <!-- Duplicate for infinite smooth scroll -->
-          <span class="marquee-item"><span class="marquee-dot"></span> 0.12–0.16MM LAYER PRECISION</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> BIO-PLA &amp; PETG CHUẨN XƯỞNG</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> ĐỔI MỚI 1:1 TRONG 7 NGÀY NẾU LỖI IN</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> FREESHIP TOÀN QUỐC ĐƠN TỪ 300K</span>
-          <span class="marquee-item"><span class="marquee-dot"></span> CHẾ TÁC &amp; KHẮC TÊN THEO YÊU CẦU</span>
-        </div>
-      </div>
-
       
       <!-- HERO SECTION: ARTISAN STUDIO & CURATED TACTILE SHOWCASE -->
       <section id="hero" class="relative pt-10 pb-14 lg:pt-14 lg:pb-16 border-b border-[var(--border-subtle)] bg-[var(--bg-canvas)] overflow-hidden">
@@ -215,19 +201,23 @@
             <!-- Left Hero Copy & Actions -->
             <div class="hero-copy lg:col-span-6 space-y-6 text-left">
               
-              <p class="store-eyebrow">T&amp;T 3D LABS / MADE FOR YOUR SPACE</p>
-              <h1 class="minimal-hero-title">Một món nhỏ.<br><span>Góc sống có gu.</span></h1>
-              <p class="minimal-hero-description">Decor bàn làm việc và quà tặng mang dấu ấn riêng. Chọn mẫu bạn thích, thêm một màu sắc, một cái tên — và làm góc nhỏ trở thành của bạn.</p>
+              <p class="store-eyebrow"><span class="studio-eyebrow-line" aria-hidden="true"></span> ĐỒ DECOR &amp; QUÀ TẶNG IN 3D</p>
+              <h1 class="minimal-hero-title">Thiết kế có gu.<br><span>Dấu ấn của bạn.</span></h1>
+              <p class="minimal-hero-description">Những thiết kế nhỏ làm nên một không gian khác biệt. Khám phá đồ decor, phụ kiện bàn làm việc và quà tặng được chế tác theo màu sắc, cái tên bạn chọn.</p>
               <div class="minimal-hero-actions">
                 <a href="#store-catalog" class="btn-primary">Khám phá sản phẩm <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-                <button type="button" class="minimal-text-action" onclick="window.switchWorkspace('view-personalize')">Tạo dấu ấn riêng <span aria-hidden="true">↗</span></button>
+                <button type="button" class="minimal-text-action" onclick="window.switchWorkspace('view-personalize')">Thiết kế món của bạn <span aria-hidden="true">↗</span></button>
               </div>
-              <div class="minimal-hero-notes"><span>Chọn màu theo sở thích</span><span>Cá nhân hóa theo mẫu</span><span>Chế tác tại Hà Nội</span></div>
+              <div class="minimal-hero-notes"><span><i class="fa-solid fa-palette" aria-hidden="true"></i> Phối màu riêng</span><span><i class="fa-solid fa-pen-nib" aria-hidden="true"></i> Thêm tên của bạn</span><span><i class="fa-solid fa-location-dot" aria-hidden="true"></i> Từ xưởng Hà Nội</span></div>
             </div>
 
             <!-- Right Hero: Interactive Artisan Showcase (Lifestyle Frame + Curated Switcher) -->
             <div class="lg:col-span-6 relative w-full flex flex-col items-center">
               <div class="hero-showcase-card rounded-3xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] p-4 sm:p-5 shadow-[0_16px_40px_-12px_rgba(45,35,25,0.08)]">
+                <div class="studio-showcase-status">
+                  <span>TỪ BỘ SƯU TẬP <span id="studio-slide-count">01 / 03</span></span>
+                  <button type="button" id="studio-motion-toggle" aria-pressed="true" aria-label="Tạm dừng tự chuyển sản phẩm"><i class="fa-solid fa-pause" aria-hidden="true"></i><span>Tạm dừng</span></button>
+                </div>
                 
                 <!-- Showcase Top Switcher Pills with Roving Tabindex & ARIA -->
                 <div class="flex items-center justify-between gap-1.5 mb-3.5 p-1 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)]" role="tablist" aria-label="Sản phẩm nổi bật">
@@ -324,13 +314,20 @@
       </section>
 
       <!-- ASYMMETRIC BENTO GRID: 5 SPATIAL CATEGORIES (ELIMINATES IA REDUNDANCY) -->
+      <div id="artisan-trust-strip" class="artisan-trust-strip">
+        <div class="studio-benefits" aria-label="Thông tin mua hàng">
+          <div><i class="fa-solid fa-cube" aria-hidden="true"></i><span><strong>Chế tác bằng công nghệ 3D</strong><small>Hình khối thú vị, chi tiết có cá tính</small></span></div>
+          <div><i class="fa-solid fa-swatchbook" aria-hidden="true"></i><span><strong>Một phiên bản dành riêng</strong><small>Chọn màu và nội dung theo từng mẫu</small></span></div>
+          <div><i class="fa-solid fa-comment-dots" aria-hidden="true"></i><span><strong>Trao đổi trực tiếp với xưởng</strong><small>Xác nhận yêu cầu trước khi chế tác</small></span></div>
+        </div>
+      </div>
       <section id="store-birdseye-hub" class="py-8 sm:py-14 bg-white border-b border-[#E5E4DE]">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3">
             <div>
-              <span class="text-xs font-mono font-bold text-[#D45B34] uppercase tracking-wider">KHÁM PHÁ THEO KHÔNG GIAN SỐNG</span>
-              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#141413] mt-1">Cho từng góc nhỏ có gu.</h2>
-              <p class="text-xs sm:text-sm text-[#575653] mt-0.5">5 danh mục chế tác độc bản — Chạm vào từng ô để lọc nhanh catalog bên dưới.</p>
+              <span class="text-xs font-mono font-bold text-[#D45B34] uppercase tracking-wider">TÌM MÓN ĐỒ HỢP VỚI BẠN</span>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#141413] mt-1">Bạn muốn làm mới góc nào?</h2>
+              <p class="text-xs sm:text-sm text-[#575653] mt-0.5">Chọn một không gian, khám phá những thiết kế dành cho nó.</p>
             </div>
             <button type="button" class="minimal-text-action self-start sm:self-auto" onclick="window.TTGiftQuiz?.open()">
               <i class="fa-solid fa-gift mr-1 text-[#D45B34]"></i> Gợi ý chọn quà 1 phút <span aria-hidden="true">↗</span>
@@ -339,54 +336,54 @@
 
           <div class="bento-categories">
             <!-- 1. Desk Setup & Cơ khí (span 7) -->
-            <div class="bento-card group" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')">
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')">
               <span class="bento-card-badge">11 MẪU · 360° MECH</span>
               <div class="space-y-1 z-10 max-w-[65%] sm:max-w-[70%]">
                 <h3 class="text-base sm:text-lg font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Bàn Làm Việc &amp; Cơ Khí</h3>
                 <p class="text-xs text-[#575653] line-clamp-2">Hộp đu quay xoay 360°, Module Pork3D xếp chồng và kẹp cáp Skadis.</p>
               </div>
               <img src="assets/images/products/thumb_1971424.png" alt="Bàn làm việc & Cơ khí" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-            </div>
+            </button>
 
             <!-- 2. Khay & Decor Coquette (span 5) -->
-            <div class="bento-card group" onclick="window.navigateToCategory('Trang_Diem_Vanity')">
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Trang_Diem_Vanity')">
               <span class="bento-card-badge">11 MẪU · COQUETTE SILK</span>
               <div class="space-y-1 z-10 max-w-[65%] sm:max-w-[70%]">
                 <h3 class="text-base sm:text-lg font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Góc Trang Điểm &amp; Nơ Lụa</h3>
                 <p class="text-xs text-[#575653] line-clamp-2">Khay nơ satin, hộp vỏ sò ngọc trai, ống cắm cọ Ballet mềm mại.</p>
               </div>
               <img src="assets/images/products/thumb_1646129.png" alt="Góc trang điểm Coquette" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-            </div>
+            </button>
 
             <!-- 3. Quà tặng khắc tên riêng (span 4) -->
-            <div class="bento-card group" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')">
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')">
               <span class="bento-card-badge">11 MẪU · PERSONALIZED</span>
               <div class="space-y-1 z-10 max-w-[75%]">
                 <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Quà Tặng &amp; Khắc Tên</h3>
                 <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Biển tên để bàn cao cấp, biển số đỗ xe ô tô giấu số xoay.</p>
               </div>
               <img src="assets/images/products/thumb_1147539.png" alt="Quà tặng khắc tên" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-            </div>
+            </button>
 
             <!-- 4. Thẻ & Standee NFC (span 4) -->
-            <div class="bento-card group" onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')">
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')">
               <span class="bento-card-badge">11 MẪU · TACTILE &amp; NFC</span>
               <div class="space-y-1 z-10 max-w-[75%]">
                 <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Móc Khóa &amp; Fidget Cơ</h3>
                 <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Đĩa than NFC phát nhạc 1 chạm, Clicker ASMR phím cơ.</p>
               </div>
               <img src="assets/images/products/thumb_1795991.png" alt="Móc khóa & Fidget cơ" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-            </div>
+            </button>
 
             <!-- 5. Đèn Decor & Bình Hoa (span 4) -->
-            <div class="bento-card group" onclick="window.navigateToCategory('Decor_Den_Noi_That')">
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Decor_Den_Noi_That')">
               <span class="bento-card-badge">11 MẪU · AMBIENT LIGHT</span>
               <div class="space-y-1 z-10 max-w-[75%]">
                 <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Đèn Decor &amp; Ánh Sáng</h3>
                 <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Đèn giấy Washi KŌHAKU, bình hoa túi giấy nhăn, đĩa lụa nếp gấp.</p>
               </div>
               <img src="assets/images/products/thumb_2235027.png" alt="Đèn Decor & Bình hoa" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-            </div>
+            </button>
           </div>
         </div>
       </section>
@@ -398,8 +395,8 @@
           <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
             <div>
               <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">Tuyển Chọn Nổi Bật</span>
-              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Sản Phẩm Đang Được Yêu Thích</h2>
-              <p class="text-xs sm:text-sm text-[#586057] mt-1">Các thiết kế tinh xảo, tỷ lệ hoàn thiện sắc nét nhất tại xưởng T&amp;T.</p>
+              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Bắt đầu từ một thiết kế bạn thích.</h2>
+              <p class="text-xs sm:text-sm text-[#586057] mt-1">Bốn gợi ý từ xưởng, để góc nhỏ có thêm một điểm nhấn.</p>
             </div>
 
             <a href="#store-catalog" class="inline-flex items-center gap-2 text-xs font-bold text-[#FF5C00] hover:text-[#C44800] transition-colors shrink-0">
@@ -410,6 +407,74 @@
 
           <!-- Curated Grid (Populated by products-manager.js) -->
           <div id="curated-product-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6"></div>
+        </div>
+      </section>
+
+      <section id="store-catalog" aria-labelledby="collection-title" class="py-6 sm:py-12 border-b border-[#DCDDD5] bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+          
+          <div class="space-y-4 sticky-catalog-header pt-3 pb-3">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+              <div>
+                <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">BỘ SƯU TẬP T&amp;T</span>
+                <h2 id="collection-title" class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Thiết kế nhỏ. Cảm hứng lớn.</h2>
+                <p class="text-xs sm:text-sm text-[#586057] mt-1">Những món đồ để góc sống gọn gàng và có cá tính hơn.</p>
+              </div>
+
+              <!-- Quick Search Input -->
+              <div class="relative w-full sm:w-72 lg:w-80 shrink-0">
+                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[#586057] text-xs pointer-events-none"></i>
+                <input type="text" 
+                       id="store-search-input" enterkeyhint="search" 
+                       placeholder="Tìm theo tên sản phẩm..." 
+                       aria-label="Tìm kiếm sản phẩm"
+                       class="w-full pl-9 pr-8 py-2.5 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] focus:border-[#FF5C00] focus:ring-1 focus:ring-[#FF5C00]/30 text-xs text-[#20231F] placeholder-[#586057] outline-none transition-all">
+                <button type="button" 
+                        id="store-search-clear" aria-label="Xóa tìm kiếm" 
+                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[#586057] hover:text-[#20231F] text-xs" 
+                        title="Xóa tìm kiếm">
+                  <i class="fa-solid fa-xmark"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Category Filter Pills -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none pt-2" id="store-category-filters" role="group" aria-label="Bộ lọc danh mục">
+              <button type="button" class="segmented-pill active" data-category="all" aria-pressed="true">
+                <span>Tất Cả Mẫu</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Trang_Diem_Vanity" aria-pressed="false">
+                <span>Trang Điểm &amp; Nơ Lụa</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false">
+                <span>Decor &amp; Đèn Nội Thất</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false">
+                <span>Hộp Bàn &amp; Tiện Ích</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false">
+                <span>Cá Nhân Hóa &amp; NFC</span>
+              </button>
+              <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false">
+                <span>Móc Khóa &amp; Art Toy</span>
+              </button>
+            </div>
+            <!-- Sub-Category Filter Pills (Dynamic 2nd Tier Taxonomy) -->
+            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none pt-1" id="store-sub-filters" role="group" aria-label="Bộ lọc phân loại chi tiết"></div>
+          </div>
+
+          <div class="minimal-catalog-toolbar">
+            <p id="store-results-count" role="status" aria-live="polite" aria-atomic="true"></p>
+            <label for="store-sort-input">Sắp xếp <select id="store-sort-input"><option value="curated">Đề xuất từ xưởng</option><option value="price-asc">Giá tăng dần</option><option value="price-desc">Giá giảm dần</option></select></label>
+          </div>
+          <div id="product-view-controls" class="product-view-controls" role="group" aria-label="Cách xem sản phẩm">
+            <span>Xem sản phẩm</span>
+            <button type="button" data-product-layout="large" aria-pressed="true"><i class="fa-solid fa-image" aria-hidden="true"></i> Ảnh lớn</button>
+            <button type="button" data-product-layout="compact" aria-pressed="false"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i> Lưới</button>
+          </div>
+          <!-- The Complete Grid (Populated by products-manager.js) -->
+          <div id="store-product-grid" class="min-h-[200px]"></div>
+
         </div>
       </section>
 
@@ -577,73 +642,7 @@
         </div>
       </section>
 
-      <section id="store-catalog" aria-labelledby="collection-title" class="py-6 sm:py-12 border-b border-[#DCDDD5] bg-white">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          
-          <div class="space-y-4 sticky-catalog-header pt-3 pb-3">
-            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
-              <div>
-                <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">BỘ SƯU TẬP T&amp;T</span>
-                <h2 id="collection-title" class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Thiết kế nhỏ. Cảm hứng lớn.</h2>
-                <p class="text-xs sm:text-sm text-[#586057] mt-1">Những món đồ để góc sống gọn gàng và có cá tính hơn.</p>
-              </div>
 
-              <!-- Quick Search Input -->
-              <div class="relative w-full sm:w-72 lg:w-80 shrink-0">
-                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-[#586057] text-xs pointer-events-none"></i>
-                <input type="text" 
-                       id="store-search-input" enterkeyhint="search" 
-                       placeholder="Tìm theo tên sản phẩm..." 
-                       aria-label="Tìm kiếm sản phẩm"
-                       class="w-full pl-9 pr-8 py-2.5 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] focus:border-[#FF5C00] focus:ring-1 focus:ring-[#FF5C00]/30 text-xs text-[#20231F] placeholder-[#586057] outline-none transition-all">
-                <button type="button" 
-                        id="store-search-clear" aria-label="Xóa tìm kiếm" 
-                        class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-[#586057] hover:text-[#20231F] text-xs" 
-                        title="Xóa tìm kiếm">
-                  <i class="fa-solid fa-xmark"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Category Filter Pills -->
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none pt-2" id="store-category-filters" role="group" aria-label="Bộ lọc danh mục">
-              <button type="button" class="segmented-pill active" data-category="all" aria-pressed="true">
-                <span>Tất Cả Mẫu</span>
-              </button>
-              <button type="button" class="segmented-pill" data-category="Trang_Diem_Vanity" aria-pressed="false">
-                <span>Trang Điểm &amp; Nơ Lụa</span>
-              </button>
-              <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false">
-                <span>Decor &amp; Đèn Nội Thất</span>
-              </button>
-              <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false">
-                <span>Hộp Bàn &amp; Tiện Ích</span>
-              </button>
-              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false">
-                <span>Cá Nhân Hóa &amp; NFC</span>
-              </button>
-              <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false">
-                <span>Móc Khóa &amp; Art Toy</span>
-              </button>
-            </div>
-            <!-- Sub-Category Filter Pills (Dynamic 2nd Tier Taxonomy) -->
-            <div class="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none pt-1" id="store-sub-filters" role="group" aria-label="Bộ lọc phân loại chi tiết"></div>
-          </div>
-
-          <div class="minimal-catalog-toolbar">
-            <p id="store-results-count" role="status" aria-live="polite" aria-atomic="true"></p>
-            <label for="store-sort-input">Sắp xếp <select id="store-sort-input"><option value="curated">Đề xuất từ xưởng</option><option value="price-asc">Giá tăng dần</option><option value="price-desc">Giá giảm dần</option></select></label>
-          </div>
-          <div id="product-view-controls" class="product-view-controls" role="group" aria-label="Cách xem sản phẩm">
-            <span>Xem sản phẩm</span>
-            <button type="button" data-product-layout="large" aria-pressed="true"><i class="fa-solid fa-image" aria-hidden="true"></i> Ảnh lớn</button>
-            <button type="button" data-product-layout="compact" aria-pressed="false"><i class="fa-solid fa-table-cells-large" aria-hidden="true"></i> Lưới</button>
-          </div>
-          <!-- The Complete Grid (Populated by products-manager.js) -->
-          <div id="store-product-grid" class="min-h-[200px]"></div>
-
-        </div>
-      </section>
 
 
       <section class="minimal-personalize-teaser">

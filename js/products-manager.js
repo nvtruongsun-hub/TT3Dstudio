@@ -226,7 +226,7 @@
     const badgeTheme = item.badgeTheme || 'default';
     const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
 
-    const specPillText = isNFC ? 'NFC · 0.12MM' : (item.category === 'Hop_De_Ban_Tien_Ich' ? '360° MECH · 0.12MM' : (item.category === 'Trang_Diem_Vanity' ? '0.12MM · SILK PLA' : '0.12MM · BIO-PLA'));
+    const specPillText = isNFC ? 'NFC tích hợp' : 'Chế tác theo mẫu';
 
     return `
       <article class="tt-product-card minimal-product-card studio-product-card group cursor-pointer flex flex-col justify-between" data-product-id="${escapeHTML(item.id)}" onclick="if(!event.target.closest('[data-action]')) window.openProductDetailModal('${escapeHTML(item.id)}')">
@@ -540,7 +540,8 @@
       currentSortMode = ['price-asc', 'price-desc'].includes(sortInput.value) ? sortInput.value : 'curated';
       renderStoreProducts(currentCategoryFilter);
     });
-    container.addEventListener('click', (e) => {
+    const productContainers = [container, document.getElementById('curated-product-grid')].filter(Boolean);
+    productContainers.forEach(productContainer => productContainer.addEventListener('click', (e) => {
       if (e.target.closest('[data-action="load-more"]')) {
         const previousCount = visibleProductLimit;
         visibleProductLimit += 8;
@@ -659,7 +660,7 @@
         if (prodId) window.openProductDetailModal(prodId);
         return;
       }
-    });
+    }));
   }
 
   // 6. QUICK ADD TO CART
@@ -1270,16 +1271,12 @@
     const allProducts = getStoredProducts();
     const activeProducts = allProducts.filter(p => (p.status || 'active') === 'active');
 
-    // 8 sản phẩm tiêu biểu cho trang chủ rút gọn
+    // Four exact catalog records keep the first collection focused.
     const curatedIds = [
-      'mw-cn-2084928', // Khay trang sức nơ lụa
-      'mw-cn-1836100', // Đế WiFi NFC 1-chạm
-      'mw-cn-1438306', // Đèn bàn xoắn kem
-      'mw-cn-1971424', // Hộp để bàn tiện ích
-      'mw-cn-1702306', // Móc khóa cá nhân hóa
-      'mw-cn-1646129', // Ống cắm cọ Coquette
-      'mw-cn-2332220', // Bình hoa dập ly xếp nếp
-      'mw-cn-2531095'  // Khay nơ lụa cánh bướm
+      'mw-cn-1646129', // Khay nơ lụa
+      'mw-cn-2235027', // Đèn bàn Washi
+      'mw-cn-1147539', // Biển tên để bàn
+      'mw-cn-2084928'  // Ống cắm cọ nơ lụa
     ];
 
     const curatedList = [];
@@ -1288,11 +1285,11 @@
       if (item) curatedList.push(item);
     });
 
-    if (curatedList.length < 8) {
+    if (curatedList.length < 4) {
       for (const p of activeProducts) {
         if (!curatedList.some(c => c.id === p.id)) {
           curatedList.push(p);
-          if (curatedList.length >= 8) break;
+          if (curatedList.length >= 4) break;
         }
       }
     }

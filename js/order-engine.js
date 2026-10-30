@@ -12,6 +12,14 @@
 
   // 6 mốc trạng thái chuẩn cho khách hàng
   const STATUS_CONFIG = {
+    handoff_ready: {
+      stepIndex: 1,
+      label: 'Chờ xưởng xác nhận',
+      shortLabel: 'Chờ duyệt',
+      badgeClass: 'bg-amber-100 text-amber-800 border-amber-300',
+      icon: 'fa-clock',
+      description: 'Đơn hàng đã được gửi qua Zalo/COD, chờ xưởng T&T xác nhận và chốt lịch in 3D.'
+    },
     request_received: {
       stepIndex: 1,
       label: 'Đã nhận yêu cầu',

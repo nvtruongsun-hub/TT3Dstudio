@@ -639,6 +639,15 @@
       window.TTFirestore.saveOrder(orderRecord);
     }
 
+    // Tự động thông báo đơn hàng mới về Chatbot Telegram (chạy ngầm an toàn)
+    if (typeof window !== 'undefined' && window.TTTelegram && typeof window.TTTelegram.notifyNewOrder === 'function') {
+      try {
+        window.TTTelegram.notifyNewOrder(orderRecord);
+      } catch (tgErr) {
+        console.warn('[Checkout] Không thể gửi thông báo Telegram:', tgErr);
+      }
+    }
+
     // Tạo tin nhắn chuyển tiếp
     const messageText = buildOrderMessage(orderRecord);
 

@@ -46,6 +46,7 @@ const REQUIRED_PREFLIGHT_FILES = [
   'js/purchase-config.js',
   'js/products-manager.js',
   'js/product-experience.js',
+  'js/studio-experience.js',
   'js/visual-renderer.js',
   'js/viewer3d.js',
   'js/order-engine.js',

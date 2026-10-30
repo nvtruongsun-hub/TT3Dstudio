@@ -101,8 +101,8 @@
       controls.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.productLayout === selected)));
       if (remember) { try { localStorage.setItem('tt_product_layout', selected); } catch (_) {} }
     }
-    let saved = 'large';
-    try { saved = localStorage.getItem('tt_product_layout') || 'large'; } catch (_) {}
+    let saved = 'compact';
+    try { saved = localStorage.getItem('tt_product_layout') || 'compact'; } catch (_) {}
     setLayout(saved, false);
     controls.forEach(button => button.addEventListener('click', () => setLayout(button.dataset.productLayout, true)));
     const dialog = byId('product-image-dialog');
