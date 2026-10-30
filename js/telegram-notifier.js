@@ -48,10 +48,9 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(cleanConfig));
 
       // Đồng bộ lên Cloud Firestore nếu có TTFirestore
-      if (window.TTFirestore && window.TTFirestore.db && typeof window.TTFirestore.setDoc === 'function') {
+      if (window.TTFirestore && typeof window.TTFirestore.saveTelegramConfig === 'function') {
         try {
-          const docRef = window.TTFirestore.doc(window.TTFirestore.db, 'system_configs', 'telegram');
-          await window.TTFirestore.setDoc(docRef, cleanConfig, { merge: true });
+          await window.TTFirestore.saveTelegramConfig(cleanConfig);
         } catch (fsErr) {
           console.warn('[TTTelegram] Cloud Firestore sync skipped:', fsErr);
         }
@@ -185,20 +184,60 @@
    * Tự động gửi thông báo khi có đơn hàng mới (chạy ngầm an toàn)
    */
   async function notifyNewOrder(order) {
-    const config = getTelegramConfig();
+    let config = getTelegramConfig();
+
+    // 1. Tự động lấy cấu hình từ Cloud Firestore nếu localStorage chưa có (khách đặt từ storefront)
+    if ((!config.token || !config.chatId) && window.TTFirestore && typeof window.TTFirestore.getTelegramConfig === 'function') {
+      try {
+        const cloudConfig = await window.TTFirestore.getTelegramConfig();
+        if (cloudConfig && cloudConfig.token) {
+          config = {
+            token: (cloudConfig.token || '').trim(),
+            chatId: (cloudConfig.chatId || '').trim(),
+            enabled: cloudConfig.enabled !== false
+          };
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+        }
+      } catch (cloudErr) {
+        console.warn('[TTTelegram] Không thể nạp cấu hình từ Cloud Firestore:', cloudErr);
+      }
+    }
+
     if (!config.enabled) {
       console.log('[TTTelegram] Thông báo đơn hàng tự động đang bị tắt.');
       return { ok: false, reason: 'disabled' };
     }
 
-    if (!config.token || !config.chatId) {
-      console.log('[TTTelegram] Chưa cấu hình Telegram Bot Token hoặc Chat ID.');
+    if (!config.token) {
+      console.log('[TTTelegram] Chưa cấu hình Telegram Bot Token.');
       return { ok: false, reason: 'unconfigured' };
+    }
+
+    // 2. Tự động xử lý nếu Chat ID là số điện thoại (ví dụ: 0349657529) hoặc bị trống
+    let effectiveChatId = (config.chatId || '').trim();
+    if (!effectiveChatId || /^0\d{9,10}$/.test(effectiveChatId)) {
+      console.log('[TTTelegram] Chat ID là số điện thoại hoặc chưa có. Đang tự động dò tìm Chat ID thực tế từ Telegram Bot...');
+      try {
+        const detectRes = await detectLatestChatId(config.token);
+        if (detectRes && detectRes.ok && detectRes.chatId) {
+          effectiveChatId = detectRes.chatId;
+          config.chatId = effectiveChatId;
+          saveTelegramConfig(config);
+          console.log(`[TTTelegram] Đã tự động cập nhật Chat ID thực tế: ${effectiveChatId}`);
+        }
+      } catch (detErr) {
+        console.warn('[TTTelegram] Tự động dò Chat ID thất bại:', detErr);
+      }
+    }
+
+    if (!effectiveChatId || /^0\d{9,10}$/.test(effectiveChatId)) {
+      console.warn('[TTTelegram] Chưa có Chat ID Telegram hợp lệ để gửi thông báo.');
+      return { ok: false, reason: 'invalid_chat_id' };
     }
 
     try {
       const messageHtml = formatOrderTelegramMessage(order);
-      const res = await sendTelegramMessage(config.token, config.chatId, messageHtml);
+      const res = await sendTelegramMessage(config.token, effectiveChatId, messageHtml);
       console.log('[TTTelegram] Đã gửi thông báo đơn hàng mới tới Telegram thành công!');
       return res;
     } catch (err) {
@@ -313,20 +352,23 @@
 
   // Khởi tạo và đồng bộ config từ Firestore (nếu có)
   async function initFromCloud() {
-    if (window.TTFirestore && window.TTFirestore.db && typeof window.TTFirestore.getDoc === 'function') {
+    if (window.TTFirestore && typeof window.TTFirestore.getTelegramConfig === 'function') {
       try {
-        const docRef = window.TTFirestore.doc(window.TTFirestore.db, 'system_configs', 'telegram');
-        const snap = await window.TTFirestore.getDoc(docRef);
-        if (snap.exists()) {
-          const cloudConfig = snap.data();
-          if (cloudConfig.token && cloudConfig.chatId) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudConfig));
-          }
+        const cloudConfig = await window.TTFirestore.getTelegramConfig();
+        if (cloudConfig && cloudConfig.token && cloudConfig.chatId) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(cloudConfig));
         }
       } catch (e) {
         // Silently skip
       }
     }
+  }
+
+  // Lắng nghe sự kiện firebase ready nếu firebase khởi tạo sau
+  if (typeof window !== 'undefined') {
+    window.addEventListener('tt:firebase-ready', () => {
+      initFromCloud();
+    });
   }
 
   if (typeof document !== 'undefined') {
