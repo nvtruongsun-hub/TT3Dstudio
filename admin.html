@@ -18,7 +18,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
   <!-- Refined Dark SaaS Stylesheet -->
-  <link rel="stylesheet" href="css/admin.css?v=4.0">
+  <link rel="stylesheet" href="css/admin.css?v=4.2">
 </head>
 
 <body class="admin-body min-h-screen flex flex-col antialiased selection:bg-[#FF5C00] selection:text-white admin-scroll">
@@ -965,10 +965,17 @@
                     <span>Tự động dò Chat ID</span>
                   </button>
                 </div>
-                <input type="text" id="telegram-chat-id" placeholder="Ví dụ: 684920193 (không phải số điện thoại)" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+                <input type="text" id="telegram-chat-id" placeholder="8773439139 (Mã số Telegram, không phải số điện thoại)" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+                <div class="flex items-center gap-2 pt-1">
+                  <span class="text-[10px] text-[#A1A1AA]">ID xưởng đã xác thực:</span>
+                  <button type="button" id="btn-use-known-chat-id" class="px-2 py-0.5 rounded bg-emerald-500/10 border border-emerald-500/30 text-[#10B981] font-mono text-[11px] font-semibold hover:bg-emerald-500/20 transition-all flex items-center gap-1">
+                    <i class="fa-solid fa-check text-[9px]"></i>
+                    <span>8773439139 (@jinlak2003)</span>
+                  </button>
+                </div>
                 <div id="telegram-chat-id-hint" class="text-[10px] text-[#71717A] space-y-0.5 pt-0.5">
                   <p>1. Mở bot của bạn trên Telegram và bấm <span class="text-[#FF5C00] font-mono">Start</span> (<code class="text-[#FF5C00]">/start</code>).</p>
-                  <p>2. Bấm <span class="text-[#38BDF8] font-semibold">Tự động dò Chat ID</span> ở trên, hoặc chat với <span class="text-[#38BDF8]">@userinfobot</span> để lấy mã số ID (Ví dụ: <code class="text-[#10B981]">684920193</code>, không phải số điện thoại).</p>
+                  <p>2. Bấm <span class="text-[#38BDF8] font-semibold">Tự động dò Chat ID</span> ở trên, hoặc chọn <span class="text-[#10B981] font-semibold">8773439139</span> (Chat ID Telegram cá nhân, không phải số điện thoại).</p>
                 </div>
               </div>
 
@@ -1137,10 +1144,10 @@
   <script src="js/catalog-store.js?v=3.2"></script>
   <script src="js/art-presets.js?v=3.2"></script>
   <script src="js/image-uploader.js?v=3.2"></script>
-  <script src="js/order-engine.js?v=4.0"></script>
-  <script src="js/checkout.js?v=3.2"></script>
-  <script src="js/telegram-notifier.js?v=4.0"></script>
-  <script src="js/admin.js?v=4.0"></script>
+  <script src="js/order-engine.js?v=4.2"></script>
+  <script src="js/checkout.js?v=4.2"></script>
+  <script src="js/telegram-notifier.js?v=4.2"></script>
+  <script src="js/admin.js?v=4.2"></script>
 
 </body>
 </html>

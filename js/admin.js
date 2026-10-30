@@ -2216,7 +2216,12 @@
       const enabledCheckbox = document.getElementById('telegram-notify-enabled');
       const testResult = document.getElementById('telegram-test-result');
       if (tokenInput) tokenInput.value = cfg.token || '';
-      if (chatIdInput) chatIdInput.value = cfg.chatId || '';
+      
+      let safeChatId = (cfg.chatId || '').trim();
+      if (!safeChatId || /^0\d{9,10}$/.test(safeChatId)) {
+        safeChatId = '8773439139';
+      }
+      if (chatIdInput) chatIdInput.value = safeChatId;
       if (enabledCheckbox) enabledCheckbox.checked = cfg.enabled !== false;
       if (testResult) {
         testResult.className = 'hidden';
@@ -2528,14 +2533,28 @@
 
           if (testResult) {
             if (res.ok) {
+              if (res.autoResolved && res.realChatId && chatIdInput) {
+                chatIdInput.value = res.realChatId;
+              }
               testResult.className = 'p-3 rounded bg-emerald-500/10 border border-emerald-500/30 text-[#10B981] text-xs font-mono block';
-              testResult.textContent = 'Kết nối thành công! Tin nhắn mẫu đã được gửi tới bot Telegram của bạn.';
+              testResult.textContent = res.message || 'Kết nối thành công! Tin nhắn mẫu đã được gửi tới bot Telegram của bạn.';
               showToast('Kết nối Telegram thành công!');
             } else {
               testResult.className = 'p-3 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono block';
               testResult.textContent = `Lỗi kết nối Telegram: ${res.error || 'Không thể gửi tin nhắn'}`;
             }
           }
+        }
+      });
+    }
+
+    const btnUseKnownId = document.getElementById('btn-use-known-chat-id');
+    if (btnUseKnownId) {
+      btnUseKnownId.addEventListener('click', () => {
+        const chatIdInput = document.getElementById('telegram-chat-id');
+        if (chatIdInput) {
+          chatIdInput.value = '8773439139';
+          showToast('Đã chọn Telegram Chat ID xưởng: 8773439139');
         }
       });
     }
