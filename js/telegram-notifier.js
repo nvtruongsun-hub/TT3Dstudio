@@ -357,11 +357,24 @@
 
     // Kiểm tra nếu người dùng vô tình nhập số điện thoại thay vì Chat ID
     const cleanId = String(testChatId).trim();
-    if (/^0\d{9,10}$/.test(cleanId)) {
-      return {
-        ok: false,
-        error: `"${cleanId}" là số điện thoại, không phải Telegram Chat ID! Telegram Chat ID là một mã số nội bộ (ví dụ: 684920193). Hãy bấm nút "Tự động dò Chat ID" ở trên hoặc chat với @userinfobot để lấy ID.`
-      };
+    let actualChatId = cleanId;
+    let autoResolvedFromPhone = false;
+
+    if (/^0\d{9,10}$/.test(cleanId) || /^\+84\d{9,10}$/.test(cleanId)) {
+      // Tự động tìm Chat ID thật từ bot hoặc lấy Chat ID xưởng đã xác thực (8773439139)
+      const detectRes = await detectLatestChatId(testToken);
+      if (detectRes.ok && detectRes.chatId) {
+        actualChatId = detectRes.chatId;
+        autoResolvedFromPhone = true;
+      } else if (DEFAULT_CONFIG.chatId) {
+        actualChatId = DEFAULT_CONFIG.chatId;
+        autoResolvedFromPhone = true;
+      } else {
+        return {
+          ok: false,
+          error: `"${cleanId}" là số điện thoại, không phải Telegram Chat ID! Telegram Chat ID là một mã số nội bộ (ví dụ: 8773439139). Hãy bấm nút "Tự động dò Chat ID" ở trên hoặc chat với @userinfobot để lấy ID.`
+        };
+      }
     }
 
     const now = new Date().toLocaleString('vi-VN');
@@ -370,11 +383,24 @@
       `✅ Kết nối thành công giữa Hệ thống Quản trị Xưởng và Telegram Bot!\n` +
       `⏰ Thời gian: <code>${now}</code>\n` +
       `🤖 Trạng thái: <b>Sẵn sàng nhận thông báo đơn hàng mới tự động 24/7.</b>\n` +
+      (autoResolvedFromPhone ? `📱 Ghi chú: Đã tự động liên kết từ SĐT <code>${cleanId}</code> sang Telegram Chat ID <code>${actualChatId}</code>.\n` : '') +
       `━━━━━━━━━━━━━━━━━━`;
 
     try {
-      const res = await sendTelegramMessage(testToken, testChatId, testMsg);
-      return { ok: true, res };
+      const res = await sendTelegramMessage(testToken, actualChatId, testMsg);
+      // Tự động lưu Chat ID chuẩn nếu vừa resolve từ SĐT
+      if (autoResolvedFromPhone) {
+        await saveTelegramConfig({ token: testToken, chatId: actualChatId, enabled: true });
+      }
+      return {
+        ok: true,
+        res,
+        autoResolved: autoResolvedFromPhone,
+        realChatId: actualChatId,
+        message: autoResolvedFromPhone
+          ? `Đã tự động chuyển từ số điện thoại (${cleanId}) sang Telegram Chat ID chuẩn: ${actualChatId}! Tin nhắn test đã gửi thành công.`
+          : 'Kết nối thành công! Tin nhắn mẫu đã được gửi tới bot Telegram của bạn.'
+      };
     } catch (err) {
       return { ok: false, error: err.message };
     }
