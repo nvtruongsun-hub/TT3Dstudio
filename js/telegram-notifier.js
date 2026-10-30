@@ -83,7 +83,14 @@
     const custAddress = order.customer?.address || 'Nhận tại xưởng / Thỏa thuận qua Zalo';
     const custNote = order.customer?.note || 'Không có ghi chú';
     const channel = (order.channel || 'zalo').toUpperCase();
-    const finalTotal = formatMoney(order.totals?.finalTotal || order.totals?.payableTotal || 0);
+    const finalTotal = formatMoney(
+      order.totals?.finalTotal ??
+      order.totals?.payableTotal ??
+      order.totals?.total ??
+      order.total ??
+      order.pricing?.total ??
+      0
+    );
 
     const items = Array.isArray(order.items) ? order.items : [];
     let itemsHtml = '';
@@ -92,7 +99,7 @@
     } else {
       items.forEach((item, idx) => {
         const title = item.title || 'Sản phẩm in 3D';
-        const qty = item.qty || 1;
+        const qty = item.qty || item.quantity || 1;
         const price = formatMoney(item.price || 0);
         let specs = [];
         if (item.colorName) specs.push(`Màu: ${item.colorName}`);
