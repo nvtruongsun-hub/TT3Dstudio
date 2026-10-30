@@ -208,6 +208,71 @@
   }
 
   /**
+   * Tự động dò Chat ID từ tin nhắn gần nhất gửi tới Bot qua getUpdates API
+   */
+  async function detectLatestChatId(token) {
+    const cleanToken = (token || getTelegramConfig().token || '').trim();
+    if (!cleanToken) {
+      return {
+        ok: false,
+        error: 'Vui lòng nhập Telegram Bot Token trước khi bấm Tự động dò Chat ID.'
+      };
+    }
+
+    const url = `https://api.telegram.org/bot${cleanToken}/getUpdates`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+    try {
+      const response = await fetch(url, {
+        method: 'GET',
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      const data = await response.json();
+      if (!response.ok || !data.ok) {
+        throw new Error(data.description || `Lỗi Telegram API HTTP ${response.status}`);
+      }
+
+      const updates = Array.isArray(data.result) ? data.result : [];
+      if (updates.length === 0) {
+        return {
+          ok: false,
+          reason: 'no_messages',
+          error: 'Chưa tìm thấy tin nhắn nào gửi tới bot. Vui lòng mở Telegram, tìm bot của bạn, bấm "Start" (/start hoặc gửi 1 tin nhắn bất kỳ), sau đó bấm lại nút này!'
+        };
+      }
+
+      // Duyệt ngược từ tin nhắn mới nhất để tìm chat.id
+      for (let i = updates.length - 1; i >= 0; i--) {
+        const u = updates[i];
+        const chat = u.message?.chat || u.my_chat_member?.chat || u.channel_post?.chat || u.callback_query?.message?.chat;
+        if (chat && chat.id) {
+          const senderName = chat.title || [chat.first_name, chat.last_name].filter(Boolean).join(' ') || 'Tài khoản Telegram';
+          return {
+            ok: true,
+            chatId: String(chat.id),
+            chatType: chat.type || 'private',
+            senderName
+          };
+        }
+      }
+
+      return {
+        ok: false,
+        error: 'Không tìm thấy ID người chat trong danh sách tin nhắn của bot.'
+      };
+    } catch (err) {
+      clearTimeout(timeoutId);
+      if (err.name === 'AbortError') {
+        return { ok: false, error: 'Kết nối tới Telegram API bị quá hạn thời gian (Timeout 6s).' };
+      }
+      return { ok: false, error: err.message };
+    }
+  }
+
+  /**
    * Gửi tin nhắn test kiểm tra kết nối Telegram
    */
   async function testTelegramConnection(token, chatId) {
@@ -218,6 +283,15 @@
       return {
         ok: false,
         error: 'Vui lòng nhập đầy đủ Telegram Bot Token và Chat ID trước khi kiểm tra.'
+      };
+    }
+
+    // Kiểm tra nếu người dùng vô tình nhập số điện thoại thay vì Chat ID
+    const cleanId = String(testChatId).trim();
+    if (/^0\d{9,10}$/.test(cleanId)) {
+      return {
+        ok: false,
+        error: `"${cleanId}" là số điện thoại, không phải Telegram Chat ID! Telegram Chat ID là một mã số nội bộ (ví dụ: 684920193). Hãy bấm nút "Tự động dò Chat ID" ở trên hoặc chat với @userinfobot để lấy ID.`
       };
     }
 
@@ -269,7 +343,8 @@
     formatOrderTelegramMessage,
     sendTelegramMessage,
     notifyNewOrder,
-    testTelegramConnection
+    testTelegramConnection,
+    detectLatestChatId
   };
 
 })(typeof window !== 'undefined' ? window : global);

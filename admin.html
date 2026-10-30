@@ -919,9 +919,18 @@
 
               <!-- Telegram Chat ID -->
               <div class="space-y-1.5">
-                <label class="font-medium text-[#A1A1AA] block">Telegram Chat ID (Người nhận hoặc Nhóm xưởng)</label>
-                <input type="text" id="telegram-chat-id" placeholder="Ví dụ: 987654321 hoặc -100123456789" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
-                <p class="text-[10px] text-[#71717A]">Chat với bot <span class="text-[#38BDF8]">@userinfobot</span> để lấy ID cá nhân của bạn hoặc ID của nhóm Telegram.</p>
+                <div class="flex items-center justify-between">
+                  <label class="font-medium text-[#A1A1AA] block">Telegram Chat ID (Người nhận hoặc Nhóm xưởng)</label>
+                  <button type="button" id="btn-auto-chat-id" class="text-[11px] text-[#38BDF8] hover:text-[#7DD3FC] flex items-center gap-1 font-mono transition-colors">
+                    <i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i>
+                    <span>Tự động dò Chat ID</span>
+                  </button>
+                </div>
+                <input type="text" id="telegram-chat-id" placeholder="Ví dụ: 684920193 (không phải số điện thoại)" class="w-full px-3.5 py-2 admin-input font-mono tabular-nums text-xs">
+                <div id="telegram-chat-id-hint" class="text-[10px] text-[#71717A] space-y-0.5 pt-0.5">
+                  <p>1. Mở bot của bạn trên Telegram và bấm <span class="text-[#FF5C00] font-mono">Start</span> (<code class="text-[#FF5C00]">/start</code>).</p>
+                  <p>2. Bấm <span class="text-[#38BDF8] font-semibold">Tự động dò Chat ID</span> ở trên, hoặc chat với <span class="text-[#38BDF8]">@userinfobot</span> để lấy mã số ID (Ví dụ: <code class="text-[#10B981]">684920193</code>, không phải số điện thoại).</p>
+                </div>
               </div>
 
               <!-- Toggle Kích hoạt -->
