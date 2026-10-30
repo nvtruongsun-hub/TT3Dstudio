@@ -378,6 +378,44 @@ export const TTFirestore = {
     }
 
     return { ok: failed === 0, success, failed, errors };
+  },
+
+  /**
+   * Save Telegram Bot Configuration to Cloud Firestore
+   */
+  async saveTelegramConfig(config) {
+    if (!db || !config) return { ok: false, error: 'Database not initialized or invalid config' };
+    try {
+      const docRef = doc(db, 'system_configs', 'telegram');
+      await setDoc(docRef, {
+        token: (config.token || '').trim(),
+        chatId: (config.chatId || '').trim(),
+        enabled: config.enabled !== false,
+        updatedAt: new Date().toISOString()
+      }, { merge: true });
+      return { ok: true };
+    } catch (err) {
+      console.warn('[Firestore] Failed to save telegram config:', err.message);
+      return { ok: false, error: err.message };
+    }
+  },
+
+  /**
+   * Get Telegram Bot Configuration from Cloud Firestore
+   */
+  async getTelegramConfig() {
+    if (!db) return null;
+    try {
+      const docRef = doc(db, 'system_configs', 'telegram');
+      const snap = await getDoc(docRef);
+      if (snap.exists()) {
+        return snap.data();
+      }
+      return null;
+    } catch (err) {
+      console.warn('[Firestore] Failed to get telegram config:', err.message);
+      return null;
+    }
   }
 };
 
@@ -392,6 +430,15 @@ if (typeof window !== 'undefined') {
   };
   window.TTAnalytics = TTAnalytics;
   window.TTFirestore = TTFirestore;
+
+  // Auto-sync Telegram Bot configuration into localStorage
+  try {
+    TTFirestore.getTelegramConfig().then(cloudCfg => {
+      if (cloudCfg && cloudCfg.token && cloudCfg.chatId) {
+        localStorage.setItem('TT_TELEGRAM_CONFIG_V1', JSON.stringify(cloudCfg));
+      }
+    }).catch(() => {});
+  } catch (_) {}
 
   // Dispatch global ready event
   window.dispatchEvent(new CustomEvent('tt:firebase-ready', {
