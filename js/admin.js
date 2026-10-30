@@ -1792,7 +1792,7 @@
       const customBadge = item.customText
         ? `<div style="color: #A855F7; font-size: 11px; margin-top: 2px; font-weight: 600;">Khắc tên riêng: "${escapeHtml(item.customText)}"</div>`
         : '';
-      const colorSpec = item.colorName ? `Màu: ${item.colorName}` : '';
+      const colorSpec = item.colorName ? `Màu: ${escapeHtml(item.colorName)}` : '';
       return `
         <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
           <td style="padding: 10px 8px; font-family: monospace;">${idx + 1}</td>
@@ -1829,7 +1829,7 @@
         <div style="margin-bottom: 16px;">
           <div style="margin-bottom: 8px;">${trackBadge}</div>
           <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.6;">
-            <div><strong>Khách hàng:</strong> <span style="font-weight: 600; color: #F4F4F5;">${escapeHtml(ord.customer?.name || 'Khách vãng lai')}</span> - SĐT: <span style="font-family: monospace; color: #38BDF8; font-weight: 600;">${ord.customer?.phone || 'Chưa có'}</span></div>
+            <div><strong>Khách hàng:</strong> <span style="font-weight: 600; color: #F4F4F5;">${escapeHtml(ord.customer?.name || 'Khách vãng lai')}</span> - SĐT: <span style="font-family: monospace; color: #38BDF8; font-weight: 600;">${escapeHtml(ord.customer?.phone || 'Chưa có')}</span></div>
             <div><strong>Địa chỉ giao:</strong> ${escapeHtml(ord.customer?.address || 'Nhận tại xưởng / Thỏa thuận qua Zalo')}</div>
             ${ord.customer?.note ? `<div style="color: #F59E0B; margin-top: 4px;"><strong>Ghi chú của khách:</strong> ${escapeHtml(ord.customer.note)}</div>` : ''}
           </div>

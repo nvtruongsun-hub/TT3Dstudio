@@ -10,7 +10,7 @@
   const STORAGE_KEY = 'TT_TELEGRAM_CONFIG_V1';
 
   const DEFAULT_CONFIG = {
-    token: '9107317312:AAG2AdoxsBZfs6w2DMf8_JsAFGuKidXMxso',
+    token: '', // Không hardcode secret bot token trong client bundle (Codex TT3D-MASTER-AUDIT-R7)
     chatId: '8773439139',
     enabled: true
   };
@@ -115,14 +115,14 @@
       itemsHtml = '• <i>Không có chi tiết sản phẩm</i>\n';
     } else {
       items.forEach((item, idx) => {
-        const title = item.title || 'Sản phẩm in 3D';
+        const title = escapeHtml(item.title || 'Sản phẩm in 3D');
         const qty = item.qty || item.quantity || 1;
         const price = formatMoney(item.price || 0);
         let specs = [];
-        if (item.colorName) specs.push(`Màu: ${item.colorName}`);
-        if (item.materialName) specs.push(`Nhựa: ${item.materialName}`);
-        if (item.customText) specs.push(`Khắc: "${item.customText}"`);
-        if (item.fontName) specs.push(`Font: ${item.fontName}`);
+        if (item.colorName) specs.push(`Màu: ${escapeHtml(item.colorName)}`);
+        if (item.materialName) specs.push(`Nhựa: ${escapeHtml(item.materialName)}`);
+        if (item.customText) specs.push(`Khắc: "${escapeHtml(item.customText)}"`);
+        if (item.fontName) specs.push(`Font: ${escapeHtml(item.fontName)}`);
 
         const specStr = specs.length > 0 ? ` (${specs.join(', ')})` : '';
         itemsHtml += `${idx + 1}. <b>${title}</b> x${qty} - <code>${price}</code>${specStr}\n`;
@@ -154,7 +154,9 @@
     return String(text)
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   /**

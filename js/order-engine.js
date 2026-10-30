@@ -260,31 +260,34 @@
     try {
       if (typeof localStorage === 'undefined') return getDemoOrders();
       const raw = localStorage.getItem(STORAGE_KEY);
-      if (!raw) {
+      if (raw === null) {
+        // Chỉ khởi tạo demo orders lần đầu tiên khi chưa từng có key trong localStorage
         const demos = getDemoOrders();
         localStorage.setItem(STORAGE_KEY, JSON.stringify(demos));
         return demos;
       }
       const parsed = JSON.parse(raw);
-      if (!Array.isArray(parsed) || parsed.length === 0) {
-        const demos = getDemoOrders();
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(demos));
-        return demos;
+      if (!Array.isArray(parsed)) {
+        return [];
       }
       return parsed;
     } catch (e) {
       console.warn('[OrderEngine] Lỗi đọc cơ sở dữ liệu đơn:', e);
-      return getDemoOrders();
+      return [];
     }
   }
 
   function saveStoredOrders(orders) {
     try {
-      if (typeof localStorage === 'undefined') return;
+      if (typeof localStorage === 'undefined') {
+        return { ok: false, error: 'localStorage không khả dụng' };
+      }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
       broadcastChange();
+      return { ok: true };
     } catch (e) {
       console.error('[OrderEngine] Lỗi lưu cơ sở dữ liệu đơn:', e);
+      return { ok: false, error: e.message || 'Lỗi lưu trữ dữ liệu' };
     }
   }
 
@@ -354,7 +357,14 @@
     };
 
     orders.unshift(newRecord);
-    saveStoredOrders(orders);
+    const saveRes = saveStoredOrders(orders);
+    if (saveRes && saveRes.ok === false) {
+      return {
+        ok: false,
+        code: 'STORAGE_UNAVAILABLE',
+        error: saveRes.error || 'Lỗi lưu trữ dữ liệu đơn hàng'
+      };
+    }
 
     return {
       ok: true,
@@ -391,9 +401,10 @@
     } else if (cleanAuth && cleanAuth === ord.token) {
       authorized = true;
     } else if (cleanAuth && ord.customer && ord.customer.phone) {
-      const cleanTargetPhone = ord.customer.phone.replace(/[\s.-]/g, '');
-      const cleanInput = cleanAuth.replace(/[\s.-]/g, '');
-      if (cleanTargetPhone.endsWith(cleanInput) || cleanTargetPhone === cleanInput) {
+      const cleanTargetPhone = ord.customer.phone.replace(/\D/g, '');
+      const cleanInput = cleanAuth.replace(/\D/g, '');
+      // Bắt buộc nhập ít nhất 4 chữ số và phải khớp với đuôi hoặc toàn bộ số điện thoại
+      if (cleanInput.length >= 4 && (cleanTargetPhone.endsWith(cleanInput) || cleanTargetPhone === cleanInput)) {
         authorized = true;
       }
     }
@@ -401,7 +412,7 @@
     if (!authorized) {
       return {
         ok: false,
-        error: 'Cần mã bảo mật (token) trong link tra cứu hoặc số điện thoại đặt hàng để xác thực quyền xem đơn này.',
+        error: 'Cần mã bảo mật (token) trong link tra cứu hoặc số điện thoại đặt hàng (tối thiểu 4 chữ số) để xác thực quyền xem đơn này.',
         needsPhoneAuth: true
       };
     }
@@ -424,7 +435,6 @@
     return {
       ok: true,
       orderId: ord.orderId,
-      token: ord.token,
       status: ord.status,
       statusInfo: STATUS_CONFIG[ord.status] || STATUS_CONFIG.request_received,
       etaDate: ord.etaDate || 'Đang cập nhật',
@@ -449,6 +459,19 @@
       publicNote: ord.publicNote || ''
     };
   }
+
+  // Ma trận chuyển đổi trạng thái nghiêm ngặt (State Machine Graph - Codex TT3D-MASTER-AUDIT-R7)
+  const VALID_STATUS_TRANSITIONS = {
+    request_received: ['confirmed', 'cancelled', 'handoff_ready'],
+    handoff_ready: ['confirmed', 'ready_to_pack', 'in_production', 'cancelled'],
+    confirmed: ['in_production', 'ready_to_pack', 'cancelled'],
+    in_production: ['quality_check', 'ready_to_pack', 'cancelled'],
+    quality_check: ['ready_to_pack', 'in_production', 'cancelled'],
+    ready_to_pack: ['shipped', 'cancelled'],
+    shipped: ['delivered', 'cancelled'],
+    delivered: [], // Cấm hồi sinh đơn hoàn tất quay ngược lại sản xuất
+    cancelled: []  // Đơn đã hủy không được chuyển trạng thái tùy ý
+  };
 
   /**
    * Cập nhật trạng thái từ phía Xưởng (Admin Portal)
@@ -489,8 +512,21 @@
     const prevStatus = ord.status;
     const nowIso = new Date().toISOString();
 
-    if (updateData.status && STATUS_CONFIG[updateData.status]) {
-      ord.status = updateData.status;
+    if (updateData.status) {
+      if (!STATUS_CONFIG[updateData.status]) {
+        return { ok: false, error: `Trạng thái không hợp lệ: "${updateData.status}"` };
+      }
+      if (updateData.status !== prevStatus) {
+        const allowed = VALID_STATUS_TRANSITIONS[prevStatus] || [];
+        if (!allowed.includes(updateData.status)) {
+          return {
+            ok: false,
+            code: 'INVALID_TRANSITION',
+            error: `Cấm chuyển đổi trạng thái phi lý từ "${STATUS_CONFIG[prevStatus]?.label || prevStatus}" sang "${STATUS_CONFIG[updateData.status]?.label || updateData.status}". Đơn đã hoàn tất hoặc vi phạm chu trình xưởng!`
+          };
+        }
+        ord.status = updateData.status;
+      }
     }
     if (updateData.etaDate !== undefined) {
       ord.etaDate = updateData.etaDate;
@@ -526,7 +562,14 @@
     });
 
     orders[idx] = ord;
-    saveStoredOrders(orders);
+    const saveRes = saveStoredOrders(orders);
+    if (saveRes && saveRes.ok === false) {
+      return {
+        ok: false,
+        code: 'STORAGE_UNAVAILABLE',
+        error: saveRes.error || 'Lỗi lưu trạng thái đơn hàng'
+      };
+    }
 
     // Đồng bộ sang kho TT_DIRECT_ORDER_DRAFTS_V1
     if (typeof localStorage !== 'undefined') {
