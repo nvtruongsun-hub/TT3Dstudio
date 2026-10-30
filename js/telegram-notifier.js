@@ -10,8 +10,8 @@
   const STORAGE_KEY = 'TT_TELEGRAM_CONFIG_V1';
 
   const DEFAULT_CONFIG = {
-    token: '',
-    chatId: '',
+    token: '9107317312:AAG2AdoxsBZfs6w2DMf8_JsAFGuKidXMxso',
+    chatId: '8773439139',
     enabled: true
   };
 
@@ -23,9 +23,26 @@
       const raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) return { ...DEFAULT_CONFIG };
       const parsed = JSON.parse(raw);
+      let token = (parsed.token || DEFAULT_CONFIG.token || '').trim();
+      let chatId = (parsed.chatId || DEFAULT_CONFIG.chatId || '').trim();
+      
+      // Tự động sửa lỗi nếu người dùng lưu nhầm số điện thoại vào Chat ID
+      if (/^0\d{9,10}$/.test(chatId) && DEFAULT_CONFIG.chatId) {
+        console.warn(`[TTTelegram] Phát hiện số điện thoại (${chatId}) trong Chat ID. Tự động chuyển sang Telegram Chat ID chuẩn: ${DEFAULT_CONFIG.chatId}`);
+        chatId = DEFAULT_CONFIG.chatId;
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            token,
+            chatId,
+            enabled: parsed.enabled !== false,
+            updatedAt: new Date().toISOString()
+          }));
+        } catch (_) {}
+      }
+
       return {
-        token: (parsed.token || '').trim(),
-        chatId: (parsed.chatId || '').trim(),
+        token,
+        chatId,
         enabled: parsed.enabled !== false
       };
     } catch (e) {
@@ -223,17 +240,23 @@
     // 2. Tự động xử lý nếu Chat ID là số điện thoại (ví dụ: 0349657529) hoặc bị trống
     let effectiveChatId = (config.chatId || '').trim();
     if (!effectiveChatId || /^0\d{9,10}$/.test(effectiveChatId)) {
-      console.log('[TTTelegram] Chat ID là số điện thoại hoặc chưa có. Đang tự động dò tìm Chat ID thực tế từ Telegram Bot...');
-      try {
-        const detectRes = await detectLatestChatId(config.token);
-        if (detectRes && detectRes.ok && detectRes.chatId) {
-          effectiveChatId = detectRes.chatId;
-          config.chatId = effectiveChatId;
-          saveTelegramConfig(config);
-          console.log(`[TTTelegram] Đã tự động cập nhật Chat ID thực tế: ${effectiveChatId}`);
+      if (DEFAULT_CONFIG.chatId && !/^0\d{9,10}$/.test(DEFAULT_CONFIG.chatId)) {
+        effectiveChatId = DEFAULT_CONFIG.chatId;
+        config.chatId = effectiveChatId;
+        saveTelegramConfig(config);
+      } else {
+        console.log('[TTTelegram] Chat ID là số điện thoại hoặc chưa có. Đang tự động dò tìm Chat ID thực tế từ Telegram Bot...');
+        try {
+          const detectRes = await detectLatestChatId(config.token);
+          if (detectRes && detectRes.ok && detectRes.chatId) {
+            effectiveChatId = detectRes.chatId;
+            config.chatId = effectiveChatId;
+            saveTelegramConfig(config);
+            console.log(`[TTTelegram] Đã tự động cập nhật Chat ID thực tế: ${effectiveChatId}`);
+          }
+        } catch (detErr) {
+          console.warn('[TTTelegram] Tự động dò Chat ID thất bại:', detErr);
         }
-      } catch (detErr) {
-        console.warn('[TTTelegram] Tự động dò Chat ID thất bại:', detErr);
       }
     }
 

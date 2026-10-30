@@ -52,6 +52,14 @@
       icon: 'fa-magnifying-glass-check',
       description: 'Kiểm tra độ khít, độ bền nếp gấp và chip NFC trước khi đóng gói chống va đập.'
     },
+    ready_to_pack: {
+      stepIndex: 5,
+      label: 'Chờ đóng gói (Sẵn sàng xuất)',
+      shortLabel: 'Chờ đóng gói',
+      badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300',
+      icon: 'fa-box-archive',
+      description: 'Sản phẩm đã sẵn sàng tại kho hoặc đã in hoàn tất, đang chờ kiểm đếm và đóng gói chống sốc.'
+    },
     shipped: {
       stepIndex: 5,
       label: 'Đang giao hàng',
@@ -552,8 +560,141 @@
     return getStoredOrders();
   }
 
+  /**
+   * Phân loại đơn hàng theo 2 nhánh: Hàng sẵn kho (in_stock) vs Cần in 3D (print_on_demand)
+   * (Chỉ thị kiến trúc Argon 4: Dual-Track Workshop Fulfillment)
+   */
+  function detectOrderTrack(order) {
+    if (!order) return 'in_stock';
+    if (order.fulfillmentTrack === 'print_on_demand' || order.fulfillmentTrack === 'in_stock') {
+      return order.fulfillmentTrack;
+    }
+    const items = Array.isArray(order.items) ? order.items : [];
+    if (items.length === 0) return 'in_stock';
+
+    const requiresPrinting = items.some(item => {
+      if (!item) return false;
+      if (item.customText && String(item.customText).trim()) return true;
+      if (item.monogram && String(item.monogram).trim()) return true;
+      if (item.isCustomizable === true || item.requiresPrinting === true) return true;
+      if (item.madeToOrder === true) return true;
+      return false;
+    });
+
+    return requiresPrinting ? 'print_on_demand' : 'in_stock';
+  }
+
+  /**
+   * Xác định hành động tiếp theo theo ngữ cảnh 1-chạm cho chủ xưởng
+   */
+  function getNextStepAction(order) {
+    if (!order) return null;
+    const status = order.status || 'request_received';
+    const track = detectOrderTrack(order);
+
+    if (status === 'handoff_ready' || status === 'request_received') {
+      if (track === 'in_stock') {
+        return {
+          nextStatus: 'ready_to_pack',
+          label: 'Xác nhận & Chờ đóng gói',
+          shortLabel: 'Đóng gói ngay',
+          badge: 'HÀNG SẴN KHO',
+          track: 'in_stock',
+          icon: 'fa-box-archive',
+          buttonClass: 'px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-[#10B981] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+        };
+      } else {
+        return {
+          nextStatus: 'in_production',
+          label: 'Xác nhận & Hàng đợi in 3D',
+          shortLabel: 'Đưa vào in 3D',
+          badge: 'CẦN IN 3D',
+          track: 'print_on_demand',
+          icon: 'fa-cube',
+          buttonClass: 'px-2.5 py-1 rounded bg-[#FF5C00]/20 hover:bg-[#FF5C00]/30 border border-[#FF5C00]/40 text-[#FF5C00] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+        };
+      }
+    }
+
+    if (status === 'confirmed') {
+      if (track === 'in_stock') {
+        return {
+          nextStatus: 'ready_to_pack',
+          label: 'Chuyển đóng gói xuất kho',
+          shortLabel: 'Chờ đóng gói',
+          badge: 'HÀNG SẴN KHO',
+          track: 'in_stock',
+          icon: 'fa-box-archive',
+          buttonClass: 'px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-[#10B981] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+        };
+      } else {
+        return {
+          nextStatus: 'in_production',
+          label: 'Bắt đầu in 3D (Bambu Lab)',
+          shortLabel: 'Bắt đầu in',
+          badge: 'CẦN IN 3D',
+          track: 'print_on_demand',
+          icon: 'fa-cube',
+          buttonClass: 'px-2.5 py-1 rounded bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-400 font-medium text-[11px] transition-colors flex items-center gap-1.5'
+        };
+      }
+    }
+
+    if (status === 'in_production') {
+      return {
+        nextStatus: 'ready_to_pack',
+        label: 'In xong, chuyển đóng gói',
+        shortLabel: 'Đã in xong',
+        badge: 'HOÀN TẤT IN',
+        track: 'print_on_demand',
+        icon: 'fa-box-archive',
+        buttonClass: 'px-2.5 py-1 rounded bg-indigo-600/20 hover:bg-indigo-600/30 border border-indigo-500/30 text-[#818CF8] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+      };
+    }
+
+    if (status === 'quality_check') {
+      return {
+        nextStatus: 'ready_to_pack',
+        label: 'Đạt QC, đóng gói ngay',
+        shortLabel: 'Đạt QC',
+        badge: 'ĐẠT QC',
+        track,
+        icon: 'fa-box-archive',
+        buttonClass: 'px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-[#10B981] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+      };
+    }
+
+    if (status === 'ready_to_pack') {
+      return {
+        nextStatus: 'shipped',
+        label: 'Bàn giao Shipper & Giao',
+        shortLabel: 'Giao hàng',
+        badge: 'SẴN SÀNG GIAO',
+        track,
+        icon: 'fa-truck-fast',
+        buttonClass: 'px-2.5 py-1 rounded bg-sky-600/20 hover:bg-sky-600/30 border border-sky-500/30 text-[#38BDF8] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+      };
+    }
+
+    if (status === 'shipped') {
+      return {
+        nextStatus: 'delivered',
+        label: 'Hoàn thành đơn hàng',
+        shortLabel: 'Hoàn tất',
+        badge: 'ĐANG GIAO',
+        track,
+        icon: 'fa-circle-check',
+        buttonClass: 'px-2.5 py-1 rounded bg-emerald-600/20 hover:bg-emerald-600/30 border border-emerald-500/30 text-[#10B981] font-medium text-[11px] transition-colors flex items-center gap-1.5'
+      };
+    }
+
+    return null;
+  }
+
   window.TTOrderEngine = {
     STATUS_CONFIG,
+    detectOrderTrack,
+    getNextStepAction,
     createOrderRequest,
     getOrderProjection,
     updateOrderStatus,

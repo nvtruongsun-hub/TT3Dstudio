@@ -303,3 +303,41 @@ body.admin-body {
   margin-top: -10px;
   transition: opacity 0.1s ease, transform 0.1s ease;
 }
+
+/* Print Stylesheet for Workshop Packing Slip (A5 / A4) */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #admin-packing-slip-modal,
+  #admin-packing-slip-modal #packing-slip-print-content,
+  #admin-packing-slip-modal #packing-slip-print-content * {
+    visibility: visible;
+  }
+  #admin-packing-slip-modal {
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: #ffffff !important;
+    color: #000000 !important;
+    box-shadow: none !important;
+  }
+  #admin-packing-slip-modal .border-b,
+  #admin-packing-slip-modal .bg-\[\#111114\],
+  #admin-packing-slip-modal #btn-print-packing-slip-action,
+  #admin-packing-slip-modal #btn-close-packing-slip-modal {
+    display: none !important;
+  }
+  #packing-slip-print-content {
+    background: #ffffff !important;
+    color: #111111 !important;
+    padding: 8mm !important;
+  }
+  #packing-slip-print-content * {
+    color: #111111 !important;
+    border-color: #cccccc !important;
+  }
+}
