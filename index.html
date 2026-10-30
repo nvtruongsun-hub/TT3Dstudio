@@ -388,29 +388,10 @@
         </div>
       </section>
 
-      <!-- SECTION: TOÀN BỘ CATALOG & CỬA HÀNG CÓ FILTER & SEARCH -->
-      <!-- SECTION: SẢN PHẨM ĐƯỢC CHỌN (CURATED 6-8 HERO ITEMS CHO TRANG CHỦ GỌN) -->
-      <section class="py-6 sm:py-12 border-b border-[#DCDDD5]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
-          <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div>
-              <span class="text-xs font-mono font-bold text-[#FF5C00] uppercase tracking-wider">Tuyển Chọn Nổi Bật</span>
-              <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F] mt-1">Bắt đầu từ một thiết kế bạn thích.</h2>
-              <p class="text-xs sm:text-sm text-[#586057] mt-1">Bốn gợi ý từ xưởng, để góc nhỏ có thêm một điểm nhấn.</p>
-            </div>
-
-            <a href="#store-catalog" class="inline-flex items-center gap-2 text-xs font-bold text-[#FF5C00] hover:text-[#C44800] transition-colors shrink-0">
-              <span>Xem toàn bộ 55+ sản phẩm</span>
-              <i class="fa-solid fa-arrow-right"></i>
-            </a>
-          </div>
-
-          <!-- Curated Grid (Populated by products-manager.js) -->
-          <div id="curated-product-grid" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-6"></div>
-        </div>
-      </section>
-
+      <!-- SECTION 3: TOÀN BỘ CATALOG & CỬA HÀNG CÓ FILTER & SEARCH DÍNH (STICKY) -->
       <section id="store-catalog" aria-labelledby="collection-title" class="py-6 sm:py-12 border-b border-[#DCDDD5] bg-white">
+        <!-- Hidden curated anchor for backward compatibility -->
+        <div id="curated-product-grid" class="hidden grid-cols-2 sm:grid-cols-2 lg:grid-cols-4" aria-hidden="true"></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           
           <div class="space-y-4 sticky-catalog-header pt-3 pb-3">
@@ -644,13 +625,6 @@
 
 
 
-
-      <section class="minimal-personalize-teaser">
-        <div class="minimal-container minimal-personalize-layout">
-          <div><p class="store-eyebrow">DÀNH RIÊNG CHO BẠN</p><h2>Một cái tên.<br>Một món quà riêng.</h2><p>Chọn mẫu, phối màu và xem trước nội dung cá nhân hóa. Một chi tiết nhỏ làm món quà trở nên đặc biệt.</p><button type="button" class="btn-primary" onclick="window.switchWorkspace('view-personalize')">Cá nhân hóa sản phẩm <span aria-hidden="true">↗</span></button></div>
-          <div class="minimal-personalize-image"><img src="assets/images/products/thumb_1147539.png" alt="Mẫu biển tên cá nhân hóa để bàn" width="700" height="525" loading="lazy"><span>Chọn mẫu → Thêm tên → Gửi yêu cầu</span></div>
-        </div>
-      </section>
 
       <!-- SECTION: QUY TRÌNH TỪ XƯỞNG ĐẾN TAY BẠN (FROM LAB TO LIFE) -->
       <section class="minimal-process"><div class="minimal-container"><div class="minimal-section-heading"><h2>Từ xưởng đến tay bạn.</h2><button class="minimal-text-action" type="button" onclick="window.switchWorkspace('view-tracking')">Tra cứu yêu cầu <span aria-hidden="true">↗</span></button></div><ol><li><span>01</span><div><h3>Chọn sản phẩm</h3><p>Chọn mẫu, màu và nội dung riêng nếu có.</p></div></li><li><span>02</span><div><h3>Xác nhận với xưởng</h3><p>Thống nhất thông tin và thời gian hoàn thiện.</p></div></li><li><span>03</span><div><h3>Chế tác &amp; kiểm tra</h3><p>Hoàn thiện sản phẩm theo nội dung đã chốt.</p></div></li><li><span>04</span><div><h3>Đóng gói &amp; giao hàng</h3><p>Nhận sản phẩm và hướng dẫn sử dụng.</p></div></li></ol></div></section>
@@ -949,59 +923,6 @@
                   </div>
                   <button type="button" 
                           onclick="window.TTCart.addItem({id:'mw-cn-1769352', title:'Biển Mã QR Quầy Thu Ngân Thẻ Trượt', price:69000, qty:1}); window.TTCart.addItem({id:'mw-cn-1147539', title:'Biển Tên Chức Danh Để Bàn Khắc Chữ Theo Yêu Cầu', price:99000, qty:1}); window.TTCart.openCart();" 
-                          class="btn-primary text-xs !py-3 !px-4">
-                    Mua Trọn Bộ
-                  </button>
-                </div>
-              </div>
-
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-    </div>
-          </div>
-
-          <!-- SETUP 2: BÀN TRANG ĐIỂM COQUETTE NƠ LỤA -->
-          <div class="setup-card p-6 sm:p-8">
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              
-              <div class="lg:col-span-7 rounded-2xl overflow-hidden border border-[#DCDDD5] aspect-[16/10] bg-slate-100">
-                <img src="assets/images/product-pleated-vase.jpg" alt="Bàn trang điểm nơ lụa Coquette" class="w-full h-full object-cover">
-              </div>
-
-              <div class="lg:col-span-5 space-y-5">
-                <span class="text-xs font-mono font-bold text-rose-500 uppercase tracking-wider">Setup 02 • Bàn Trang Điểm</span>
-                <h3 class="text-xl sm:text-2xl font-bold text-[#20231F]">Góc Bàn Trang Điểm Nơ Lụa &amp; Coquette</h3>
-                <p class="text-xs text-[#586057] leading-relaxed">
-                  Tone hồng pastel và trắng ngọc trai dịu ngọt, kết hợp ống cắm cọ nếp lụa thắt nơ, bình hoa dập ly xếp nếp và khay trang sức lụa.
-                </p>
-
-                <!-- Hotspot items in this scene -->
-                <div class="space-y-2 pt-2 border-t border-slate-100">
-                  <div class="text-xs font-bold text-[#20231F]">Sản phẩm trong ảnh:</div>
-                  <div class="flex flex-wrap gap-2">
-                    <span class="setup-hotspot-pill cursor-pointer" onclick="window.openProductDetailModal('mw-cn-2084928')">
-                      <span>• Khay nơ lụa Sweet Silk</span>
-                      <strong class="font-mono text-[#FF5C00]">139.000 đ</strong>
-                    </span>
-                    <span class="setup-hotspot-pill cursor-pointer" onclick="window.openProductDetailModal('mw-cn-1646129')">
-                      <span>• Ống cắm cọ Coquette</span>
-                      <strong class="font-mono text-[#FF5C00]">129.000 đ</strong>
-                    </span>
-                  </div>
-                </div>
-
-                <div class="pt-3 border-t border-slate-100 flex items-center justify-between">
-                  <div>
-                    <span class="text-[11px] text-[#586057] block">Giá trọn bộ 2 món (Giảm 10%):</span>
-                    <span class="text-xl font-mono font-bold text-[#FF5C00]">241.000 đ</span>
-                    <span class="text-xs text-slate-400 line-through ml-2">268.000 đ</span>
-                  </div>
-                  <button type="button" 
-                          onclick="window.TTCart.addItem({id:'mw-cn-2084928', title:'Khay nơ lụa Sweet Silk', price:139000, qty:1}); window.TTCart.addItem({id:'mw-cn-1646129', title:'Ống cắm cọ Coquette', price:129000, qty:1}); window.TTCart.openCart();" 
                           class="btn-primary text-xs !py-3 !px-4">
                     Mua Trọn Bộ
                   </button>
