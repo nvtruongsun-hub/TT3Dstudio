@@ -48,24 +48,26 @@ function runTest(name, fn) {
 }
 
 // 1. CSS Design Tokens
-runTest('1. Design Tokens include Tactile Minimalist Palette (--bg-canvas: #F7F6F2, --bg-obsidian: #141413, --accent-craft: #C85A32)', () => {
-  assert.ok(cssContent.includes('--bg-canvas: #F7F6F2') || cssContent.includes('#F7F6F2'), 'Canvas #F7F6F2 must be defined');
-  assert.ok(cssContent.includes('--bg-obsidian: #141413') || cssContent.includes('#141413'), 'Obsidian #141413 must be defined');
-  assert.ok(cssContent.includes('--accent-craft') || cssContent.includes('#C85A32'), 'Accent Terracotta #C85A32 must be defined');
+runTest('1. Scoped storefront palette is integrated without changing the admin stylesheet', () => {
+  assert.ok(cssContent.includes('body.minimal-storefront'), 'Storefront styles must have their own scope');
+  assert.ok(cssContent.includes('--accent-primary:'), 'Storefront must define a shared action color');
+  assert.ok(cssContent.includes('--accent-craft'), 'Craft accent token remains available to components');
   assert.ok(indexHtml.includes('world-class-upgrade.css'), 'index.html must load world-class-upgrade.css');
 });
 
 // 2. Technical Marquee Ticker
-runTest('2. Technical Marquee ticker exists with precision speed and 0.12-0.16mm layer spec', () => {
-  assert.ok(indexHtml.includes('artisan-marquee') || indexHtml.includes('technical-marquee'), 'Marquee element must exist');
-  assert.ok(indexHtml.includes('0.12') || indexHtml.includes('0.12MM') || indexHtml.includes('0.12–0.16MM'), 'Must highlight 0.12mm precision spec');
+runTest('2. Purchase information uses a static accessible strip instead of duplicate scrolling text', () => {
+  assert.ok(indexHtml.includes('class="studio-benefits"'), 'Purchase information strip must exist');
+  assert.ok(indexHtml.includes('aria-label="Thông tin mua hàng"'), 'Purchase information needs an accessible label');
+  assert.ok(!indexHtml.includes('class="marquee-track"'), 'Automatically scrolling duplicate text has been retired');
 });
 
 // 3. Interactive Hero Color Swatches
-runTest('3. Split Hero includes interactive color swatches allowing real-time color preview', () => {
-  assert.ok(indexHtml.includes('hero-swatch-row') || indexHtml.includes('hero-swatches'), 'Hero must contain color swatch row');
-  assert.ok(indexHtml.includes('hero-swatch-dot') || indexHtml.includes('data-hero-color'), 'Hero must contain interactive swatch dots');
-  assert.ok(appJs.includes('heroSwatch') || appJs.includes('hero-swatch') || productsJs.includes('hero-swatch') || indexHtml.includes('switchHeroColor'), 'Logic must support hero color switching');
+runTest('3. Hero exposes manual product selection and an explicitly labelled pause control', () => {
+  assert.ok(indexHtml.includes('data-hero-tab'), 'Hero needs manual product selection');
+  assert.ok(indexHtml.includes('id="studio-motion-toggle"'), 'Automatic rotation must have a control');
+  assert.ok(indexHtml.includes('aria-label="Tạm dừng tự chuyển sản phẩm"'), 'Pause control must have an accessible label');
+  assert.ok(indexHtml.includes('js/studio-experience.js'), 'Motion controller must ship with the storefront');
 });
 
 // 4. Asymmetric Bento Grid

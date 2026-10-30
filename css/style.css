@@ -1885,52 +1885,8 @@ html.light-theme .layercraft-controls-bar {
   border-color: #DCDDD5 !important;
 }
 
-/* ==========================================================================
-   MOBILE STOREFRONT 2-COLUMN GRID & BIRDS-EYE HUB (ARGON 4 SPEC)
-   ========================================================================== */
-@media (max-width: 639px) {
-  .minimal-product-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-    padding: 0 !important;
-  }
-
-  .minimal-storefront #store-product-grid[data-layout="large"] .minimal-product-grid,
-  .minimal-storefront #store-product-grid[data-layout="compact"] .minimal-product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 10px !important;
-  }
-
-  .studio-product-card {
-    border-radius: 12px !important;
-    border: 1px solid #E5E4DE !important;
-    background: #FFFFFF !important;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02) !important;
-  }
-
-  .studio-product-card .product-card-title {
-    min-height: 32px !important;
-    font-size: 12px !important;
-    line-height: 1.3 !important;
-  }
-}
-
-@media (min-width: 640px) and (max-width: 1023px) {
-  .minimal-product-grid {
-    display: grid !important;
-    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-    gap: 16px !important;
-  }
-}
-
-@media (min-width: 1024px) {
-  .minimal-product-grid {
-    display: grid !important;
-    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
-    gap: 24px !important;
-  }
-}
+/* Storefront grid and card sizing are owned by world-class-upgrade.css.
+   The large-image and compact modes retain independent column counts. */
 
 /* Sticky Filter Bar on Scroll */
 .store-filters-sticky-wrapper {

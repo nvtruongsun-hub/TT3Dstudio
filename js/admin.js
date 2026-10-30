@@ -929,6 +929,12 @@
   // 7. ORDER REQUESTS (DRAFTS) TAB & FIRESTORE REALTIME SYNC - DOM Safe (Codex R02, R03)
   let cloudOrders = [];
   let isFirestoreOrdersListening = false;
+  let orderTimeFilter = 'all'; // 'all', 'today', 'yesterday', '7days', 'this_month', 'this_year', 'custom'
+  let orderCustomDateFrom = '';
+  let orderCustomDateTo = '';
+  let orderSearchQuery = '';
+  let orderStatusFilter = '';
+  let currentDetailOrder = null;
 
   function initFirestoreLiveFeed() {
     if (isFirestoreOrdersListening) return;
@@ -964,6 +970,180 @@
     }
   }
 
+  function formatDateTime(isoString) {
+    if (!isoString) return '--/--/---- --:--';
+    try {
+      const d = new Date(isoString);
+      if (isNaN(d.getTime())) return isoString;
+      const dd = String(d.getDate()).padStart(2, '0');
+      const mm = String(d.getMonth() + 1).padStart(2, '0');
+      const yyyy = d.getFullYear();
+      const hh = String(d.getHours()).padStart(2, '0');
+      const min = String(d.getMinutes()).padStart(2, '0');
+      return `${dd}/${mm}/${yyyy} ${hh}:${min}`;
+    } catch (e) {
+      return isoString;
+    }
+  }
+
+  function filterOrdersByTime(orders, timeRange, customFrom, customTo) {
+    if (!Array.isArray(orders)) return [];
+    if (!timeRange || timeRange === 'all') return orders;
+
+    const now = new Date();
+    const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    const startOfYesterday = new Date(startOfToday.getTime() - 86400000);
+    const endOfYesterday = new Date(startOfToday.getTime() - 1);
+    const sevenDaysAgo = new Date(startOfToday.getTime() - 6 * 86400000);
+
+    return orders.filter(ord => {
+      if (!ord.createdAt) return true;
+      const d = new Date(ord.createdAt);
+      if (isNaN(d.getTime())) return true;
+
+      switch (timeRange) {
+        case 'today':
+          return d >= startOfToday;
+        case 'yesterday':
+          return d >= startOfYesterday && d <= endOfYesterday;
+        case '7days':
+          return d >= sevenDaysAgo;
+        case 'this_month':
+          return d.getFullYear() === now.getFullYear() && d.getMonth() === now.getMonth();
+        case 'this_year':
+          return d.getFullYear() === now.getFullYear();
+        case 'custom': {
+          let valid = true;
+          if (customFrom) {
+            const fromD = new Date(customFrom);
+            fromD.setHours(0, 0, 0, 0);
+            if (d < fromD) valid = false;
+          }
+          if (customTo) {
+            const toD = new Date(customTo);
+            toD.setHours(23, 59, 59, 999);
+            if (d > toD) valid = false;
+          }
+          return valid;
+        }
+        default:
+          return true;
+      }
+    });
+  }
+
+  function filterOrdersByQueryAndStatus(orders, query, status) {
+    if (!Array.isArray(orders)) return [];
+    let result = orders;
+
+    if (query) {
+      const q = query.toLowerCase();
+      result = result.filter(o => {
+        const id = (o.orderId || o.clientRequestId || '').toLowerCase();
+        const name = (o.customer?.name || '').toLowerCase();
+        const phone = (o.customer?.phone || '').toLowerCase();
+        const address = (o.customer?.address || '').toLowerCase();
+        const items = (o.items || []).map(i => (i.title || '').toLowerCase()).join(' ');
+        return id.includes(q) || name.includes(q) || phone.includes(q) || address.includes(q) || items.includes(q);
+      });
+    }
+
+    if (status) {
+      result = result.filter(o => o.status === status);
+    }
+
+    return result;
+  }
+
+  function calculateOrderSummary(filteredOrders, allOrders) {
+    const totalRev = filteredOrders.reduce((sum, o) => sum + (o.totals?.finalTotal || o.totals?.payableTotal || 0), 0);
+    const totalCount = filteredOrders.length;
+    const processingCount = filteredOrders.filter(o =>
+      ['handoff_ready', 'request_received', 'confirmed', 'in_production', 'quality_check'].includes(o.status)
+    ).length;
+    const aov = totalCount > 0 ? Math.round(totalRev / totalCount) : 0;
+
+    const kpiRev = document.getElementById('order-kpi-revenue');
+    const kpiCount = document.getElementById('order-kpi-count');
+    const kpiProcessing = document.getElementById('order-kpi-processing');
+    const kpiAov = document.getElementById('order-kpi-aov');
+    const kpiRevSub = document.getElementById('order-kpi-revenue-sub');
+    const kpiCountSub = document.getElementById('order-kpi-count-sub');
+
+    if (kpiRev) kpiRev.textContent = formatMoney(totalRev);
+    if (kpiCount) kpiCount.textContent = String(totalCount);
+    if (kpiProcessing) kpiProcessing.textContent = String(processingCount);
+    if (kpiAov) kpiAov.textContent = formatMoney(aov);
+
+    const timeLabels = {
+      all: 'Toàn thời gian',
+      today: 'Hôm nay',
+      yesterday: 'Hôm qua',
+      '7days': '7 ngày qua',
+      this_month: 'Tháng này',
+      this_year: 'Năm nay',
+      custom: 'Khoảng ngày chọn'
+    };
+    if (kpiRevSub) kpiRevSub.textContent = timeLabels[orderTimeFilter] || 'Kỳ đã chọn';
+    if (kpiCountSub) kpiCountSub.textContent = `${totalCount} / ${allOrders.length} tổng đơn`;
+  }
+
+  function renderOrderBreakdown(orders) {
+    const tbody = document.getElementById('orders-breakdown-tbody');
+    if (!tbody) return;
+
+    if (!Array.isArray(orders) || orders.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="p-4 text-center text-[#71717A] text-xs">
+            Không có dữ liệu tổng kết trong kỳ được chọn.
+          </td>
+        </tr>
+      `;
+      return;
+    }
+
+    const groups = new Map();
+    orders.forEach(ord => {
+      const d = ord.createdAt ? new Date(ord.createdAt) : new Date();
+      const dateKey = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`;
+      if (!groups.has(dateKey)) {
+        groups.set(dateKey, { dateKey, count: 0, completed: 0, revenue: 0, rawDate: d.getTime() });
+      }
+      const grp = groups.get(dateKey);
+      grp.count++;
+      if (ord.status === 'delivered') grp.completed++;
+      grp.revenue += (ord.totals?.finalTotal || ord.totals?.payableTotal || 0);
+    });
+
+    const sortedGroups = Array.from(groups.values()).sort((a, b) => b.rawDate - a.rawDate);
+
+    tbody.innerHTML = '';
+    sortedGroups.slice(0, 10).forEach(grp => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-[#16161A]/50 border-b border-[rgba(255,255,255,0.07)] transition-colors';
+
+      const tdTime = document.createElement('td');
+      tdTime.className = 'p-2.5 font-mono text-[#F4F4F5]';
+      tdTime.textContent = grp.dateKey;
+
+      const tdCount = document.createElement('td');
+      tdCount.className = 'p-2.5 text-center text-[#A1A1AA] font-mono';
+      tdCount.textContent = `${grp.count} đơn`;
+
+      const tdCompleted = document.createElement('td');
+      tdCompleted.className = 'p-2.5 text-center text-[#10B981] font-mono';
+      tdCompleted.textContent = `${grp.completed} đơn`;
+
+      const tdRev = document.createElement('td');
+      tdRev.className = 'p-2.5 text-right font-semibold text-[#10B981] font-mono';
+      tdRev.textContent = formatMoney(grp.revenue);
+
+      tr.append(tdTime, tdCount, tdCompleted, tdRev);
+      tbody.appendChild(tr);
+    });
+  }
+
   function renderOrdersTable() {
     const tableBody = document.getElementById('orders-table-body');
     if (!tableBody) return;
@@ -991,14 +1171,31 @@
       }
     });
 
-    const orders = Array.from(orderMap.values());
+    const allOrders = Array.from(orderMap.values());
 
-    if (!Array.isArray(orders) || orders.length === 0) {
+    // Sort descending by creation date
+    allOrders.sort((a, b) => {
+      const tA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const tB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return tB - tA;
+    });
+
+    // 1. Time range filter
+    const timeFiltered = filterOrdersByTime(allOrders, orderTimeFilter, orderCustomDateFrom, orderCustomDateTo);
+
+    // 2. Query & status filter
+    const displayOrders = filterOrdersByQueryAndStatus(timeFiltered, orderSearchQuery, orderStatusFilter);
+
+    // 3. Dynamic KPI calculation & Breakdown table update
+    calculateOrderSummary(timeFiltered, allOrders);
+    renderOrderBreakdown(timeFiltered);
+
+    if (!Array.isArray(displayOrders) || displayOrders.length === 0) {
       tableBody.innerHTML = `
         <tr>
-          <td colspan="7" class="p-8 text-center text-[#71717A] text-xs">
+          <td colspan="8" class="p-8 text-center text-[#71717A] text-xs">
             <i class="fa-solid fa-inbox text-2xl mb-2 block text-[#71717A]"></i>
-            Chưa có yêu cầu đặt hàng nào trong hệ thống.
+            Không tìm thấy đơn hàng nào phù hợp với bộ lọc hiện tại.
           </td>
         </tr>
       `;
@@ -1006,12 +1203,14 @@
     }
 
     tableBody.innerHTML = '';
-    orders.forEach(ord => {
+    displayOrders.forEach(ord => {
       const itemCount = (ord.items || []).reduce((acc, i) => acc + (i.qty || 1), 0);
       const cleanPhone = (ord.customer?.phone || '').replace(/\D/g, '');
       const ordId = ord.orderId || ord.clientRequestId || 'TT3D-ORDER';
+      const createdDateStr = formatDateTime(ord.createdAt);
+
       const statusCfg = (window.TTOrderEngine && window.TTOrderEngine.STATUS_CONFIG && window.TTOrderEngine.STATUS_CONFIG[ord.status]) || {
-        label: ord.status || 'Đã nhận yêu cầu',
+        label: (ord.status === 'handoff_ready' ? 'Chờ xưởng xác nhận' : (ord.status || 'Đã nhận yêu cầu')),
         badgeClass: 'badge-clean text-[10px]'
       };
 
@@ -1030,7 +1229,13 @@
       }
       tr.appendChild(tdId);
 
-      // 2. Customer Name & Phone
+      // 2. Order Date/Time
+      const tdTime = document.createElement('td');
+      tdTime.className = 'p-3 font-mono tabular-nums text-[11px] text-[#A1A1AA]';
+      tdTime.textContent = createdDateStr;
+      tr.appendChild(tdTime);
+
+      // 3. Customer Name & Phone
       const tdCust = document.createElement('td');
       tdCust.className = 'p-3';
       const nameDiv = document.createElement('div');
@@ -1042,7 +1247,7 @@
       tdCust.append(nameDiv, phoneDiv);
       tr.appendChild(tdCust);
 
-      // 3. Items list
+      // 4. Items list
       const tdItems = document.createElement('td');
       tdItems.className = 'p-3 text-xs text-[#A1A1AA]';
       const countDiv = document.createElement('div');
@@ -1054,28 +1259,39 @@
       tdItems.append(countDiv, listDiv);
       tr.appendChild(tdItems);
 
-      // 4. Total Amount
+      // 5. Total Amount
       const tdTotal = document.createElement('td');
       tdTotal.className = 'p-3 font-mono tabular-nums font-semibold text-xs text-[#10B981]';
       tdTotal.textContent = formatMoney(ord.totals?.finalTotal || ord.totals?.payableTotal || 0);
       tr.appendChild(tdTotal);
 
-      // 5. Real Milestone Status
+      // 6. Real Milestone Status with Vietnamese styling
       const tdStatus = document.createElement('td');
       tdStatus.className = 'p-3 text-center';
       const statusBadge = document.createElement('span');
-      statusBadge.className = 'badge-clean text-[10px]';
-      statusBadge.textContent = statusCfg.label;
+      if (ord.status === 'handoff_ready') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#F59E0B]/30 bg-[#F59E0B]/10 text-[#F59E0B]';
+        statusBadge.textContent = 'Chờ xưởng xác nhận';
+      } else if (ord.status === 'in_production') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#FF5C00]/30 bg-[#FF5C00]/10 text-[#FF5C00]';
+        statusBadge.textContent = statusCfg.label;
+      } else if (ord.status === 'delivered') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#10B981]/30 bg-[#10B981]/10 text-[#10B981]';
+        statusBadge.textContent = statusCfg.label;
+      } else {
+        statusBadge.className = 'badge-clean text-[10px]';
+        statusBadge.textContent = statusCfg.label;
+      }
       tdStatus.appendChild(statusBadge);
       tr.appendChild(tdStatus);
 
-      // 6. ETA
+      // 7. ETA
       const tdEta = document.createElement('td');
       tdEta.className = 'p-3 font-mono tabular-nums text-[11px] text-[#A1A1AA] text-center';
       tdEta.textContent = ord.etaDate || 'Chờ xếp lịch';
       tr.appendChild(tdEta);
 
-      // 7. Actions
+      // 8. Actions
       const tdActions = document.createElement('td');
       tdActions.className = 'p-3 text-center';
       const actionsDiv = document.createElement('div');
@@ -1120,9 +1336,19 @@
       viewBtn.dataset.action = 'admin-view-order';
       viewBtn.dataset.orderId = ordId;
       viewBtn.className = 'p-1.5 rounded hover:bg-[#16161A] text-[#71717A] hover:text-[#F4F4F5] border border-transparent hover:border-[rgba(255,255,255,0.07)] transition-colors';
-      viewBtn.title = 'Xem chi tiết';
+      viewBtn.title = 'Xem chi tiết đơn hàng';
       viewBtn.innerHTML = '<i class="fa-solid fa-eye text-xs"></i>';
       actionsDiv.appendChild(viewBtn);
+
+      // Telegram notification trigger
+      const tgBtn = document.createElement('button');
+      tgBtn.type = 'button';
+      tgBtn.dataset.action = 'admin-send-telegram';
+      tgBtn.dataset.orderId = ordId;
+      tgBtn.className = 'p-1.5 rounded hover:bg-[#16161A] text-[#71717A] hover:text-[#38BDF8] border border-transparent hover:border-[rgba(56,189,248,0.2)] transition-colors';
+      tgBtn.title = 'Gửi thông báo đơn này lên Telegram';
+      tgBtn.innerHTML = '<i class="fa-brands fa-telegram text-xs"></i>';
+      actionsDiv.appendChild(tgBtn);
 
       tdActions.appendChild(actionsDiv);
       tr.appendChild(tdActions);
@@ -1143,6 +1369,26 @@
         if (editBtn) {
           const ordId = editBtn.dataset.orderId;
           if (ordId) openAdminOrderUpdateModal(ordId);
+          return;
+        }
+
+        const tgBtn = e.target.closest('[data-action="admin-send-telegram"]');
+        if (tgBtn) {
+          const ordId = tgBtn.dataset.orderId;
+          const ord = allOrders.find(o => o.orderId === ordId || o.clientRequestId === ordId);
+          if (ord && window.TTTelegram && typeof window.TTTelegram.notifyNewOrder === 'function') {
+            showToast(`Đang gửi thông báo đơn ${ordId} lên Telegram...`);
+            window.TTTelegram.notifyNewOrder(ord).then(res => {
+              if (res && res.ok) {
+                showToast(`Đã gửi thông báo đơn ${ordId} lên Telegram thành công!`);
+              } else {
+                const err = res && res.error ? res.error : (res?.reason === 'unconfigured' ? 'Chưa cấu hình Telegram Bot Token hoặc Chat ID.' : 'Không thể gửi');
+                showToast(`Lỗi gửi Telegram: ${err}`, 'error');
+              }
+            }).catch(err => {
+              showToast(`Lỗi: ${err.message}`, 'error');
+            });
+          }
           return;
         }
 
@@ -1303,16 +1549,137 @@
     const ord = orders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
     if (!ord) return;
 
-    alert(
-      `CHI TIẾT ĐƠN HÀNG: ${ord.orderId || ord.clientRequestId}\n` +
-      `Trạng thái: ${ord.status}\n` +
-      `Thời gian: ${new Date(ord.createdAt).toLocaleString('vi-VN')}\n` +
-      `Khách: ${ord.customer?.name} - SĐT: ${ord.customer?.phone}\n` +
-      `Địa chỉ: ${ord.customer?.address}\n` +
-      `Ghi chú: ${ord.customer?.note || 'Không có'}\n` +
-      `Tổng tiền: ${formatMoney(ord.totals?.finalTotal || ord.totals?.payableTotal || 0)}\n` +
-      `Dự kiến (ETA): ${ord.etaDate || 'Chưa có'}`
-    );
+    currentDetailOrder = ord;
+    const modal = document.getElementById('admin-order-detail-modal');
+    const titleId = document.getElementById('detail-modal-order-id');
+    const content = document.getElementById('detail-modal-content');
+    if (!modal || !content) return;
+
+    if (titleId) titleId.textContent = ord.orderId || ord.clientRequestId || 'TT3D-ORDER';
+
+    const statusCfg = (window.TTOrderEngine && window.TTOrderEngine.STATUS_CONFIG && window.TTOrderEngine.STATUS_CONFIG[ord.status]) || {
+      label: (ord.status === 'handoff_ready' ? 'Chờ xưởng xác nhận' : (ord.status || 'Đã nhận yêu cầu')),
+      badgeClass: 'badge-clean text-[10px]'
+    };
+
+    const createdDateStr = ord.createdAt ? formatDateTime(ord.createdAt) : '--/--/----';
+
+    let itemsRows = '';
+    (ord.items || []).forEach((item, idx) => {
+      const title = item.title || 'Sản phẩm in 3D';
+      const qty = item.qty || 1;
+      const price = formatMoney(item.price || 0);
+      const subtotal = formatMoney((item.price || 0) * qty);
+      let specs = [];
+      if (item.colorName) specs.push(`Màu: ${item.colorName}`);
+      if (item.materialName) specs.push(`Nhựa: ${item.materialName}`);
+      if (item.customText) specs.push(`Khắc: "${item.customText}"`);
+      if (item.fontName) specs.push(`Font: ${item.fontName}`);
+      const specLine = specs.length > 0 ? `<div class="text-[11px] text-[#A1A1AA] mt-0.5">${specs.join(' • ')}</div>` : '';
+
+      itemsRows += `
+        <tr class="border-b border-[rgba(255,255,255,0.05)]">
+          <td class="py-2 font-mono text-[11px] text-[#71717A]">${idx + 1}</td>
+          <td class="py-2">
+            <div class="font-medium text-[#F4F4F5]">${title}</div>
+            ${specLine}
+          </td>
+          <td class="py-2 text-center font-mono tabular-nums text-[#F4F4F5]">${qty}</td>
+          <td class="py-2 text-right font-mono tabular-nums text-[#A1A1AA]">${price}</td>
+          <td class="py-2 text-right font-mono tabular-nums text-[#10B981] font-semibold">${subtotal}</td>
+        </tr>
+      `;
+    });
+
+    content.innerHTML = `
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-3 rounded bg-[#111114] border border-[rgba(255,255,255,0.07)]">
+        <div>
+          <span class="text-[11px] text-[#71717A] block">Khách hàng &amp; Liên hệ</span>
+          <div class="font-semibold text-xs text-[#F4F4F5] mt-0.5">${ord.customer?.name || 'Khách vãng lai'}</div>
+          <div class="font-mono text-xs text-[#38BDF8] mt-0.5">${ord.customer?.phone || 'Chưa có SĐT'}</div>
+          <div class="text-[11px] text-[#A1A1AA] mt-1">${ord.customer?.address || 'Nhận tại xưởng / Thỏa thuận qua Zalo'}</div>
+        </div>
+        <div>
+          <span class="text-[11px] text-[#71717A] block">Thông tin đơn hàng</span>
+          <div class="text-xs text-[#E4E4E7] mt-0.5">Thời gian: <span class="font-mono text-[#F4F4F5]">${createdDateStr}</span></div>
+          <div class="text-xs text-[#E4E4E7] mt-0.5">Kênh tiếp nhận: <span class="font-mono uppercase font-semibold text-[#FF5C00]">${ord.channel || 'zalo'}</span></div>
+          <div class="text-xs text-[#E4E4E7] mt-0.5">Tiến độ: <span class="px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#FF5C00]/30 bg-[#FF5C00]/10 text-[#FF5C00]">${statusCfg.label}</span></div>
+          <div class="text-xs text-[#A1A1AA] mt-0.5">ETA: <span class="font-mono">${ord.etaDate || 'Chờ xếp lịch'}</span></div>
+        </div>
+      </div>
+
+      ${ord.customer?.note ? `
+        <div class="p-2.5 rounded bg-[#111114] border border-[rgba(255,255,255,0.07)]">
+          <span class="text-[11px] text-[#71717A] block">Ghi chú từ khách hàng:</span>
+          <p class="text-xs text-[#F4F4F5] italic mt-0.5">"${ord.customer.note}"</p>
+        </div>
+      ` : ''}
+
+      <div class="space-y-1.5">
+        <span class="text-xs font-semibold text-[#F4F4F5] block">Danh sách sản phẩm (${(ord.items || []).length} món)</span>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs">
+            <thead class="text-[#71717A] border-b border-[rgba(255,255,255,0.07)] font-mono text-[11px]">
+              <tr>
+                <th class="py-1.5 w-6">#</th>
+                <th class="py-1.5">Sản phẩm &amp; Chi tiết</th>
+                <th class="py-1.5 text-center w-12">SL</th>
+                <th class="py-1.5 text-right w-20">Đơn giá</th>
+                <th class="py-1.5 text-right w-24">Thành tiền</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsRows}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between p-3 rounded bg-[#111114] border border-[rgba(255,255,255,0.07)]">
+        <span class="text-xs font-semibold text-[#F4F4F5]">Tổng tiền thanh toán:</span>
+        <span class="text-base font-bold font-mono tabular-nums text-[#10B981]">${formatMoney(ord.totals?.finalTotal || ord.totals?.payableTotal || 0)}</span>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeAdminOrderDetailModal() {
+    const modal = document.getElementById('admin-order-detail-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function openTelegramModal() {
+    const modal = document.getElementById('admin-telegram-modal');
+    if (!modal) return;
+    if (window.TTTelegram && typeof window.TTTelegram.getTelegramConfig === 'function') {
+      const cfg = window.TTTelegram.getTelegramConfig();
+      const tokenInput = document.getElementById('telegram-bot-token');
+      const chatIdInput = document.getElementById('telegram-chat-id');
+      const enabledCheckbox = document.getElementById('telegram-notify-enabled');
+      const testResult = document.getElementById('telegram-test-result');
+      if (tokenInput) tokenInput.value = cfg.token || '';
+      if (chatIdInput) chatIdInput.value = cfg.chatId || '';
+      if (enabledCheckbox) enabledCheckbox.checked = cfg.enabled !== false;
+      if (testResult) {
+        testResult.className = 'hidden';
+        testResult.innerHTML = '';
+      }
+    }
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closeTelegramModal() {
+    const modal = document.getElementById('admin-telegram-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
   }
 
   // 8. EXPORT / IMPORT PRODUCTS.JSON & FIRESTORE DATABASE SYNC
@@ -1450,6 +1817,166 @@
         renderProductsTable();
       });
     }
+
+    // -------------------------------------------------------------------------
+    // Order Filters & Summaries
+    // -------------------------------------------------------------------------
+    const timeFilterGroup = document.getElementById('order-time-filter-group');
+    if (timeFilterGroup) {
+      timeFilterGroup.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-order-time-filter]');
+        if (!btn) return;
+        const filterVal = btn.dataset.orderTimeFilter;
+        orderTimeFilter = filterVal;
+
+        timeFilterGroup.querySelectorAll('[data-order-time-filter]').forEach(b => {
+          if (b.dataset.orderTimeFilter === filterVal) {
+            b.className = 'px-2.5 py-1 rounded text-xs font-mono font-medium border border-[#FF5C00] bg-[#FF5C00]/15 text-[#FF5C00] transition-colors';
+          } else {
+            b.className = 'px-2.5 py-1 rounded text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] transition-colors';
+          }
+        });
+        renderOrdersTable();
+      });
+    }
+
+    const btnApplyCustomDate = document.getElementById('btn-apply-custom-date');
+    if (btnApplyCustomDate) {
+      btnApplyCustomDate.addEventListener('click', () => {
+        const fromVal = document.getElementById('order-date-from')?.value;
+        const toVal = document.getElementById('order-date-to')?.value;
+        if (!fromVal && !toVal) {
+          showToast('Vui lòng chọn ngày bắt đầu hoặc ngày kết thúc.', 'error');
+          return;
+        }
+        orderTimeFilter = 'custom';
+        orderCustomDateFrom = fromVal || '';
+        orderCustomDateTo = toVal || '';
+        renderOrdersTable();
+      });
+    }
+
+    const orderSearchInput = document.getElementById('search-orders-input');
+    if (orderSearchInput) {
+      let debounceTimer = null;
+      orderSearchInput.addEventListener('input', (e) => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          orderSearchQuery = e.target.value.trim();
+          renderOrdersTable();
+        }, 150);
+      });
+    }
+
+    const orderStatusSelect = document.getElementById('filter-order-status');
+    if (orderStatusSelect) {
+      orderStatusSelect.addEventListener('change', (e) => {
+        orderStatusFilter = e.target.value;
+        renderOrdersTable();
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // Telegram Modal & Controls
+    // -------------------------------------------------------------------------
+    const btnOpenTg = document.getElementById('btn-open-telegram-modal');
+    if (btnOpenTg) btnOpenTg.addEventListener('click', openTelegramModal);
+
+    const btnCloseTg = document.getElementById('btn-close-telegram-modal');
+    if (btnCloseTg) btnCloseTg.addEventListener('click', closeTelegramModal);
+
+    const btnCancelTg = document.getElementById('btn-cancel-telegram-modal');
+    if (btnCancelTg) btnCancelTg.addEventListener('click', closeTelegramModal);
+
+    const btnTestTg = document.getElementById('btn-test-telegram');
+    if (btnTestTg) {
+      btnTestTg.addEventListener('click', async () => {
+        const tokenInput = document.getElementById('telegram-bot-token');
+        const chatIdInput = document.getElementById('telegram-chat-id');
+        const testResult = document.getElementById('telegram-test-result');
+        const token = tokenInput ? tokenInput.value.trim() : '';
+        const chatId = chatIdInput ? chatIdInput.value.trim() : '';
+
+        if (!token || !chatId) {
+          if (testResult) {
+            testResult.className = 'p-3 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono block';
+            testResult.textContent = 'Vui lòng nhập đầy đủ Token và Chat ID trước khi kiểm tra.';
+          }
+          return;
+        }
+
+        btnTestTg.disabled = true;
+        btnTestTg.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[10px]"></i><span>Đang gửi test...</span>';
+
+        if (window.TTTelegram && typeof window.TTTelegram.testTelegramConnection === 'function') {
+          const res = await window.TTTelegram.testTelegramConnection(token, chatId);
+          btnTestTg.disabled = false;
+          btnTestTg.innerHTML = '<i class="fa-solid fa-paper-plane text-[10px]"></i><span>Kiểm tra kết nối</span>';
+
+          if (testResult) {
+            if (res.ok) {
+              testResult.className = 'p-3 rounded bg-emerald-500/10 border border-emerald-500/30 text-[#10B981] text-xs font-mono block';
+              testResult.textContent = 'Kết nối thành công! Tin nhắn mẫu đã được gửi tới bot Telegram của bạn.';
+              showToast('Kết nối Telegram thành công!');
+            } else {
+              testResult.className = 'p-3 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono block';
+              testResult.textContent = `Lỗi kết nối Telegram: ${res.error || 'Không thể gửi tin nhắn'}`;
+            }
+          }
+        }
+      });
+    }
+
+    const btnSaveTg = document.getElementById('btn-save-telegram');
+    if (btnSaveTg) {
+      btnSaveTg.addEventListener('click', async () => {
+        const tokenInput = document.getElementById('telegram-bot-token');
+        const chatIdInput = document.getElementById('telegram-chat-id');
+        const enabledCheckbox = document.getElementById('telegram-notify-enabled');
+        const token = tokenInput ? tokenInput.value.trim() : '';
+        const chatId = chatIdInput ? chatIdInput.value.trim() : '';
+        const enabled = enabledCheckbox ? enabledCheckbox.checked : true;
+
+        if (window.TTTelegram && typeof window.TTTelegram.saveTelegramConfig === 'function') {
+          const res = await window.TTTelegram.saveTelegramConfig({ token, chatId, enabled });
+          if (res.ok) {
+            showToast('Đã lưu cấu hình Chatbot Telegram thành công!');
+            closeTelegramModal();
+          } else {
+            showToast(`Lỗi lưu cấu hình: ${res.error}`, 'error');
+          }
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------------
+    // Order Detail Modal Controls
+    // -------------------------------------------------------------------------
+    const btnCloseDetail = document.getElementById('btn-close-detail-modal');
+    if (btnCloseDetail) btnCloseDetail.addEventListener('click', closeAdminOrderDetailModal);
+
+    const btnDetailCloseFooter = document.getElementById('btn-detail-close');
+    if (btnDetailCloseFooter) btnDetailCloseFooter.addEventListener('click', closeAdminOrderDetailModal);
+
+    const btnDetailSendTg = document.getElementById('btn-detail-send-tg');
+    if (btnDetailSendTg) {
+      btnDetailSendTg.addEventListener('click', () => {
+        if (!currentDetailOrder) return;
+        if (window.TTTelegram && typeof window.TTTelegram.notifyNewOrder === 'function') {
+          showToast(`Đang gửi đơn ${currentDetailOrder.orderId || currentDetailOrder.clientRequestId} lên Telegram...`);
+          window.TTTelegram.notifyNewOrder(currentDetailOrder).then(res => {
+            if (res && res.ok) {
+              showToast('Đã gửi thông báo đơn lên Telegram thành công!');
+            } else {
+              const err = res && res.error ? res.error : (res?.reason === 'unconfigured' ? 'Chưa cấu hình Telegram Bot Token hoặc Chat ID.' : 'Không thể gửi');
+              showToast(`Lỗi: ${err}`, 'error');
+            }
+          }).catch(err => {
+            showToast(`Lỗi: ${err.message}`, 'error');
+          });
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -1466,6 +1993,10 @@
     applyPresetToCurrentForm,
     viewOrderDetail,
     renderOrdersTable,
+    filterOrdersByTime,
+    calculateOrderSummary,
+    openTelegramModal,
+    closeTelegramModal,
     renderWorkshopSplineChart,
     loadOverviewStats,
     exportProductsJson,

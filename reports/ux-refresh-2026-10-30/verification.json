@@ -1,0 +1,56 @@
+[
+  {
+    "name": "Four selected products and 55 searchable catalog records",
+    "pass": true
+  },
+  {
+    "name": "Autoplay advances without stealing focus",
+    "pass": true
+  },
+  {
+    "name": "Pause control and manual selection stop automatic rotation",
+    "pass": true
+  },
+  {
+    "name": "Search returns matches and has a usable empty/reset state",
+    "pass": true
+  },
+  {
+    "name": "Ascending price sorting uses actual rendered prices",
+    "pass": true
+  },
+  {
+    "name": "Category tiles activate with Enter and filter 11 records",
+    "pass": true
+  },
+  {
+    "name": "Product configuration still adds an item to the cart",
+    "pass": false,
+    "error": "The expression evaluated to a falsy value:\n\n  assert.ok(Number(count.trim()) > 0)\n"
+  },
+  {
+    "name": "Responsive layout at 1440px",
+    "pass": true
+  },
+  {
+    "name": "Responsive layout at 768px",
+    "pass": true
+  },
+  {
+    "name": "Responsive layout at 390px",
+    "pass": false,
+    "error": "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('#mobile-menu-toggle-btn')\u001b[22m\n\u001b[2m    - locator resolved to <button type=\"button\" aria-label=\"Mở menu\" aria-expanded=\"false\" id=\"mobile-menu-toggle-btn\" aria-controls=\"mobile-nav-drawer\" class=\"md:hidden w-10 h-10 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-primary)]\">…</button>\u001b[22m\n\u001b[2m  - attempting click action\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"px-5 py-3.5 sm:px-6 sm:py-4 border-b border-[#DCDDD5] flex items-center justify-between shrink-0 bg-white\">…</div> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m    - waiting 20ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <div class=\"px-5 py-3.5 sm:px-6 sm:py-4 border-b border-[#DCDDD5] flex items-center justify-between shrink-0 bg-white\">…</div> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 100ms\u001b[22m\n\u001b[2m    14 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <i class=\"fa-solid fa-xmark text-sm\"></i> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <i class=\"fa-solid fa-xmark text-sm\"></i> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"px-5 py-3.5 sm:px-6 sm:py-4 border-b border-[#DCDDD5] flex items-center justify-between shrink-0 bg-white\">…</div> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m       - waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m       - element is visible, enabled and stable\u001b[22m\n\u001b[2m       - scrolling into view if needed\u001b[22m\n\u001b[2m       - done scrolling\u001b[22m\n\u001b[2m       - <div class=\"px-5 py-3.5 sm:px-6 sm:py-4 border-b border-[#DCDDD5] flex items-center justify-between shrink-0 bg-white\">…</div> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m     - retrying click action\u001b[22m\n\u001b[2m       - waiting 500ms\u001b[22m\n\u001b[2m    2 × waiting for element to be visible, enabled and stable\u001b[22m\n\u001b[2m      - element is visible, enabled and stable\u001b[22m\n\u001b[2m      - scrolling into view if needed\u001b[22m\n\u001b[2m      - done scrolling\u001b[22m\n\u001b[2m      - <i class=\"fa-solid fa-xmark text-sm\"></i> from <div role=\"dialog\" id=\"order-modal\" aria-modal=\"true\" aria-labelledby=\"order-prod-title\" aria-describedby=\"order-prod-desc\" class=\"fixed inset-0 z-[130] items-center justify-center p-3 sm:p-5 bg-black/60 backdrop-blur-sm flex active\">…</div> subtree intercepts pointer events\u001b[22m\n\u001b[2m    - retrying click action\u001b[22m\n\u001b[2m      - waiting 500ms\u001b[22m\n"
+  },
+  {
+    "name": "Responsive layout at 320px",
+    "pass": true
+  },
+  {
+    "name": "Reduced motion stops autoplay and reveals content immediately",
+    "pass": true
+  },
+  {
+    "name": "No browser runtime exceptions through the buying flow",
+    "pass": true
+  }
+]
