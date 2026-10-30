@@ -934,6 +934,7 @@
   let orderCustomDateTo = '';
   let orderSearchQuery = '';
   let orderStatusFilter = '';
+  let orderPipelineFilter = 'all'; // 'all', 'pending', 'print_queue', 'ready_to_pack', 'shipped', 'delivered'
   let currentDetailOrder = null;
 
   function initFirestoreLiveFeed() {
@@ -1032,7 +1033,7 @@
     });
   }
 
-  function filterOrdersByQueryAndStatus(orders, query, status) {
+  function filterOrdersByQueryAndStatus(orders, query, status, pipeline = 'all') {
     if (!Array.isArray(orders)) return [];
     let result = orders;
 
@@ -1052,6 +1053,30 @@
       result = result.filter(o => o.status === status);
     }
 
+    if (pipeline && pipeline !== 'all') {
+      result = result.filter(o => {
+        const s = o.status || 'request_received';
+        const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function'
+          ? window.TTOrderEngine.detectOrderTrack(o)
+          : 'in_stock';
+
+        switch (pipeline) {
+          case 'pending':
+            return s === 'handoff_ready' || s === 'request_received';
+          case 'print_queue':
+            return s === 'in_production' || (s === 'confirmed' && track === 'print_on_demand');
+          case 'ready_to_pack':
+            return s === 'ready_to_pack' || s === 'quality_check' || (s === 'confirmed' && track === 'in_stock');
+          case 'shipped':
+            return s === 'shipped';
+          case 'delivered':
+            return s === 'delivered';
+          default:
+            return true;
+        }
+      });
+    }
+
     return result;
   }
 
@@ -1059,7 +1084,7 @@
     const totalRev = filteredOrders.reduce((sum, o) => sum + (o.totals?.finalTotal || o.totals?.payableTotal || 0), 0);
     const totalCount = filteredOrders.length;
     const processingCount = filteredOrders.filter(o =>
-      ['handoff_ready', 'request_received', 'confirmed', 'in_production', 'quality_check'].includes(o.status)
+      ['handoff_ready', 'request_received', 'confirmed', 'in_production', 'quality_check', 'ready_to_pack'].includes(o.status)
     ).length;
     const aov = totalCount > 0 ? Math.round(totalRev / totalCount) : 0;
 
@@ -1086,6 +1111,34 @@
     };
     if (kpiRevSub) kpiRevSub.textContent = timeLabels[orderTimeFilter] || 'Kỳ đã chọn';
     if (kpiCountSub) kpiCountSub.textContent = `${totalCount} / ${allOrders.length} tổng đơn`;
+
+    // Pipeline Count Badges
+    const pAll = allOrders.length;
+    const pPending = allOrders.filter(o => o.status === 'handoff_ready' || o.status === 'request_received').length;
+    const pPrintQueue = allOrders.filter(o => {
+      const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function' ? window.TTOrderEngine.detectOrderTrack(o) : 'in_stock';
+      return o.status === 'in_production' || (o.status === 'confirmed' && track === 'print_on_demand');
+    }).length;
+    const pReadyToPack = allOrders.filter(o => {
+      const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function' ? window.TTOrderEngine.detectOrderTrack(o) : 'in_stock';
+      return o.status === 'ready_to_pack' || o.status === 'quality_check' || (o.status === 'confirmed' && track === 'in_stock');
+    }).length;
+    const pShipped = allOrders.filter(o => o.status === 'shipped').length;
+    const pDelivered = allOrders.filter(o => o.status === 'delivered').length;
+
+    const elAll = document.getElementById('pipeline-count-all');
+    const elPending = document.getElementById('pipeline-count-pending');
+    const elPrintQueue = document.getElementById('pipeline-count-print-queue');
+    const elReadyToPack = document.getElementById('pipeline-count-ready-to-pack');
+    const elShipped = document.getElementById('pipeline-count-shipped');
+    const elDelivered = document.getElementById('pipeline-count-delivered');
+
+    if (elAll) elAll.textContent = String(pAll);
+    if (elPending) elPending.textContent = String(pPending);
+    if (elPrintQueue) elPrintQueue.textContent = String(pPrintQueue);
+    if (elReadyToPack) elReadyToPack.textContent = String(pReadyToPack);
+    if (elShipped) elShipped.textContent = String(pShipped);
+    if (elDelivered) elDelivered.textContent = String(pDelivered);
   }
 
   function renderOrderBreakdown(orders) {
@@ -1203,8 +1256,8 @@
     // 1. Time range filter
     const timeFiltered = filterOrdersByTime(allOrders, orderTimeFilter, orderCustomDateFrom, orderCustomDateTo);
 
-    // 2. Query & status filter
-    const displayOrders = filterOrdersByQueryAndStatus(timeFiltered, orderSearchQuery, orderStatusFilter);
+    // 2. Query, status & pipeline filter (Argon 4 Dual-Track Workflow)
+    const displayOrders = filterOrdersByQueryAndStatus(timeFiltered, orderSearchQuery, orderStatusFilter, orderPipelineFilter);
 
     // 3. Dynamic KPI calculation & Breakdown table update
     calculateOrderSummary(timeFiltered, allOrders);
@@ -1237,16 +1290,46 @@
       const tr = document.createElement('tr');
       tr.className = 'hover:bg-[#16161A]/50 border-b border-[rgba(255,255,255,0.07)] transition-colors';
 
-      // 1. Order ID + Demo badge
+      // 1. Order ID + Track Badges (Argon 4 Dual-Track Pipeline)
+      const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function'
+        ? window.TTOrderEngine.detectOrderTrack(ord)
+        : 'in_stock';
+      const hasCustom = (ord.items || []).some(i => i.customText && String(i.customText).trim());
+
       const tdId = document.createElement('td');
       tdId.className = 'p-3 font-mono tabular-nums text-xs font-semibold text-[#FF5C00]';
       tdId.textContent = ordId;
+
+      const trackWrap = document.createElement('div');
+      trackWrap.className = 'flex flex-col gap-1 mt-1';
+
+      if (track === 'in_stock') {
+        const inStockBadge = document.createElement('span');
+        inStockBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-medium border border-emerald-500/30 bg-emerald-500/10 text-[#10B981] inline-flex items-center gap-1 w-max';
+        inStockBadge.innerHTML = '<i class="fa-solid fa-box-open text-[8px]"></i><span>HÀNG SẴN KHO</span>';
+        trackWrap.appendChild(inStockBadge);
+      } else {
+        const podBadge = document.createElement('span');
+        podBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-medium border border-[#FF5C00]/30 bg-[#FF5C00]/10 text-[#FF5C00] inline-flex items-center gap-1 w-max';
+        podBadge.innerHTML = '<i class="fa-solid fa-cube text-[8px]"></i><span>CẦN IN 3D</span>';
+        trackWrap.appendChild(podBadge);
+      }
+
+      if (hasCustom) {
+        const customBadge = document.createElement('span');
+        customBadge.className = 'px-1.5 py-0.5 rounded text-[9px] font-mono font-medium border border-purple-500/30 bg-purple-500/10 text-purple-400 inline-flex items-center gap-1 w-max';
+        customBadge.innerHTML = '<i class="fa-solid fa-signature text-[8px]"></i><span>CÁ NHÂN HÓA</span>';
+        trackWrap.appendChild(customBadge);
+      }
+
       if (ord.isDemo) {
         const demoTag = document.createElement('span');
-        demoTag.className = 'block text-[9px] font-mono tabular-nums text-[#71717A] font-normal mt-0.5';
+        demoTag.className = 'text-[9px] font-mono tabular-nums text-[#71717A] font-normal';
         demoTag.textContent = '[Minh họa]';
-        tdId.appendChild(demoTag);
+        trackWrap.appendChild(demoTag);
       }
+
+      tdId.appendChild(trackWrap);
       tr.appendChild(tdId);
 
       // 2. Order Date/Time
@@ -1301,6 +1384,9 @@
       } else if (ord.status === 'quality_check') {
         statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#A855F7]/30 bg-[#A855F7]/10 text-[#A855F7] inline-flex items-center gap-1';
         statusBadge.innerHTML = '<i class="fa-solid fa-magnifying-glass text-[9px]"></i><span>Kiểm tra QC</span>';
+      } else if (ord.status === 'ready_to_pack') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#10B981]/30 bg-[#10B981]/10 text-[#10B981] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-box-archive text-[9px]"></i><span>Chờ đóng gói</span>';
       } else if (ord.status === 'shipped') {
         statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#3B82F6]/30 bg-[#3B82F6]/10 text-[#3B82F6] inline-flex items-center gap-1';
         statusBadge.innerHTML = '<i class="fa-solid fa-truck-fast text-[9px]"></i><span>Đang giao</span>';
@@ -1320,41 +1406,46 @@
       tdEta.textContent = ord.etaDate || 'Chờ xếp lịch';
       tr.appendChild(tdEta);
 
-      // 8. Actions
+      // 8. Actions & Contextual Next Step (Argon 4 Dual-Track Workflow)
       const tdActions = document.createElement('td');
-      tdActions.className = 'p-3 text-center';
+      tdActions.className = 'p-3 text-right pr-4';
       const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'flex items-center justify-center gap-1.5 flex-wrap';
+      actionsDiv.className = 'flex items-center justify-end gap-1.5 flex-wrap';
 
-      // 1-Click Workshop Quick Action based on workflow state
-      if (!ord.status || ord.status === 'handoff_ready' || ord.status === 'request_received') {
-        const confirmBtn = document.createElement('button');
-        confirmBtn.type = 'button';
-        confirmBtn.dataset.action = 'admin-quick-confirm';
-        confirmBtn.dataset.orderId = ordId;
-        confirmBtn.className = 'px-2.5 py-1 rounded bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/40 text-[#10B981] font-semibold text-[11px] transition-all flex items-center gap-1 shadow-sm';
-        confirmBtn.title = 'Xưởng xác nhận đơn này và xếp lịch in 3D';
-        confirmBtn.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i><span>Xác nhận</span>';
-        actionsDiv.appendChild(confirmBtn);
-      } else if (ord.status === 'confirmed') {
-        const produceBtn = document.createElement('button');
-        produceBtn.type = 'button';
-        produceBtn.dataset.action = 'admin-start-production';
-        produceBtn.dataset.orderId = ordId;
-        produceBtn.className = 'px-2.5 py-1 rounded bg-[#FF5C00]/15 hover:bg-[#FF5C00]/25 border border-[#FF5C00]/40 text-[#FF5C00] font-semibold text-[11px] transition-all flex items-center gap-1 shadow-sm';
-        produceBtn.title = 'Bắt đầu đưa vào máy in 3D';
-        produceBtn.innerHTML = '<i class="fa-solid fa-cube text-[10px]"></i><span>In 3D</span>';
-        actionsDiv.appendChild(produceBtn);
+      const nextAction = window.TTOrderEngine && typeof window.TTOrderEngine.getNextStepAction === 'function'
+        ? window.TTOrderEngine.getNextStepAction(ord)
+        : null;
+
+      if (nextAction) {
+        const nextBtn = document.createElement('button');
+        nextBtn.type = 'button';
+        nextBtn.dataset.action = 'admin-next-step';
+        nextBtn.dataset.orderId = ordId;
+        nextBtn.dataset.nextStatus = nextAction.nextStatus;
+        nextBtn.className = nextAction.buttonClass;
+        nextBtn.title = `Chuyển tiến độ: ${nextAction.label}`;
+        nextBtn.innerHTML = `<i class="fa-solid ${nextAction.icon} text-[10px]"></i><span>${nextAction.shortLabel || nextAction.label}</span>`;
+        actionsDiv.appendChild(nextBtn);
       }
+
+      // Print Packing Slip Button
+      const slipBtn = document.createElement('button');
+      slipBtn.type = 'button';
+      slipBtn.dataset.action = 'admin-print-slip';
+      slipBtn.dataset.orderId = ordId;
+      slipBtn.className = 'p-1.5 rounded hover:bg-[#16161A] text-[#71717A] hover:text-[#FF5C00] border border-transparent hover:border-[#FF5C00]/30 transition-colors';
+      slipBtn.title = 'In phiếu lệnh xưởng & đóng gói';
+      slipBtn.innerHTML = '<i class="fa-solid fa-print text-xs"></i>';
+      actionsDiv.appendChild(slipBtn);
 
       // Update status & ETA modal button
       const editBtn = document.createElement('button');
       editBtn.type = 'button';
       editBtn.dataset.action = 'admin-edit-order-status';
       editBtn.dataset.orderId = ordId;
-      editBtn.className = 'px-2 py-1 rounded bg-[#16161A] hover:bg-[#FF5C00]/15 border border-[rgba(255,255,255,0.07)] text-[#A1A1AA] hover:text-[#FF5C00] font-medium text-[11px] transition-all flex items-center gap-1';
+      editBtn.className = 'p-1.5 rounded hover:bg-[#16161A] text-[#71717A] hover:text-[#F4F4F5] border border-transparent hover:border-[rgba(255,255,255,0.07)] transition-colors';
       editBtn.title = 'Cập nhật tiến độ chi tiết, hãng vận chuyển và ghi chú';
-      editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square text-[10px]"></i><span>Sửa</span>';
+      editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square text-xs"></i>';
       actionsDiv.appendChild(editBtn);
 
       // Copy Tracking Link
@@ -1408,6 +1499,25 @@
 
     if (!tableBody._hasOrdersDelegation) {
       tableBody.addEventListener('click', (e) => {
+        // Contextual Next Step Button (Argon 4 Dual-Track Pipeline)
+        const nextStepBtn = e.target.closest('[data-action="admin-next-step"]');
+        if (nextStepBtn) {
+          const ordId = nextStepBtn.dataset.orderId;
+          const nextStatus = nextStepBtn.dataset.nextStatus;
+          if (ordId && nextStatus) {
+            handleOrderNextStep(ordId, nextStatus);
+          }
+          return;
+        }
+
+        // Printable Packing Slip Button
+        const printSlipBtn = e.target.closest('[data-action="admin-print-slip"]');
+        if (printSlipBtn) {
+          const ordId = printSlipBtn.dataset.orderId;
+          if (ordId) openPackingSlipModal(ordId);
+          return;
+        }
+
         // Quick Confirm Button
         const quickConfirmBtn = e.target.closest('[data-action="admin-quick-confirm"]');
         if (quickConfirmBtn) {
@@ -1482,12 +1592,18 @@
   }
 
   /**
-   * 1-Click xác nhận đơn hàng của Xưởng (Workshop Quick Confirm)
+   * 1-Click xác nhận đơn hàng của Xưởng (Dual-Track Workshop Quick Confirm)
+   * Tự động phân loại: Hàng sẵn kho -> Chuyển đóng gói (ready_to_pack) | Cần in 3D -> Hàng đợi in (in_production)
    */
   async function confirmOrderQuick(orderId) {
     if (!orderId) return;
 
-    // Calculate tomorrow's date for ETA as DD/MM/YYYY
+    const allOrders = getAllCombinedOrders();
+    const ord = allOrders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
+    const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function'
+      ? window.TTOrderEngine.detectOrderTrack(ord)
+      : 'in_stock';
+
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     const day = String(tomorrow.getDate()).padStart(2, '0');
@@ -1495,13 +1611,22 @@
     const year = tomorrow.getFullYear();
     const defaultEta = `${day}/${month}/${year}`;
 
+    const isFastTrack = (track === 'in_stock');
+    const nextStatus = isFastTrack ? 'ready_to_pack' : 'in_production';
+    const noteMsg = isFastTrack
+      ? 'Đơn hàng toàn bộ là sản phẩm sẵn kho -> Đã chuyển thẳng sang Chờ đóng gói (bỏ qua máy in 3D).'
+      : 'Đơn hàng có sản phẩm cần chế tác/khắc tên -> Đã đưa vào Hàng đợi máy in 3D Bambu Lab.';
+
     const updatePayload = {
-      status: 'confirmed',
+      status: nextStatus,
       etaDate: defaultEta,
-      publicNote: 'Xưởng T&T 3D Labs đã duyệt file in và lên lịch sản xuất.',
+      fulfillmentTrack: track,
+      publicNote: noteMsg,
       customerAlert: {
         type: 'success',
-        message: 'Đơn hàng đã được xưởng xác nhận và xếp lịch in 3D.'
+        message: isFastTrack
+          ? 'Hàng có sẵn tại kho, xưởng đã xác nhận và đang đóng gói chuyển đi.'
+          : 'Đơn hàng đã được xưởng xác nhận và đưa vào hàng đợi in 3D.'
       }
     };
 
@@ -1530,29 +1655,239 @@
       channel.postMessage({
         type: 'ORDER_STATUS_UPDATED',
         orderId: orderId,
-        status: 'confirmed',
+        status: nextStatus,
         etaDate: defaultEta,
         timestamp: new Date().toISOString()
       });
       channel.close();
     } catch (e) {
       try {
-        localStorage.setItem('TT_ORDER_BROADCAST_TRIGGER', JSON.stringify({ orderId, status: 'confirmed', time: Date.now() }));
+        localStorage.setItem('TT_ORDER_BROADCAST_TRIGGER', JSON.stringify({ orderId, status: nextStatus, time: Date.now() }));
       } catch (err) {}
     }
 
     // 5. Telegram notification if enabled
     try {
-      const allOrders = getAllCombinedOrders();
-      const ord = allOrders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
       if (ord && window.TTTelegram && typeof window.TTTelegram.notifyNewOrder === 'function') {
         const confirmedOrd = { ...ord, ...updatePayload };
         window.TTTelegram.notifyNewOrder(confirmedOrd).catch(() => {});
       }
     } catch (e) {}
 
-    showToast(`Đã duyệt đơn #${orderId}! Trạng thái: Xưởng xác nhận (ETA: ${defaultEta})`);
+    showToast(`Đã duyệt đơn #${orderId}! Phân loại: ${isFastTrack ? 'Hàng sẵn kho -> Chờ đóng gói' : 'Cần in 3D -> Hàng đợi in'}`);
     renderOrdersTable();
+  }
+
+  /**
+   * Xử lý chuyển đổi tiến độ theo ngữ cảnh (Contextual Next Step Action)
+   */
+  async function handleOrderNextStep(orderId, nextStatus) {
+    if (!orderId || !nextStatus) return;
+
+    const allOrders = getAllCombinedOrders();
+    const ord = allOrders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
+    const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function'
+      ? window.TTOrderEngine.detectOrderTrack(ord)
+      : 'in_stock';
+
+    let defaultEta = ord?.etaDate || 'Trong ngày';
+    let noteMsg = `Xưởng chuyển tiến độ sang: ${nextStatus}`;
+    let alertMsg = 'Tiến độ đơn hàng của bạn đã được cập nhật.';
+
+    if (nextStatus === 'ready_to_pack') {
+      noteMsg = (track === 'in_stock')
+        ? 'Hàng có sẵn tại kho -> Đã chuyển sang Chờ đóng gói xuất kho.'
+        : 'Đã hoàn tất in 3D và kiểm tra QC -> Chuyển sang Chờ đóng gói.';
+      alertMsg = 'Sản phẩm đã sẵn sàng, xưởng đang đóng gói chống va đập để bàn giao shipper.';
+      defaultEta = 'Hôm nay / Sáng mai';
+    } else if (nextStatus === 'in_production') {
+      noteMsg = 'Đơn có sản phẩm cần in 3D/khắc tên -> Đã đưa vào máy in Bambu Lab.';
+      alertMsg = 'Sản phẩm đang được tạo hình trên dàn máy in 3D Bambu Lab với độ mịn 0.16mm.';
+      defaultEta = '1 - 2 ngày';
+    } else if (nextStatus === 'shipped') {
+      noteMsg = 'Đã đóng gói hoàn tất và bàn giao cho đơn vị vận chuyển.';
+      alertMsg = 'Kiện hàng đã được bàn giao cho đơn vị bưu chính để chuyển tới bạn.';
+      defaultEta = '2 - 3 ngày';
+    } else if (nextStatus === 'delivered') {
+      noteMsg = 'Khách hàng đã nhận hàng thành công.';
+      alertMsg = 'Đơn hàng đã được giao thành công. Cảm ơn bạn đã lựa chọn T&T 3D Labs!';
+    }
+
+    const updatePayload = {
+      status: nextStatus,
+      etaDate: defaultEta,
+      fulfillmentTrack: track,
+      publicNote: noteMsg,
+      customerAlert: {
+        type: 'info',
+        message: alertMsg
+      }
+    };
+
+    if (window.TTOrderEngine && typeof window.TTOrderEngine.updateOrderStatus === 'function') {
+      window.TTOrderEngine.updateOrderStatus(orderId, updatePayload, 'Cập nhật tiến độ');
+    }
+    if (window.TTCheckout && typeof window.TTCheckout.updateDraftOrderStatus === 'function') {
+      window.TTCheckout.updateDraftOrderStatus(orderId, updatePayload);
+    }
+    if (window.TTFirestore && typeof window.TTFirestore.updateOrderStatus === 'function') {
+      try {
+        await window.TTFirestore.updateOrderStatus(orderId, updatePayload);
+      } catch (err) {
+        console.warn('[Admin] Firestore update error:', err);
+      }
+    }
+
+    try {
+      const channel = new BroadcastChannel('TT3D_ORDERS_CHANNEL');
+      channel.postMessage({
+        type: 'ORDER_STATUS_UPDATED',
+        orderId: orderId,
+        status: nextStatus,
+        etaDate: defaultEta,
+        timestamp: new Date().toISOString()
+      });
+      channel.close();
+    } catch (e) {
+      try {
+        localStorage.setItem('TT_ORDER_BROADCAST_TRIGGER', JSON.stringify({ orderId, status: nextStatus, time: Date.now() }));
+      } catch (err) {}
+    }
+
+    const statusLabels = {
+      ready_to_pack: 'Chờ đóng gói',
+      in_production: 'Hàng đợi in 3D',
+      shipped: 'Đang giao hàng',
+      delivered: 'Hoàn tất'
+    };
+    showToast(`Đã chuyển đơn #${orderId} sang "${statusLabels[nextStatus] || nextStatus}"!`);
+    renderOrdersTable();
+  }
+
+  /**
+   * Tạo phiếu lệnh xưởng & đóng gói chuẩn in ấn (A5 / A4)
+   */
+  function openPackingSlipModal(orderId) {
+    const orders = getAllCombinedOrders();
+    const ord = orders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
+    if (!ord) {
+      showToast('Không tìm thấy thông tin đơn hàng để in phiếu!', 'error');
+      return;
+    }
+
+    const modal = document.getElementById('admin-packing-slip-modal');
+    const container = document.getElementById('packing-slip-print-content');
+    if (!modal || !container) return;
+
+    const ordId = ord.orderId || ord.clientRequestId || 'TT3D-ORDER';
+    const track = window.TTOrderEngine && typeof window.TTOrderEngine.detectOrderTrack === 'function'
+      ? window.TTOrderEngine.detectOrderTrack(ord)
+      : 'in_stock';
+    const trackBadge = track === 'in_stock'
+      ? '<span style="border: 1px solid #10B981; color: #10B981; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;">HÀNG SẴN KHO (IN-STOCK FAST TRACK)</span>'
+      : '<span style="border: 1px solid #FF5C00; color: #FF5C00; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; display: inline-block;">CẦN IN 3D (PRINT ON DEMAND - BAMBU LAB)</span>';
+
+    const items = Array.isArray(ord.items) ? ord.items : [];
+    const itemsRows = items.map((item, idx) => {
+      const customBadge = item.customText
+        ? `<div style="color: #A855F7; font-size: 11px; margin-top: 2px; font-weight: 600;">Khắc tên riêng: "${escapeHtml(item.customText)}"</div>`
+        : '';
+      const colorSpec = item.colorName ? `Màu: ${item.colorName}` : '';
+      return `
+        <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <td style="padding: 10px 8px; font-family: monospace;">${idx + 1}</td>
+          <td style="padding: 10px 8px;">
+            <div style="font-weight: 600;">${escapeHtml(item.title || 'Sản phẩm in 3D')}</div>
+            <div style="font-size: 11px; color: #71717A;">${colorSpec}</div>
+            ${customBadge}
+          </td>
+          <td style="padding: 10px 8px; text-align: center; font-family: monospace; font-weight: bold;">x${item.qty || 1}</td>
+          <td style="padding: 10px 8px; text-align: right; font-family: monospace;">${formatMoney(item.price || 0)}</td>
+        </tr>
+      `;
+    }).join('');
+
+    const totalMoney = formatMoney(ord.totals?.finalTotal || ord.totals?.payableTotal || 0);
+
+    container.innerHTML = `
+      <div style="border: 2px solid rgba(255,255,255,0.12); border-radius: 12px; padding: 24px; font-family: 'Plus Jakarta Sans', sans-serif;">
+        <!-- Header -->
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px dashed rgba(255,255,255,0.15); padding-bottom: 16px; margin-bottom: 16px;">
+          <div>
+            <div style="font-size: 18px; font-weight: 800; color: #FF5C00; letter-spacing: -0.02em;">T&amp;T 3D LABS</div>
+            <div style="font-size: 11px; color: #71717A;">Xưởng Chế Tác &amp; Desk Setup Cao Cấp · Hotline/Zalo: 0349.657.529</div>
+            <div style="font-size: 11px; color: #71717A;">Website: nvtruongsun-hub.github.io/TT3Dstudio</div>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-family: monospace; font-size: 14px; font-weight: 800; color: #F4F4F5;">PHIẾU LỆNH XƯỞNG</div>
+            <div style="font-family: monospace; font-size: 13px; color: #FF5C00; font-weight: bold;">#${ordId}</div>
+            <div style="font-size: 10px; color: #71717A; margin-top: 4px;">${formatDateTime(ord.createdAt)}</div>
+          </div>
+        </div>
+
+        <!-- Track & Customer -->
+        <div style="margin-bottom: 16px;">
+          <div style="margin-bottom: 8px;">${trackBadge}</div>
+          <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 12px; font-size: 12px; line-height: 1.6;">
+            <div><strong>Khách hàng:</strong> <span style="font-weight: 600; color: #F4F4F5;">${escapeHtml(ord.customer?.name || 'Khách vãng lai')}</span> - SĐT: <span style="font-family: monospace; color: #38BDF8; font-weight: 600;">${ord.customer?.phone || 'Chưa có'}</span></div>
+            <div><strong>Địa chỉ giao:</strong> ${escapeHtml(ord.customer?.address || 'Nhận tại xưởng / Thỏa thuận qua Zalo')}</div>
+            ${ord.customer?.note ? `<div style="color: #F59E0B; margin-top: 4px;"><strong>Ghi chú của khách:</strong> ${escapeHtml(ord.customer.note)}</div>` : ''}
+          </div>
+        </div>
+
+        <!-- Items Table -->
+        <div style="margin-bottom: 16px;">
+          <div style="font-size: 12px; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; color: #A1A1AA;">Danh mục sản phẩm đóng gói</div>
+          <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+            <thead>
+              <tr style="border-bottom: 1px solid rgba(255,255,255,0.15); color: #71717A; font-family: monospace; font-size: 10px; text-align: left;">
+                <th style="padding: 6px 8px; width: 35px;">STT</th>
+                <th style="padding: 6px 8px;">Mặt hàng &amp; Thuộc tính</th>
+                <th style="padding: 6px 8px; text-align: center; width: 60px;">SL</th>
+                <th style="padding: 6px 8px; text-align: right; width: 90px;">Đơn giá</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${itemsRows}
+            </tbody>
+          </table>
+          <div style="display: flex; justify-content: flex-end; padding-top: 12px; font-size: 14px; font-weight: 800; font-family: monospace; color: #10B981;">
+            TỔNG THANH TOÁN: ${totalMoney}
+          </div>
+        </div>
+
+        <!-- Checklist QC & Đóng gói -->
+        <div style="border: 1px dashed rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; font-size: 11px; background: rgba(255,255,255,0.02);">
+          <div style="font-weight: 700; color: #A1A1AA; margin-bottom: 6px; text-transform: uppercase;">Checklist kiểm tra xưởng (KCS &amp; Đóng gói):</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; color: #71717A;">
+            <div>[  ] Kiểm đếm đủ số lượng &amp; đúng mã màu</div>
+            <div>[  ] Kiểm tra độ mịn phôi in (0.16mm, không xơ)</div>
+            <div>[  ] Đã test chip NFC 1 chạm (nếu có)</div>
+            <div>[  ] Bọc màng xốp 3 lớp chống va đập</div>
+            <div>[  ] Đã dán tem niêm phong T&amp;T 3D Labs</div>
+            <div>[  ] Bỏ kèm thiệp cảm ơn &amp; hướng dẫn sử dụng</div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+
+  function closePackingSlipModal() {
+    const modal = document.getElementById('admin-packing-slip-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function printWorkshopPackingSlip(orderId) {
+    openPackingSlipModal(orderId);
+    setTimeout(() => {
+      window.print();
+    }, 250);
   }
 
   /**
@@ -2275,6 +2610,50 @@
         }
       });
     }
+
+    // -------------------------------------------------------------------------
+    // Dual-Track Pipeline Tabs & Packing Slip Controls (Argon 4 Directive)
+    // -------------------------------------------------------------------------
+    const pipelineTabsGroup = document.getElementById('order-pipeline-tabs');
+    if (pipelineTabsGroup) {
+      pipelineTabsGroup.addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-pipeline-status]');
+        if (!btn) return;
+        orderPipelineFilter = btn.dataset.pipelineStatus || 'all';
+
+        pipelineTabsGroup.querySelectorAll('[data-pipeline-status]').forEach(b => {
+          if (b.dataset.pipelineStatus === orderPipelineFilter) {
+            b.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-medium border border-[#FF5C00] bg-[#FF5C00]/15 text-[#FF5C00] flex items-center gap-1.5 transition-colors';
+          } else {
+            b.className = 'px-3 py-1.5 rounded-lg text-xs font-mono font-medium border border-[rgba(255,255,255,0.07)] hover:border-[#FF5C00]/40 text-[#A1A1AA] hover:text-[#F4F4F5] flex items-center gap-1.5 transition-colors';
+          }
+        });
+        renderOrdersTable();
+      });
+    }
+
+    const btnPrintPackingSlipAction = document.getElementById('btn-print-packing-slip-action');
+    if (btnPrintPackingSlipAction) {
+      btnPrintPackingSlipAction.addEventListener('click', () => {
+        window.print();
+      });
+    }
+
+    const btnClosePackingSlipModal = document.getElementById('btn-close-packing-slip-modal');
+    if (btnClosePackingSlipModal) {
+      btnClosePackingSlipModal.addEventListener('click', closePackingSlipModal);
+    }
+
+    const btnDetailPrintSlip = document.getElementById('btn-detail-print-slip');
+    if (btnDetailPrintSlip) {
+      btnDetailPrintSlip.addEventListener('click', () => {
+        if (!currentDetailOrder) return;
+        const ordId = currentDetailOrder.orderId || currentDetailOrder.clientRequestId;
+        if (ordId) {
+          openPackingSlipModal(ordId);
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -2295,6 +2674,10 @@
     calculateOrderSummary,
     confirmOrderQuick,
     startProductionQuick,
+    handleOrderNextStep,
+    openPackingSlipModal,
+    closePackingSlipModal,
+    printWorkshopPackingSlip,
     batchConfirmPendingOrders,
     getAllCombinedOrders,
     openTelegramModal,
