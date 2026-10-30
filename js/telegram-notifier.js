@@ -372,13 +372,13 @@
   }
 
   // Lắng nghe sự kiện firebase ready nếu firebase khởi tạo sau
-  if (typeof window !== 'undefined') {
+  if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
     window.addEventListener('tt:firebase-ready', () => {
       initFromCloud();
     });
   }
 
-  if (typeof document !== 'undefined') {
+  if (typeof document !== 'undefined' && typeof document.addEventListener === 'function') {
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', initFromCloud);
     } else {
@@ -395,5 +395,9 @@
     testTelegramConnection,
     detectLatestChatId
   };
+
+  if (typeof module !== 'undefined' && module.exports) {
+    module.exports = window.TTTelegram;
+  }
 
 })(typeof window !== 'undefined' ? window : global);
