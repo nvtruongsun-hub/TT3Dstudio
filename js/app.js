@@ -247,6 +247,12 @@
       window.renderStoreProducts(validCat);
     }
 
+    // Cuộn mượt mà xuống Section 3 (Catalog) theo chỉ đạo Argon 4
+    const catalogEl = document.getElementById('store-catalog');
+    if (catalogEl && typeof catalogEl.scrollIntoView === 'function') {
+      catalogEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     // Đồng bộ URL hash
     if (pushHistory && history.pushState && window.location.hash !== targetHash) {
       history.pushState({ viewId: 'view-store', category: validCat }, '', targetHash);
@@ -1531,7 +1537,9 @@
     ];
     if (window.TTCart && typeof window.TTCart.addItem === 'function') {
       comboItems.forEach(item => window.TTCart.addItem(item));
-      if (typeof window.openCartModal === 'function') {
+      if (typeof window.TTCart.openCart === 'function') {
+        window.TTCart.openCart();
+      } else if (typeof window.openCartModal === 'function') {
         window.openCartModal();
       }
     }
