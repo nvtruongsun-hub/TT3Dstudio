@@ -449,8 +449,31 @@
     if (!orderId) return { ok: false, error: 'Thiếu mã đơn hàng' };
 
     const orders = getStoredOrders();
-    const idx = orders.findIndex(o => o.orderId === orderId || o.clientRequestId === orderId);
+    let idx = orders.findIndex(o => o.orderId === orderId || o.clientRequestId === orderId || o.id === orderId);
+
+    // Nếu chưa có trong TT_ORDERS_DATABASE_V1, kiểm tra trong TT_DIRECT_ORDER_DRAFTS_V1
+    if (idx === -1 && typeof localStorage !== 'undefined') {
+      try {
+        const rawDrafts = localStorage.getItem('TT_DIRECT_ORDER_DRAFTS_V1');
+        if (rawDrafts) {
+          const drafts = JSON.parse(rawDrafts);
+          if (Array.isArray(drafts)) {
+            const draftOrd = drafts.find(o => o.orderId === orderId || o.clientRequestId === orderId || o.id === orderId);
+            if (draftOrd) {
+              orders.push({ ...draftOrd });
+              idx = orders.length - 1;
+            }
+          }
+        }
+      } catch (e) {
+        console.warn('[OrderEngine] Lỗi tìm đơn trong draft:', e);
+      }
+    }
+
     if (idx === -1) {
+      if (typeof window !== 'undefined' && window.TTCheckout && typeof window.TTCheckout.updateDraftOrderStatus === 'function') {
+        return window.TTCheckout.updateDraftOrderStatus(orderId, updateData);
+      }
       return { ok: false, error: 'Không tìm thấy đơn hàng' };
     }
 
@@ -496,6 +519,25 @@
 
     orders[idx] = ord;
     saveStoredOrders(orders);
+
+    // Đồng bộ sang kho TT_DIRECT_ORDER_DRAFTS_V1
+    if (typeof localStorage !== 'undefined') {
+      try {
+        const rawDrafts = localStorage.getItem('TT_DIRECT_ORDER_DRAFTS_V1');
+        if (rawDrafts) {
+          const drafts = JSON.parse(rawDrafts);
+          if (Array.isArray(drafts)) {
+            const dIdx = drafts.findIndex(o => o.orderId === orderId || o.clientRequestId === orderId || o.id === orderId);
+            if (dIdx !== -1) {
+              drafts[dIdx] = { ...drafts[dIdx], ...ord };
+              localStorage.setItem('TT_DIRECT_ORDER_DRAFTS_V1', JSON.stringify(drafts));
+            }
+          }
+        }
+      } catch (draftErr) {
+        console.warn('[OrderEngine] Sync to TT_DIRECT_ORDER_DRAFTS_V1 skipped:', draftErr);
+      }
+    }
 
     return {
       ok: true,

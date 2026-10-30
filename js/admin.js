@@ -1144,34 +1144,54 @@
     });
   }
 
-  function renderOrdersTable() {
-    const tableBody = document.getElementById('orders-table-body');
-    if (!tableBody) return;
-
+  /**
+   * Trích xuất danh sách đơn hàng đã gộp từ TTOrderEngine, TTCheckout (Drafts) và Cloud Firestore
+   */
+  function getAllCombinedOrders() {
     const engineOrders = (window.TTOrderEngine && typeof window.TTOrderEngine.getAllOrdersAdmin === 'function')
       ? window.TTOrderEngine.getAllOrdersAdmin()
-      : null;
+      : [];
     const checkoutOrders = (window.TTCheckout && typeof window.TTCheckout.getDraftOrders === 'function')
       ? window.TTCheckout.getDraftOrders()
       : [];
 
-    const localOrders = engineOrders || checkoutOrders;
-
-    // Merge cloudOrders with localOrders (prefer cloud order if exists, avoid duplicates by ID)
     const orderMap = new Map();
-    (localOrders || []).forEach(o => {
-      const id = o.orderId || o.clientRequestId;
-      if (id) orderMap.set(id, o);
+    (engineOrders || []).forEach(o => {
+      const id = o.orderId || o.clientRequestId || o.id;
+      if (id) orderMap.set(id, { ...o });
+    });
+    (checkoutOrders || []).forEach(o => {
+      const id = o.orderId || o.clientRequestId || o.id;
+      if (id) {
+        if (!orderMap.has(id)) {
+          orderMap.set(id, { ...o });
+        } else {
+          orderMap.set(id, { ...orderMap.get(id), ...o });
+        }
+      }
     });
     (cloudOrders || []).forEach(o => {
       const id = o.orderId || o.clientRequestId || o.id;
       if (id) {
-        const local = orderMap.get(id);
+        const local = orderMap.get(id) || {};
         orderMap.set(id, { ...local, ...o });
       }
     });
 
     const allOrders = Array.from(orderMap.values());
+    allOrders.sort((a, b) => {
+      const tA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+      const tB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+      return tB - tA;
+    });
+    return allOrders;
+  }
+
+  function renderOrdersTable() {
+    const tableBody = document.getElementById('orders-table-body');
+    if (!tableBody) return;
+
+    const allOrders = getAllCombinedOrders();
 
     // Sort descending by creation date
     allOrders.sort((a, b) => {
@@ -1269,18 +1289,27 @@
       const tdStatus = document.createElement('td');
       tdStatus.className = 'p-3 text-center';
       const statusBadge = document.createElement('span');
-      if (ord.status === 'handoff_ready') {
-        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#F59E0B]/30 bg-[#F59E0B]/10 text-[#F59E0B]';
-        statusBadge.textContent = 'Chờ xưởng xác nhận';
+      if (ord.status === 'handoff_ready' || ord.status === 'request_received') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#F59E0B]/30 bg-[#F59E0B]/10 text-[#F59E0B] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-clock text-[9px]"></i><span>Chờ xưởng xác nhận</span>';
+      } else if (ord.status === 'confirmed') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#38BDF8]/30 bg-[#38BDF8]/10 text-[#38BDF8] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-clipboard-check text-[9px]"></i><span>Xưởng đã duyệt</span>';
       } else if (ord.status === 'in_production') {
-        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#FF5C00]/30 bg-[#FF5C00]/10 text-[#FF5C00]';
-        statusBadge.textContent = statusCfg.label;
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#FF5C00]/30 bg-[#FF5C00]/10 text-[#FF5C00] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-gear fa-spin text-[9px]"></i><span>Đang in 3D</span>';
+      } else if (ord.status === 'quality_check') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#A855F7]/30 bg-[#A855F7]/10 text-[#A855F7] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-magnifying-glass text-[9px]"></i><span>Kiểm tra QC</span>';
+      } else if (ord.status === 'shipped') {
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#3B82F6]/30 bg-[#3B82F6]/10 text-[#3B82F6] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-truck-fast text-[9px]"></i><span>Đang giao</span>';
       } else if (ord.status === 'delivered') {
-        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#10B981]/30 bg-[#10B981]/10 text-[#10B981]';
-        statusBadge.textContent = statusCfg.label;
+        statusBadge.className = 'px-2 py-0.5 rounded text-[10px] font-mono font-medium border border-[#10B981]/30 bg-[#10B981]/10 text-[#10B981] inline-flex items-center gap-1';
+        statusBadge.innerHTML = '<i class="fa-solid fa-circle-check text-[9px]"></i><span>Đã nhận hàng</span>';
       } else {
         statusBadge.className = 'badge-clean text-[10px]';
-        statusBadge.textContent = statusCfg.label;
+        statusBadge.textContent = statusCfg.label || ord.status || 'Chờ xử lý';
       }
       tdStatus.appendChild(statusBadge);
       tr.appendChild(tdStatus);
@@ -1295,16 +1324,37 @@
       const tdActions = document.createElement('td');
       tdActions.className = 'p-3 text-center';
       const actionsDiv = document.createElement('div');
-      actionsDiv.className = 'flex items-center justify-center gap-1.5';
+      actionsDiv.className = 'flex items-center justify-center gap-1.5 flex-wrap';
 
-      // Update status button
+      // 1-Click Workshop Quick Action based on workflow state
+      if (!ord.status || ord.status === 'handoff_ready' || ord.status === 'request_received') {
+        const confirmBtn = document.createElement('button');
+        confirmBtn.type = 'button';
+        confirmBtn.dataset.action = 'admin-quick-confirm';
+        confirmBtn.dataset.orderId = ordId;
+        confirmBtn.className = 'px-2.5 py-1 rounded bg-[#10B981]/15 hover:bg-[#10B981]/25 border border-[#10B981]/40 text-[#10B981] font-semibold text-[11px] transition-all flex items-center gap-1 shadow-sm';
+        confirmBtn.title = 'Xưởng xác nhận đơn này và xếp lịch in 3D';
+        confirmBtn.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i><span>Xác nhận</span>';
+        actionsDiv.appendChild(confirmBtn);
+      } else if (ord.status === 'confirmed') {
+        const produceBtn = document.createElement('button');
+        produceBtn.type = 'button';
+        produceBtn.dataset.action = 'admin-start-production';
+        produceBtn.dataset.orderId = ordId;
+        produceBtn.className = 'px-2.5 py-1 rounded bg-[#FF5C00]/15 hover:bg-[#FF5C00]/25 border border-[#FF5C00]/40 text-[#FF5C00] font-semibold text-[11px] transition-all flex items-center gap-1 shadow-sm';
+        produceBtn.title = 'Bắt đầu đưa vào máy in 3D';
+        produceBtn.innerHTML = '<i class="fa-solid fa-cube text-[10px]"></i><span>In 3D</span>';
+        actionsDiv.appendChild(produceBtn);
+      }
+
+      // Update status & ETA modal button
       const editBtn = document.createElement('button');
       editBtn.type = 'button';
       editBtn.dataset.action = 'admin-edit-order-status';
       editBtn.dataset.orderId = ordId;
-      editBtn.className = 'px-2 py-1 rounded bg-[#16161A] hover:bg-[#FF5C00]/15 border border-[rgba(255,255,255,0.07)] text-[#FF5C00] font-semibold text-[11px] transition-all flex items-center gap-1';
-      editBtn.title = 'Cập nhật tiến độ và ETA';
-      editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square text-[10px]"></i><span>Cập nhật</span>';
+      editBtn.className = 'px-2 py-1 rounded bg-[#16161A] hover:bg-[#FF5C00]/15 border border-[rgba(255,255,255,0.07)] text-[#A1A1AA] hover:text-[#FF5C00] font-medium text-[11px] transition-all flex items-center gap-1';
+      editBtn.title = 'Cập nhật tiến độ chi tiết, hãng vận chuyển và ghi chú';
+      editBtn.innerHTML = '<i class="fa-solid fa-pen-to-square text-[10px]"></i><span>Sửa</span>';
       actionsDiv.appendChild(editBtn);
 
       // Copy Tracking Link
@@ -1358,6 +1408,22 @@
 
     if (!tableBody._hasOrdersDelegation) {
       tableBody.addEventListener('click', (e) => {
+        // Quick Confirm Button
+        const quickConfirmBtn = e.target.closest('[data-action="admin-quick-confirm"]');
+        if (quickConfirmBtn) {
+          const ordId = quickConfirmBtn.dataset.orderId;
+          if (ordId) confirmOrderQuick(ordId);
+          return;
+        }
+
+        // Quick Start Production Button
+        const startProdBtn = e.target.closest('[data-action="admin-start-production"]');
+        if (startProdBtn) {
+          const ordId = startProdBtn.dataset.orderId;
+          if (ordId) startProductionQuick(ordId);
+          return;
+        }
+
         const viewBtn = e.target.closest('[data-action="admin-view-order"]');
         if (viewBtn) {
           const ordId = viewBtn.dataset.orderId;
@@ -1415,10 +1481,150 @@
     }
   }
 
+  /**
+   * 1-Click xác nhận đơn hàng của Xưởng (Workshop Quick Confirm)
+   */
+  async function confirmOrderQuick(orderId) {
+    if (!orderId) return;
+
+    // Calculate tomorrow's date for ETA as DD/MM/YYYY
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const day = String(tomorrow.getDate()).padStart(2, '0');
+    const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+    const year = tomorrow.getFullYear();
+    const defaultEta = `${day}/${month}/${year}`;
+
+    const updatePayload = {
+      status: 'confirmed',
+      etaDate: defaultEta,
+      publicNote: 'Xưởng T&T 3D Labs đã duyệt file in và lên lịch sản xuất.',
+      customerAlert: {
+        type: 'success',
+        message: 'Đơn hàng đã được xưởng xác nhận và xếp lịch in 3D.'
+      }
+    };
+
+    // 1. Update TTOrderEngine
+    if (window.TTOrderEngine && typeof window.TTOrderEngine.updateOrderStatus === 'function') {
+      window.TTOrderEngine.updateOrderStatus(orderId, updatePayload, 'Xưởng xác nhận');
+    }
+
+    // 2. Update TTCheckout drafts
+    if (window.TTCheckout && typeof window.TTCheckout.updateDraftOrderStatus === 'function') {
+      window.TTCheckout.updateDraftOrderStatus(orderId, updatePayload);
+    }
+
+    // 3. Update Cloud Firestore
+    if (window.TTFirestore && typeof window.TTFirestore.updateOrderStatus === 'function') {
+      try {
+        await window.TTFirestore.updateOrderStatus(orderId, updatePayload);
+      } catch (err) {
+        console.warn('[Admin] Firestore update error:', err);
+      }
+    }
+
+    // 4. Real-time broadcast for customer tracking page
+    try {
+      const channel = new BroadcastChannel('TT3D_ORDERS_CHANNEL');
+      channel.postMessage({
+        type: 'ORDER_STATUS_UPDATED',
+        orderId: orderId,
+        status: 'confirmed',
+        etaDate: defaultEta,
+        timestamp: new Date().toISOString()
+      });
+      channel.close();
+    } catch (e) {
+      try {
+        localStorage.setItem('TT_ORDER_BROADCAST_TRIGGER', JSON.stringify({ orderId, status: 'confirmed', time: Date.now() }));
+      } catch (err) {}
+    }
+
+    // 5. Telegram notification if enabled
+    try {
+      const allOrders = getAllCombinedOrders();
+      const ord = allOrders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
+      if (ord && window.TTTelegram && typeof window.TTTelegram.notifyNewOrder === 'function') {
+        const confirmedOrd = { ...ord, ...updatePayload };
+        window.TTTelegram.notifyNewOrder(confirmedOrd).catch(() => {});
+      }
+    } catch (e) {}
+
+    showToast(`Đã duyệt đơn #${orderId}! Trạng thái: Xưởng xác nhận (ETA: ${defaultEta})`);
+    renderOrdersTable();
+  }
+
+  /**
+   * Bắt đầu đưa đơn vào máy in 3D
+   */
+  async function startProductionQuick(orderId) {
+    if (!orderId) return;
+
+    const updatePayload = {
+      status: 'in_production',
+      publicNote: 'Sản phẩm đang được tạo hình trên máy in 3D Bambu Lab.',
+      customerAlert: {
+        type: 'info',
+        message: 'Xưởng đang in 3D và xử lý bề mặt sản phẩm của bạn.'
+      }
+    };
+
+    if (window.TTOrderEngine && typeof window.TTOrderEngine.updateOrderStatus === 'function') {
+      window.TTOrderEngine.updateOrderStatus(orderId, updatePayload, 'Bắt đầu in 3D');
+    }
+    if (window.TTCheckout && typeof window.TTCheckout.updateDraftOrderStatus === 'function') {
+      window.TTCheckout.updateDraftOrderStatus(orderId, updatePayload);
+    }
+    if (window.TTFirestore && typeof window.TTFirestore.updateOrderStatus === 'function') {
+      try {
+        await window.TTFirestore.updateOrderStatus(orderId, updatePayload);
+      } catch (err) {}
+    }
+    try {
+      const channel = new BroadcastChannel('TT3D_ORDERS_CHANNEL');
+      channel.postMessage({
+        type: 'ORDER_STATUS_UPDATED',
+        orderId: orderId,
+        status: 'in_production',
+        timestamp: new Date().toISOString()
+      });
+      channel.close();
+    } catch (e) {}
+
+    showToast(`Đơn #${orderId} đã chuyển sang: Đang in 3D & Xử lý!`);
+    renderOrdersTable();
+  }
+
+  /**
+   * Xác nhận hàng loạt tất cả đơn đang chờ xưởng xác nhận
+   */
+  async function batchConfirmPendingOrders() {
+    const allOrders = getAllCombinedOrders();
+    const pendingOrders = allOrders.filter(o => o.status === 'handoff_ready' || o.status === 'request_received' || !o.status);
+    if (pendingOrders.length === 0) {
+      showToast('Không có đơn hàng nào đang chờ xưởng xác nhận.', 'info');
+      return;
+    }
+
+    if (!confirm(`Bạn có chắc muốn xác nhận hàng loạt ${pendingOrders.length} đơn hàng đang chờ không?`)) {
+      return;
+    }
+
+    let count = 0;
+    for (const ord of pendingOrders) {
+      const ordId = ord.orderId || ord.clientRequestId;
+      if (ordId) {
+        await confirmOrderQuick(ordId);
+        count++;
+      }
+    }
+    showToast(`Đã xác nhận thành công ${count} đơn hàng chờ!`);
+    renderOrdersTable();
+  }
+
   function openAdminOrderUpdateModal(orderId) {
-    const orders = (window.TTOrderEngine && typeof window.TTOrderEngine.getAllOrdersAdmin === 'function')
-      ? window.TTOrderEngine.getAllOrdersAdmin()
-      : [];
+    const orders = getAllCombinedOrders();
     const ord = orders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
     if (!ord) {
       showToast('Không tìm thấy đơn hàng cần sửa!', 'error');
@@ -1530,22 +1736,34 @@
 
     if (window.TTOrderEngine && typeof window.TTOrderEngine.updateOrderStatus === 'function') {
       window.TTOrderEngine.updateOrderStatus(orderId, updatePayload, 'KTV Quản Trị');
-      if (window.TTFirestore && typeof window.TTFirestore.updateOrderStatus === 'function') {
-        window.TTFirestore.updateOrderStatus(orderId, updatePayload);
-      }
-      showToast(`Đã lưu tiến độ mới cho đơn ${orderId}!`);
-      closeAdminOrderModal();
-      renderOrdersTable();
     }
+    if (window.TTCheckout && typeof window.TTCheckout.updateDraftOrderStatus === 'function') {
+      window.TTCheckout.updateDraftOrderStatus(orderId, updatePayload);
+    }
+    if (window.TTFirestore && typeof window.TTFirestore.updateOrderStatus === 'function') {
+      window.TTFirestore.updateOrderStatus(orderId, updatePayload);
+    }
+    try {
+      const channel = new BroadcastChannel('TT3D_ORDERS_CHANNEL');
+      channel.postMessage({
+        type: 'ORDER_STATUS_UPDATED',
+        orderId: orderId,
+        status: updatePayload.status,
+        timestamp: new Date().toISOString()
+      });
+      channel.close();
+    } catch (e) {}
+
+    showToast(`Đã lưu tiến độ mới cho đơn ${orderId}!`);
+    closeAdminOrderModal();
+    renderOrdersTable();
   }
 
   window.closeAdminOrderModal = closeAdminOrderModal;
   window.saveAdminOrderUpdate = saveAdminOrderUpdate;
 
   function viewOrderDetail(orderId) {
-    const orders = (window.TTOrderEngine && typeof window.TTOrderEngine.getAllOrdersAdmin === 'function')
-      ? window.TTOrderEngine.getAllOrdersAdmin()
-      : ((window.TTCheckout && typeof window.TTCheckout.getDraftOrders === 'function') ? window.TTCheckout.getDraftOrders() : []);
+    const orders = getAllCombinedOrders();
     const ord = orders.find(o => o.orderId === orderId || o.clientRequestId === orderId);
     if (!ord) return;
 
@@ -2037,6 +2255,26 @@
         }
       });
     }
+
+    // -------------------------------------------------------------------------
+    // Workshop Order Confirmation Batch & Detail Handlers
+    // -------------------------------------------------------------------------
+    const btnBatchConfirm = document.getElementById('btn-batch-confirm-orders');
+    if (btnBatchConfirm) {
+      btnBatchConfirm.addEventListener('click', batchConfirmPendingOrders);
+    }
+
+    const btnDetailConfirm = document.getElementById('btn-detail-confirm-order');
+    if (btnDetailConfirm) {
+      btnDetailConfirm.addEventListener('click', async () => {
+        if (!currentDetailOrder) return;
+        const ordId = currentDetailOrder.orderId || currentDetailOrder.clientRequestId;
+        if (ordId) {
+          await confirmOrderQuick(ordId);
+          closeAdminOrderDetailModal();
+        }
+      });
+    }
   }
 
   if (document.readyState === 'loading') {
@@ -2055,6 +2293,10 @@
     renderOrdersTable,
     filterOrdersByTime,
     calculateOrderSummary,
+    confirmOrderQuick,
+    startProductionQuick,
+    batchConfirmPendingOrders,
+    getAllCombinedOrders,
     openTelegramModal,
     closeTelegramModal,
     renderWorkshopSplineChart,

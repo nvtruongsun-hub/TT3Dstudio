@@ -230,6 +230,42 @@
   }
 
   /**
+   * Cập nhật trạng thái đơn hàng trong kho draft TT_DIRECT_ORDER_DRAFTS_V1
+   */
+  function updateDraftOrderStatus(orderId, updateData) {
+    if (!orderId || !updateData) return { ok: false, error: 'Thiếu dữ liệu' };
+    const orders = getDraftOrders();
+    const idx = orders.findIndex(o => o.orderId === orderId || o.clientRequestId === orderId || o.id === orderId);
+    if (idx === -1) {
+      return { ok: false, error: 'Không tìm thấy đơn hàng trong draft' };
+    }
+
+    const ord = orders[idx];
+    if (updateData.status) ord.status = updateData.status;
+    if (updateData.etaDate !== undefined) ord.etaDate = updateData.etaDate;
+    if (updateData.carrier !== undefined) ord.carrier = updateData.carrier;
+    if (updateData.customerAlert !== undefined) ord.customerAlert = updateData.customerAlert;
+    if (updateData.publicNote !== undefined) ord.publicNote = updateData.publicNote;
+    if (updateData.privateNote !== undefined) ord.privateNote = updateData.privateNote;
+    ord.updatedAt = new Date().toISOString();
+
+    if (!Array.isArray(ord.history)) ord.history = [];
+    ord.history.push({
+      status: ord.status,
+      timestamp: ord.updatedAt,
+      note: updateData.historyNote || (updateData.status === 'confirmed' ? 'Xưởng xác nhận đơn và xếp lịch in 3D' : `Đổi trạng thái sang ${updateData.status}`),
+      staff: updateData.staff || 'Quản trị xưởng'
+    });
+
+    try {
+      localStorage.setItem(DRAFT_ORDERS_KEY, JSON.stringify(orders));
+      return { ok: true, order: ord };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  }
+
+  /**
    * Tra cứu đơn hàng theo Mã Đơn chính xác (clientRequestId)
    * Không tìm theo tên, số điện thoại hoặc partial ID ở bản client-side (Codex Directive F06 & R2-06).
    * Trả về view model đã được whitelist projection tối thiểu an toàn, che giấu PII.
@@ -856,6 +892,7 @@
     formatMoney,
     buildOrderMessage,
     getDraftOrders,
+    updateDraftOrderStatus: updateDraftOrderStatus,
     lookupOrder
   };
 
