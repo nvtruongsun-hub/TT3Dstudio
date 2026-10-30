@@ -2566,8 +2566,15 @@
         const chatIdInput = document.getElementById('telegram-chat-id');
         const enabledCheckbox = document.getElementById('telegram-notify-enabled');
         const token = tokenInput ? tokenInput.value.trim() : '';
-        const chatId = chatIdInput ? chatIdInput.value.trim() : '';
+        let chatId = chatIdInput ? chatIdInput.value.trim() : '';
         const enabled = enabledCheckbox ? enabledCheckbox.checked : true;
+
+        // Tự động chuyển số điện thoại thành Chat ID Telegram xưởng đã xác thực (8773439139)
+        if (/^0\d{9,10}$/.test(chatId) || /^\+84\d{9,10}$/.test(chatId)) {
+          console.warn(`[Admin] Phát hiện SĐT (${chatId}). Tự động lưu bằng Chat ID Telegram chuẩn: 8773439139`);
+          chatId = '8773439139';
+          if (chatIdInput) chatIdInput.value = chatId;
+        }
 
         if (window.TTTelegram && typeof window.TTTelegram.saveTelegramConfig === 'function') {
           const res = await window.TTTelegram.saveTelegramConfig({ token, chatId, enabled });

@@ -121,7 +121,8 @@ body.minimal-storefront {
 .bento-card h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); }
 .bento-card p { font-size: 11px; max-width: 240px; line-height: 1.6; color: var(--text-secondary); }
 .bento-card > div { max-width: 62%; position: relative; z-index: 1; }
-.bento-card-bg-img { position: absolute; width: 45%; max-width: 200px; aspect-ratio: 1; object-fit: contain; right: -6px; bottom: -12px; transition: transform .5s var(--ease-out-expo); pointer-events: none; mix-blend-mode: multiply; }
+.bento-card-bg-img { position: absolute; width: 46%; max-width: 190px; aspect-ratio: 1; object-fit: cover; border-radius: 10px; right: 12px; bottom: 12px; border: 1px solid rgba(20, 20, 19, 0.08); box-shadow: 0 4px 16px rgba(20, 20, 19, 0.06); transition: transform .5s var(--ease-out-expo), box-shadow .35s; pointer-events: none; }
+.bento-card:hover .bento-card-bg-img { transform: scale(1.04) translateY(-2px); box-shadow: 0 8px 24px rgba(20, 20, 19, 0.12); }
 .bento-card-badge { position: relative; z-index: 1; font-size: 9px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: .07em; padding: 4px 7px; border: 1px solid var(--border-subtle); border-radius: 4px; background: rgba(255, 255, 255, 0.7); width: fit-content; }
 
 /* Product anatomy: image, useful name, price and one clear action. */
