@@ -1888,6 +1888,66 @@
     const btnCancelTg = document.getElementById('btn-cancel-telegram-modal');
     if (btnCancelTg) btnCancelTg.addEventListener('click', closeTelegramModal);
 
+    // Auto-detect Telegram Chat ID button
+    const btnAutoChatId = document.getElementById('btn-auto-chat-id');
+    if (btnAutoChatId) {
+      btnAutoChatId.addEventListener('click', async () => {
+        const tokenInput = document.getElementById('telegram-bot-token');
+        const chatIdInput = document.getElementById('telegram-chat-id');
+        const testResult = document.getElementById('telegram-test-result');
+        const token = tokenInput ? tokenInput.value.trim() : '';
+
+        if (!token) {
+          if (testResult) {
+            testResult.className = 'p-3 rounded bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs font-mono block';
+            testResult.textContent = 'Vui lòng nhập Telegram Bot Token trước khi bấm Tự động dò Chat ID.';
+          }
+          return;
+        }
+
+        btnAutoChatId.disabled = true;
+        btnAutoChatId.innerHTML = '<i class="fa-solid fa-spinner fa-spin text-[10px]"></i><span>Đang dò ID...</span>';
+
+        if (window.TTTelegram && typeof window.TTTelegram.detectLatestChatId === 'function') {
+          const res = await window.TTTelegram.detectLatestChatId(token);
+          btnAutoChatId.disabled = false;
+          btnAutoChatId.innerHTML = '<i class="fa-solid fa-wand-magic-sparkles text-[10px]"></i><span>Tự động dò Chat ID</span>';
+
+          if (res.ok) {
+            if (chatIdInput) chatIdInput.value = res.chatId;
+            if (testResult) {
+              testResult.className = 'p-3 rounded bg-emerald-500/10 border border-emerald-500/30 text-[#10B981] text-xs font-mono block';
+              testResult.textContent = `Đã tìm thấy Chat ID của ${res.senderName}: ${res.chatId}! Bấm "Kiểm tra kết nối" để thử gửi tin nhắn.`;
+            }
+            showToast(`Đã tìm thấy Chat ID: ${res.chatId}!`);
+          } else {
+            if (testResult) {
+              testResult.className = 'p-3 rounded bg-amber-500/10 border border-amber-500/30 text-[#F59E0B] text-xs font-mono block';
+              testResult.textContent = res.error || 'Chưa tìm thấy tin nhắn nào gửi tới bot.';
+            }
+          }
+        }
+      });
+    }
+
+    // Real-time phone number detection warning on Chat ID input
+    const chatIdInput = document.getElementById('telegram-chat-id');
+    if (chatIdInput) {
+      chatIdInput.addEventListener('input', (e) => {
+        const val = e.target.value.trim();
+        const testResult = document.getElementById('telegram-test-result');
+        if (/^0\d{9,10}$/.test(val)) {
+          if (testResult) {
+            testResult.className = 'p-3 rounded bg-amber-500/10 border border-amber-500/30 text-[#F59E0B] text-xs font-mono block';
+            testResult.innerHTML = `<strong>Lưu ý:</strong> "${val}" là số điện thoại, không phải Telegram Chat ID.<br>Vui lòng mở Telegram bấm <strong>Start</strong> với bot của bạn, rồi bấm <strong>"Tự động dò Chat ID"</strong> hoặc chat với <strong>@userinfobot</strong> để lấy mã ID số nguyên (ví dụ: <code>684920193</code>).`;
+          }
+        } else if (testResult && testResult.textContent.includes('số điện thoại')) {
+          testResult.className = 'hidden';
+          testResult.innerHTML = '';
+        }
+      });
+    }
+
     const btnTestTg = document.getElementById('btn-test-telegram');
     if (btnTestTg) {
       btnTestTg.addEventListener('click', async () => {

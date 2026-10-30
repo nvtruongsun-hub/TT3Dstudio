@@ -1430,8 +1430,8 @@
     }
 
     if (cfg && cfg.shopInfo) {
-      const hotline = cfg.shopInfo.hotline || '0986.888.333';
-      const zalo = cfg.shopInfo.zaloPhone || '0986888333';
+      const hotline = cfg.shopInfo.hotline || '0349.657.529';
+      const zalo = cfg.shopInfo.zaloPhone || '0349657529';
 
       document.querySelectorAll('.dynamic-hotline-text').forEach(el => {
         el.textContent = hotline;
@@ -1515,7 +1515,7 @@
       });
     }
 
-    const defaultZalo = (window.TT_DEFAULT_CONFIG && window.TT_DEFAULT_CONFIG.store && window.TT_DEFAULT_CONFIG.store.zaloUrl) || 'https://zalo.me/0987654321';
+    const defaultZalo = (window.TT_DEFAULT_CONFIG && window.TT_DEFAULT_CONFIG.shopInfo && window.TT_DEFAULT_CONFIG.shopInfo.zaloPhone) ? `https://zalo.me/${window.TT_DEFAULT_CONFIG.shopInfo.zaloPhone}` : 'https://zalo.me/0349657529';
     const targetUrl = customZaloUrl || defaultZalo;
     setTimeout(() => {
       window.open(targetUrl, '_blank');

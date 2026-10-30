@@ -7,8 +7,8 @@ const TT_DEFAULT_CONFIG = {
   shopInfo: {
     brandName: "T&T 3D Labs",
     slogan: "Smart Living & Aesthetic 3D Crafts",
-    hotline: "0986.888.333",
-    zaloPhone: "0986888333",
+    hotline: "0349.657.529",
+    zaloPhone: "0349657529",
     email: "contact@tt3dlabs.vn",
     address: "Số 175 Tây Sơn, Phường Trung Liệt, Quận Đống Đa, Hà Nội",
     workingHours: "Thứ 2 - Chủ Nhật: 08:00 - 21:00 (Dàn máy in chạy 24/7)",
@@ -22,7 +22,7 @@ const TT_DEFAULT_CONFIG = {
     mode: 'manual', // 'manual' (xác thực trực tiếp qua Zalo/Hotline hoặc COD)
     orderEndpoint: null,
     paymentMethods: ['cod', 'zalo'],
-    zaloHandoffPhone: "0986888333",
+    zaloHandoffPhone: "0349657529",
     allowCustomerNotes: true
   },
 
