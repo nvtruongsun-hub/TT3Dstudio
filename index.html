@@ -23,7 +23,7 @@
 
   <link rel="stylesheet" href="css/minimal.css?v=20261027-clarity">
   <link rel="stylesheet" href="css/world-class-upgrade.css?v=20261031-argon-marquee">
-  <link rel="stylesheet" href="css/catalog.css?v=20261031-typo-r1">
+  <link rel="stylesheet" href="css/catalog.css?v=20261031-compact-r1">
 
   <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
   <script type="module" src="js/firebase-init.js?v=1.0"></script>
@@ -41,14 +41,14 @@
   <script src="js/personalize-studio.js?v=4.1"></script>
   <script src="js/gift-quiz.js?v=4.0"></script>
   <script src="js/visual-renderer.js?v=4.0"></script>
-  <script src="js/catalog-store.js?v=4.4-typo-r1"></script>
-  <script src="js/products-manager.js?v=20261031-typo-r1"></script>
+  <script src="js/catalog-store.js?v=4.5-compact-r1"></script>
+  <script src="js/products-manager.js?v=20261031-compact-r1"></script>
   <script src="js/viewer3d.js?v=4.0"></script>
   <script src="js/calculator.js?v=4.0"></script>
   <script src="js/config.js?v=4.0"></script>
   <script src="js/automation-simulator.js?v=4.1"></script>
   <script src="js/product-experience.js?v=20261030-studio" defer></script>
-  <script src="js/app.js?v=4.4-typo-r1" defer></script>
+  <script src="js/app.js?v=4.5-compact-r1" defer></script>
   <script src="js/studio-experience.js?v=20261030" defer></script>
 </head>
 
@@ -439,12 +439,12 @@
               <button type="button" id="store-filters-toggle" class="catalog-filter-toggle" aria-label="Bộ lọc mẫu" aria-expanded="false" aria-controls="store-advanced-filters"><i class="fa-solid fa-sliders" aria-hidden="true"></i><span>Bộ lọc</span><span id="store-filter-count" hidden></span></button>
             </div>
             <div id="store-category-filters" class="catalog-categories" role="group" aria-label="Chọn nhóm mẫu">
-              <button type="button" class="segmented-pill active" data-category="all" aria-pressed="true"><span>Tất cả mẫu</span></button>
-              <button type="button" class="segmented-pill" data-category="Trang_Diem_Vanity" aria-pressed="false"><span>Góc trang điểm</span></button>
-              <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false"><span>Đèn &amp; decor</span></button>
-              <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false"><span>Bàn làm việc</span></button>
-              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false"><span>Cá nhân hóa &amp; NFC</span></button>
-              <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false"><span>Móc khóa &amp; đồ chơi</span></button>
+              <button type="button" class="segmented-pill active" data-category="all" aria-pressed="true"><span>Tất cả</span><span class="catalog-pill-count">(55)</span></button>
+              <button type="button" class="segmented-pill" data-category="Trang_Diem_Vanity" aria-pressed="false"><span>Góc trang điểm</span><span class="catalog-pill-count">(11)</span></button>
+              <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false"><span>Đèn &amp; Decor</span><span class="catalog-pill-count">(11)</span></button>
+              <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false"><span>Bàn làm việc</span><span class="catalog-pill-count">(11)</span></button>
+              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false"><span>Cá nhân hóa</span><span class="catalog-pill-count">(11)</span></button>
+              <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false"><span>Móc khóa &amp; đồ chơi</span><span class="catalog-pill-count">(11)</span></button>
             </div>
             <div id="store-advanced-filters" class="catalog-advanced" hidden>
               <label class="catalog-budget-label" for="store-price-range">Ngân sách<select id="store-price-range"><option value="all">Tất cả mức giá</option><option value="under-100">Dưới 100.000 đ</option><option value="100-200">100.000 đến dưới 200.000 đ</option><option value="over-200">Từ 200.000 đ</option></select><small class="catalog-budget-note">Lọc theo giá mẫu cơ bản. Màu và vật liệu được xác nhận ở bước chọn phiên bản.</small></label>

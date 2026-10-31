@@ -13,7 +13,7 @@
   const EVENT_NAME = 'tt_products_updated';
   const FALLBACK_URL = 'products.json';
   const CURRENT_SCHEMA_VERSION = 5;
-  const CURRENT_CATALOG_REVISION = 'mw-55-v4-typo-r1';
+  const CURRENT_CATALOG_REVISION = 'mw-55-v5-compact-tabs';
 
   // 6 Sản phẩm legacy chuẩn làm fixture làm giàu dữ liệu cũ (Codex Directive)
   const LEGACY_FIXTURE_PRODUCTS = [
