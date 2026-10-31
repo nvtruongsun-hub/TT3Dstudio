@@ -1,0 +1,78 @@
+[
+  {
+    "success": true,
+    "revision": "R11",
+    "format": "banner",
+    "width": 1200,
+    "height": 600,
+    "widthMm": 1200,
+    "heightMm": 600,
+    "imageCount": 2
+  },
+  {
+    "success": true,
+    "revision": "R11",
+    "format": "a2",
+    "width": 840,
+    "height": 1188,
+    "widthMm": 420,
+    "heightMm": 594,
+    "imageCount": 2
+  },
+  {
+    "viewport": 375,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 375,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 768,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 768,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1280,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1280,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1920,
+    "format": "banner",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  },
+  {
+    "viewport": 1920,
+    "format": "a2",
+    "noHorizontalOverflow": true,
+    "visibleSheets": 1,
+    "selected": "true"
+  }
+]

@@ -1,0 +1,30 @@
+{
+  "banner": {
+    "mediaBox": [
+      0,
+      0,
+      3402,
+      1700.88
+    ],
+    "widthMm": 1200.15,
+    "heightMm": 600.03,
+    "pageCount": 1,
+    "targetWidthMm": 1200,
+    "targetHeightMm": 600,
+    "passed": true
+  },
+  "a2": {
+    "mediaBox": [
+      0,
+      0,
+      1191.12,
+      1684.08
+    ],
+    "widthMm": 420.2,
+    "heightMm": 594.11,
+    "pageCount": 1,
+    "targetWidthMm": 420,
+    "targetHeightMm": 594,
+    "passed": true
+  }
+}

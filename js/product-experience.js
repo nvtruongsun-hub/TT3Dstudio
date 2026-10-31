@@ -96,10 +96,12 @@
     const grid = byId('store-product-grid');
     const controls = document.querySelectorAll('[data-product-layout]');
     function setLayout(layout, remember) {
+      const positions = window.TTInterfaceMotion && window.TTInterfaceMotion.captureGrid(grid);
       const selected = layout === 'compact' ? 'compact' : 'large';
       if (grid) grid.dataset.layout = selected;
       controls.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.productLayout === selected)));
       if (remember) { try { localStorage.setItem('tt_product_layout', selected); } catch (_) {} }
+      if (remember && window.TTInterfaceMotion) window.TTInterfaceMotion.animateGrid(grid, positions);
     }
     let saved = 'compact';
     try { saved = localStorage.getItem('tt_product_layout') || 'compact'; } catch (_) {}

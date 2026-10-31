@@ -1,0 +1,66 @@
+{
+  "revision": "R11",
+  "timestamp": "2026-10-30T13:56:21.247Z",
+  "files": [
+    {
+      "path": "poster-artisan-stall.html",
+      "size": 20962,
+      "sha256": "755cc48cb080bbd106d0b3ce389fbc44dd7f1173bb469ef0cdcac5c5a911bfdd"
+    },
+    {
+      "path": "data/poster-r11.json",
+      "size": 1376,
+      "sha256": "c15bb86c3a373e58331cf416b61b600c82d6220a3294563c26d11163d5727fab"
+    },
+    {
+      "path": "assets/images/poster-r11/tactile-trio-vibrant.png",
+      "size": 2195094,
+      "sha256": "2f5518d6dbc2dfa7f5440ed875103a224194af9fad6118e46da1036407721e7b"
+    },
+    {
+      "path": "scripts/export_poster_r11_pdf.js",
+      "size": 9543,
+      "sha256": "85c90163b8fa0d63ed9f5d4e9c37b00712b85b7b42c432d91e95bc3a63f1f99c"
+    },
+    {
+      "path": "reports/poster-r11/TT3D-banner-1200x600.pdf",
+      "size": 2236562,
+      "sha256": "21ebba4bfdf11e742db05c90692df0316d079d9e3485c4415935619cce743f11"
+    },
+    {
+      "path": "reports/poster-r11/TT3D-poster-A2.pdf",
+      "size": 2223153,
+      "sha256": "4e8e0ba3476a8f5911ac4f1df59ad2005b1eed9bc2bb26411be61c1b84ef6b46"
+    },
+    {
+      "path": "reports/poster-r11/banner-pdf.png",
+      "size": 1048201,
+      "sha256": "d22b071caa56cdf3a4708fe2457117dd590444c8e95374a710396a31c814dcfc"
+    },
+    {
+      "path": "reports/poster-r11/a2-pdf.png",
+      "size": 940996,
+      "sha256": "b4ac99566b489485aad1389204cc0eb530bfec57b60949285a5c042908e78545"
+    },
+    {
+      "path": "reports/poster-r11/checks.json",
+      "size": 1419,
+      "sha256": "0f01b5e62642e8b4974926d6b6cd715e82b45ae06619ab7dc193b36cc14d3632"
+    },
+    {
+      "path": "reports/poster-r11/pdf-checks.json",
+      "size": 456,
+      "sha256": "ecaee46009d23202762e65f578d4598efb99c0d8de441e2dd379877eac3335a7"
+    },
+    {
+      "path": "reports/poster-r11/qr-checks.json",
+      "size": 346,
+      "sha256": "a81630ccd9ce60b9a02af7c438aed9af35fadb11c773c2e798e16e0bb9248254"
+    },
+    {
+      "path": "reports/poster-r11/asset-quality.json",
+      "size": 1074,
+      "sha256": "53b9f451f250effec52a965baf6934aed51f3f6c9faef311b4d2fa32d8d99772"
+    }
+  ]
+}

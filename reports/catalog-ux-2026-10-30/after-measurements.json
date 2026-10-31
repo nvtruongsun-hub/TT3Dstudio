@@ -1,0 +1,150 @@
+[
+  {
+    "name": "desktop",
+    "viewport": 1440,
+    "pageWidth": 1440,
+    "firstCard": {
+      "x": 120,
+      "y": 442.5,
+      "width": 384,
+      "height": 620.9375,
+      "top": 442.5,
+      "right": 504,
+      "bottom": 1063.4375,
+      "left": 120
+    },
+    "controls": {
+      "x": 120,
+      "y": 248.5,
+      "width": 1200,
+      "height": 128,
+      "top": 248.5,
+      "right": 1320,
+      "bottom": 376.5,
+      "left": 120
+    },
+    "sortFont": "12px",
+    "catalogCss": "css/catalog.css?v=20261030-choice-v2",
+    "toolbarBounds": [
+      {
+        "left": 992.109375,
+        "right": 1160.1875
+      },
+      {
+        "left": 1174.1875,
+        "right": 1320
+      }
+    ]
+  },
+  {
+    "name": "tablet",
+    "viewport": 768,
+    "pageWidth": 768,
+    "firstCard": {
+      "x": 40,
+      "y": 426.9375,
+      "width": 334,
+      "height": 570.9375,
+      "top": 426.9375,
+      "right": 374,
+      "bottom": 997.875,
+      "left": 40
+    },
+    "controls": {
+      "x": 40,
+      "y": 232.9375,
+      "width": 688,
+      "height": 128,
+      "top": 232.9375,
+      "right": 728,
+      "bottom": 360.9375,
+      "left": 40
+    },
+    "sortFont": "12px",
+    "catalogCss": "css/catalog.css?v=20261030-choice-v2",
+    "toolbarBounds": [
+      {
+        "left": 400.109375,
+        "right": 568.1875
+      },
+      {
+        "left": 582.1875,
+        "right": 728
+      }
+    ]
+  },
+  {
+    "name": "mobile",
+    "viewport": 390,
+    "pageWidth": 390,
+    "firstCard": {
+      "x": 20,
+      "y": 374.25,
+      "width": 170,
+      "height": 398.234375,
+      "top": 374.25,
+      "right": 190,
+      "bottom": 772.484375,
+      "left": 20
+    },
+    "controls": {
+      "x": 20,
+      "y": 190.25,
+      "width": 350,
+      "height": 120,
+      "top": 190.25,
+      "right": 370,
+      "bottom": 310.25,
+      "left": 20
+    },
+    "sortFont": "16px",
+    "catalogCss": "css/catalog.css?v=20261030-choice-v2",
+    "toolbarBounds": [
+      {
+        "left": 102.640625,
+        "right": 239.640625
+      },
+      {
+        "left": 247.640625,
+        "right": 370
+      }
+    ]
+  },
+  {
+    "name": "small-mobile",
+    "viewport": 320,
+    "pageWidth": 320,
+    "firstCard": {
+      "x": 20,
+      "y": 373.78125,
+      "width": 135,
+      "height": 389.734375,
+      "top": 373.78125,
+      "right": 155,
+      "bottom": 763.515625,
+      "left": 20
+    },
+    "controls": {
+      "x": 20,
+      "y": 189.78125,
+      "width": 280,
+      "height": 120,
+      "top": 189.78125,
+      "right": 300,
+      "bottom": 309.78125,
+      "left": 20
+    },
+    "sortFont": "16px",
+    "catalogCss": "css/catalog.css?v=20261030-choice-v2",
+    "toolbarBounds": [
+      {
+        "left": 81,
+        "right": 218
+      },
+      {
+        "left": 226,
+        "right": 300
+      }
+    ]
+  }
+]

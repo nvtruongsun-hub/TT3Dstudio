@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "E-Commerce System Architecture",
+    "output": ".archify/architecture-ecommerce-system-20261031-080700/ecommerce-system.html",
+    "quality_profile": "showcase"
+  },
+  "components": [
+    {
+      "id": "client",
+      "type": "external",
+      "label": "Shoppers",
+      "sublabel": "Web & Mobile App",
+      "icon": "person",
+      "pos": [40, 260],
+      "size": [130, 60]
+    },
+    {
+      "id": "nextjs",
+      "type": "frontend",
+      "label": "Next.js Frontend",
+      "sublabel": "SSR & Storefront :3000",
+      "tag": "BFF Pattern",
+      "brand": "next-js",
+      "pos": [260, 260],
+      "size": [150, 60]
+    },
+    {
+      "id": "gateway",
+      "type": "backend",
+      "label": "Go API Gateway",
+      "sublabel": "Reverse Proxy :8080",
+      "tag": "Auth & Routing",
+      "brand": "go",
+      "pos": [530, 260],
+      "size": [150, 60]
+    },
+    {
+      "id": "redis",
+      "type": "database",
+      "label": "Redis Cache",
+      "sublabel": "Sessions & Catalog :6379",
+      "tag": "In-Memory",
+      "brand": "redis",
+      "pos": [790, 110],
+      "size": [160, 60]
+    },
+    {
+      "id": "ordersvc",
+      "type": "backend",
+      "label": "Go Order Service",
+      "sublabel": "Core E-Commerce :9000",
+      "tag": "gRPC Engine",
+      "brand": "go",
+      "pos": [790, 260],
+      "size": [160, 60]
+    },
+    {
+      "id": "postgres",
+      "type": "database",
+      "label": "PostgreSQL",
+      "sublabel": "Primary Database :5432",
+      "tag": "ACID Storage",
+      "brand": "postgresql",
+      "pos": [1060, 260],
+      "size": [150, 60]
+    },
+    {
+      "id": "kafka",
+      "type": "messagebus",
+      "label": "Kafka Broker",
+      "sublabel": "Event Streaming :9092",
+      "tag": "Distributed Pub/Sub",
+      "brand": "apache-kafka",
+      "pos": [790, 410],
+      "size": [160, 60]
+    },
+    {
+      "id": "worker",
+      "type": "backend",
+      "label": "Fulfillment Worker",
+      "sublabel": "Async Notifications",
+      "tag": "Event Consumer",
+      "pos": [1060, 410],
+      "size": [150, 60]
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "region",
+      "label": "Backend Microservices & Data VPC",
+      "wraps": ["gateway", "ordersvc", "redis", "postgres", "kafka", "worker"]
+    }
+  ],
+  "connections": [
+    {
+      "id": "client-to-nextjs",
+      "from": "client",
+      "to": "nextjs",
+      "label": "HTTPS / UI",
+      "variant": "emphasis"
+    },
+    {
+      "id": "nextjs-to-gateway",
+      "from": "nextjs",
+      "to": "gateway",
+      "label": "REST / GraphQL",
+      "variant": "emphasis"
+    },
+    {
+      "id": "gateway-to-redis",
+      "from": "gateway",
+      "to": "redis",
+      "label": "Rate Limit & Session",
+      "variant": "dashed",
+      "fromSide": "top",
+      "toSide": "left"
+    },
+    {
+      "id": "gateway-to-ordersvc",
+      "from": "gateway",
+      "to": "ordersvc",
+      "label": "gRPC Call",
+      "variant": "emphasis"
+    },
+    {
+      "id": "ordersvc-to-redis",
+      "from": "ordersvc",
+      "to": "redis",
+      "label": "Cache Read/Write",
+      "fromSide": "top",
+      "toSide": "bottom"
+    },
+    {
+      "id": "ordersvc-to-postgres",
+      "from": "ordersvc",
+      "to": "postgres",
+      "label": "SQL Transactions",
+      "variant": "emphasis"
+    },
+    {
+      "id": "ordersvc-to-kafka",
+      "from": "ordersvc",
+      "to": "kafka",
+      "label": "Publish order.created",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top"
+    },
+    {
+      "id": "kafka-to-worker",
+      "from": "kafka",
+      "to": "worker",
+      "label": "Consume Events",
+      "variant": "dashed"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "cyan",
+      "title": "Storefront & Edge",
+      "items": [
+        "Shoppers interact via web and mobile interfaces",
+        "Next.js handles Server-Side Rendering (SSR) and edge page delivery",
+        "Backend-For-Frontend (BFF) securely aggregates downstream API calls"
+      ]
+    },
+    {
+      "dot": "emerald",
+      "title": "Go Gateway & Business Services",
+      "items": [
+        "Go API Gateway manages reverse proxying, JWT authentication, and rate limiting",
+        "Order Service executes core business logic and inventory allocation via gRPC",
+        "Redis stores user sessions and caches hot product catalog entries in-memory"
+      ]
+    },
+    {
+      "dot": "rose",
+      "title": "Persistence & Event Streaming",
+      "items": [
+        "PostgreSQL maintains ACID consistency for orders, billing, and inventory",
+        "Kafka broker streams order.created and payment.completed topics asynchronously",
+        "Fulfillment workers decouple email, SMS, and shipping workflows from user checkout"
+      ]
+    }
+  ]
+}

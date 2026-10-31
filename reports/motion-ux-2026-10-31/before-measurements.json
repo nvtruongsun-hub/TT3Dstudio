@@ -1,0 +1,24 @@
+[
+  {
+    "name": "desktop",
+    "errors": [],
+    "viewport": 1440,
+    "pageWidth": 1440,
+    "products": 105,
+    "heroHeight": 710.75,
+    "headerHeight": 72,
+    "cardCount": 12,
+    "motion": null
+  },
+  {
+    "name": "mobile",
+    "errors": [],
+    "viewport": 390,
+    "pageWidth": 390,
+    "products": 105,
+    "heroHeight": 774.4375,
+    "headerHeight": 62,
+    "cardCount": 12,
+    "motion": null
+  }
+]
