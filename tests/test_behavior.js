@@ -119,7 +119,7 @@ async function runTests() {
 
     await win.TTCatalogStore.initCatalog();
     const prods = win.TTCatalogStore.getProductsSync(false);
-    assert.strictEqual(prods.length, 56, 'Should keep 1 legacy product + 55 new seeds (total 56)');
+    assert.strictEqual(prods.length, 106, 'Should keep 1 legacy product + 105 new seeds (total 106)');
     const p1 = win.TTCatalogStore.getProductByIdSync('prod-1');
     assert.ok(p1, 'prod-1 must exist in store');
     assert.strictEqual(p1.id, 'prod-1');
@@ -321,30 +321,40 @@ async function runTests() {
   });
 
   // -------------------------------------------------------------
-  // CASE 11: Catalog Baseline Contract (55 Items, 11 per Category)
+  // CASE 11: Catalog Baseline Contract (105 Items, 7 Categories)
   // -------------------------------------------------------------
-  await it('Case 11: Catalog contains exactly 55 unique IDs across 5 categories (11 items each)', async () => {
-    assert.strictEqual(defaultCatalog.length, 55, 'Catalog must contain exactly 55 products');
+  await it('Case 11: Catalog contains exactly 105 unique IDs across 7 categories', async () => {
+    assert.strictEqual(defaultCatalog.length, 105, 'Catalog must contain exactly 105 products');
     const ids = new Set(defaultCatalog.map(p => p.id));
-    assert.strictEqual(ids.size, 55, 'All 55 product IDs must be unique');
+    assert.strictEqual(ids.size, 105, 'All 105 product IDs must be unique');
 
-    const expectedCats = ['Trang_Diem_Vanity', 'Decor_Den_Noi_That', 'Do_Choi_Moc_Khoa', 'Hop_De_Ban_Tien_Ich', 'Ca_Nhan_Hoa_NFC'];
-    expectedCats.forEach(cat => {
+    const expectedCounts = {
+      Trang_Diem_Vanity: 12,
+      Decor_Den_Noi_That: 17,
+      Hoa_Decor_Kim_Loai: 10,
+      Hop_De_Ban_Tien_Ich: 14,
+      Ca_Nhan_Hoa_NFC: 11,
+      Do_Choi_Moc_Khoa: 24,
+      Moc_Khoa_Clicker_Viral: 17
+    };
+    Object.entries(expectedCounts).forEach(([cat, count]) => {
       const inCat = defaultCatalog.filter(p => p.category === cat);
-      assert.strictEqual(inCat.length, 11, `Category ${cat} must contain exactly 11 products`);
+      assert.strictEqual(inCat.length, count, `Category ${cat} must contain exactly ${count} products`);
     });
   });
 
   // -------------------------------------------------------------
   // CASE 12: Hero Selection Accuracy (Codex Directive Ranking)
   // -------------------------------------------------------------
-  await it('Case 12: Hero selection identifies exact 5 Hero IDs approved by Codex Master Controller', async () => {
+  await it('Case 12: Hero selection identifies exact 7 Hero IDs approved by Codex Master Controller', async () => {
     const expectedHeroes = {
       Trang_Diem_Vanity: '1646129',
       Decor_Den_Noi_That: '1438306',
-      Do_Choi_Moc_Khoa: '1702306',
+      Hoa_Decor_Kim_Loai: '1334861',
       Hop_De_Ban_Tien_Ich: '1971424',
-      Ca_Nhan_Hoa_NFC: '1836100'
+      Ca_Nhan_Hoa_NFC: '1836100',
+      Do_Choi_Moc_Khoa: '1702306',
+      Moc_Khoa_Clicker_Viral: '1073472'
     };
 
     const win = createMockBrowser();
@@ -361,9 +371,9 @@ async function runTests() {
   });
 
   // -------------------------------------------------------------
-  // CASE 13: Media Pipeline Verification (55/55 Thumbnails Exist)
+  // CASE 13: Media Pipeline Verification (105/105 Thumbnails Exist)
   // -------------------------------------------------------------
-  await it('Case 13: All 55 product images exist on disk in assets/images/products/ and are readable', async () => {
+  await it('Case 13: All 105 product images exist on disk in assets/images/products/ and are readable', async () => {
     defaultCatalog.forEach(p => {
       const imgPath = path.join(__dirname, '..', p.image);
       assert.ok(fs.existsSync(imgPath), `Thumbnail must exist on disk: ${p.image}`);
@@ -407,17 +417,17 @@ async function runTests() {
     vm.runInContext(catalogStoreCode, win);
 
     await win.TTCatalogStore.initCatalog();
-    assert.strictEqual(win.TTCatalogStore.getProductsSync(false).length, 55, 'Initial load has 55 items');
+    assert.strictEqual(win.TTCatalogStore.getProductsSync(false).length, 105, 'Initial load has 105 items');
 
     // Delete one seed
     const idToDelete = defaultCatalog[0].id;
     await win.TTCatalogStore.deleteProduct(idToDelete);
-    assert.strictEqual(win.TTCatalogStore.getProductsSync(false).length, 54, 'Store has 54 items after deletion');
+    assert.strictEqual(win.TTCatalogStore.getProductsSync(false).length, 104, 'Store has 104 items after deletion');
 
     // Re-initialize with same storage and incoming catalog
     await win.TTCatalogStore.initCatalog();
     const reloaded = win.TTCatalogStore.getProductsSync(false);
-    assert.strictEqual(reloaded.length, 54, 'Deleted seed must NOT be resurrected on re-init');
+    assert.strictEqual(reloaded.length, 104, 'Deleted seed must NOT be resurrected on re-init');
     assert.strictEqual(win.TTCatalogStore.getProductByIdSync(idToDelete), null, 'Deleted seed remains absent');
   });
 

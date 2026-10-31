@@ -28,9 +28,9 @@ function runTest(name, fn) {
   }
 }
 
-// 1. All 55 products have differentiation fields
-runTest('All 55 products have cleanTitle, archetypeBadge, useCaseEyebrow, subCategory, and microSpecs', () => {
-  assert.strictEqual(products.length, 55, 'Should have exactly 55 products');
+// 1. All 105 products have differentiation fields
+runTest('All 105 products have cleanTitle, archetypeBadge, useCaseEyebrow, subCategory, and microSpecs', () => {
+  assert.strictEqual(products.length, 105, 'Should have exactly 105 products');
   products.forEach(p => {
     assert.ok(p.cleanTitle && p.cleanTitle.trim().length > 0, `Product ${p.id} missing cleanTitle`);
     assert.ok(p.archetypeBadge && p.archetypeBadge.trim().length > 0, `Product ${p.id} missing archetypeBadge`);

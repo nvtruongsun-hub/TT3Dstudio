@@ -28,7 +28,7 @@ if sys.stderr and hasattr(sys.stderr, "reconfigure"):
 BASE_DIR = Path(__file__).resolve().parent
 BRIDGE_FILE = BASE_DIR / "CODEX_BRIDGE.md"
 RESPONSE_FILE = BASE_DIR / "codex_response.md"
-CODEX_PRIMARY_PATH = r"C:\Users\truongg\AppData\Local\OpenAI\Codex\bin\896a0166b774037a\codex.exe"
+CODEX_PRIMARY_PATH = r"C:\Users\truongg\AppData\Local\OpenAI\Codex\bin\2993767bd1dfb009\codex.exe"
 
 def find_codex_binary():
     if os.path.exists(CODEX_PRIMARY_PATH):
