@@ -311,9 +311,9 @@ async function run() {
     assert.strictEqual(e.win.location.hash, '#store');
     const catalogHtml = e.nodes.get('store-product-grid').innerHTML;
     const productCount = (catalogHtml.match(/<article /g) || []).length;
-    assert.strictEqual(productCount, 8, 'Store initially presents eight purchasable products');
+    assert.strictEqual(productCount, 12, 'Store initially presents twelve purchasable products');
     assert.ok(catalogHtml.includes('data-action="load-more"'), 'Remaining catalog must be reachable through Load more');
-    assert.strictEqual(new Set(Array.from(catalogHtml.matchAll(/<article [^>]+data-product-id="([^"]+)"/g), match => match[1])).size, 8, 'Visible products must have distinct identities');
+    assert.strictEqual(new Set(Array.from(catalogHtml.matchAll(/<article [^>]+data-product-id="([^"]+)"/g), match => match[1])).size, 12, 'Visible products must have distinct identities');
   });
 
   // Ca H: Swatch click uses DOM/dataset delegation, escaping injection payloads

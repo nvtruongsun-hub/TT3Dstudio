@@ -94,8 +94,17 @@
     }
   }
   let currentSearchKeyword = '';
-  let visibleProductLimit = 8;
+  const CATALOG_PAGE_SIZE = 12;
+  let visibleProductLimit = CATALOG_PAGE_SIZE;
   let currentSortMode = 'curated';
+  let currentPriceRange = 'all';
+  const PRICE_RANGES = {
+    all: { label: 'Tất cả mức giá', min: 0, max: Infinity },
+    'under-100': { label: 'Dưới 100.000 đ', min: 0, max: 100000 },
+    '100-200': { label: '100.000 đến dưới 200.000 đ', min: 100000, max: 200000 },
+    'over-200': { label: 'Từ 200.000 đ', min: 200000, max: Infinity }
+  };
+  let isCatalogLoading = true;
   window.cardSelectedColors = window.cardSelectedColors || {};
 
   // 2. HELPER FUNCTIONS & SANITIZERS
@@ -205,108 +214,33 @@
 
   // 3. HTML TEMPLATE BUILDERS (XSS-Safe)
   function buildProductCardHTML(item) {
-    const safeImage = sanitizeImageUrl(item.image);
-    const priceFormatted = formatMoney(item.price);
-    const originalPriceFormatted = item.originalPrice ? formatMoney(item.originalPrice) : '';
-
-    const swatches = (Array.isArray(item.colors) && item.colors.length > 0) ? item.colors : [
-      { id: 'black', name: 'Đen Obsidian', hex: '#26282B' },
-      { id: 'white', name: 'Trắng Sứ Nordic', hex: '#F5F2EB' },
-      { id: 'terracotta', name: 'Cam Đất Mờ', hex: '#C85A32' }
-    ];
-
-    const currentSwatchId = window.cardSelectedColors[item.id] || swatches[0].id;
-    const currentSwatch = swatches.find(s => s.id === currentSwatchId) || swatches[0];
-
-    const cleanTitle = item.cleanTitle || getCleanTitle(item.title);
-    const sp = item.specs || {};
-    const specLine = item.microSpecs || item.specLine || (sp.dimensions ? `📐 ${sp.dimensions} • ${sp.material || 'Bio-PLA'}` : '🌱 Nhựa Bio-PLA • 0.16mm');
-
-    const badgeText = item.archetypeBadge || item.badge;
-    const badgeTheme = item.badgeTheme || 'default';
-    const isNFC = item.category === 'Ca_Nhan_Hoa_NFC' && (item.type === 'nfc' || (item.title && (item.title.toLowerCase().includes('nfc') || item.title.toLowerCase().includes('wifi'))));
-
-    const specPillText = isNFC ? 'NFC tích hợp' : 'Chế tác theo mẫu';
-
+    const title = item.cleanTitle || getCleanTitle(item.title);
+    const swatches = (Array.isArray(item.colors) ? item.colors : []).filter(color => isValidHex(color.hex));
+    const category = CATEGORY_REGISTRY[item.category]?.shortName || 'Thiết kế T&T';
+    const benefit = item.headlineBenefit || item.microSpecs || item.specLine || item.desc || '';
+    const hasVariants = Array.isArray(item.materials) && item.materials.some(material => Number(material.priceModifier) > 0);
+    const personalizable = item.type === 'monogram' || item.requiresCustomText || item.specs?.requireCustomText;
+    const isNFC = /nfc|wifi/i.test(item.title || '') && item.category === 'Ca_Nhan_Hoa_NFC';
+    const badge = personalizable ? 'Thêm tên riêng' : (isNFC ? 'NFC tích hợp' : '');
+    const original = Number(item.originalPrice) > Number(item.price) ? formatMoney(item.originalPrice) : '';
     return `
-      <article class="tt-product-card minimal-product-card studio-product-card group cursor-pointer flex flex-col justify-between" data-product-id="${escapeHTML(item.id)}" onclick="if(!event.target.closest('[data-action]')) window.openProductDetailModal('${escapeHTML(item.id)}')">
-        <!-- Clean Product Visual Frame (Aspect 1:1) -->
-        <button type="button" aria-label="Xem ${escapeHTML(cleanTitle)}" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" class="tt-product-media product-image-box relative overflow-hidden group aspect-square block w-full bg-[#F2F0EA]">
-          <span class="tt-spec-pill spec-code">${specPillText}</span>
-          <img src="${safeImage}" 
-               width="400" 
-               height="400" 
-               loading="lazy" 
-               decoding="async" 
-               alt="${escapeHTML(item.imageAlt || cleanTitle)}" 
-               id="img-${escapeHTML(item.id)}"
-               class="studio-crisp-img w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-               onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
-          
-          <!-- Archetype & Engineering Badge (Compact Studio Pill) -->
-          ${badgeText ? `
-            <div class="absolute bottom-2 left-2 pointer-events-none z-10 max-w-[85%]">
-              <span class="px-1.5 py-0.5 rounded-md text-[9px] font-bold ${getBadgeThemeClass(badgeTheme)} shadow-xs flex items-center gap-1 border backdrop-blur-xs bg-opacity-95 truncate">
-                <span class="w-1.5 h-1.5 rounded-full shrink-0 ${getBadgeDotClass(badgeTheme)}"></span>
-                <span class="truncate">${escapeHTML(badgeText)}</span>
-              </span>
-            </div>
-          ` : (isNFC ? `
-            <div class="absolute bottom-2 left-2 pointer-events-none z-10">
-              <span class="px-1.5 py-0.5 rounded-md text-[9px] font-bold bg-[#FAF5FF]/95 text-[#6B21A8] border border-[#E9D5FF] shadow-xs flex items-center gap-1">
-                <span class="w-1.5 h-1.5 rounded-full bg-[#6B21A8] shrink-0"></span>
-                <span>NFC 1-Chạm</span>
-              </span>
-            </div>
-          ` : '')}
+      <article class="catalog-product-card tt-product-card studio-product-card" data-product-id="${escapeHTML(item.id)}">
+        <button type="button" class="catalog-product-photo tt-product-media" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" aria-label="Xem ảnh và chi tiết ${escapeHTML(title)}">
+          <img src="${sanitizeImageUrl(item.image)}" width="600" height="600" loading="lazy" decoding="async" alt="${escapeHTML(item.imageAlt || title)}" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+          ${badge ? `<span class="catalog-product-badge">${badge}</span>` : ''}
+          <span class="catalog-photo-hint" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
         </button>
-
-        <!-- Card Content Body (Compact Ergonomic Padding) -->
-        <div class="tt-product-body p-2 sm:p-3.5 flex flex-col flex-1 justify-between gap-1.5">
-          <div class="space-y-1">
-            
-            <!-- Color Swatches Row (Tactile preview) -->
-            <div class="tt-swatch-row" aria-label="Màu sắc có sẵn">
-              ${swatches.slice(0, 3).map(s => `
-                <span class="tt-swatch-dot" style="background: ${s.hex};" title="${escapeHTML(s.name)}"></span>
-              `).join('')}
-              ${swatches.length > 3 ? `<span class="spec-code text-[9.5px] text-[#8A8884]">+${swatches.length - 3} màu</span>` : ''}
-            </div>
-
-            <!-- Micro-Eyebrow Context (Truncated 1 line) -->
-            ${item.useCaseEyebrow ? `
-              <div class="text-[9px] sm:text-[9.5px] font-mono font-bold tracking-wider uppercase text-[#8C6218] truncate">
-                ${escapeHTML(item.useCaseEyebrow)}
-              </div>
-            ` : ''}
-
-            <!-- Product Title (Clean, short, readable, 2-line uniform height) -->
-            <h3 class="product-card-title text-xs sm:text-sm font-bold font-display text-primary-color line-clamp-2 min-h-[32px] sm:min-h-[38px] group-hover:text-[#FF5C00] transition-colors leading-snug" title="${escapeHTML(cleanTitle)}">
-              ${escapeHTML(cleanTitle)}
-            </h3>
-
-            <!-- Micro-Specs Line (Compact 1 line) -->
-            <div class="text-[9.5px] sm:text-[10.5px] font-mono text-[#78736A] truncate">
-              ${escapeHTML(specLine)}
-            </div>
+        <div class="catalog-product-info">
+          <p class="catalog-product-category">${escapeHTML(category)}</p>
+          <h3 class="catalog-product-title">${escapeHTML(title)}</h3>
+          ${benefit ? `<p class="catalog-product-benefit">${escapeHTML(benefit)}</p>` : ''}
+          <div class="catalog-product-colors" aria-label="${swatches.length} màu, chọn màu trong chi tiết mẫu">
+            <span class="catalog-color-dots" aria-hidden="true">${swatches.slice(0,3).map(color => `<span style="background:${color.hex}"></span>`).join('')}</span>
+            <span>${swatches.length ? `${swatches.length} màu để chọn` : 'Xác nhận màu với xưởng'}</span>
           </div>
-
-          <!-- Price & Action Row -->
-          <div class="tt-product-footer pt-2 border-t border-[var(--border-subtle)] flex items-center justify-between gap-1 mt-auto">
-            <div class="truncate">
-              <div class="price-display product-price leading-none text-xs sm:text-sm font-bold font-mono tabular-nums text-[#D45B34]">${priceFormatted}</div>
-              ${originalPriceFormatted ? `<div class="text-[9px] sm:text-[10px] text-muted line-through mt-0.5">${originalPriceFormatted}</div>` : ''}
-            </div>
-
-            <!-- Sleek Action Button -->
-            <button type="button" 
-                    class="badge-mono w-7 h-7 sm:w-auto sm:h-auto sm:py-1.5 sm:px-2.5 rounded-lg bg-[#F7F6F2] hover:bg-[#D45B34] text-[#20231F] hover:text-white border border-[#E5E4DE] hover:border-[#D45B34] flex items-center justify-center text-xs font-bold transition-all relative shrink-0 cursor-pointer" 
-                    data-action="configure-product"
-                    data-product-id="${escapeHTML(item.id)}"
-                    title="Xem &amp; chọn">
-              <i class="fa-solid fa-arrow-right text-[10px] pointer-events-none"></i>
-              <span class="hidden sm:inline pointer-events-none ml-1 text-[11px]">Xem</span>
-            </button>
+          <div class="catalog-product-bottom">
+            <div class="catalog-product-price"><span class="catalog-price-prefix">${hasVariants ? 'Từ ' : ''}</span><strong class="price-display product-price">${formatMoney(item.price)}</strong>${original ? `<del>${original}</del>` : ''}</div>
+            <button type="button" class="catalog-product-select" data-action="configure-product" data-product-id="${escapeHTML(item.id)}" aria-label="Xem và chọn ${escapeHTML(title)}"><span>Xem &amp; chọn</span><i class="fa-solid fa-arrow-right" aria-hidden="true"></i></button>
           </div>
         </div>
       </article>
@@ -423,6 +357,14 @@
   function renderSubCategoryFilters(currentCategory) {
     const subFilterContainer = document.getElementById('store-sub-filters');
     if (!subFilterContainer) return;
+    const hint = document.getElementById('store-sub-filter-hint');
+    if (currentCategory === 'all') {
+      subFilterContainer.innerHTML = '';
+      subFilterContainer.classList.add('hidden');
+      if (hint) { hint.hidden = false; hint.textContent = 'Chọn một nhóm bên trên để xem kiểu mẫu chi tiết.'; }
+      return;
+    }
+    if (hint) hint.hidden = true;
 
     const allProducts = getStoredProducts().filter(p => (p.status || 'active') === 'active');
     const relevantProducts = currentCategory === 'all' 
@@ -443,6 +385,7 @@
     if (subCatMap.size <= 1 && currentCategory !== 'all') {
       subFilterContainer.innerHTML = '';
       subFilterContainer.classList.add('hidden');
+      if (hint) { hint.hidden = false; hint.textContent = 'Bạn đang xem tất cả kiểu mẫu trong nhóm này.'; }
       return;
     }
     subFilterContainer.classList.remove('hidden');
@@ -474,7 +417,30 @@
     subFilterContainer.innerHTML = html;
   }
 
+  function syncCatalogFilters(keyword) {
+    const chips = [];
+    if (keyword) chips.push({ key: 'search', label: `Tìm: ${currentSearchKeyword}` });
+    if (currentCategoryFilter !== 'all') chips.push({ key: 'category', label: CATEGORY_REGISTRY[currentCategoryFilter]?.shortName || 'Nhóm đã chọn' });
+    if (currentSubCategoryFilter !== 'all') {
+      const item = getStoredProducts().find(product => product.subCategory === currentSubCategoryFilter);
+      if (item) chips.push({ key: 'sub', label: item.subCategoryName || 'Kiểu đã chọn' });
+    }
+    if (currentPriceRange !== 'all') chips.push({ key: 'price', label: PRICE_RANGES[currentPriceRange].label });
+    const area = document.getElementById('store-active-filters');
+    if (area) {
+      area.hidden = chips.length === 0;
+      area.innerHTML = chips.map(chip => `<button type="button" data-remove-filter="${chip.key}" aria-label="Bỏ điều kiện ${escapeHTML(chip.label)}">${escapeHTML(chip.label)}<span aria-hidden="true">×</span></button>`).join('');
+    }
+    const count = document.getElementById('store-filter-count');
+    const advancedCount = chips.filter(chip => chip.key !== 'search').length;
+    if (count) { count.hidden = advancedCount === 0; count.textContent = String(advancedCount); }
+    const reset = document.getElementById('store-reset-filters');
+    if (reset) reset.hidden = chips.length === 0 && currentSortMode === 'curated';
+    document.querySelector('.catalog-results-toolbar')?.classList.toggle('is-filtered', chips.length > 0 || currentSortMode !== 'curated');
+  }
+
   function renderStoreProducts(filter = currentCategoryFilter, keepPage = false, updateSubFilters = true) {
+    if (isCatalogLoading) return;
     if (filter !== currentCategoryFilter) {
       currentCategoryFilter = filter;
       currentSubCategoryFilter = 'all';
@@ -482,18 +448,22 @@
       currentCategoryFilter = filter;
     }
 
-    if (!keepPage) visibleProductLimit = 8;
+    if (!keepPage) visibleProductLimit = CATALOG_PAGE_SIZE;
     if (updateSubFilters) {
       renderSubCategoryFilters(currentCategoryFilter);
     }
 
     const container = document.getElementById('store-product-grid');
     if (!container) return;
+    container.setAttribute('aria-busy', 'false');
     const keyword = removeVietnameseDiacritics(currentSearchKeyword).trim();
+    syncCatalogFilters(keyword);
     let matches = getStoredProducts().filter(product => {
       if ((product.status || 'active') !== 'active') return false;
       if (currentCategoryFilter !== 'all' && product.category !== currentCategoryFilter) return false;
       if (currentSubCategoryFilter !== 'all' && product.subCategory !== currentSubCategoryFilter) return false;
+      const range = PRICE_RANGES[currentPriceRange];
+      if (product.price < range.min || product.price >= range.max) return false;
       return !keyword || removeVietnameseDiacritics([
         product.title, product.cleanTitle, product.desc, product.modelId, product.id,
         product.useCaseEyebrow, product.archetypeBadge, product.subCategoryName
@@ -501,15 +471,30 @@
     });
     if (currentSortMode === 'price-asc') matches.sort((a,b) => a.price - b.price);
     if (currentSortMode === 'price-desc') matches.sort((a,b) => b.price - a.price);
+    if (currentSortMode === 'curated' && currentCategoryFilter === 'all') {
+      // Balance the first view across categories while preserving order inside each group.
+      const queues = new Map();
+      matches.forEach(product => {
+        if (!queues.has(product.category)) queues.set(product.category, []);
+        queues.get(product.category).push(product);
+      });
+      const balanced = [];
+      while (balanced.length < matches.length) queues.forEach(queue => { if (queue.length) balanced.push(queue.shift()); });
+      matches = balanced;
+    }
     const count = document.getElementById('store-results-count');
     const visible = matches.slice(0, visibleProductLimit);
-    if (count) count.textContent = matches.length ? `${matches.length} sản phẩm · Đang hiển thị ${visible.length}` : 'Không có sản phẩm phù hợp';
+    if (count) count.innerHTML = matches.length ? `<strong>${matches.length} mẫu</strong><span class="catalog-count-detail"> · Đang xem ${visible.length}</span>` : 'Chưa có mẫu phù hợp';
     if (!matches.length) {
-      container.innerHTML = `<div class="minimal-empty"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><h3>Chưa tìm thấy món bạn cần.</h3><p>Thử một tên khác hoặc bỏ bớt bộ lọc.</p><button type="button" data-action="clear-search" class="btn-secondary">Xóa tìm kiếm</button><button type="button" data-action="view-category" data-category="all" class="minimal-text-action">Xem tất cả danh mục</button></div>`;
+      if (!keyword && currentCategoryFilter === 'all' && currentSubCategoryFilter === 'all' && currentPriceRange === 'all') {
+        container.innerHTML = `<div class="minimal-empty"><i class="fa-solid fa-box-open" aria-hidden="true"></i><h3>Chưa có mẫu để hiển thị.</h3><p>Bạn có thể thử tải lại danh sách hoặc liên hệ xưởng để được hỗ trợ.</p><button type="button" data-action="retry-catalog" class="btn-secondary">Tải lại bộ sưu tập</button></div>`;
+        return;
+      }
+      container.innerHTML = `<div class="minimal-empty"><i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><h3>Chưa có mẫu khớp lựa chọn này.</h3><p>Thử từ khóa ngắn hơn hoặc mở rộng ngân sách, nhóm mẫu.</p>${keyword ? '<button type="button" data-action="clear-search" class="btn-secondary">Xóa từ khóa</button>' : ''}<button type="button" data-action="reset-filters" class="minimal-text-action">Bỏ tất cả điều kiện</button></div>`;
       return;
     }
     const extra = matches.length - visible.length;
-    container.innerHTML = `<div class="minimal-product-grid">${visible.map(buildProductCardHTML).join('')}</div><div class="minimal-pagination">${extra > 0 ? `<button type="button" class="btn-secondary" data-action="load-more">Xem thêm ${Math.min(8, extra)} sản phẩm <span aria-hidden="true">↓</span></button>` : '<span>Bạn đã xem hết các sản phẩm phù hợp.</span>'}</div>`;
+    container.innerHTML = `<div class="minimal-product-grid">${visible.map(buildProductCardHTML).join('')}</div><div class="minimal-pagination">${extra > 0 ? `<button type="button" class="btn-secondary" data-action="load-more">Xem thêm ${Math.min(CATALOG_PAGE_SIZE, extra)} mẫu <span aria-hidden="true">↓</span></button><p>${visible.length} / ${matches.length} mẫu</p>` : '<span>Bạn đã xem hết các mẫu phù hợp.</span>'}</div>`;
   }
 
   // 5. EVENT DELEGATION ON CONTAINER (Zero Inline Onclick XSS Vulnerability)
@@ -524,7 +509,7 @@
         if (!pill) return;
         const subCat = pill.dataset.subCategory || 'all';
         currentSubCategoryFilter = subCat;
-        visibleProductLimit = 8;
+        visibleProductLimit = CATALOG_PAGE_SIZE;
         renderStoreProducts(currentCategoryFilter, false, false);
         subFilterContainer.querySelectorAll('.sub-filter-pill').forEach(p => {
           const isActive = (p.dataset.subCategory || 'all') === subCat;
@@ -536,15 +521,88 @@
 
 
     const sortInput = document.getElementById('store-sort-input');
+    const priceInput = document.getElementById('store-price-range');
+    const filterToggle = document.getElementById('store-filters-toggle');
+    const advancedPanel = document.getElementById('store-advanced-filters');
+    if (filterToggle && advancedPanel) {
+      filterToggle.addEventListener('click', () => {
+        const open = filterToggle.getAttribute('aria-expanded') !== 'true';
+        advancedPanel.hidden = !open;
+        filterToggle.setAttribute('aria-expanded', String(open));
+      });
+      advancedPanel.addEventListener('keydown', event => {
+        if (event.key !== 'Escape') return;
+        event.preventDefault();
+        advancedPanel.hidden = true;
+        filterToggle.setAttribute('aria-expanded', 'false');
+        filterToggle.focus({ preventScroll: true });
+      });
+    }
+    if (priceInput) priceInput.addEventListener('change', () => {
+      currentPriceRange = Object.prototype.hasOwnProperty.call(PRICE_RANGES, priceInput.value) ? priceInput.value : 'all';
+      renderStoreProducts(currentCategoryFilter);
+    });
+    const activeFilters = document.getElementById('store-active-filters');
+    if (activeFilters) activeFilters.addEventListener('click', event => {
+      const button = event.target.closest('[data-remove-filter]');
+      if (!button) return;
+      const kind = button.dataset.removeFilter;
+      if (kind === 'search') {
+        currentSearchKeyword = '';
+        const input = document.getElementById('store-search-input');
+        if (input) input.value = '';
+        document.getElementById('store-search-clear')?.classList.add('hidden');
+      }
+      if (kind === 'price') { currentPriceRange = 'all'; if (priceInput) priceInput.value = 'all'; }
+      if (kind === 'sub') currentSubCategoryFilter = 'all';
+      if (kind === 'category') {
+        currentSubCategoryFilter = 'all';
+        if (typeof window.navigateToCategory === 'function') window.navigateToCategory('all');
+        else renderStoreProducts('all');
+      } else renderStoreProducts(currentCategoryFilter);
+      if (filterToggle) filterToggle.focus({ preventScroll: true });
+    });
+    const resetFilters = document.getElementById('store-reset-filters');
+    if (resetFilters) resetFilters.addEventListener('click', () => {
+      currentSearchKeyword = '';
+      currentSubCategoryFilter = 'all';
+      currentSortMode = 'curated';
+      currentPriceRange = 'all';
+      const searchInput = document.getElementById('store-search-input');
+      const clearButton = document.getElementById('store-search-clear');
+      if (searchInput) searchInput.value = '';
+      if (clearButton) clearButton.classList.add('hidden');
+      if (sortInput) sortInput.value = 'curated';
+      if (priceInput) priceInput.value = 'all';
+      if (typeof window.navigateToCategory === 'function') window.navigateToCategory('all');
+      else renderStoreProducts('all');
+      if (searchInput) searchInput.focus({ preventScroll: true });
+    });
     if (sortInput) sortInput.addEventListener('change', () => {
       currentSortMode = ['price-asc', 'price-desc'].includes(sortInput.value) ? sortInput.value : 'curated';
       renderStoreProducts(currentCategoryFilter);
     });
     const productContainers = [container, document.getElementById('curated-product-grid')].filter(Boolean);
-    productContainers.forEach(productContainer => productContainer.addEventListener('click', (e) => {
+    productContainers.forEach(productContainer => productContainer.addEventListener('click', async (e) => {
+      if (e.target.closest('[data-action="reset-filters"]')) {
+        e.preventDefault();
+        resetFilters?.click();
+        return;
+      }
+      if (e.target.closest('[data-action="retry-catalog"]')) {
+        e.preventDefault();
+        isCatalogLoading = true;
+        container.setAttribute('aria-busy', 'true');
+        container.innerHTML = '<div class="studio-catalog-loading" role="status"><span class="studio-loading-orb" aria-hidden="true"></span><p>Đang tải lại bộ sưu tập…</p></div>';
+        try {
+          if (window.TTCatalogStore) await window.TTCatalogStore.init(true);
+        } catch (error) { console.warn('[Storefront] Catalog retry failed:', error); }
+        finally { isCatalogLoading = false; renderStoreProducts(currentCategoryFilter); renderCuratedProducts(); }
+        return;
+      }
       if (e.target.closest('[data-action="load-more"]')) {
         const previousCount = visibleProductLimit;
-        visibleProductLimit += 8;
+        visibleProductLimit += CATALOG_PAGE_SIZE;
         renderStoreProducts(currentCategoryFilter, true);
         // Re-render replaces the clicked button: place focus on the first new card.
         const nextCard = container.querySelectorAll('.studio-product-card')[previousCount];
@@ -1309,9 +1367,10 @@
   });
 
   async function init() {
-    if (window.TTCatalogStore && typeof window.TTCatalogStore.init === 'function') {
-      await window.TTCatalogStore.init();
-    }
+    try {
+      if (window.TTCatalogStore && typeof window.TTCatalogStore.init === 'function') await window.TTCatalogStore.init();
+    } catch (error) { console.warn('[Storefront] Catalog initialization failed:', error); }
+    finally { isCatalogLoading = false; }
 
     // Đọc category từ URL thay vì ghi đè 'all' (Codex Directive)
     const initialParsed = window.parseStoreHash ? window.parseStoreHash(window.location.hash) : { category: 'all' };

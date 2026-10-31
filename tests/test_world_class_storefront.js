@@ -7,7 +7,7 @@
  * 4. Asymmetric Bento Grid for 5 categories (zero IA redundancy)
  * 5. Homepage "Shop the Look" with Interactive Hotspots & Combo Add-to-cart
  * 6. Homepage Live Customizer Preview in Obsidian Dark theme (#141413)
- * 7. World-class Product Card anatomy with color swatches & technical spec pills
+ * 7. Catalog cards show actual color choices, benefits and clearly labelled actions
  * 8. Mobile Zalo conversion quick action with copy-to-clipboard functionality
  */
 
@@ -25,7 +25,7 @@ const productsJs = fs.readFileSync(path.join(rootDir, 'js', 'products-manager.js
 const appJs = fs.readFileSync(path.join(rootDir, 'js', 'app.js'), 'utf8');
 
 let cssContent = '';
-const cssFiles = ['world-class-upgrade.css', 'style.css', 'minimal.css'];
+const cssFiles = ['world-class-upgrade.css', 'style.css', 'minimal.css', 'catalog.css'];
 cssFiles.forEach(file => {
   const p = path.join(rootDir, 'css', file);
   if (fs.existsSync(p)) {
@@ -97,9 +97,12 @@ runTest('6. Homepage features Live Customizer Preview with Obsidian dark theme a
 });
 
 // 7. World-class Product Card Template
-runTest('7. Product Card template renders tactile color swatches and technical spec pill', () => {
-  assert.ok(productsJs.includes('tt-swatch-row') || productsJs.includes('swatch-dot') || productsJs.includes('swatch-row'), 'Product card must render color swatches');
-  assert.ok(productsJs.includes('tt-spec-pill') || productsJs.includes('spec-pill') || productsJs.includes('badge-mono'), 'Product card must render technical spec pill');
+runTest('7. Catalog cards show actual color choices, benefits and clearly labelled actions', () => {
+  const cardTemplate = productsJs.slice(productsJs.indexOf('function buildProductCardHTML'), productsJs.indexOf('function buildHeroSpotlightHTML'));
+  assert.ok(cardTemplate.includes('catalog-product-colors') && cardTemplate.includes('isValidHex(color.hex)'), 'Color legends must use valid colors from the product');
+  assert.ok(cardTemplate.includes('catalog-product-benefit'), 'Card must show the product benefit');
+  assert.ok(cardTemplate.includes('data-action="open-detail"') && cardTemplate.includes('data-action="configure-product"'), 'Photos and configuration need distinct named actions');
+  assert.ok(cssContent.includes('object-fit: contain'), 'Catalog photos must remain fully visible');
   assert.ok(productsJs.includes('font-mono') || productsJs.includes('product-price'), 'Product price must use monospace tabular-nums');
 });
 

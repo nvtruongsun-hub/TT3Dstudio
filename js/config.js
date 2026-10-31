@@ -10,7 +10,7 @@ const TT_DEFAULT_CONFIG = {
     hotline: "0349.657.529",
     zaloPhone: "0349657529",
     email: "contact@tt3dlabs.vn",
-    address: "Số 175 Tây Sơn, Phường Trung Liệt, Quận Đống Đa, Hà Nội",
+    address: "Thị trấn Cẩm Xuyên, Huyện Cẩm Xuyên, Tỉnh Hà Tĩnh (Tiệm in 3D đầu tiên tại Hà Tĩnh)",
     workingHours: "Thứ 2 - Chủ Nhật: 08:00 - 21:00 (Dàn máy in chạy 24/7)",
     shopeeUrl: "https://shopee.vn",
     tiktokUrl: "https://tiktok.com",
