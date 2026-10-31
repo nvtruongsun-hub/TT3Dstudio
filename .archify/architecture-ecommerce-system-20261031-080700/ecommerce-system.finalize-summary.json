@@ -1,0 +1,51 @@
+{
+  "schemaVersion": 1,
+  "ok": true,
+  "command": "finalize",
+  "status": "pass",
+  "type": "architecture",
+  "quality": "showcase",
+  "specification": {
+    "path": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\candidate.json",
+    "sha256": "02bc0db2dd0cec3cf48670f5cf86e7365c0f1056e989be4e23295a8392e98000",
+    "bytes": 4787
+  },
+  "artifact": {
+    "path": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\ecommerce-system.html",
+    "sha256": "5b1335420e523fcb9bbe8e4be41843522461368e5f2a560303b2e6de740416f5",
+    "bytes": 861390
+  },
+  "gates": {
+    "validate": "pass",
+    "deliver": "pass",
+    "check": "pass",
+    "browser-check": "pass"
+  },
+  "diagnostics": [],
+  "diagnosticSummary": {
+    "total": 0,
+    "shown": 0,
+    "truncated": false
+  },
+  "evidence": {
+    "receipt": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\ecommerce-system.finalize.json",
+    "summaryReceipt": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\ecommerce-system.finalize-summary.json",
+    "browserCheckReceipt": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\ecommerce-system.browser-check.json"
+  },
+  "update": {
+    "status": "current",
+    "installedVersion": "3.2.0",
+    "availableVersion": "3.2.0",
+    "releaseNotes": null,
+    "checkedAt": "2026-10-31T01:07:56.330Z",
+    "source": "network",
+    "noticeRequired": false,
+    "noticeText": null
+  },
+  "visualReview": "not-requested",
+  "durationMs": 19474,
+  "browserCheck": {
+    "requested": true,
+    "ran": true
+  }
+}

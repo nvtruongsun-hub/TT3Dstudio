@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "a95e8774-62e5-427c-a731-247ac33b24ac",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\candidate.json",
+  "output": "C:\\Users\\truongg\\OneDrive - Thuyloi University\\Tài liệu\\02. T&T 3D studio\\.archify\\architecture-ecommerce-system-20261031-080700\\ecommerce-system.html",
+  "specification": {
+    "sha256": "02bc0db2dd0cec3cf48670f5cf86e7365c0f1056e989be4e23295a8392e98000",
+    "bytes": 4787
+  },
+  "artifact": {
+    "sha256": "5b1335420e523fcb9bbe8e4be41843522461368e5f2a560303b2e6de740416f5",
+    "bytes": 861390
+  }
+}

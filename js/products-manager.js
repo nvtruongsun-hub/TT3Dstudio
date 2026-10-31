@@ -472,6 +472,7 @@
     const container = document.getElementById('store-product-grid');
     if (!container) return;
     container.setAttribute('aria-busy', 'false');
+    const positions = window.TTInterfaceMotion && window.TTInterfaceMotion.captureGrid(container);
     const keyword = removeVietnameseDiacritics(currentSearchKeyword).trim();
     syncCatalogFilters(keyword);
     let matches = getStoredProducts().filter(product => {
@@ -511,6 +512,7 @@
     }
     const extra = matches.length - visible.length;
     container.innerHTML = `<div class="minimal-product-grid">${visible.map(buildProductCardHTML).join('')}</div><div class="minimal-pagination">${extra > 0 ? `<button type="button" class="btn-secondary" data-action="load-more">Xem thêm ${Math.min(CATALOG_PAGE_SIZE, extra)} mẫu <span aria-hidden="true">↓</span></button><p>${visible.length} / ${matches.length} mẫu</p>` : '<span>Bạn đã xem hết các mẫu phù hợp.</span>'}</div>`;
+    if (window.TTInterfaceMotion) window.TTInterfaceMotion.animateGrid(container, positions);
   }
 
   // 5. EVENT DELEGATION ON CONTAINER (Zero Inline Onclick XSS Vulnerability)
@@ -543,13 +545,15 @@
     if (filterToggle && advancedPanel) {
       filterToggle.addEventListener('click', () => {
         const open = filterToggle.getAttribute('aria-expanded') !== 'true';
-        advancedPanel.hidden = !open;
+        if (window.TTInterfaceMotion) window.TTInterfaceMotion.togglePanel(advancedPanel, open);
+        else advancedPanel.hidden = !open;
         filterToggle.setAttribute('aria-expanded', String(open));
       });
       advancedPanel.addEventListener('keydown', event => {
         if (event.key !== 'Escape') return;
         event.preventDefault();
-        advancedPanel.hidden = true;
+        if (window.TTInterfaceMotion) window.TTInterfaceMotion.togglePanel(advancedPanel, false);
+        else advancedPanel.hidden = true;
         filterToggle.setAttribute('aria-expanded', 'false');
         filterToggle.focus({ preventScroll: true });
       });
@@ -792,7 +796,7 @@
     const modal = document.getElementById('order-modal');
     if (!modal) return;
 
-    if (typeof document !== 'undefined' && document.activeElement) {
+    if (typeof document !== 'undefined' && document.activeElement && !modal.contains(document.activeElement) && !modal.dataset.motionClosing) {
       productModalPreviousActiveElement = document.activeElement;
     }
 
@@ -1060,6 +1064,7 @@
     window.updateModalPriceSummary();
     modal.classList.remove('hidden');
     modal.classList.add('flex', 'active');
+    if (window.TTInterfaceMotion) window.TTInterfaceMotion.openDialog(modal);
     if (window.TTProductExperience) window.TTProductExperience.refresh(item);
     if (document.body && document.body.style) {
       document.body.style.overflow = 'hidden';
@@ -1249,7 +1254,7 @@
 
     if (window.TTCart && typeof window.TTCart.addToCart === 'function') {
       window.TTCart.addToCart(line);
-      window.closeProductDetailModal();
+      window.closeProductDetailModal({ immediate: true });
       window.TTCart.openCart();
       if (window.showToast) {
         window.showToast(`Đã thêm "${line.title}" vào giỏ hàng!`);
@@ -1261,7 +1266,7 @@
     const line = buildConfiguredLine();
     if (!line) return;
 
-    window.closeProductDetailModal();
+    window.closeProductDetailModal({ immediate: true });
 
     if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
       window.TTCheckout.openCheckout([line], 0, { source: 'direct' });
@@ -1290,23 +1295,23 @@
     }
   };
 
-  window.closeProductDetailModal = function () {
+  window.closeProductDetailModal = function (options = {}) {
     const imageDialog = document.getElementById('product-image-dialog');
     if (imageDialog && imageDialog.open) imageDialog.close();
     const modal = document.getElementById('order-modal');
-    if (modal) {
-      modal.classList.add('hidden');
-      modal.classList.remove('flex', 'active');
-    }
-    if (document.body && document.body.style) {
-      document.body.style.overflow = '';
-    }
-    if (productModalPreviousActiveElement && typeof productModalPreviousActiveElement.focus === 'function') {
-      try {
-        productModalPreviousActiveElement.focus();
-      } catch (_) {}
-      productModalPreviousActiveElement = null;
-    }
+    const previous = productModalPreviousActiveElement;
+    const finish = () => {
+      const focusWasInModal = !document.activeElement || document.activeElement === document.body || (modal && modal.contains(document.activeElement));
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex', 'active'); }
+      const anotherDialog = document.querySelector('#cart-slide-drawer.active, #checkout-modal.active');
+      if (document.body && document.body.style && !anotherDialog) document.body.style.overflow = '';
+      if (previous && typeof previous.focus === 'function' && focusWasInModal && !anotherDialog) {
+        try { previous.focus({ preventScroll: true }); } catch (_) {}
+      }
+      if (productModalPreviousActiveElement === previous) productModalPreviousActiveElement = null;
+    };
+    if (window.TTInterfaceMotion && !options.immediate) window.TTInterfaceMotion.closeDialog(modal, finish);
+    else finish();
   };
 
   // 8. SEARCH INPUT HANDLER

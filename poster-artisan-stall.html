@@ -1,45 +1,821 @@
-<!DOCTYPE html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="color-scheme" content="light"><title>T&amp;T 3D Labs | Bấm vui. Mang theo. | R10</title><style>
-@font-face{font-family:Jakarta;src:url('assets/fonts/poster-r7/jakarta-500.ttf') format('truetype');font-weight:500;font-display:swap}@font-face{font-family:Jakarta;src:url('assets/fonts/poster-r7/jakarta-700.ttf') format('truetype');font-weight:700;font-display:swap}
-:root{--ink:#303a32;--clay:#a95642;--paper:#f5f0e8;--muted:#70766a}*{box-sizing:border-box}body{margin:0;background:#e5e3dc;color:var(--ink);font:500 14px/1.5 Jakarta,Arial,sans-serif}button{font:inherit;cursor:pointer}button:focus-visible,a:focus-visible{outline:3px solid var(--clay);outline-offset:4px}[hidden]{display:none!important}h1,h2,h3,p,figure{margin:0}img{display:block}
-.control-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 24px;background:#f9faf6;border-bottom:1px solid #cbd0c5;min-height:76px}.control-brand{font-weight:700}.control-brand small{display:block;color:var(--muted);font-weight:500;font-size:11px}.controls{display:flex;gap:6px;flex-wrap:wrap}.controls button{min-height:44px;padding:10px 15px;border:1px solid #c5cabe;background:transparent;color:var(--ink);border-radius:6px}.controls button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:white}.controls .print-button{background:var(--clay);color:white;border-color:var(--clay)}.preview-stage{min-height:calc(100dvh - 124px);display:flex;justify-content:center;align-items:flex-start;padding:22px;overflow:auto}.preview-frame{position:relative;flex:none;box-shadow:0 16px 50px #273a3326;background:var(--paper)}.print-sheet{position:absolute;inset:0 auto auto 0;transform-origin:top left;background:var(--paper)}.artwork{position:relative;overflow:hidden;background:var(--paper);transform-origin:top left}.preview-note{text-align:center;padding:0 16px 12px;color:#4d5c50;font-size:12px;min-height:32px}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>T&amp;T 3D Labs | Bấm vui. Mang theo. | R11</title>
+<style>
+@font-face {
+  font-family: Jakarta;
+  src: url('assets/fonts/poster-r7/jakarta-500.ttf') format('truetype');
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: Jakarta;
+  src: url('assets/fonts/poster-r7/jakarta-700.ttf') format('truetype');
+  font-weight: 700;
+  font-display: swap;
+}
 
+:root {
+  --paper: #faf8f5;
+  --ink: #303a32;
+  --muted: #60685c;
+  --clay: #a95642;
+  --accent: #d94826;
 
+  --taro: #9d7ec4;
+  --mint: #4eba96;
+  --strawberry: #fa7b8c;
+  --matcha: #569850;
 
-#sheet-banner,.banner{width:1200px;height:600px}#sheet-a2,.a2{width:840px;height:1188px}.artwork{position:relative;overflow:hidden;background:var(--paper);transform-origin:top left;color:var(--ink)}.brand{display:flex;align-items:center;gap:18px;position:absolute;z-index:2}.brand-word{font-weight:700;font-size:43px;line-height:1;letter-spacing:-2px;display:flex;align-items:center;gap:13px}.brand-labs{font-size:11px;letter-spacing:2.6px;font-weight:700}.brand-strokes{width:20px;height:14px;border-top:3px solid var(--clay);border-bottom:3px solid var(--clay);transform:translateY(3px)}.banner .brand{top:40px;left:48px}.title-block{position:absolute;z-index:2}.banner .title-block{top:151px;left:48px;width:355px}.eyebrow{font-size:10px;letter-spacing:1.5px;font-weight:700;color:var(--clay);margin-bottom:22px}h1{font-size:65px;letter-spacing:-3.2px;font-weight:700;line-height:1.13}h1 em{font-style:normal;color:var(--clay)}.intro{font-size:14px;line-height:1.85;color:var(--muted);margin-top:22px}.trio-photo{position:absolute;object-fit:contain;pointer-events:none}.banner .trio-photo{top:-1px;right:0;width:800px;height:auto;z-index:1}.micro-signature{position:absolute;z-index:2;top:445px;left:48px;font-size:9px;letter-spacing:2px;color:var(--muted);display:flex;align-items:center;gap:12px}.micro-signature:before{content:"";width:26px;height:2px;background:var(--clay)}.banner-footer{position:absolute;left:48px;right:48px;bottom:27px;z-index:2;display:grid;grid-template-columns:1fr 110px;gap:22px;align-items:end}.footer-main{border-top:1px solid #d0d1c6;padding-top:16px;display:flex;justify-content:space-between;align-items:center;gap:20px}.footer-main h2{font-weight:700;font-size:16px;letter-spacing:-.4px}.footer-main p{font-size:10px;color:var(--muted);margin-top:5px}.footer-web{font-size:9px;color:var(--muted);text-align:right;line-height:1.6}.qr{display:block;color:var(--ink);text-decoration:none;text-align:center;flex:none}.qr img{width:82px;height:82px;margin:auto;background:white}.qr span{display:block;font-size:8px;font-weight:700;letter-spacing:.7px;margin-top:6px}.a2 .brand{top:43px;left:48px}.a2 .brand-word{font-size:43px}.a2 .page-label{position:absolute;right:48px;top:55px;color:var(--muted);font-size:9px;letter-spacing:2px}.a2 .title-block{top:139px;left:48px;right:48px}.a2 .eyebrow{margin-bottom:18px;font-size:11px}.a2 h1{font-size:81px;line-height:1.06;letter-spacing:-4px}.a2 .intro{position:absolute;left:423px;top:95px;font-size:13px;line-height:1.85;max-width:300px;margin:0}.a2 .trio-photo{top:355px;left:0;width:840px;height:auto;z-index:1}.a2 .caption{position:absolute;left:48px;right:48px;top:945px;display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:10px;letter-spacing:1px}.a2 .caption strong{font-size:10px;font-weight:500;color:var(--clay);letter-spacing:2px}.a2-footer{position:absolute;bottom:42px;left:48px;right:48px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #d0d1c6;padding-top:22px;gap:28px}.a2-footer h2{font-size:27px;letter-spacing:-.9px;line-height:1.25}.a2-footer p{font-size:12px;color:var(--muted);margin-top:9px}.a2-footer .concept-note{font-size:9px;margin-top:16px;color:var(--muted)}.a2-footer .qr img{width:100px;height:100px}.a2-footer .qr span{font-size:9px}.a2-footer .web{display:block;font-size:9px;color:var(--muted);margin-top:10px}
-@media(max-width:680px){.control-bar{padding:12px;align-items:flex-start;flex-direction:column;gap:9px}.control-brand small{display:none}.controls{width:100%;display:grid;grid-template-columns:1fr 1fr}.controls button{padding:10px 8px;font-size:12px}.preview-stage{padding:14px 10px;min-height:0}.preview-note{font-size:11px;padding:8px 12px 16px}}
-@page stall-a2{size:420mm 594mm;margin:0}@page stall-banner{size:1200mm 600mm;margin:0}
-@media print{html,body{margin:0!important;padding:0!important;display:block!important;background:white!important;height:auto!important;min-height:0!important;print-color-adjust:exact;-webkit-print-color-adjust:exact}.control-bar,.preview-note{display:none!important}.preview-stage,.preview-frame{display:block!important;margin:0!important;padding:0!important;width:auto!important;height:auto!important;min-height:0!important;overflow:visible!important;box-shadow:none!important}.print-sheet{position:relative;transform:none!important;overflow:hidden;break-inside:avoid}.artwork{transform-origin:top left}#sheet-a2{page:stall-a2;width:420mm;height:594mm}#sheet-banner{page:stall-banner;width:1200mm;height:600mm}#sheet-a2 .artwork{transform:scale(1.889763779527559)}#sheet-banner .artwork{transform:scale(3.779527559055118)}}
-.banner .trio-photo{mask-image:linear-gradient(to right,transparent,#000 24px),linear-gradient(to bottom,#000 calc(100% - 25px),transparent);mask-composite:intersect}
-.price-board h2{font-size:10px;font-weight:700;letter-spacing:1.7px;color:var(--clay);margin:0 0 10px}.price-board table{border-collapse:collapse;width:100%;table-layout:fixed}.price-board th{font-size:12px;line-height:1.3;text-align:left;font-weight:500;padding:0 14px 3px 0;color:var(--ink);height:26px;vertical-align:top}.price-board td{padding:0 15px 0 0;vertical-align:top}.price-board td strong{display:block;font-size:33px;line-height:1.12;letter-spacing:-1.5px;color:var(--ink)}.price-board td small{font-size:18px;letter-spacing:0;margin-left:2px}.price-board td span{display:block;font-size:8px;color:var(--muted);margin-top:2px}.price-board .price-note{font-size:8px;color:var(--muted);margin:9px 0 0;line-height:1.4}.banner .trio-photo{width:755px;top:-15px}.banner .title-block{top:135px}.banner h1{font-size:63px}.banner .micro-signature{top:411px}.banner-footer{bottom:22px;align-items:center;background:var(--paper);border-top:1px solid #d0d1c6;padding-top:12px;grid-template-columns:1fr 100px}.a2-footer{bottom:38px;display:grid;grid-template-columns:1fr 92px;gap:22px;align-items:center;padding-top:20px}.a2-footer .price-board h2{font-size:10px;line-height:1.5;letter-spacing:1.4px;margin:0 0 12px}.a2-footer .price-board th{font-size:11px;height:33px;padding-right:8px}.a2-footer .price-board td strong{font-size:34px}.a2-footer .price-note{font-size:8px;line-height:1.5;margin:11px 0 0}.a2-footer .qr img{width:88px;height:88px}.a2-footer .qr span{font-size:8px}
+  --board-paper: #fdfbf7;
+  --board-line: #d8cbbb;
+  --board-shadow: #e5ded3;
+}
 
-/* Contour frame: a pair of fine outlines and a small offset echo printed layers. */
-.price-board{position:relative;isolation:isolate;border:1.6px solid #ad604c;border-radius:19px 7px 19px 7px;padding:22px 22px 13px;background:#fbf7f0;box-shadow:3px 3px 0 #d5d6c8,6px 6px 0 #e9e2d6}
-.price-board:before{content:"";position:absolute;inset:5px;border:1px solid #d1c3b2;border-radius:13px 3px 13px 3px;pointer-events:none;z-index:-1}
-.price-board:after{content:"";position:absolute;top:-2px;right:24px;width:48px;height:4px;background:var(--clay);border-radius:0 0 3px 3px;pointer-events:none}
-.price-board h2,.a2-footer .price-board h2{position:absolute;top:-9px;left:18px;background:var(--paper);padding:0 9px;margin:0;font-size:9px;line-height:18px;letter-spacing:1.7px;color:var(--clay);white-space:nowrap}
-.price-board th{height:21px;font-size:12px;padding:0 12px 3px 0}
-.price-board td{padding-right:12px}
-.price-board th+th,.price-board td+td{border-left:1px solid #ded5c8;padding-left:18px}
-.price-board td strong{font-size:33px}
-.price-board .price-note{font-size:8px;margin-top:8px;color:#77796e}
-.banner-footer{border:0;background:transparent;padding-top:0;bottom:23px;gap:25px}
-.a2-footer{border:0;padding-top:0;bottom:39px;gap:22px}
-.a2-footer .price-board{padding:23px 17px 13px}
-.a2-footer .price-board h2{left:12px;font-size:8px;letter-spacing:1.4px}
-.a2-footer .price-board th{font-size:10px;height:30px;padding-right:8px}
-.a2-footer .price-board td{padding-right:8px}
-.a2-footer .price-board th+th,.a2-footer .price-board td+td{padding-left:12px}
-.a2-footer .price-board td strong{font-size:31px}
-.a2-footer .price-board .price-note{font-size:7px;margin-top:10px;line-height:1.5}
-</style></head><body><nav class="control-bar" aria-label="Điều khiển thiết kế"><div class="control-brand">T&amp;T / Bấm vui. Mang theo.<small>Hình chủ đạo isometric · R10</small></div><div class="controls"><button id="btn-show-banner" type="button" aria-pressed="true" onclick="switchFormat('banner')">Biển quầy · 1200 × 600 mm</button><button id="btn-show-a2" type="button" aria-pressed="false" onclick="switchFormat('a2')">Poster A2 · 420 × 594 mm</button><button id="zoom-button" type="button" aria-pressed="false" onclick="toggleZoom()">Xem 100%</button><button type="button" class="print-button" onclick="handlePrint()">In / Lưu PDF</button></div></nav><main class="preview-stage"><div class="preview-frame"><section id="sheet-banner" class="print-sheet" data-format="banner" aria-label="Banner T&T"><div class="artwork banner"><img class="trio-photo" src="assets/images/poster-r10/tactile-trio.png" width="1536" height="1024" alt="Hình ý tưởng: clicker mèo pastel, kem ốc quế và quả bơ với switch cơ học lộ nhẹ, nổi trên nền ngà"><div class="brand" aria-label="T&T 3D Labs"><span class="brand-word">T&amp;T<span class="brand-strokes" aria-hidden="true"></span></span><span class="brand-labs">3D LABS</span></div><div class="title-block"><p class="eyebrow">MÓC KHÓA &amp; CLICKER IN 3D</p><h1>Bấm <em>vui.</em><br>Mang theo.</h1><p class="intro">Một chút cá tính.<br>Một niềm vui trong lòng bàn tay.</p></div><p class="micro-signature">TỪNG LỚP IN. RIÊNG CHẤT BẠN.</p><footer class="banner-footer"><div class="price-board"><h2>BẢNG GIÁ MẪU CƠ BẢN</h2><table aria-label="Bảng giá sản phẩm trong shop"><thead><tr><th scope="col" data-product-id="mw-cn-1433737">Mèo mini khớp động</th><th scope="col" data-product-id="mw-cn-2370777">Clicker cơ học</th><th scope="col" data-product-id="mw-cn-2331892">Clicker kem</th><th scope="col" data-product-id="mw-cn-1753199">Clicker quả bơ</th></tr></thead><tbody><tr><td><strong>29<small>K</small></strong><span>29.000 ₫</span></td><td><strong>39<small>K</small></strong><span>39.000 ₫</span></td><td><strong>49<small>K</small></strong><span>49.000 ₫</span></td><td><strong>69<small>K</small></strong><span>69.000 ₫</span></td></tr></tbody></table><p class="price-note">Giá mẫu thực tế trong shop · Hình phía trên là minh họa ý tưởng.</p></div><a class="qr" href="https://nvtruongsun-hub.github.io/TT3Dstudio/" aria-label="Xem mẫu và giá thực tế tại shop"><img src="assets/images/poster-r7/qr-shop.svg" width="110" height="110" alt="QR xem mẫu và giá thực tế"><span>XEM MẪU &amp; GIÁ ↗</span></a></footer></div></section>
-<section id="sheet-a2" class="print-sheet" data-format="a2" hidden aria-label="Poster A2 T&T"><div class="artwork a2"><div class="brand" aria-label="T&T 3D Labs"><span class="brand-word">T&amp;T<span class="brand-strokes" aria-hidden="true"></span></span><span class="brand-labs">3D LABS</span></div><p class="page-label">TỪNG LỚP IN. RIÊNG CHẤT BẠN.</p><div class="title-block"><p class="eyebrow">MÓC KHÓA &amp; CLICKER IN 3D</p><h1>Bấm <em>vui.</em><br>Mang theo.</h1><p class="intro">Một chút cá tính.<br>Một niềm vui trong lòng bàn tay.</p></div><img class="trio-photo" src="assets/images/poster-r10/tactile-trio.png" width="1536" height="1024" alt="Hình ý tưởng: clicker mèo pastel, kem ốc quế và quả bơ với switch cơ học lộ nhẹ, nổi trên nền ngà"><div class="caption"><span>MÈO MINI / KEM ỐC QUẾ / QUẢ BƠ</span><strong>NHỎ TRONG TAY. VUI MỖI NGÀY.</strong></div><footer class="a2-footer"><div class="price-board"><h2>BẢNG GIÁ MẪU CƠ BẢN</h2><table aria-label="Bảng giá sản phẩm trong shop"><thead><tr><th scope="col" data-product-id="mw-cn-1433737">Mèo mini khớp động</th><th scope="col" data-product-id="mw-cn-2370777">Clicker cơ học</th><th scope="col" data-product-id="mw-cn-2331892">Clicker kem</th><th scope="col" data-product-id="mw-cn-1753199">Clicker quả bơ</th></tr></thead><tbody><tr><td><strong>29<small>K</small></strong><span>29.000 ₫</span></td><td><strong>39<small>K</small></strong><span>39.000 ₫</span></td><td><strong>49<small>K</small></strong><span>49.000 ₫</span></td><td><strong>69<small>K</small></strong><span>69.000 ₫</span></td></tr></tbody></table><p class="price-note">Giá mẫu thực tế trong shop · Hình phía trên là minh họa ý tưởng.</p></div><a class="qr" href="https://nvtruongsun-hub.github.io/TT3Dstudio/" aria-label="Xem mẫu và giá thực tế tại shop"><img src="assets/images/poster-r7/qr-shop.svg" width="110" height="110" alt="QR xem mẫu và giá thực tế"><span>XEM MẪU &amp; GIÁ ↗</span></a></footer></div></section></div></main><p class="preview-note" id="preview-status" role="status">Hình sản phẩm được tạo bằng AI theo prompt của bạn. Bản thiết kế ý tưởng; mẫu thực tế xem tại shop.</p><script>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  background: #e5e3dc;
+  color: var(--ink);
+  font: 500 14px/1.5 Jakarta, Arial, sans-serif;
+}
+button {
+  font: inherit;
+  cursor: pointer;
+}
+button:focus-visible, a:focus-visible {
+  outline: 3px solid var(--clay);
+  outline-offset: 4px;
+}
+[hidden] {
+  display: none !important;
+}
+h1, h2, h3, p, figure {
+  margin: 0;
+}
+img {
+  display: block;
+}
+
+/* Control Top Bar */
+.control-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 24px;
+  background: #f9faf6;
+  border-bottom: 1px solid #cbd0c5;
+  min-height: 76px;
+}
+.control-brand {
+  font-weight: 700;
+}
+.control-brand small {
+  display: block;
+  color: var(--muted);
+  font-weight: 500;
+  font-size: 11px;
+}
+.controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.controls button {
+  min-height: 44px;
+  padding: 10px 15px;
+  border: 1px solid #c5cabe;
+  background: transparent;
+  color: var(--ink);
+  border-radius: 6px;
+}
+.controls button[aria-pressed=true] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: white;
+}
+.controls .print-button {
+  background: var(--clay);
+  color: white;
+  border-color: var(--clay);
+}
+
+/* Preview Canvas Stage */
+.preview-stage {
+  min-height: calc(100dvh - 124px);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 22px;
+  overflow: auto;
+}
+.preview-frame {
+  position: relative;
+  flex: none;
+  box-shadow: 0 16px 50px #273a3326;
+  background: var(--paper);
+}
+.print-sheet {
+  position: absolute;
+  inset: 0 auto auto 0;
+  transform-origin: top left;
+  background: var(--paper);
+}
+.artwork {
+  position: relative;
+  overflow: hidden;
+  background: var(--paper);
+  transform-origin: top left;
+  color: var(--ink);
+}
+.preview-note {
+  text-align: center;
+  padding: 0 16px 12px;
+  color: #4d5c50;
+  font-size: 12px;
+  min-height: 32px;
+}
+
+/* Layout Dimensions */
+#sheet-banner, .banner {
+  width: 1200px;
+  height: 600px;
+}
+#sheet-a2, .a2 {
+  width: 840px;
+  height: 1188px;
+}
+
+/* Brand Header */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  position: absolute;
+  z-index: 2;
+}
+.brand-word {
+  font-weight: 700;
+  font-size: 43px;
+  line-height: 1;
+  letter-spacing: -2px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+}
+.brand-labs {
+  font-size: 11px;
+  letter-spacing: 2.6px;
+  font-weight: 700;
+}
+.brand-strokes {
+  width: 20px;
+  height: 14px;
+  border-top: 3px solid var(--clay);
+  border-bottom: 3px solid var(--clay);
+  transform: translateY(3px);
+}
+
+.banner .brand {
+  top: 40px;
+  left: 48px;
+}
+.banner .title-block {
+  top: 135px;
+  left: 48px;
+  width: 355px;
+}
+
+.title-block {
+  position: absolute;
+  z-index: 2;
+}
+.eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  font-weight: 700;
+  color: var(--clay);
+  margin-bottom: 22px;
+}
+h1 {
+  font-size: 63px;
+  letter-spacing: -3.2px;
+  font-weight: 700;
+  line-height: 1.13;
+}
+h1 em {
+  font-style: normal;
+  color: var(--accent);
+}
+.intro {
+  font-size: 14px;
+  line-height: 1.85;
+  color: var(--muted);
+  margin-top: 22px;
+}
+
+/* Hero Trio Photo */
+.trio-photo {
+  position: absolute;
+  object-fit: contain;
+  pointer-events: none;
+}
+.banner .trio-photo {
+  width: 755px;
+  height: auto;
+  top: -15px;
+  right: 0;
+  z-index: 1;
+  mask-image: linear-gradient(to right, transparent, #000 24px), linear-gradient(to bottom, #000 calc(100% - 25px), transparent);
+  mask-composite: intersect;
+}
+
+.micro-signature {
+  position: absolute;
+  z-index: 2;
+  top: 411px;
+  left: 48px;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.micro-signature:before {
+  content: "";
+  width: 26px;
+  height: 2px;
+  background: var(--clay);
+}
+
+/* Artisan Price Board */
+.price-board {
+  position: relative;
+  isolation: isolate;
+  border: 1.6px solid var(--clay);
+  border-radius: 19px 7px 19px 7px;
+  padding: 22px 22px 13px;
+  background: var(--board-paper);
+  box-shadow: 3px 3px 0 var(--board-shadow), 6px 6px 0 #eee8df;
+}
+.price-board:before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  border: 1px solid var(--board-line);
+  border-radius: 13px 3px 13px 3px;
+  pointer-events: none;
+  z-index: -1;
+}
+.price-board:after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  right: 24px;
+  width: 48px;
+  height: 4px;
+  background: var(--clay);
+  border-radius: 0 0 3px 3px;
+  pointer-events: none;
+}
+.price-board h2,
+.a2-footer .price-board h2 {
+  position: absolute;
+  top: -9px;
+  left: 18px;
+  background: var(--paper);
+  padding: 0 9px;
+  margin: 0;
+  font-size: 9px;
+  line-height: 18px;
+  letter-spacing: 1.7px;
+  color: var(--clay);
+  white-space: nowrap;
+}
+.price-board table {
+  border-collapse: collapse;
+  width: 100%;
+  table-layout: fixed;
+}
+.price-board th {
+  height: 21px;
+  font-size: 12px;
+  line-height: 1.3;
+  text-align: left;
+  font-weight: 500;
+  padding: 0 12px 3px 0;
+  color: var(--ink);
+  vertical-align: top;
+}
+.price-board td {
+  padding: 0 12px 0 0;
+  vertical-align: top;
+}
+.price-board th + th,
+.price-board td + td {
+  border-left: 1px solid #ded5c8;
+  padding-left: 18px;
+}
+.price-board td strong {
+  display: block;
+  font-size: 33px;
+  line-height: 1.12;
+  letter-spacing: -1.5px;
+  color: var(--ink);
+}
+.price-board td small {
+  font-size: 18px;
+  letter-spacing: 0;
+  margin-left: 2px;
+}
+.price-board td span {
+  display: block;
+  font-size: 8px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.price-board .price-note {
+  font-size: 8px;
+  color: var(--muted);
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+/* Decorative Color Dot Swatches */
+.color-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border: 1px solid rgba(48, 58, 50, .22);
+  border-radius: 50%;
+  vertical-align: .05em;
+  background: var(--swatch);
+}
+
+th[data-product-id="mw-cn-1433737"] { --swatch: var(--taro); }
+th[data-product-id="mw-cn-2370777"] { --swatch: var(--mint); }
+th[data-product-id="mw-cn-2331892"] { --swatch: var(--strawberry); }
+th[data-product-id="mw-cn-1753199"] { --swatch: var(--matcha); }
+
+/* Banner Footer */
+.banner-footer {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  bottom: 23px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 100px;
+  gap: 25px;
+  align-items: center;
+}
+
+/* QR Hub */
+.qr {
+  display: block;
+  color: var(--ink);
+  text-decoration: none;
+  text-align: center;
+  flex: none;
+}
+.qr img {
+  width: 82px;
+  height: 82px;
+  margin: auto;
+  background: white;
+}
+.qr span {
+  display: block;
+  font-size: 8px;
+  font-weight: 700;
+  letter-spacing: .7px;
+  margin-top: 6px;
+}
+
+/* Format A2 Styles */
+.a2 .brand {
+  top: 43px;
+  left: 48px;
+}
+.a2 .brand-word {
+  font-size: 43px;
+}
+.a2 .page-label {
+  position: absolute;
+  right: 48px;
+  top: 55px;
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 2px;
+}
+.a2 .title-block {
+  top: 139px;
+  left: 48px;
+  right: 48px;
+}
+.a2 .eyebrow {
+  margin-bottom: 18px;
+  font-size: 11px;
+}
+.a2 h1 {
+  font-size: 81px;
+  line-height: 1.06;
+  letter-spacing: -4px;
+}
+.a2 .intro {
+  position: absolute;
+  left: 423px;
+  top: 95px;
+  font-size: 13px;
+  line-height: 1.85;
+  max-width: 300px;
+  margin: 0;
+}
+.a2 .trio-photo {
+  top: 355px;
+  left: 0;
+  width: 840px;
+  height: auto;
+  z-index: 1;
+}
+.a2 .caption {
+  position: absolute;
+  left: 48px;
+  right: 48px;
+  top: 945px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+.a2 .caption strong {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--clay);
+  letter-spacing: 2px;
+}
+.a2-footer {
+  position: absolute;
+  bottom: 39px;
+  left: 48px;
+  right: 48px;
+  display: grid;
+  grid-template-columns: 1fr 92px;
+  gap: 22px;
+  align-items: center;
+}
+.a2-footer .price-board {
+  padding: 23px 17px 13px;
+}
+.a2-footer .price-board h2 {
+  left: 12px;
+  font-size: 8px;
+  letter-spacing: 1.4px;
+}
+.a2-footer .price-board th {
+  font-size: 10px;
+  height: 30px;
+  padding-right: 8px;
+}
+.a2-footer .price-board td {
+  padding-right: 8px;
+}
+.a2-footer .price-board th + th,
+.a2-footer .price-board td + td {
+  padding-left: 12px;
+}
+.a2-footer .price-board td strong {
+  font-size: 31px;
+}
+.a2-footer .price-board .price-note {
+  font-size: 7px;
+  margin-top: 10px;
+  line-height: 1.5;
+}
+.a2-footer .qr img {
+  width: 88px;
+  height: 88px;
+}
+.a2-footer .qr span {
+  font-size: 8px;
+}
+
+@media(max-width: 680px) {
+  .control-bar {
+    padding: 12px;
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 9px;
+  }
+  .control-brand small {
+    display: none;
+  }
+  .controls {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  .controls button {
+    padding: 10px 8px;
+    font-size: 12px;
+  }
+  .preview-stage {
+    padding: 14px 10px;
+    min-height: 0;
+  }
+  .preview-note {
+    font-size: 11px;
+    padding: 8px 12px 16px;
+  }
+}
+
+@page stall-a2 {
+  size: 420mm 594mm;
+  margin: 0;
+}
+@page stall-banner {
+  size: 1200mm 600mm;
+  margin: 0;
+}
+
+@media print {
+  html, body {
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    background: white !important;
+    height: auto !important;
+    min-height: 0 !important;
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+  .control-bar, .preview-note {
+    display: none !important;
+  }
+  .preview-stage, .preview-frame {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: auto !important;
+    height: auto !important;
+    min-height: 0 !important;
+    overflow: visible !important;
+    box-shadow: none !important;
+  }
+  .print-sheet {
+    position: relative;
+    transform: none !important;
+    overflow: hidden;
+    break-inside: avoid;
+  }
+  .artwork {
+    transform-origin: top left;
+  }
+  #sheet-a2 {
+    page: stall-a2;
+    width: 420mm;
+    height: 594mm;
+  }
+  #sheet-banner {
+    page: stall-banner;
+    width: 1200mm;
+    height: 600mm;
+  }
+  #sheet-a2 .artwork {
+    transform: scale(1.889763779527559);
+  }
+  #sheet-banner .artwork {
+    transform: scale(3.779527559055118);
+  }
+}
+</style>
+</head>
+<body>
+
+<nav class="control-bar" aria-label="Điều khiển thiết kế">
+  <div class="control-brand">
+    T&amp;T / Bấm vui. Mang theo.
+    <small>Hình chủ đạo isometric · R11</small>
+  </div>
+  <div class="controls">
+    <button id="btn-show-banner" type="button" aria-pressed="true" onclick="switchFormat('banner')">Biển quầy · 1200 × 600 mm</button>
+    <button id="btn-show-a2" type="button" aria-pressed="false" onclick="switchFormat('a2')">Poster A2 · 420 × 594 mm</button>
+    <button id="zoom-button" type="button" aria-pressed="false" onclick="toggleZoom()">Xem 100%</button>
+    <button type="button" class="print-button" onclick="handlePrint()">In / Lưu PDF</button>
+  </div>
+</nav>
+
+<main class="preview-stage">
+  <div class="preview-frame">
+    <!-- Format 1: Banner Ngang 1200x600 mm -->
+    <section id="sheet-banner" class="print-sheet" data-format="banner" aria-label="Banner T&T">
+      <div class="artwork banner">
+        <img class="trio-photo" src="assets/images/poster-r11/tactile-trio-vibrant.png" width="1536" height="1024" alt="Hình ý tưởng: clicker mèo pastel, kem ốc quế và quả bơ với switch cơ học lộ nhẹ, nổi trên nền ngà">
+        
+        <div class="brand" aria-label="T&T 3D Labs">
+          <span class="brand-word">T&amp;T<span class="brand-strokes" aria-hidden="true"></span></span>
+          <span class="brand-labs">3D LABS</span>
+        </div>
+
+        <div class="title-block">
+          <p class="eyebrow">MÓC KHÓA &amp; CLICKER IN 3D</p>
+          <h1>Bấm <em>vui.</em><br>Mang theo.</h1>
+          <p class="intro">Một chút cá tính.<br>Một niềm vui trong lòng bàn tay.</p>
+        </div>
+
+        <p class="micro-signature">TỪNG LỚP IN. RIÊNG CHẤT BẠN.</p>
+
+        <footer class="banner-footer">
+          <div class="price-board">
+            <h2>BẢNG GIÁ MẪU CƠ BẢN</h2>
+            <table aria-label="Bảng giá sản phẩm trong shop">
+              <thead>
+                <tr>
+                  <th scope="col" data-product-id="mw-cn-1433737"><span class="color-dot" aria-hidden="true"></span>Mèo mini khớp động</th>
+                  <th scope="col" data-product-id="mw-cn-2370777"><span class="color-dot" aria-hidden="true"></span>Clicker cơ học</th>
+                  <th scope="col" data-product-id="mw-cn-2331892"><span class="color-dot" aria-hidden="true"></span>Clicker kem</th>
+                  <th scope="col" data-product-id="mw-cn-1753199"><span class="color-dot" aria-hidden="true"></span>Clicker quả bơ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>29<small>K</small></strong><span>29.000 ₫</span></td>
+                  <td><strong>39<small>K</small></strong><span>39.000 ₫</span></td>
+                  <td><strong>49<small>K</small></strong><span>49.000 ₫</span></td>
+                  <td><strong>69<small>K</small></strong><span>69.000 ₫</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="price-note">Giá mẫu thực tế trong shop · Hình phía trên là minh họa ý tưởng.</p>
+          </div>
+
+          <a class="qr" href="https://nvtruongsun-hub.github.io/TT3Dstudio/" aria-label="Xem mẫu và giá thực tế tại shop">
+            <img src="assets/images/poster-r7/qr-shop.svg" width="110" height="110" alt="QR xem mẫu và giá thực tế">
+            <span>XEM MẪU &amp; GIÁ ↗</span>
+          </a>
+        </footer>
+      </div>
+    </section>
+
+    <!-- Format 2: Poster A2 420x594 mm -->
+    <section id="sheet-a2" class="print-sheet" data-format="a2" hidden aria-label="Poster A2 T&T">
+      <div class="artwork a2">
+        <div class="brand" aria-label="T&T 3D Labs">
+          <span class="brand-word">T&amp;T<span class="brand-strokes" aria-hidden="true"></span></span>
+          <span class="brand-labs">3D LABS</span>
+        </div>
+
+        <p class="page-label">TỪNG LỚP IN. RIÊNG CHẤT BẠN.</p>
+
+        <div class="title-block">
+          <p class="eyebrow">MÓC KHÓA &amp; CLICKER IN 3D</p>
+          <h1>Bấm <em>vui.</em><br>Mang theo.</h1>
+          <p class="intro">Một chút cá tính.<br>Một niềm vui trong lòng bàn tay.</p>
+        </div>
+
+        <img class="trio-photo" src="assets/images/poster-r11/tactile-trio-vibrant.png" width="1536" height="1024" alt="Hình ý tưởng: clicker mèo pastel, kem ốc quế và quả bơ với switch cơ học lộ nhẹ, nổi trên nền ngà">
+
+        <div class="caption">
+          <span>MÈO MINI / KEM ỐC QUẾ / QUẢ BƠ</span>
+          <strong>NHỎ TRONG TAY. VUI MỖI NGÀY.</strong>
+        </div>
+
+        <footer class="a2-footer">
+          <div class="price-board">
+            <h2>BẢNG GIÁ MẪU CƠ BẢN</h2>
+            <table aria-label="Bảng giá sản phẩm trong shop">
+              <thead>
+                <tr>
+                  <th scope="col" data-product-id="mw-cn-1433737"><span class="color-dot" aria-hidden="true"></span>Mèo mini khớp động</th>
+                  <th scope="col" data-product-id="mw-cn-2370777"><span class="color-dot" aria-hidden="true"></span>Clicker cơ học</th>
+                  <th scope="col" data-product-id="mw-cn-2331892"><span class="color-dot" aria-hidden="true"></span>Clicker kem</th>
+                  <th scope="col" data-product-id="mw-cn-1753199"><span class="color-dot" aria-hidden="true"></span>Clicker quả bơ</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>29<small>K</small></strong><span>29.000 ₫</span></td>
+                  <td><strong>39<small>K</small></strong><span>39.000 ₫</span></td>
+                  <td><strong>49<small>K</small></strong><span>49.000 ₫</span></td>
+                  <td><strong>69<small>K</small></strong><span>69.000 ₫</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="price-note">Giá mẫu thực tế trong shop · Hình phía trên là minh họa ý tưởng.</p>
+          </div>
+
+          <a class="qr" href="https://nvtruongsun-hub.github.io/TT3Dstudio/" aria-label="Xem mẫu và giá thực tế tại shop">
+            <img src="assets/images/poster-r7/qr-shop.svg" width="110" height="110" alt="QR xem mẫu và giá thực tế">
+            <span>XEM MẪU &amp; GIÁ ↗</span>
+          </a>
+        </footer>
+      </div>
+    </section>
+  </div>
+</main>
+
+<p class="preview-note" id="preview-status" role="status">Hình sản phẩm được tạo bằng AI theo prompt của bạn. Bản thiết kế ý tưởng; mẫu thực tế xem tại shop.</p>
+
+<script>
 'use strict';
-const FORMATS={a2:{width:840,height:1188,widthMm:420,heightMm:594},banner:{width:1200,height:600,widthMm:1200,heightMm:600}};
-let activeFormat='banner',zoomed=false,isPreparingPrint=false;
-function fitPreview(){const stage=document.querySelector('.preview-stage'),frame=document.querySelector('.preview-frame'),sheet=document.querySelector('.print-sheet:not([hidden])');if(!stage||!sheet)return;const base=FORMATS[activeFormat];const mobile=innerWidth<=680;const availableWidth=Math.max(160,stage.clientWidth-(mobile?20:44));const availableHeight=Math.max(320,innerHeight-document.querySelector('.control-bar').offsetHeight-80);const scale=zoomed?1:Math.min(availableWidth/base.width,mobile?Infinity:availableHeight/base.height,1);frame.style.width=base.width*scale+'px';frame.style.height=base.height*scale+'px';sheet.style.transform=`scale(${scale})`;stage.style.justifyContent=zoomed&&availableWidth<base.width?'flex-start':'center';}
-function switchFormat(format){if(!FORMATS[format])throw new Error('Khổ in không hợp lệ');if(isPreparingPrint)throw new Error('Đang chuẩn bị bản in');activeFormat=format;for(const name of Object.keys(FORMATS)){document.getElementById('sheet-'+name).hidden=name!==format;document.getElementById('btn-show-'+name).setAttribute('aria-pressed',String(name===format));}fitPreview();}
-function toggleZoom(){zoomed=!zoomed;document.getElementById('zoom-button').setAttribute('aria-pressed',String(zoomed));document.getElementById('zoom-button').textContent=zoomed?'Vừa màn hình':'Xem 100%';fitPreview();}
-async function prepareForPrint(format){if(isPreparingPrint)throw new Error('Đang chuẩn bị bản in');switchFormat(format);isPreparingPrint=true;let timer;try{await Promise.race([Promise.all([document.fonts.ready,...Array.from(document.querySelector('#sheet-'+format).querySelectorAll('img'),img=>img.decode())]),new Promise((_,reject)=>{timer=setTimeout(()=>reject(new Error('Ảnh hoặc font chưa tải xong. Vui lòng tải lại trang.')),10000)})]);await new Promise(r=>requestAnimationFrame(r));return{success:true,revision:'R10',format,...FORMATS[format],imageCount:document.querySelectorAll('#sheet-'+format+' img').length};}finally{clearTimeout(timer);isPreparingPrint=false;}}
-async function handlePrint(){const button=document.querySelector('.print-button');button.disabled=true;try{await prepareForPrint(activeFormat);window.print();}catch(error){document.getElementById('preview-status').textContent=error.message;}finally{button.disabled=false;}}
-window.addEventListener('resize',fitPreview);window.addEventListener('load',fitPreview);window.addEventListener('afterprint',fitPreview);new ResizeObserver(fitPreview).observe(document.querySelector('.control-bar'));fitPreview();
-</script></body></html>
+const FORMATS = {
+  a2: { width: 840, height: 1188, widthMm: 420, heightMm: 594 },
+  banner: { width: 1200, height: 600, widthMm: 1200, heightMm: 600 }
+};
+let activeFormat = 'banner', zoomed = false, isPreparingPrint = false;
+
+function fitPreview() {
+  const stage = document.querySelector('.preview-stage');
+  const frame = document.querySelector('.preview-frame');
+  const sheet = document.querySelector('.print-sheet:not([hidden])');
+  if (!stage || !sheet) return;
+  const base = FORMATS[activeFormat];
+  const mobile = innerWidth <= 680;
+  const availableWidth = Math.max(160, stage.clientWidth - (mobile ? 20 : 44));
+  const availableHeight = Math.max(320, innerHeight - document.querySelector('.control-bar').offsetHeight - 80);
+  const scale = zoomed ? 1 : Math.min(availableWidth / base.width, mobile ? Infinity : availableHeight / base.height, 1);
+  frame.style.width = base.width * scale + 'px';
+  frame.style.height = base.height * scale + 'px';
+  sheet.style.transform = `scale(${scale})`;
+  stage.style.justifyContent = zoomed && availableWidth < base.width ? 'flex-start' : 'center';
+}
+
+function switchFormat(format) {
+  if (!FORMATS[format]) throw new Error('Khổ in không hợp lệ');
+  if (isPreparingPrint) throw new Error('Đang chuẩn bị bản in');
+  activeFormat = format;
+  for (const name of Object.keys(FORMATS)) {
+    document.getElementById('sheet-' + name).hidden = name !== format;
+    document.getElementById('btn-show-' + name).setAttribute('aria-pressed', String(name === format));
+  }
+  fitPreview();
+}
+
+function toggleZoom() {
+  zoomed = !zoomed;
+  document.getElementById('zoom-button').setAttribute('aria-pressed', String(zoomed));
+  document.getElementById('zoom-button').textContent = zoomed ? 'Vừa màn hình' : 'Xem 100%';
+  fitPreview();
+}
+
+async function prepareForPrint(format) {
+  if (isPreparingPrint) throw new Error('Đang chuẩn bị bản in');
+  switchFormat(format);
+  isPreparingPrint = true;
+  let timer;
+  try {
+    await Promise.race([
+      Promise.all([
+        document.fonts.ready,
+        ...Array.from(document.querySelector('#sheet-' + format).querySelectorAll('img'), img => img.decode ? img.decode() : Promise.resolve())
+      ]),
+      new Promise((_, reject) => {
+        timer = setTimeout(() => reject(new Error('Ảnh hoặc font chưa tải xong. Vui lòng tải lại trang.')), 10000);
+      })
+    ]);
+    await new Promise(r => requestAnimationFrame(r));
+    return {
+      success: true,
+      revision: 'R11',
+      format,
+      ...FORMATS[format],
+      imageCount: document.querySelectorAll('#sheet-' + format + ' img').length
+    };
+  } finally {
+    clearTimeout(timer);
+    isPreparingPrint = false;
+  }
+}
+
+async function handlePrint() {
+  const button = document.querySelector('.print-button');
+  button.disabled = true;
+  try {
+    await prepareForPrint(activeFormat);
+    window.print();
+  } catch (error) {
+    document.getElementById('preview-status').textContent = error.message;
+  } finally {
+    button.disabled = false;
+  }
+}
+
+window.addEventListener('resize', fitPreview);
+window.addEventListener('load', fitPreview);
+window.addEventListener('afterprint', fitPreview);
+new ResizeObserver(fitPreview).observe(document.querySelector('.control-bar'));
+fitPreview();
+</script>
+</body>
+</html>

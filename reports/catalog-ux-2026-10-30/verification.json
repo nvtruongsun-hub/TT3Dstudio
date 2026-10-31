@@ -1,0 +1,78 @@
+[
+  {
+    "name": "First 12 choices cover all five categories without duplicated products",
+    "pass": true
+  },
+  {
+    "name": "Advanced filters open by keyboard and Escape restores focus",
+    "pass": true
+  },
+  {
+    "name": "Budget under-100 returns every matching product and no others",
+    "pass": true
+  },
+  {
+    "name": "Budget 100-200 returns every matching product and no others",
+    "pass": true
+  },
+  {
+    "name": "Budget over-200 returns every matching product and no others",
+    "pass": true
+  },
+  {
+    "name": "Category, subtype, budget and text search combine; removing one preserves others",
+    "pass": true
+  },
+  {
+    "name": "Empty combination offers a complete reset including budget, search and sort",
+    "pass": true
+  },
+  {
+    "name": "Loading more keeps existing order, focuses the next card and reaches all 55 choices",
+    "pass": true
+  },
+  {
+    "name": "Images show the full photo and color legends reflect actual available colors",
+    "pass": true
+  },
+  {
+    "name": "Small action labels retain a contrast ratio of at least 4.5 against their surfaces",
+    "pass": true
+  },
+  {
+    "name": "Closing product details returns to the same filtered results and card focus",
+    "pass": true
+  },
+  {
+    "name": "Xem & chọn opens the correct item and preserves selected color/material in cart",
+    "pass": true
+  },
+  {
+    "name": "Catalog controls and product columns fit at 320px",
+    "pass": true
+  },
+  {
+    "name": "Catalog controls and product columns fit at 390px",
+    "pass": true
+  },
+  {
+    "name": "Catalog controls and product columns fit at 768px",
+    "pass": true
+  },
+  {
+    "name": "Catalog controls and product columns fit at 1440px",
+    "pass": true
+  },
+  {
+    "name": "Saved photo layout survives a reload",
+    "pass": true
+  },
+  {
+    "name": "Exact budget boundaries 100000 and 200000 belong to only one range",
+    "pass": true
+  },
+  {
+    "name": "No browser runtime exceptions in the catalog buying flow",
+    "pass": true
+  }
+]

@@ -541,8 +541,9 @@
       const detailBtn = document.getElementById('hero-showcase-detail-btn');
 
       if (imgEl) {
-        imgEl.src = targetSrc;
-        imgEl.alt = product.title || 'Sản phẩm chế tác T&T 3D';
+        const alt = product.title || 'Sản phẩm chế tác T&T 3D';
+        if (window.TTInterfaceMotion) window.TTInterfaceMotion.swapHeroImage(imgEl, targetSrc, alt);
+        else { imgEl.src = targetSrc; imgEl.alt = alt; }
       }
 
       if (mediaEl) {

@@ -10,9 +10,20 @@ const path = require('path');
       const errors = [];
       page.on('pageerror', error => errors.push(error.message));
       await page.goto('http://127.0.0.1:8765', { waitUntil: 'domcontentloaded' });
-      await page.waitForSelector('#curated-product-grid .tt-product-card');
+      await page.waitForSelector('#store-product-grid .tt-product-card');
       await page.waitForTimeout(2200);
       await page.screenshot({ path: path.join(__dirname, `${process.env.AUDIT_PHASE || 'before'}-${name}.png`) });
+      if (name === 'mobile' && process.env.AUDIT_PHASE === 'final') {
+        await page.evaluate(() => {
+          const catalog = document.getElementById('store-catalog');
+          const header = document.getElementById('floating-navbar').getBoundingClientRect().height;
+          window.scrollTo({ top: catalog.getBoundingClientRect().top + scrollY - header, behavior: 'instant' });
+        });
+        await page.waitForTimeout(900);
+        await page.screenshot({ path: path.join(__dirname, 'final-mobile-catalog.png') });
+        console.log('Catalog media geometry', await page.locator('#store-product-grid .tt-product-media').first().evaluate(x => ({width:x.getBoundingClientRect().width,height:x.getBoundingClientRect().height})));
+        await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
+      }
       results.push({ name, errors, ...await page.evaluate(() => ({
         title: document.title,
         viewport: innerWidth,

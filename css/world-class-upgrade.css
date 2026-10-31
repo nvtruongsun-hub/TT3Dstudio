@@ -390,3 +390,95 @@ body.minimal-storefront {
   .minimal-storefront *, .minimal-storefront *::before, .minimal-storefront *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .minimal-storefront .studio-reveal-pending { opacity: 1 !important; transform: none !important; }
 }
+
+/* =========================================================================
+   INTERNATIONAL ATELIER LUXURY POLISH (Apple & Teenage Engineering Benchmarks)
+   ========================================================================= */
+.minimal-storefront .floating-navbar-container {
+  background: rgba(247, 246, 242, 0.85) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(20, 20, 19, 0.06) !important;
+  box-shadow: 0 4px 20px -4px rgba(20, 20, 19, 0.03) !important;
+}
+
+.minimal-storefront .workspace-nav-tab {
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  padding: 8px 16px !important;
+  border-radius: 9999px !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.minimal-storefront .workspace-nav-tab.active {
+  background: rgba(20, 20, 19, 0.06) !important;
+  color: var(--text-primary) !important;
+}
+
+.minimal-storefront .minimal-hero-title {
+  font-weight: 800 !important;
+  letter-spacing: -0.04em !important;
+  line-height: 1.12 !important;
+}
+
+.minimal-storefront .minimal-hero-title span {
+  color: var(--accent-primary) !important;
+  background: linear-gradient(135deg, #C85A32 0%, #E05626 50%, #983F1E 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.minimal-storefront .bento-card {
+  border: 1px solid rgba(20, 20, 19, 0.06) !important;
+  box-shadow: 0 8px 24px -6px rgba(20, 20, 19, 0.04) !important;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.minimal-storefront .bento-card:hover {
+  transform: translateY(-3px) scale(1.01) !important;
+  box-shadow: 0 20px 36px -10px rgba(20, 20, 19, 0.08), 0 0 0 1px rgba(200, 90, 50, 0.12) !important;
+}
+
+.minimal-storefront .catalog-product-card,
+.minimal-storefront .tt-product-card {
+  border: 1px solid rgba(20, 20, 19, 0.07) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 4px 18px -4px rgba(20, 20, 19, 0.03) !important;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.minimal-storefront .catalog-product-card:hover,
+.minimal-storefront .tt-product-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 16px 36px -8px rgba(20, 20, 19, 0.08), 0 0 0 1px rgba(200, 90, 50, 0.1) !important;
+  border-color: rgba(200, 90, 50, 0.25) !important;
+}
+
+.minimal-storefront .btn-primary {
+  background: #141413 !important;
+  color: #F7F6F2 !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  box-shadow: 0 8px 20px -4px rgba(20, 20, 19, 0.2) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.minimal-storefront .btn-primary:hover {
+  background: #C85A32 !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 12px 24px -4px rgba(200, 90, 50, 0.35) !important;
+}
+
+.minimal-storefront .segmented-pill {
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  border: 1px solid rgba(20, 20, 19, 0.08) !important;
+  background: #FFFFFF !important;
+}
+
+.minimal-storefront .segmented-pill.active {
+  background: #141413 !important;
+  color: #FFFFFF !important;
+  border-color: #141413 !important;
+  box-shadow: 0 4px 14px -2px rgba(20, 20, 19, 0.25) !important;
+}

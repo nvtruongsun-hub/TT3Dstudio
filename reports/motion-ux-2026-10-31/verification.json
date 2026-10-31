@@ -1,0 +1,74 @@
+[
+  {
+    "name": "Existing full catalog loads with motion enhancement",
+    "pass": true
+  },
+  {
+    "name": "Hero workflow, photograph and ticker animate while visible",
+    "pass": true
+  },
+  {
+    "name": "Shared pause stops every ambient loop and is remembered on reload",
+    "pass": true
+  },
+  {
+    "name": "Autoplay switches products without moving keyboard focus",
+    "pass": true
+  },
+  {
+    "name": "Manual hero choice pauses autoplay and cleans up crossfade copies",
+    "pass": true
+  },
+  {
+    "name": "Scrolling away suspends hero and ticker loops",
+    "pass": true
+  },
+  {
+    "name": "Rapid filter open/close settles on the final choice",
+    "pass": true
+  },
+  {
+    "name": "Category changes move the indicator and preserve correct matching cards",
+    "pass": true
+  },
+  {
+    "name": "Opening and closing details keeps the clicked item and returns focus",
+    "pass": true
+  },
+  {
+    "name": "Reopening during close cancels the stale close callback",
+    "pass": true
+  },
+  {
+    "name": "Cart handoff preserves variant, focus and scroll lock; closing returns to the card",
+    "pass": true
+  },
+  {
+    "name": "Responsive motion at 320px has no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "Responsive motion at 390px has no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "Responsive motion at 768px has no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "Responsive motion at 1440px has no horizontal overflow",
+    "pass": true
+  },
+  {
+    "name": "Reduced motion immediately ends transitions and disables automatic loops",
+    "pass": true
+  },
+  {
+    "name": "No runtime exceptions through animated browsing and cart flow",
+    "pass": true
+  },
+  {
+    "name": "Touch resume starts immediately and ambient motion pauses behind product details",
+    "pass": true
+  }
+]

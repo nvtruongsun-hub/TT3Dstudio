@@ -1,0 +1,35 @@
+{
+  "revision": "R11",
+  "heroAsset": "assets/images/poster-r11/tactile-trio-vibrant.png",
+  "sourceAsset": "assets/images/poster-r10/tactile-trio.png",
+  "resolution": {
+    "width": 1536,
+    "height": 1024
+  },
+  "bannerPlacement": {
+    "cssWidth": "755px",
+    "effectivePhysicalWidthMm": 755,
+    "ppiAtPrint": 51.7
+  },
+  "a2Placement": {
+    "cssWidth": "840px",
+    "effectivePhysicalWidthMm": 420,
+    "ppiAtPrint": 92.9
+  },
+  "colorEnhancements": {
+    "paperColor": "#FAF8F5",
+    "taroLilac": "#9D7EC4 (Vibrance +32%)",
+    "strawberryPink": "#FA7B8C (Vibrance +28%)",
+    "matchaAvocado": "#569850 (Vibrance +30%, botanical tuning)",
+    "waffleGold": "#E8B06C (Warmth +22%)",
+    "tactileLayerLines": "Preserved natural FDM texture with S-curve micro-contrast tuning"
+  },
+  "fileSizes": {
+    "sourceR10Bytes": 2007733,
+    "vibrantR11Bytes": 2195094
+  },
+  "hashes": {
+    "sourceR10Sha256": "118e1ad9621a8da70159c34e19507d228acc0cc6c7c715bbc33f7ae45c757d47",
+    "vibrantR11Sha256": "2f5518d6dbc2dfa7f5440ed875103a224194af9fad6118e46da1036407721e7b"
+  }
+}

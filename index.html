@@ -24,6 +24,7 @@
   <link rel="stylesheet" href="css/minimal.css?v=20261027-clarity">
   <link rel="stylesheet" href="css/world-class-upgrade.css?v=20261031-argon-marquee">
   <link rel="stylesheet" href="css/catalog.css?v=20261031-compact-r1">
+  <link rel="stylesheet" href="css/interface-motion.css?v=20261031-atelier-r1">
 
   <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
   <script type="module" src="js/firebase-init.js?v=1.0"></script>
@@ -42,14 +43,15 @@
   <script src="js/gift-quiz.js?v=4.0"></script>
   <script src="js/visual-renderer.js?v=4.0"></script>
   <script src="js/catalog-store.js?v=5.0-mw105"></script>
-  <script src="js/products-manager.js?v=5.0-mw105"></script>
+  <script src="js/products-manager.js?v=5.0-mw105-motion-r1"></script>
   <script src="js/viewer3d.js?v=4.0"></script>
   <script src="js/calculator.js?v=4.0"></script>
   <script src="js/config.js?v=4.0"></script>
   <script src="js/automation-simulator.js?v=4.1"></script>
-  <script src="js/product-experience.js?v=20261030-studio" defer></script>
-  <script src="js/app.js?v=4.5-compact-r1" defer></script>
-  <script src="js/studio-experience.js?v=20261030" defer></script>
+  <script src="js/product-experience.js?v=20261031-motion-r1" defer></script>
+  <script src="js/app.js?v=20261031-motion-r1" defer></script>
+  <script src="js/interface-motion.js?v=20261031-atelier-r1" defer></script>
+  <script src="js/studio-experience.js?v=20261031-atelier-r1" defer></script>
 </head>
 
 <body class="minimal-storefront bg-[var(--bg-canvas)] text-[var(--text-primary)] flex flex-col min-h-screen selection:bg-[#D45B34] selection:text-white antialiased">
@@ -60,34 +62,35 @@
        1. TOP AUTOMATION WORKSHOP TICKER (INFINITE RUNNING MARQUEE)
        ========================================================================= -->
   <aside aria-label="Thông báo tự động xưởng in" class="automation-marquee-bar">
+    <button type="button" id="studio-ticker-toggle" aria-pressed="true" aria-label="Tạm dừng hiệu ứng tự động" title="Tạm dừng hiệu ứng tự động"><i class="fa-solid fa-pause" aria-hidden="true"></i></button>
     <div class="automation-loop-track">
       <div class="automation-loop-content">
-        <span class="automation-loop-item"><i class="fa-solid fa-bolt text-[#D45B34]"></i> <strong>TIỆM IN 3D ĐẦU TIÊN TẠI HÀ TĨNH</strong> — XƯỞNG CHẾ TÁC SỐ T&amp;T LABS</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-cube text-[#D45B34]"></i> <strong>T&amp;T 3D ATELIER</strong> — XƯỞNG CHẾ TÁC SỐ &amp; NGHỆ THUẬT 3D CHUẨN QUỐC TẾ</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-truck-fast text-[#10B981]"></i> <strong>FREESHIP TOÀN KHU VỰC CẨM XUYÊN</strong> — GIAO TẬN TAY TRONG NGÀY</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-shapes text-[#10B981]"></i> BỘ SƯU TẬP <strong>105 TÁC PHẨM MAKERWORLD</strong> TUYỂN CHỌN CAO CẤP</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-cube text-[#D45B34]"></i> ĐỘ MỊN CÔNG NGHỆ 0.12MM · NHỰA NGUYÊN SINH BIO-PLA &amp; PETG AN TOÀN</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-layer-group text-[#D45B34]"></i> ĐỘ MỊN CÔNG NGHỆ 0.08MM · NHỰA NGUYÊN SINH BIO-PLA &amp; PETG CHỐNG TIA UV</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-wand-magic-sparkles text-[#38BDF8]"></i> NHẬN THIẾT KẾ &amp; KHẮC TÊN CÁ NHÂN HÓA THEO YÊU CẦU</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-truck-fast text-[#10B981]"></i> GIAO HỎA TỐC TOÀN QUỐC — ĐÓNG GÓI CHUẨN ATELIER HỘP QUÀ</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-phone text-[#10B981]"></i> ZALO / HOTLINE XƯỞNG: <strong>0349.657.529</strong> (MÁY IN CHẠY 24/7)</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-phone text-[#10B981]"></i> HOTLINE / ZALO TƯ VẤN: <strong>0349.657.529</strong></span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-shield-halved text-[#D45B34]"></i> BẢO HÀNH 1:1 ĐỔI MỚI MỌI LỖI IN</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-shield-halved text-[#D45B34]"></i> CAM KẾT CHẤT LƯỢNG: 1 ĐỔI 1 MỌI LỖI IN</span>
         <span class="automation-loop-divider">•</span>
       </div>
       <!-- Lặp lại track thứ 2 để tạo vòng lặp vô tận (infinite marquee loop) 100% mượt mà không khựng -->
       <div class="automation-loop-content" aria-hidden="true">
-        <span class="automation-loop-item"><i class="fa-solid fa-bolt text-[#D45B34]"></i> <strong>TIỆM IN 3D ĐẦU TIÊN TẠI HÀ TĨNH</strong> — XƯỞNG CHẾ TÁC SỐ T&amp;T LABS</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-cube text-[#D45B34]"></i> <strong>T&amp;T 3D ATELIER</strong> — XƯỞNG CHẾ TÁC SỐ &amp; NGHỆ THUẬT 3D CHUẨN QUỐC TẾ</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-truck-fast text-[#10B981]"></i> <strong>FREESHIP TOÀN KHU VỰC CẨM XUYÊN</strong> — GIAO TẬN TAY TRONG NGÀY</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-shapes text-[#10B981]"></i> BỘ SƯU TẬP <strong>105 TÁC PHẨM MAKERWORLD</strong> TUYỂN CHỌN CAO CẤP</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-cube text-[#D45B34]"></i> ĐỘ MỊN CÔNG NGHỆ 0.12MM · NHỰA NGUYÊN SINH BIO-PLA &amp; PETG AN TOÀN</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-layer-group text-[#D45B34]"></i> ĐỘ MỊN CÔNG NGHỆ 0.08MM · NHỰA NGUYÊN SINH BIO-PLA &amp; PETG CHỐNG TIA UV</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-wand-magic-sparkles text-[#38BDF8]"></i> NHẬN THIẾT KẾ &amp; KHẮC TÊN CÁ NHÂN HÓA THEO YÊU CẦU</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-truck-fast text-[#10B981]"></i> GIAO HỎA TỐC TOÀN QUỐC — ĐÓNG GÓI CHUẨN ATELIER HỘP QUÀ</span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-phone text-[#10B981]"></i> ZALO / HOTLINE XƯỞNG: <strong>0349.657.529</strong> (MÁY IN CHẠY 24/7)</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-phone text-[#10B981]"></i> HOTLINE / ZALO TƯ VẤN: <strong>0349.657.529</strong></span>
         <span class="automation-loop-divider">•</span>
-        <span class="automation-loop-item"><i class="fa-solid fa-shield-halved text-[#D45B34]"></i> BẢO HÀNH 1:1 ĐỔI MỚI MỌI LỖI IN</span>
+        <span class="automation-loop-item"><i class="fa-solid fa-shield-halved text-[#D45B34]"></i> CAM KẾT CHẤT LƯỢNG: 1 ĐỔI 1 MỌI LỖI IN</span>
         <span class="automation-loop-divider">•</span>
       </div>
     </div>
@@ -105,7 +108,7 @@
         <img src="assets/images/logo-premium.svg?v=4.0" alt="T&amp;T 3D Labs" class="brand-logo w-[150px] sm:w-[185px] h-auto object-contain">
       </a>
 
-      <!-- Desktop 5 Primary Navigation Tabs -->
+      <!-- Desktop 4 Primary Navigation Tabs (Studio Precision Navigation) -->
       <nav class="store-main-nav" aria-label="Menu chính">
         
         <button type="button"
@@ -113,17 +116,7 @@
                 onclick="window.switchWorkspace('view-store')"
                 class="workspace-nav-tab active" 
                 title="Cửa hàng &amp; Bộ sưu tập chọn lọc">
-          
           <span>Cửa hàng</span>
-        </button>
-        
-        <button type="button"
-                data-nav-view="view-personalize" 
-                onclick="window.switchWorkspace('view-personalize')"
-                class="workspace-nav-tab" 
-                title="Chọn mẫu, màu sắc và nội dung riêng">
-          
-          <span>Cá nhân hóa</span>
         </button>
         
         <button type="button"
@@ -131,8 +124,7 @@
                 onclick="window.switchWorkspace('view-inspiration')"
                 class="workspace-nav-tab" 
                 title="Góc bàn làm việc, bàn trang điểm &amp; quầy cafe">
-          
-          <span>Cảm hứng</span>
+          <span>Cảm hứng &amp; Setup</span>
         </button>
 
         <button type="button"
@@ -140,17 +132,15 @@
                 onclick="window.switchWorkspace('view-tracking')"
                 class="workspace-nav-tab" 
                 title="Tra cứu tiến độ in 3D &amp; vận đơn thực tế">
-          
-          <span>Tra đơn</span>
+          <span>Tra cứu đơn</span>
         </button>
         
         <button type="button"
                 data-nav-view="view-support" 
                 onclick="window.switchWorkspace('view-support')"
                 class="workspace-nav-tab" 
-                title="Hướng dẫn NFC, vật liệu, bảo quản &amp; đổi trả">
-          
-          <span>Hỗ trợ</span>
+                title="Hướng dẫn vật liệu, độ mịn, bảo quản &amp; đổi trả">
+          <span>Hỗ trợ xưởng</span>
         </button>
 
       </nav>
@@ -190,20 +180,17 @@
 
     <!-- Mobile Dropdown Nav Drawer -->
     <div id="mobile-nav-drawer" class="hidden md:hidden border-t border-[#DCDDD5] px-5 py-4 space-y-2 bg-white shadow-lg">
-      <a href="#store" data-nav-view="view-store" onclick="window.switchWorkspace('view-store'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
-        <i class="fa-solid fa-store mr-2 text-[#FF5C00]"></i> Cửa Hàng &amp; Sản Phẩm
+      <a href="#store" data-nav-view="view-store" onclick="window.switchWorkspace('view-store'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#C85A32]">
+        <i class="fa-solid fa-store mr-2 text-[#C85A32]"></i> Cửa Hàng &amp; Bộ Sưu Tập
       </a>
-      <a href="#personalize" data-nav-view="view-personalize" onclick="window.switchWorkspace('view-personalize'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
-        <i class="fa-solid fa-wand-magic-sparkles mr-2 text-[#FF5C00]"></i> Cá nhân hóa
+      <a href="#inspiration" data-nav-view="view-inspiration" onclick="window.switchWorkspace('view-inspiration'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#C85A32]">
+        <i class="fa-solid fa-compass-drafting mr-2 text-[#C85A32]"></i> Cảm Hứng &amp; Setup Không Gian
       </a>
-      <a href="#inspiration" data-nav-view="view-inspiration" onclick="window.switchWorkspace('view-inspiration'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
-        <i class="fa-solid fa-compass-drafting mr-2 text-[#FF5C00]"></i> Cảm hứng
+      <a href="#tracking" data-nav-view="view-tracking" onclick="window.switchWorkspace('view-tracking'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#C85A32]">
+        <i class="fa-solid fa-truck-fast mr-2 text-[#C85A32]"></i> Tra Cứu Tiến Độ In &amp; Vận Đơn
       </a>
-      <a href="#tracking" data-nav-view="view-tracking" onclick="window.switchWorkspace('view-tracking'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
-        <i class="fa-solid fa-truck-fast mr-2 text-[#FF5C00]"></i> Tra cứu yêu cầu đặt hàng
-      </a>
-      <a href="#support" data-nav-view="view-support" onclick="window.switchWorkspace('view-support'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#FF5C00]">
-        <i class="fa-solid fa-circle-question mr-2 text-[#FF5C00]"></i> Hỗ trợ
+      <a href="#support" data-nav-view="view-support" onclick="window.switchWorkspace('view-support'); document.getElementById('mobile-nav-drawer')?.classList.add('hidden');" class="mobile-nav-link block py-2.5 text-xs font-bold text-[#20231F] hover:text-[#C85A32]">
+        <i class="fa-solid fa-circle-question mr-2 text-[#C85A32]"></i> Hướng Dẫn &amp; Hỗ Trợ Xưởng
       </a>
       <div class="pt-2 border-t border-[#DCDDD5]">
         <a data-zalo-contact="true" class="w-full btn-primary text-xs !py-3 flex items-center justify-center gap-2">
@@ -228,20 +215,33 @@
       
       <!-- HERO SECTION: ARTISAN STUDIO & CURATED TACTILE SHOWCASE -->
       <section id="hero" class="relative pt-10 pb-14 lg:pt-14 lg:pb-16 border-b border-[var(--border-subtle)] bg-[var(--bg-canvas)] overflow-hidden">
+        <div class="atelier-ambient" aria-hidden="true"><span class="atelier-orb"></span><span class="atelier-orb"></span><span class="atelier-contour"></span></div>
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
             
-            <!-- Left Hero Copy & Actions -->
+            <!-- Left Hero Copy & Actions (International 3D Atelier Standard) -->
             <div class="hero-copy lg:col-span-6 space-y-6 text-left">
               
-              <p class="store-eyebrow"><span class="studio-eyebrow-line" aria-hidden="true"></span> ĐỒ DECOR &amp; QUÀ TẶNG IN 3D</p>
-              <h1 class="minimal-hero-title">Thiết kế có gu.<br><span>Dấu ấn của bạn.</span></h1>
-              <p class="minimal-hero-description">Những thiết kế nhỏ làm nên một không gian khác biệt. Khám phá đồ decor, phụ kiện bàn làm việc và quà tặng được chế tác theo màu sắc, cái tên bạn chọn.</p>
+              <p class="store-eyebrow"><span class="studio-eyebrow-line" aria-hidden="true"></span> 3D DESIGN &amp; FABRICATION ATELIER</p>
+              <h1 class="minimal-hero-title">Nghệ thuật 3D.<br><span>Định hình không gian.</span></h1>
+              <p class="minimal-hero-description">Tuyển tập 105 tác phẩm điêu khắc, bình hoa nghệ thuật, đèn decor phát quang và cơ cấu cơ học từ MakerWorld. Chế tác thủ công với độ phân giải siêu mịn 0.08mm bằng vật liệu Bio-PLA &amp; PETG cao cấp.</p>
               <div class="minimal-hero-actions">
-                <a href="#store-catalog" class="btn-primary">Khám phá sản phẩm <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-                <button type="button" class="minimal-text-action" onclick="window.switchWorkspace('view-personalize')">Thiết kế món của bạn <span aria-hidden="true">↗</span></button>
+                <a href="#store-catalog" class="btn-primary">Khám phá bộ sưu tập <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                <a href="#home-shop-the-look" class="minimal-text-action">Xem không gian bài trí <span aria-hidden="true">↓</span></a>
               </div>
-              <div class="minimal-hero-notes"><span><i class="fa-solid fa-palette" aria-hidden="true"></i> Phối màu riêng</span><span><i class="fa-solid fa-pen-nib" aria-hidden="true"></i> Thêm tên của bạn</span><span><i class="fa-solid fa-location-dot text-[#D45B34]" aria-hidden="true"></i> Tiệm in 3D Hà Tĩnh</span></div>
+              <div class="minimal-hero-notes">
+                <span><i class="fa-solid fa-layer-group text-[#D45B34]" aria-hidden="true"></i> Độ mịn lớp 0.08mm</span>
+                <span><i class="fa-solid fa-gem text-[#D45B34]" aria-hidden="true"></i> Nhựa Bio-PLA &amp; PETG</span>
+                <span><i class="fa-solid fa-cube text-[#D45B34]" aria-hidden="true"></i> 105 Mẫu MakerWorld</span>
+              </div>
+              <div class="atelier-flow">
+                <p class="atelier-flow-label"><span class="atelier-live-dot" aria-hidden="true"></span>TIÊU CHUẨN CHẾ TÁC THỦ CÔNG</p>
+                <ol aria-label="Quy trình chế tác theo yêu cầu">
+                  <li><span class="atelier-step-icon" aria-hidden="true"><i class="fa-solid fa-shapes"></i></span><span>01. Tuyển chọn mẫu</span></li>
+                  <li><span class="atelier-step-icon" aria-hidden="true"><i class="fa-solid fa-palette"></i></span><span>02. Phối màu &amp; chất liệu</span></li>
+                  <li><span class="atelier-step-icon" aria-hidden="true"><i class="fa-solid fa-cube"></i></span><span>03. Chế tác lớp 0.08mm</span></li>
+                </ol>
+              </div>
             </div>
 
             <!-- Right Hero: Interactive Artisan Showcase (Lifestyle Frame + Curated Switcher) -->
@@ -370,7 +370,7 @@
           <div class="bento-categories">
             <!-- 1. Desk Setup & Cơ khí (span 7) -->
             <button type="button" class="bento-card group" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')">
-              <span class="bento-card-badge">01 · 11 MẪU · 360° MECH</span>
+              <span class="bento-card-badge">01 · 14 MẪU · 360° MECH</span>
               <div class="space-y-1 z-10 max-w-[65%] sm:max-w-[70%]">
                 <h3 class="text-base sm:text-lg font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Bàn Làm Việc &amp; Cơ Khí</h3>
                 <p class="text-xs text-[#575653] line-clamp-2">Hộp đu quay xoay 360°, Module Pork3D xếp chồng và kẹp cáp Skadis.</p>
@@ -380,7 +380,7 @@
 
             <!-- 2. Khay & Decor Coquette (span 5) -->
             <button type="button" class="bento-card group" onclick="window.navigateToCategory('Trang_Diem_Vanity')">
-              <span class="bento-card-badge">02 · 11 MẪU · COQUETTE SILK</span>
+              <span class="bento-card-badge">02 · 12 MẪU · COQUETTE SILK</span>
               <div class="space-y-1 z-10 max-w-[65%] sm:max-w-[70%]">
                 <h3 class="text-base sm:text-lg font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Góc Trang Điểm &amp; Nơ Lụa</h3>
                 <p class="text-xs text-[#575653] line-clamp-2">Khay nơ satin, hộp vỏ sò ngọc trai, ống cắm cọ Ballet mềm mại.</p>
@@ -388,29 +388,29 @@
               <img src="assets/images/studio-desk-tray.jpg" alt="Góc trang điểm Coquette" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
             </button>
 
-            <!-- 3. Quà tặng khắc tên riêng (span 4) -->
-            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')">
-              <span class="bento-card-badge">03 · 11 MẪU · PERSONALIZED</span>
+            <!-- 3. Hoa Decor Kim Loại Y3K (span 4) -->
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Hoa_Decor_Kim_Loai')">
+              <span class="bento-card-badge">03 · 10 MẪU · LIQUID METAL Y3K</span>
               <div class="space-y-1 z-10 max-w-[75%]">
-                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Quà Tặng &amp; Khắc Tên</h3>
-                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Biển tên để bàn cao cấp, biển số đỗ xe ô tô giấu số xoay.</p>
+                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Hoa Kim Loại &amp; Nghệ Thuật</h3>
+                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Nghệ thuật hoa điêu khắc kim loại lỏng siêu thực phản chiếu óng ánh.</p>
               </div>
-              <img src="assets/images/studio-nfc-wifi.jpg" alt="Quà tặng khắc tên" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+              <img src="assets/images/products/thumb_2595057.png" alt="Hoa kim loại lỏng Y3K" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
             </button>
 
-            <!-- 4. Thẻ & Standee NFC (span 4) -->
-            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Do_Choi_Moc_Khoa')">
-              <span class="bento-card-badge">04 · 11 MẪU · TACTILE &amp; NFC</span>
+            <!-- 4. Clicker Cơ Học & Fidget Xả Stress (span 4) -->
+            <button type="button" class="bento-card group" onclick="window.navigateToCategory('Moc_Khoa_Clicker_Viral')">
+              <span class="bento-card-badge">04 · 17 MẪU · ASMR CLICKER</span>
               <div class="space-y-1 z-10 max-w-[75%]">
-                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Móc Khóa &amp; Fidget Cơ</h3>
-                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Đĩa than NFC phát nhạc 1 chạm, Clicker ASMR phím cơ.</p>
+                <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Clicker &amp; Fidget ASMR</h3>
+                <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Mõ tụng kinh tích công đức, đệm chân mèo nảy nhíp giải tỏa căng thẳng.</p>
               </div>
-              <img src="assets/images/products/thumb_2331892.png" alt="Móc khóa &amp; Fidget cơ" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+              <img src="assets/images/products/thumb_2680027.png" alt="Mõ tụng kinh giải nghiệp" class="bento-card-bg-img" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
             </button>
 
             <!-- 5. Đèn Decor & Bình Hoa (span 4) -->
             <button type="button" class="bento-card group" onclick="window.navigateToCategory('Decor_Den_Noi_That')">
-              <span class="bento-card-badge">05 · 11 MẪU · AMBIENT LIGHT</span>
+              <span class="bento-card-badge">05 · 17 MẪU · AMBIENT LIGHT</span>
               <div class="space-y-1 z-10 max-w-[75%]">
                 <h3 class="text-sm sm:text-base font-bold text-[#141413] group-hover:text-[#D45B34] transition-colors">Đèn Decor &amp; Ánh Sáng</h3>
                 <p class="text-[11px] sm:text-xs text-[#575653] line-clamp-2">Đèn giấy Washi KŌHAKU, bình hoa túi giấy nhăn, đĩa lụa nếp gấp.</p>
@@ -444,7 +444,7 @@
               <button type="button" class="segmented-pill" data-category="Decor_Den_Noi_That" aria-pressed="false"><span>Đèn &amp; Decor</span><span class="catalog-pill-count">(17)</span></button>
               <button type="button" class="segmented-pill" data-category="Hoa_Decor_Kim_Loai" aria-pressed="false"><span>Hoa kim loại</span><span class="catalog-pill-count">(10)</span></button>
               <button type="button" class="segmented-pill" data-category="Hop_De_Ban_Tien_Ich" aria-pressed="false"><span>Bàn làm việc</span><span class="catalog-pill-count">(14)</span></button>
-              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false"><span>Cá nhân hóa</span><span class="catalog-pill-count">(11)</span></button>
+              <button type="button" class="segmented-pill" data-category="Ca_Nhan_Hoa_NFC" aria-pressed="false"><span>Tiện ích Xe &amp; Bàn</span><span class="catalog-pill-count">(11)</span></button>
               <button type="button" class="segmented-pill" data-category="Do_Choi_Moc_Khoa" aria-pressed="false"><span>Đồ chơi &amp; Fidget</span><span class="catalog-pill-count">(24)</span></button>
               <button type="button" class="segmented-pill" data-category="Moc_Khoa_Clicker_Viral" aria-pressed="false"><span>Clicker Viral</span><span class="catalog-pill-count">(17)</span></button>
             </div>
@@ -564,72 +564,11 @@
         </div>
       </section>
 
-      <!-- LIVE CUSTOMIZER PREVIEW: OBSIDIAN DARK ARCHITECTURAL BLOCK -->
-      <section id="home-live-customizer" class="py-12 sm:py-16 bg-[#141413] text-[#F7F6F2] border-b border-[#2A2A28]">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-          <div class="text-center max-w-2xl mx-auto space-y-2">
-            <span class="text-xs font-mono font-bold text-[#C85A32] uppercase tracking-wider">TRẠM CÁ NHÂN HÓA / LIVE PREVIEW</span>
-            <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">Khắc Tên &amp; Tạo Dấu Ấn Riêng</h2>
-            <p class="text-xs sm:text-sm text-[#A1A1AA]">Thử gõ tên bạn hoặc thông điệp bên dưới để xem trước biển tên chế tác in 3D thời gian thực.</p>
-          </div>
-
-          <div class="obsidian-customizer-block p-6 sm:p-8 rounded-2xl border border-[rgba(255,255,255,0.08)] bg-[#1A1A18] max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
-            <!-- Left: Inputs -->
-            <div class="md:col-span-6 space-y-4 text-left">
-              <div>
-                <label for="live-custom-input" class="block text-xs font-mono font-semibold text-[#D4D4D8] mb-1.5">
-                  Nội dung khắc nổi (Tên / Số điện thoại):
-                </label>
-                <input type="text" 
-                       id="live-custom-input" 
-                       maxlength="24" 
-                       value="MINH TRIET"
-                       placeholder="Ví dụ: NGUYEN VAN A" 
-                       class="w-full px-4 py-2.5 rounded-xl bg-[#0C0C0E] border border-[rgba(255,255,255,0.12)] text-white font-mono text-sm tracking-wider focus:outline-none focus:border-[#C85A32] transition-colors"
-                       oninput="window.updateLiveCustomizerPreview(this.value)">
-              </div>
-
-              <!-- Color Palette for Preview -->
-              <div>
-                <label class="block text-[11px] font-mono text-[#A1A1AA] mb-1.5">Màu nền biển chế tác:</label>
-                <div class="flex items-center gap-2">
-                  <button type="button" class="w-6 h-6 rounded-full border border-white/20 active ring-2 ring-[#C85A32]" style="background: #1C1B18;" title="Obsidian Black" onclick="window.setLiveCustomizerColor('#1C1B18', '#F5F2EB')"></button>
-                  <button type="button" class="w-6 h-6 rounded-full border border-white/20" style="background: #F5F2EB;" title="Matte Ivory" onclick="window.setLiveCustomizerColor('#F5F2EB', '#1C1B18')"></button>
-                  <button type="button" class="w-6 h-6 rounded-full border border-white/20" style="background: #C85A32;" title="Terracotta" onclick="window.setLiveCustomizerColor('#C85A32', '#F5F2EB')"></button>
-                  <button type="button" class="w-6 h-6 rounded-full border border-white/20" style="background: #1E3A2F;" title="Forest Green" onclick="window.setLiveCustomizerColor('#1E3A2F', '#F5F2EB')"></button>
-                </div>
-              </div>
-
-              <div class="pt-2">
-                <button type="button" 
-                        onclick="window.openFullCustomizerFromHome()" 
-                        class="btn-primary w-full py-3 px-4 rounded-xl text-xs font-bold font-mono tracking-wide flex items-center justify-center gap-2 shadow-lg cursor-pointer">
-                  <span>Tiếp tục tùy chỉnh 3D &amp; Đặt hàng riêng</span>
-                  <i class="fa-solid fa-arrow-right text-[11px]"></i>
-                </button>
-              </div>
-            </div>
-
-            <!-- Right: Real-time 3D Plate Simulation -->
-            <div class="md:col-span-6 flex flex-col items-center">
-              <div id="obsidian-preview-plate" class="obsidian-preview-plate w-full max-w-xs aspect-[16/9] rounded-xl p-6 flex flex-col justify-between items-center text-center relative overflow-hidden transition-all duration-300">
-                <div class="w-full flex items-center justify-between text-[9px] font-mono tracking-widest text-[#A1A1AA] uppercase">
-                  <span>T&amp;T STUDIO</span>
-                  <span>0.12MM PRECISION</span>
-                </div>
-
-                <div id="obsidian-preview-text" class="font-mono text-xl sm:text-2xl font-bold tracking-widest text-[#F5F2EB] drop-shadow-sm transition-all duration-200">
-                  MINH TRIET
-                </div>
-
-                <div class="w-full flex items-center justify-between text-[9px] font-mono text-[#A1A1AA]">
-                  <span>NTAG215 CHIP READY</span>
-                  <span class="text-[#C85A32]">BIO-PLA</span>
-                </div>
-              </div>
-              <span class="text-[11px] font-mono text-[#71717A] mt-2.5">Mô phỏng chữ in nổi 3D đa lớp</span>
-            </div>
-          </div>
+      <!-- LIVE CUSTOMIZER PREVIEW: OBSIDIAN DARK ARCHITECTURAL BLOCK (DISABLED AS REQUESTED) -->
+      <section id="home-live-customizer" class="hidden" style="display: none !important;" aria-hidden="true">
+        <input type="hidden" id="live-custom-input" value="MINH TRIET">
+        <div id="obsidian-preview-plate" class="hidden">
+          <div id="obsidian-preview-text">MINH TRIET</div>
         </div>
       </section>
 
@@ -696,26 +635,10 @@
 
 
     <!-- =======================================================================
-         VIEW 2: CÁ NHÂN HÓA (2D CUSTOM STUDIO)
+         VIEW 2: CÁ NHÂN HÓA (DISABLED AS REQUESTED)
          ======================================================================= -->
-    <div id="view-personalize" class="app-workspace hidden py-12" role="tabpanel" tabindex="0" aria-label="Cá Nhân Hóa">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-        
-        <div class="space-y-2">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-100 text-[#C44800] text-xs font-bold font-mono">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <span>CHỌN MẪU · THÊM DẤU ẤN RIÊNG</span>
-          </div>
-          <h2 class="text-2xl sm:text-3xl font-extrabold text-[#20231F]">Tạo một món đồ mang tên bạn.</h2>
-          <p class="text-xs sm:text-sm text-[#586057] max-w-2xl leading-relaxed">
-            Chọn mẫu sản phẩm hỗ trợ, nhập tên riêng, lời chúc hoặc link WiFi NFC của bạn. Xem trực tiếp mô phỏng chữ nổi và màu sắc trước khi gửi yêu cầu cho xưởng.
-          </p>
-        </div>
-
-        <!-- Populated by js/personalize-studio.js -->
-        <div id="personalize-studio-container" class="min-h-[500px]"></div>
-
-      </div>
+    <div id="view-personalize" class="app-workspace hidden py-12" style="display: none !important;" role="tabpanel" tabindex="0" aria-label="Cá Nhân Hóa" aria-hidden="true">
+      <div id="personalize-studio-container" class="hidden"></div>
     </div>
 
 
@@ -1167,20 +1090,20 @@
         <div class="md:col-span-2 space-y-2">
           <div class="font-bold text-[#20231F] uppercase tracking-wider text-[11px] font-mono">Cửa Hàng</div>
           <ul class="space-y-1.5">
-            <li><a href="#store" onclick="window.switchWorkspace('view-store')" class="hover:text-[#FF5C00]">Tất Cả Sản Phẩm</a></li>
-            <li><a href="#store" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')" class="hover:text-[#FF5C00]">Bàn Làm Việc</a></li>
-            <li><a href="#store" onclick="window.navigateToCategory('Trang_Diem_Vanity')" class="hover:text-[#FF5C00]">Bàn Trang Điểm</a></li>
-            <li><a href="#store" onclick="window.navigateToCategory('Ca_Nhan_Hoa_NFC')" class="hover:text-[#FF5C00]">Giải Pháp NFC</a></li>
+            <li><a href="#store" onclick="window.switchWorkspace('view-store')" class="hover:text-[#C85A32]">Tất Cả 105 Tác Phẩm</a></li>
+            <li><a href="#store" onclick="window.navigateToCategory('Decor_Den_Noi_That')" class="hover:text-[#C85A32]">Đèn &amp; Bình Hoa</a></li>
+            <li><a href="#store" onclick="window.navigateToCategory('Hoa_Decor_Kim_Loai')" class="hover:text-[#C85A32]">Hoa Kim Loại Y3K</a></li>
+            <li><a href="#store" onclick="window.navigateToCategory('Hop_De_Ban_Tien_Ich')" class="hover:text-[#C85A32]">Bàn Làm Việc Cơ Khí</a></li>
           </ul>
         </div>
 
         <div class="md:col-span-2 space-y-2">
-          <div class="font-bold text-[#20231F] uppercase tracking-wider text-[11px] font-mono">Trải Nghiệm</div>
+          <div class="font-bold text-[#20231F] uppercase tracking-wider text-[11px] font-mono">Khám Phá</div>
           <ul class="space-y-1.5">
-            <li><a href="#personalize" onclick="window.switchWorkspace('view-personalize')" class="hover:text-[#FF5C00]">Cá nhân hóa</a></li>
-            <li><a href="#inspiration" onclick="window.switchWorkspace('view-inspiration')" class="hover:text-[#FF5C00]">Góc Cảm Hứng</a></li>
-            <li><a href="#tracking" onclick="window.switchWorkspace('view-tracking')" class="hover:text-[#FF5C00]">Theo Dõi Đơn Hàng</a></li>
-            <li><a href="#support" onclick="window.switchWorkspace('view-support')" class="hover:text-[#FF5C00]">Hướng Dẫn Cài NFC</a></li>
+            <li><a href="#inspiration" onclick="window.switchWorkspace('view-inspiration')" class="hover:text-[#C85A32]">Góc Cảm Hứng &amp; Setup</a></li>
+            <li><a href="#tracking" onclick="window.switchWorkspace('view-tracking')" class="hover:text-[#C85A32]">Theo Dõi Đơn Hàng</a></li>
+            <li><a href="#support" onclick="window.switchWorkspace('view-support')" class="hover:text-[#C85A32]">Vật Liệu &amp; Tiêu Chuẩn 0.08mm</a></li>
+            <li><a href="#support" onclick="window.switchWorkspace('view-support')" class="hover:text-[#C85A32]">Chính Sách Đổi Trả 1:1</a></li>
           </ul>
         </div>
 
@@ -1221,51 +1144,42 @@
     </div>
   </button>
 
-  <nav class="mobile-bottom-dock md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#DCDDD5] px-1 py-1 shadow-lg" aria-label="Điều hướng di động">
-    <div class="grid grid-cols-5 items-center justify-around">
+  <nav class="mobile-bottom-dock md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#DCDDD5] px-2 py-1 shadow-lg" aria-label="Điều hướng di động">
+    <div class="grid grid-cols-4 items-center justify-around">
       
       <button type="button" 
               onclick="window.switchWorkspace('view-store')" 
               data-nav-view="view-store" 
-              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#C85A32]"
               aria-label="Cửa Hàng">
-        <i class="fa-solid fa-store text-base"></i>
+        <i class="fa-solid fa-store text-base text-[#C85A32]"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Cửa Hàng</span>
-      </button>
-
-      <button type="button" 
-              onclick="window.switchWorkspace('view-personalize')" 
-              data-nav-view="view-personalize" 
-              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
-              aria-label="Cá Nhân Hóa">
-        <i class="fa-solid fa-wand-magic-sparkles text-base text-[#D45B34]"></i>
-        <span class="dock-label text-[10px] font-medium mt-0.5">Tùy Biến</span>
       </button>
 
       <button type="button" 
               onclick="window.switchWorkspace('view-inspiration')" 
               data-nav-view="view-inspiration" 
-              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#C85A32]"
               aria-label="Góc Cảm Hứng">
-        <i class="fa-solid fa-compass-drafting text-base text-[#FF5C00]"></i>
+        <i class="fa-solid fa-compass-drafting text-base"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Cảm Hứng</span>
       </button>
 
       <button type="button" 
               onclick="window.switchWorkspace('view-tracking')" 
               data-nav-view="view-tracking" 
-              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#C85A32]"
               aria-label="Theo Dõi Đơn Hàng">
-        <i class="fa-solid fa-truck-fast text-base text-blue-600"></i>
+        <i class="fa-solid fa-truck-fast text-base"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Đơn Hàng</span>
       </button>
 
       <button type="button" 
               onclick="window.switchWorkspace('view-support')" 
               data-nav-view="view-support" 
-              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#FF5C00]"
-              aria-label="Hướng Dẫn & Hỗ Trợ">
-        <i class="fa-solid fa-circle-question text-base text-emerald-600"></i>
+              class="dock-item flex flex-col items-center py-1.5 px-1 text-[#586057] active:text-[#C85A32]"
+              aria-label="Hướng Dẫn &amp; Hỗ Trợ">
+        <i class="fa-solid fa-circle-question text-base"></i>
         <span class="dock-label text-[10px] font-medium mt-0.5">Hỗ Trợ</span>
       </button>
 
