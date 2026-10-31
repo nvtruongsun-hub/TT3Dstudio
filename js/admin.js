@@ -2256,9 +2256,8 @@
       if (btn) btn.classList.add('opacity-70', 'pointer-events-none');
       if (badge) badge.textContent = 'Đang đồng bộ...';
       if (statusText) statusText.textContent = 'Đang đẩy dữ liệu lên Firestore...';
-      showToast('Đang tiến hành đồng bộ 55 sản phẩm lên Cloud Firestore...');
-
       const products = await window.TTCatalogStore.getProducts(false);
+      showToast(`Đang tiến hành đồng bộ ${products.length} sản phẩm lên Cloud Firestore...`);
       const result = await window.TTFirestore.syncAllProducts(products);
 
       if (result.ok) {

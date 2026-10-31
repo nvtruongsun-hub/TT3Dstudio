@@ -60,41 +60,43 @@ runCheck('Check 2: Tab buttons include item count badges matching 55 products fr
   );
 });
 
-// 3. Verify products.json contains all 55 products from the 5 Excel sheets
-runCheck('Check 3: products.json contains 55 products across the 5 specific Excel categories', () => {
+// 3. Verify products.json contains all 105 products from the 7 Excel categories
+runCheck('Check 3: products.json contains 105 products across the 7 specific Excel categories', () => {
   const products = JSON.parse(fs.readFileSync('products.json', 'utf8'));
-  assert.strictEqual(products.length, 55, `Expected 55 products, got ${products.length}`);
+  assert.strictEqual(products.length, 105, `Expected 105 products, got ${products.length}`);
   
   const categories = {};
   products.forEach(p => {
     categories[p.category] = (categories[p.category] || 0) + 1;
   });
   
-  const expectedCats = [
-    'Trang_Diem_Vanity',
-    'Decor_Den_Noi_That',
-    'Hop_De_Ban_Tien_Ich',
-    'Ca_Nhan_Hoa_NFC',
-    'Do_Choi_Moc_Khoa'
-  ];
+  const expectedCounts = {
+    Trang_Diem_Vanity: 12,
+    Decor_Den_Noi_That: 17,
+    Hoa_Decor_Kim_Loai: 10,
+    Hop_De_Ban_Tien_Ich: 14,
+    Ca_Nhan_Hoa_NFC: 11,
+    Do_Choi_Moc_Khoa: 24,
+    Moc_Khoa_Clicker_Viral: 17
+  };
   
-  expectedCats.forEach(cat => {
-    assert.strictEqual(categories[cat], 11, `Category ${cat} must have exactly 11 products, got ${categories[cat]}`);
+  Object.entries(expectedCounts).forEach(([cat, count]) => {
+    assert.strictEqual(categories[cat], count, `Category ${cat} must have exactly ${count} products, got ${categories[cat]}`);
   });
 });
 
 // 4. Verify Catalog Store revision bump for client cache migration
-runCheck('Check 4: CatalogStore revision is bumped to trigger client refresh', () => {
+runCheck('Check 4: CatalogStore revision is bumped to mw-105-v1-full', () => {
   const storeJs = fs.readFileSync('js/catalog-store.js', 'utf8');
   assert(
-    storeJs.includes("CURRENT_CATALOG_REVISION = 'mw-55-v5-compact-tabs'") ||
-    storeJs.includes('CURRENT_CATALOG_REVISION = "mw-55-v5-compact-tabs"'),
-    'Catalog revision must be bumped to mw-55-v5-compact-tabs'
+    storeJs.includes("CURRENT_CATALOG_REVISION = 'mw-105-v1-full'") ||
+    storeJs.includes('CURRENT_CATALOG_REVISION = "mw-105-v1-full"'),
+    'Catalog revision must be bumped to mw-105-v1-full'
   );
 });
 
-// 5. Verify Catalog Page Size preserves compact initial view (12) with full catalog reachable (55)
-runCheck('Check 5: Initial catalog display limit is compact (12) and total catalog has 55 items', () => {
+// 5. Verify Catalog Page Size preserves compact initial view (12) with full catalog reachable (105)
+runCheck('Check 5: Initial catalog display limit is compact (12) and total catalog has 105 items', () => {
   const pmJs = fs.readFileSync('js/products-manager.js', 'utf8');
   const match = pmJs.match(/CATALOG_PAGE_SIZE\s*=\s*(\d+)/);
   assert(match, 'CATALOG_PAGE_SIZE must be defined in products-manager.js');
@@ -102,7 +104,7 @@ runCheck('Check 5: Initial catalog display limit is compact (12) and total catal
   assert.strictEqual(size, 12, `Expected CATALOG_PAGE_SIZE = 12, got ${size}`);
   
   const products = JSON.parse(fs.readFileSync('products.json', 'utf8'));
-  assert.strictEqual(products.length, 55, `Expected 55 total products in catalog, got ${products.length}`);
+  assert.strictEqual(products.length, 105, `Expected 105 total products in catalog, got ${products.length}`);
 });
 
 console.log('\n==========================================================');

@@ -891,6 +891,87 @@
     "microSpecs": "Cao 24cm · 2 tầng chứa trọn bộ Skincare & Serum"
   },
   {
+    "id": "mw-cn-2266980",
+    "modelId": "2266980",
+    "title": "Hộp nắp đậy nếp lụa bánh kem gấu nhỏ kèm khay trang sức (Little Bear Silk Cake Vanity Box)",
+    "cleanTitle": "Hộp nắp đậy nếp lụa bánh kem gấu nhỏ kèm khay trang sức",
+    "archetypeBadge": "Nắp Lụa Bánh Kem Độc Đáo",
+    "useCaseEyebrow": "BÀN TRANG ĐIỂM • HỘP TRANG SỨC",
+    "subCategory": "hop_trang_suc",
+    "subCategoryName": "Hộp Trang Sức Nắp Lụa",
+    "microSpecs": "Nhựa Bio-PLA Lụa Mịn · 160g",
+    "badgeTheme": "rose",
+    "originalTitle": "小熊蛋糕丝绸收纳盒",
+    "category": "Trang_Diem_Vanity",
+    "type": "standard",
+    "price": 189000,
+    "originalPrice": null,
+    "badge": "✦ Coquette Chic",
+    "image": "assets/images/products/thumb_2266980.png",
+    "imageAlt": "Hộp nắp đậy nếp lụa bánh kem gấu nhỏ kèm khay trang sức (Little Bear Silk Cake Vanity Box)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "蹦极葵花",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2266980-xiao-xiong-dan-gao-si-chou-shou-na-he#profileId-2552672",
+    "downloads": 2509,
+    "likes": 1225,
+    "prints": 1874,
+    "weightGrams": 160,
+    "printTimeSeconds": 19800,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Trắng ngọc / Hồng pastel + PLA Matte Bơ sữa / Nâu socola",
+    "headlineBenefit": "Đựng bông tẩy trang, son phấn, trang sức nhẫn vòng, làm quà tặng sinh nhật, quà Tết và decor bàn trang điểm phong cách Hàn Quốc.",
+    "desc": "Tổ hợp nếp lụa xếp tầng rủ mềm che sọc layer FDM kết hợp viền kem bánh ngọt 3D; núm cầm mở nắp gấu nhỏ ôm tim in rời không cần AMS (Zero-Purge Multi-Color).",
+    "videoScript": "Cận cảnh ánh đèn lướt trên nếp vải lụa óng ả, thao tác nhấc chú gấu nhỏ mở nắp hộp bánh kem ASMR kích thích xúc giác và thị giác.",
+    "productionNotes": "Tổ hợp nếp lụa xếp tầng rủ mềm che sọc layer FDM kết hợp viền kem bánh ngọt 3D; núm cầm mở nắp gấu nhỏ ôm tim in rời không cần AMS (Zero-Purge Multi-Color).",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Ca_nhan",
+    "isHero": false,
+    "specs": {
+      "weight": "160g",
+      "printTime": "5.5 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_silk",
+        "name": "PLA Silk Cao Cấp",
+        "label": "PLA Silk Óng Ánh",
+        "desc": "Hiệu ứng phản chiếu óng ả như vải lụa tơ tằm",
+        "priceModifier": 20000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
     "id": "mw-cn-1954833",
     "modelId": "1954833",
     "title": "Đèn ngủ tam giác cấu trúc len dệt cổ điển (Triangle Retro Woven Lamp)",
@@ -1747,6 +1828,1295 @@
     "microSpecs": "Dây cáp thép cân bằng · Chịu tải đến 1.5kg"
   },
   {
+    "id": "mw-cn-1478590",
+    "modelId": "1478590",
+    "title": "Bình hoa vạt giấy gói đôi V3 (Twin Splicable Bouquet Vase)",
+    "cleanTitle": "Bình hoa vạt giấy gói đôi V3",
+    "archetypeBadge": "Ánh Sáng Ambient Dịu Mắt",
+    "useCaseEyebrow": "PHÒNG KHÁCH • ĐÈN & DECOR",
+    "subCategory": "den_decor",
+    "subCategoryName": "Đèn & Tượng Decor",
+    "microSpecs": "Nhựa PLA Xuyên Sáng · 244g",
+    "badgeTheme": "emerald",
+    "originalTitle": "双生花束花瓶（易拼版）",
+    "category": "Decor_Den_Noi_That",
+    "type": "standard",
+    "price": 269000,
+    "originalPrice": null,
+    "badge": "✦ Ambient Craft",
+    "image": "assets/images/products/thumb_1478590.png",
+    "imageAlt": "Bình hoa vạt giấy gói đôi V3 (Twin Splicable Bouquet Vase)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Weaving",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1478590",
+    "downloads": 3260,
+    "likes": 806,
+    "prints": 2323,
+    "weightGrams": 244,
+    "printTimeSeconds": 59853,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PETG Trắng sứ / PLA Silk Trắng ngọc",
+    "headlineBenefit": "Cắm 1–3 bông hoa nghệ thuật (Gerbera, Tulip, Hồng mini) decor bàn làm việc, bàn ăn, bàn tiếp khách phong cách tối giản cao cấp.",
+    "desc": "Chính là mẫu trong ảnh người dùng: Thiết kế 2 vạt ghép trượt thông minh mô phỏng tờ giấy gói hoa đứng thẳng tự nhiên, in không cần support.",
+    "videoScript": "Quay cảnh ghép 2 vạt bình hoa lại với nhau phát ra tiếng tách nhẹ, cắm bông hoa đồng tiền hồng vào giữa như trong ảnh mẫu.",
+    "productionNotes": "Chính là mẫu trong ảnh người dùng: Thiết kế 2 vạt ghép trượt thông minh mô phỏng tờ giấy gói hoa đứng thẳng tự nhiên, in không cần support.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "244g",
+      "printTime": "16.6 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_silk",
+        "name": "PLA Silk Cao Cấp",
+        "label": "PLA Silk Óng Ánh",
+        "desc": "Hiệu ứng phản chiếu óng ả như vải lụa tơ tằm",
+        "priceModifier": 20000
+      },
+      {
+        "id": "petg_tough",
+        "name": "PETG Chịu Lực & Nhiệt",
+        "label": "PETG Tough Bền Bỉ",
+        "desc": "Chịu nhiệt độ taplo ô tô 75°C, chống va đập",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1045280",
+    "modelId": "1045280",
+    "title": "Bình hoa mô phỏng giấy bọc hoa xòe (Bouquet Paper Wrap Vase)",
+    "cleanTitle": "Bình hoa mô phỏng giấy bọc hoa xòe",
+    "archetypeBadge": "Nghệ Thuật Thị Giác",
+    "useCaseEyebrow": "PHÒNG KHÁCH • ĐÈN & DECOR",
+    "subCategory": "den_decor",
+    "subCategoryName": "Đèn & Tượng Decor",
+    "microSpecs": "Nhựa PLA Xuyên Sáng · 95g",
+    "badgeTheme": "amber",
+    "originalTitle": "仿花束花瓶",
+    "category": "Decor_Den_Noi_That",
+    "type": "standard",
+    "price": 139000,
+    "originalPrice": null,
+    "badge": "✦ Ambient Craft",
+    "image": "assets/images/products/thumb_1045280.png",
+    "imageAlt": "Bình hoa mô phỏng giấy bọc hoa xòe (Bouquet Paper Wrap Vase)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "琰",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1045280",
+    "downloads": 4657,
+    "likes": 960,
+    "prints": 3297,
+    "weightGrams": 95,
+    "printTimeSeconds": 7505,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Matte Trắng / Hồng phấn",
+    "headlineBenefit": "Bình cắm hoa để bàn học, bàn phấn, hoa khô hoặc hoa sáp trang trí tiệm bánh/quán cafe.",
+    "desc": "Siêu nhẹ (chỉ 95g), in cực nhanh ~2h; miệng bình loe rộng gấp nếp như giấy gói hoa kiểu Pháp, hộc trong vừa vặn cho mút xốp cắm hoa.",
+    "videoScript": "Cắm một bó hoa baby trắng và hoa hồng sáp vào chiếc bình giấy bọc, quay cận cảnh độ xòe mềm mại của miệng bình.",
+    "productionNotes": "Siêu nhẹ (chỉ 95g), in cực nhanh ~2h; miệng bình loe rộng gấp nếp như giấy gói hoa kiểu Pháp, hộc trong vừa vặn cho mút xốp cắm hoa.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "95g",
+      "printTime": "2.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2705739",
+    "modelId": "2705739",
+    "title": "Vỏ bọc hoa bó mini nguyên khối (Mini Bouquet Wrap Shell Vase)",
+    "cleanTitle": "Vỏ bọc hoa bó mini nguyên khối",
+    "archetypeBadge": "Khuếch Tán Ánh Sáng",
+    "useCaseEyebrow": "PHÒNG KHÁCH • ĐÈN & DECOR",
+    "subCategory": "den_decor",
+    "subCategoryName": "Đèn & Tượng Decor",
+    "microSpecs": "Nhựa PLA Xuyên Sáng · 280g",
+    "badgeTheme": "rose",
+    "originalTitle": "迷你小花束一体式包装壳",
+    "category": "Decor_Den_Noi_That",
+    "type": "standard",
+    "price": 229000,
+    "originalPrice": null,
+    "badge": "✦ Ambient Craft",
+    "image": "assets/images/products/thumb_2705739.png",
+    "imageAlt": "Vỏ bọc hoa bó mini nguyên khối (Mini Bouquet Wrap Shell Vase)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "好辣好辣的辣椒",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2705739",
+    "downloads": 994,
+    "likes": 837,
+    "prints": 494,
+    "weightGrams": 280,
+    "printTimeSeconds": 27397,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Basic Trắng kem / Xanh pastel",
+    "headlineBenefit": "Bình cắm hoa tươi bàn tiệc cưới, bàn lễ tân showroom thời trang, quà tặng ngày 8/3 hoặc 20/10.",
+    "desc": "Dáng vỏ ốc / cánh hoa xoắn cuộn nguyên khối, in 1 lần không cần ghép nối, chống rò rỉ nước 100%, cắm 4–6 cành hoa tươi để bàn.",
+    "videoScript": "Đổ nước thật vào bình và cắm một chùm hoa cúc họa mi tươi rói, chứng minh độ chống rò rỉ nước hoàn hảo.",
+    "productionNotes": "Dáng vỏ ốc / cánh hoa xoắn cuộn nguyên khối, in 1 lần không cần ghép nối, chống rò rỉ nước 100%, cắm 4–6 cành hoa tươi để bàn.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "280g",
+      "printTime": "7.6 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2756450",
+    "modelId": "2756450",
+    "title": "Bình hoa lá sen ôm hoa Endless Summer (Lotus Leaf Bouquet Vase)",
+    "cleanTitle": "Bình hoa lá sen ôm hoa Endless Summer",
+    "archetypeBadge": "Thiết Kế Tinh Xảo",
+    "useCaseEyebrow": "PHÒNG KHÁCH • ĐÈN & DECOR",
+    "subCategory": "den_decor",
+    "subCategoryName": "Đèn & Tượng Decor",
+    "microSpecs": "Nhựa PLA Xuyên Sáng · 249g",
+    "badgeTheme": "slate",
+    "originalTitle": "荷花花束 荷叶花瓶 无尽夏系列",
+    "category": "Decor_Den_Noi_That",
+    "type": "standard",
+    "price": 239000,
+    "originalPrice": null,
+    "badge": "✦ Ambient Craft",
+    "image": "assets/images/products/thumb_2756450.png",
+    "imageAlt": "Bình hoa lá sen ôm hoa Endless Summer (Lotus Leaf Bouquet Vase)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "way",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2756450",
+    "downloads": 831,
+    "likes": 696,
+    "prints": 560,
+    "weightGrams": 249,
+    "printTimeSeconds": 40115,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Xanh ngọc / Trắng ngà",
+    "headlineBenefit": "Bàn trà, phòng thiền, phòng khách kiểu Á Đông đương đại, cắm hoa sen, hoa huệ hoặc hoa lan.",
+    "desc": "Phiến lá sen khum tròn ôm trọn cành hoa ở giữa, phong cách thanh tịnh Zen / Trà đạo Á Đông cực kỳ thu hút phân khúc decor cao cấp.",
+    "videoScript": "Cảnh quay chậm giọt nước lăn trên phiến lá sen in 3D óng ả, cắm một bông sen hồng e ấp nở bung.",
+    "productionNotes": "Phiến lá sen khum tròn ôm trọn cành hoa ở giữa, phong cách thanh tịnh Zen / Trà đạo Á Đông cực kỳ thu hút phân khúc decor cao cấp.",
+    "licenseName": "MakerWorld Exclusive License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "249g",
+      "printTime": "11.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_silk",
+        "name": "PLA Silk Cao Cấp",
+        "label": "PLA Silk Óng Ánh",
+        "desc": "Hiệu ứng phản chiếu óng ả như vải lụa tơ tằm",
+        "priceModifier": 20000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2451563",
+    "modelId": "2451563",
+    "title": "Bình hoa luồng gió uốn lượn (Wind & Silk Aerodynamic Curved Vase)",
+    "cleanTitle": "Bình hoa luồng gió uốn lượn",
+    "archetypeBadge": "Phong Cách Bắc Âu",
+    "useCaseEyebrow": "PHÒNG KHÁCH • ĐÈN & DECOR",
+    "subCategory": "den_decor",
+    "subCategoryName": "Đèn & Tượng Decor",
+    "microSpecs": "Nhựa PLA Xuyên Sáng · 43g",
+    "badgeTheme": "emerald",
+    "originalTitle": "Wind-like vase 曲面花瓶",
+    "category": "Decor_Den_Noi_That",
+    "type": "standard",
+    "price": 119000,
+    "originalPrice": null,
+    "badge": "✦ Ambient Craft",
+    "image": "assets/images/products/thumb_2451563.png",
+    "imageAlt": "Bình hoa luồng gió uốn lượn (Wind & Silk Aerodynamic Curved Vase)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "树木支Aganztracy",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2451563",
+    "downloads": 636,
+    "likes": 259,
+    "prints": 423,
+    "weightGrams": 43,
+    "printTimeSeconds": 18092,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PETG Trong suốt (Translucent) / PLA Glass",
+    "headlineBenefit": "Trang trí bệ cửa sổ, bàn làm việc nghệ thuật, cắm 1 cành hoa khô liễu hoặc bông gòn.",
+    "desc": "Cực nhẹ chỉ 43g; đường cong khí động học uốn lượn như dải lụa bay trước gió, in bằng nhựa trong mờ tạo bóng đổ lung linh.",
+    "videoScript": "Chiếu đèn pin qua thân bình hoa: Ánh sáng khúc xạ qua các đường cong khí động học tạo hoa văn nước lung linh trên bàn.",
+    "productionNotes": "Cực nhẹ chỉ 43g; đường cong khí động học uốn lượn như dải lụa bay trước gió, in bằng nhựa trong mờ tạo bóng đổ lung linh.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "43g",
+      "printTime": "5.0 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_tough",
+        "name": "PETG Chịu Lực & Nhiệt",
+        "label": "PETG Tough Bền Bỉ",
+        "desc": "Chịu nhiệt độ taplo ô tô 75°C, chống va đập",
+        "priceModifier": 25000
+      },
+      {
+        "id": "pla_translucent",
+        "name": "PLA Xuyên Sáng",
+        "label": "PLA Xuyên Sáng Khuếch Tán",
+        "desc": "Tán sắc ánh sáng LED dịu mắt, không gây chói",
+        "priceModifier": 30000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2214866",
+    "modelId": "2214866",
+    "title": "Bình hoa túi giấy kraft gấp nếp hoa hồng (Rose Kraft Bag Wrap Vase)",
+    "cleanTitle": "Bình hoa túi giấy kraft gấp nếp hoa hồng",
+    "archetypeBadge": "Tạo Hình Điêu Khắc",
+    "useCaseEyebrow": "PHÒNG KHÁCH • ĐÈN & DECOR",
+    "subCategory": "den_decor",
+    "subCategoryName": "Đèn & Tượng Decor",
+    "microSpecs": "Nhựa PLA Xuyên Sáng · 73g",
+    "badgeTheme": "amber",
+    "originalTitle": "玫瑰花花瓶 纸袋笔筒",
+    "category": "Decor_Den_Noi_That",
+    "type": "standard",
+    "price": 119000,
+    "originalPrice": null,
+    "badge": "✦ Ambient Craft",
+    "image": "assets/images/products/thumb_2214866.png",
+    "imageAlt": "Bình hoa túi giấy kraft gấp nếp hoa hồng (Rose Kraft Bag Wrap Vase)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "狸狸子 c",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2214866",
+    "downloads": 2114,
+    "likes": 1236,
+    "prints": 1509,
+    "weightGrams": 73,
+    "printTimeSeconds": 7241,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Matte Nâu Kraft / Trắng gốm",
+    "headlineBenefit": "Quà tặng sinh nhật, cắm hoa hồng ngày Valentine, ống cắm bút độc lạ bàn văn phòng.",
+    "desc": "Tạo hình như túi giấy shopping cao cấp bị vò nếp gấp mềm mại, chuyên dụng để cắm 1 bông hồng đơn độc bản phong cách tối giản.",
+    "videoScript": "Cắm bông hồng nhung đỏ thắm vào chiếc túi giấy in 3D màu nâu kraft, vẻ đẹp tối giản Parisian Chic.",
+    "productionNotes": "Tạo hình như túi giấy shopping cao cấp bị vò nếp gấp mềm mại, chuyên dụng để cắm 1 bông hồng đơn độc bản phong cách tối giản.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "73g",
+      "printTime": "2.0 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2595057",
+    "modelId": "2595057",
+    "title": "Hoa Diên Vĩ Kim Loại Lỏng Đọng Sương (Metallic Iris Flower)",
+    "cleanTitle": "Hoa Diên Vĩ Kim Loại Lỏng Đọng Sương",
+    "archetypeBadge": "Họa Tiết Gợn Sóng Nóng Chảy",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 45g",
+    "badgeTheme": "slate",
+    "originalTitle": "金属感鸢尾花",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 99000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_2595057.png",
+    "imageAlt": "Hoa Diên Vĩ Kim Loại Lỏng Đọng Sương (Metallic Iris Flower)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "解忧打印铺子",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2595057",
+    "downloads": 641,
+    "likes": 506,
+    "prints": 323,
+    "weightGrams": 45,
+    "printTimeSeconds": 26152,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Bạc Chrome / PETG Tím khói trong suốt",
+    "headlineBenefit": "Cắm bình hoa giấy gấp, làm tượng hoa decor bàn làm việc, quà tặng nghệ thuật độc bản.",
+    "desc": "Cánh hoa uốn lượn giọt sương đọng nước phong cách Liquid Metal / Y3K cực độc lạ, có lỗ cuống xỏ que kim loại cắm bình.",
+    "videoScript": "Video quay cận cảnh ánh đèn quét qua cánh hoa lụa bóng bẩy và giọt sương đọng ngưng tụ, nhạc lofi thư giãn.",
+    "productionNotes": "Cánh hoa uốn lượn giọt sương đọng nước phong cách Liquid Metal / Y3K cực độc lạ, có lỗ cuống xỏ que kim loại cắm bình.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "45g",
+      "printTime": "7.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2595994",
+    "modelId": "2595994",
+    "title": "Lá Trầu Bà Quy Bối Trúc Kim Loại (Metallic Monstera Leaf)",
+    "cleanTitle": "Lá Trầu Bà Quy Bối Trúc Kim Loại",
+    "archetypeBadge": "Kim Loại Lỏng Độc Bản",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 38g",
+    "badgeTheme": "emerald",
+    "originalTitle": "金属龟背竹",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 79000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_2595994.png",
+    "imageAlt": "Lá Trầu Bà Quy Bối Trúc Kim Loại (Metallic Monstera Leaf)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "解忧打印铺子",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2595994",
+    "downloads": 316,
+    "likes": 348,
+    "prints": 184,
+    "weightGrams": 38,
+    "printTimeSeconds": 14495,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Xanh lục bảo / Bạc kim loại",
+    "headlineBenefit": "Cắm đệm bình hoa nghệ thuật, decor góc phong thủy, chặn sách, chụp ảnh sản phẩm decor.",
+    "desc": "Phiến lá Monstera uốn lượn trừu tượng đọng giọt nước, phụ kiện lá đệm hoàn hảo khi phối cắm cùng hoa diên vĩ.",
+    "videoScript": "Timelapse in 3D phiến lá trầu bà kim loại bóng loáng và cắm phối vào bình hoa vạt giấy đôi Weaving.",
+    "productionNotes": "Phiến lá Monstera uốn lượn trừu tượng đọng giọt nước, phụ kiện lá đệm hoàn hảo khi phối cắm cùng hoa diên vĩ.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "38g",
+      "printTime": "4.0 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2596131",
+    "modelId": "2596131",
+    "title": "Bướm Kim Loại Đọng Sương Cài Hoa (Metallic Dewdrop Butterfly)",
+    "cleanTitle": "Bướm Kim Loại Đọng Sương Cài Hoa",
+    "archetypeBadge": "Hiệu Ứng Thủy Ngân",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 25g",
+    "badgeTheme": "amber",
+    "originalTitle": "金属蝴蝶",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 59000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_2596131.png",
+    "imageAlt": "Bướm Kim Loại Đọng Sương Cài Hoa (Metallic Dewdrop Butterfly)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "解忧打印铺子",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2596131",
+    "downloads": 107,
+    "likes": 116,
+    "prints": 58,
+    "weightGrams": 25,
+    "printTimeSeconds": 15305,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Bạc / Chameleon Đổi màu",
+    "headlineBenefit": "Kẹp cành hoa, cài miệng bình hoa decor, trang trí bàn trang điểm, quà tặng kèm combo bình hoa.",
+    "desc": "Cánh bướm kim loại gợn sóng có giọt sương đọng, điểm nhấn sinh động gắn lên cành hoa hoặc vành miệng bình hoa.",
+    "videoScript": "Cảnh gắn bướm kim loại đậu lên cành hoa diên vĩ đang cắm trong bình hoa giấy đôi, tạo chiều sâu thị giác.",
+    "productionNotes": "Cánh bướm kim loại gợn sóng có giọt sương đọng, điểm nhấn sinh động gắn lên cành hoa hoặc vành miệng bình hoa.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "25g",
+      "printTime": "4.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1334861",
+    "modelId": "1334861",
+    "title": "Hoa Hồng Vàng Nóng Chảy Nghệ Thuật (Molten Gold Rose Sculpture)",
+    "cleanTitle": "Hoa Hồng Vàng Nóng Chảy Nghệ Thuật",
+    "archetypeBadge": "✦ Lựa Chọn Tiêu Biểu",
+    "useCaseEyebrow": "SẢN PHẨM TIÊU BIỂU • BỘ SƯU TẬP ATELIER",
+    "subCategory": "tieu_bieu",
+    "subCategoryName": "Lựa Chọn Tiêu Biểu",
+    "microSpecs": "Thiết kế flagship chuẩn xưởng · 52g",
+    "badgeTheme": "amber",
+    "originalTitle": "熔融玫瑰——金色熔化玫瑰雕塑",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 99000,
+    "originalPrice": null,
+    "badge": "✦ Tiêu Biểu",
+    "image": "assets/images/products/thumb_1334861.png",
+    "imageAlt": "Hoa Hồng Vàng Nóng Chảy Nghệ Thuật (Molten Gold Rose Sculpture)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Damakon",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1334861",
+    "downloads": 1137,
+    "likes": 446,
+    "prints": 773,
+    "weightGrams": 52,
+    "printTimeSeconds": 11142,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Gold / Bronze đồng cổ",
+    "headlineBenefit": "Tượng hoa decor để bàn, quà tặng Valentine/8/3 cao cấp, trang trí phòng khách sang trọng.",
+    "desc": "Thiết kế dòng chảy kim loại vàng nóng chảy (Molten Drip) từ cánh hoa xuống cuống, cực kỳ sang trọng và hút mắt.",
+    "videoScript": "Quay cận cảnh từng giọt vàng tan chảy của cánh hoa phản chiếu ánh nến lấp lánh trong đêm.",
+    "productionNotes": "Thiết kế dòng chảy kim loại vàng nóng chảy (Molten Drip) từ cánh hoa xuống cuống, cực kỳ sang trọng và hút mắt.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": true,
+    "specs": {
+      "weight": "52g",
+      "printTime": "3.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-3027134",
+    "modelId": "3027134",
+    "title": "Hoa Hồng Kim Loại Lỏng Điêu Khắc (Melting Liquid Metal Rose)",
+    "cleanTitle": "Hoa Hồng Kim Loại Lỏng Điêu Khắc",
+    "archetypeBadge": "Phản Chiếu Đa Sắc",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 60g",
+    "badgeTheme": "slate",
+    "originalTitle": "融化玫瑰",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 99000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_3027134.png",
+    "imageAlt": "Hoa Hồng Kim Loại Lỏng Điêu Khắc (Melting Liquid Metal Rose)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "HomeDecor",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/3027134",
+    "downloads": 24,
+    "likes": 18,
+    "prints": 12,
+    "weightGrams": 60,
+    "printTimeSeconds": 16200,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 4,
+    "selectionScore": 93.33333333333333,
+    "materialRecommendation": "PLA Silk Chrome Bạc / Đen bóng",
+    "headlineBenefit": "Trưng bày kệ sách, bàn làm việc kiến trúc sư / designer, decor phong cách hiện đại tối giản.",
+    "desc": "Trường phái điêu khắc dòng chảy kim loại lỏng vị lai Y3K, phá vỡ hoàn toàn định dạng hoa truyền thống.",
+    "videoScript": "So sánh giữa hoa hồng thật tàn phai và hoa hồng kim loại lỏng vĩnh cửu không tuổi.",
+    "productionNotes": "Trường phái điêu khắc dòng chảy kim loại lỏng vị lai Y3K, phá vỡ hoàn toàn định dạng hoa truyền thống.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "60g",
+      "printTime": "4.5 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-831574",
+    "modelId": "831574",
+    "title": "Hoa Hồng Cơ Khí Cyber Garden (Cyber Garden Metallic Rose)",
+    "cleanTitle": "Hoa Hồng Cơ Khí Cyber Garden",
+    "archetypeBadge": "Điêu Khắc Đương Đại",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 35g",
+    "badgeTheme": "emerald",
+    "originalTitle": "【赛博花园】金属玫瑰",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 89000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_831574.png",
+    "imageAlt": "Hoa Hồng Cơ Khí Cyber Garden (Cyber Garden Metallic Rose)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "嗷嗷Ultra",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/831574",
+    "downloads": 12,
+    "likes": 15,
+    "prints": 8,
+    "weightGrams": 35,
+    "printTimeSeconds": 17348,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Xám Titan / Carbon Black",
+    "headlineBenefit": "Cắm bàn máy tính góc Gaming, quà tặng bạn trai, decor góc làm việc công nghệ.",
+    "desc": "Thiết kế Cyberpunk cơ khí hóa cánh hoa với các góc cạnh vảy giáp mecha, ngách hoa độc lạ cho nam giới và game thủ.",
+    "videoScript": "Cắm cành hoa hồng Cyberpunk bên cạnh bàn phím cơ RGB, đèn LED hắt bóng cơ khí ấn tượng.",
+    "productionNotes": "Thiết kế Cyberpunk cơ khí hóa cánh hoa với các góc cạnh vảy giáp mecha, ngách hoa độc lạ cho nam giới và game thủ.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "35g",
+      "printTime": "4.8 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2492722",
+    "modelId": "2492722",
+    "title": "Hoa Rum Calla Lily Điêu Khắc 2 Dạng Cành (Calla Lily Flower)",
+    "cleanTitle": "Hoa Rum Calla Lily Điêu Khắc 2 Dạng Cành",
+    "archetypeBadge": "Họa Tiết Gợn Sóng Nóng Chảy",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 30g",
+    "badgeTheme": "amber",
+    "originalTitle": "马蹄莲花 - 2种茎杆选项 - 无需AMS",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 79000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_2492722.png",
+    "imageAlt": "Hoa Rum Calla Lily Điêu Khắc 2 Dạng Cành (Calla Lily Flower)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Billy3D Creates",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2492722",
+    "downloads": 13,
+    "likes": 12,
+    "prints": 7,
+    "weightGrams": 30,
+    "printTimeSeconds": 13019,
+    "aestheticScore": 5,
+    "uniquenessScore": 4,
+    "feasibilityScore": 5,
+    "selectionScore": 93.33333333333333,
+    "materialRecommendation": "PLA Trắng ngà / Silk Ngọc trai",
+    "headlineBenefit": "Cắm bình hoa vạt giấy gói đơn hoặc bó 3-5 cành, decor đám cưới, bàn tiệc sang trọng.",
+    "desc": "Tách 3 chi tiết thông minh: nhụy, bao hoa và đài. Cung cấp sẵn tùy chọn xỏ que kim loại hoặc dùng cành in 3D.",
+    "videoScript": "Hướng dẫn ghép nhanh 3 bộ phận hoa Calla Lily không cần keo, cắm vào bình hoa giấy đôi hoàn hảo.",
+    "productionNotes": "Tách 3 chi tiết thông minh: nhụy, bao hoa và đài. Cung cấp sẵn tùy chọn xỏ que kim loại hoặc dùng cành in 3D.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "30g",
+      "printTime": "3.6 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2474622",
+    "modelId": "2474622",
+    "title": "Hoa Hồng Môn Nghệ Thuật Phân Cụm (Botanical Anthurium Art)",
+    "cleanTitle": "Hoa Hồng Môn Nghệ Thuật Phân Cụm",
+    "archetypeBadge": "Kim Loại Lỏng Độc Bản",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 35g",
+    "badgeTheme": "cyan",
+    "originalTitle": "【原创仿真花红掌】火鹤花安祖花",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_2474622.png",
+    "imageAlt": "Hoa Hồng Môn Nghệ Thuật Phân Cụm (Botanical Anthurium Art)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "花小喵",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2474622",
+    "downloads": 312,
+    "likes": 195,
+    "prints": 145,
+    "weightGrams": 35,
+    "printTimeSeconds": 10080,
+    "aestheticScore": 5,
+    "uniquenessScore": 4,
+    "feasibilityScore": 5,
+    "selectionScore": 93.33333333333333,
+    "materialRecommendation": "PLA Đỏ Ruby bóng / Silk Bạc",
+    "headlineBenefit": "Cắm bình trang trí phòng khách, quầy lễ tân spa / khách sạn, quà tặng tân gia may mắn.",
+    "desc": "Phiến hoa hình trái tim uốn lượn đặc trưng của hồng môn nhiệt đới, tách rời nhụy và cánh in cực dễ không tốn support.",
+    "videoScript": "Video lắp ráp hoa hồng môn đỏ rực cắm xen kẽ với lá trầu bà kim loại tạo cảm giác nhiệt đới tương lai.",
+    "productionNotes": "Phiến hoa hình trái tim uốn lượn đặc trưng của hồng môn nhiệt đới, tách rời nhụy và cánh in cực dễ không tốn support.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "35g",
+      "printTime": "2.8 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-126235",
+    "modelId": "126235",
+    "title": "Bó Hoa Tulip Nghệ Thuật Cắm Bình (Botanical Tulip Bouquet)",
+    "cleanTitle": "Bó Hoa Tulip Nghệ Thuật Cắm Bình",
+    "archetypeBadge": "Hiệu Ứng Thủy Ngân",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 85g",
+    "badgeTheme": "slate",
+    "originalTitle": "郁金香花束",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 119000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_126235.png",
+    "imageAlt": "Bó Hoa Tulip Nghệ Thuật Cắm Bình (Botanical Tulip Bouquet)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "MiMa3D",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/126235",
+    "downloads": 1336,
+    "likes": 472,
+    "prints": 776,
+    "weightGrams": 85,
+    "printTimeSeconds": 16200,
+    "aestheticScore": 5,
+    "uniquenessScore": 4,
+    "feasibilityScore": 5,
+    "selectionScore": 93.33333333333333,
+    "materialRecommendation": "PLA Silk Hồng Pastel / Vàng hoàng yến",
+    "headlineBenefit": "Combo hoa kèm bình quà tặng sinh nhật bạn gái, ngày phụ nữ, trang trí bàn học phong cách Hàn Quốc.",
+    "desc": "Bó hoa tulip uốn lượn tự nhiên, tỷ lệ kích thước chuẩn chỉ để cắm lọt vừa vặn vào các mẫu bình hoa giấy gấp.",
+    "videoScript": "Cắm trọn bộ 3 bông tulip vào bình hoa giấy đôi Weaving #1478590, tạo thành set quà tặng best-seller.",
+    "productionNotes": "Bó hoa tulip uốn lượn tự nhiên, tỷ lệ kích thước chuẩn chỉ để cắm lọt vừa vặn vào các mẫu bình hoa giấy gấp.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "85g",
+      "printTime": "4.5 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1967303",
+    "modelId": "1967303",
+    "title": "Hoa Dây Kim Loại Tối Giản Cắm Bình (Minimalist Wire-frame Flower)",
+    "cleanTitle": "Hoa Dây Kim Loại Tối Giản Cắm Bình",
+    "archetypeBadge": "Đường Nét Siêu Thực",
+    "useCaseEyebrow": "TRƯNG BÀY • KIM LOẠI LỎNG ART",
+    "subCategory": "hoa_kim_loai",
+    "subCategoryName": "Hoa Kim Loại Lỏng",
+    "microSpecs": "Nhựa Bio-PLA Silk Ánh Kim · 20g",
+    "badgeTheme": "emerald",
+    "originalTitle": "极简主义铁丝花 - 花瓶装饰",
+    "category": "Hoa_Decor_Kim_Loai",
+    "type": "standard",
+    "price": 49000,
+    "originalPrice": null,
+    "badge": "✦ Kim Loại Lỏng",
+    "image": "assets/images/products/thumb_1967303.png",
+    "imageAlt": "Hoa Dây Kim Loại Tối Giản Cắm Bình (Minimalist Wire-frame Flower)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "CozyCraftStudios",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1967303",
+    "downloads": 18,
+    "likes": 4,
+    "prints": 8,
+    "weightGrams": 20,
+    "printTimeSeconds": 1764,
+    "aestheticScore": 4,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 93.33333333333333,
+    "materialRecommendation": "PLA Matte Đen mờ / Silk Gold",
+    "headlineBenefit": "Cắm bình hoa sứ, bình hoa thủy tinh hoặc bình 3D tối giản, làm điểm nhấn trang nhã bàn làm việc.",
+    "desc": "Mô phỏng nghệ thuật uốn dây thép (Wire Art) tối giản phong cách Bắc Âu, thời gian in siêu tốc dưới 30 phút.",
+    "videoScript": "In 3 bông hoa dây trong vòng 1 tiếng, cắm vào cốc gốm mộc tạo góc chill nghệ thuật.",
+    "productionNotes": "Mô phỏng nghệ thuật uốn dây thép (Wire Art) tối giản phong cách Bắc Âu, thời gian in siêu tốc dưới 30 phút.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "20g",
+      "printTime": "0.5 giờ"
+    },
+    "colors": [
+      {
+        "id": "metal_liquid_silver",
+        "name": "Bạc Thủy Ngân Lỏng",
+        "hex": "#E2E8F0"
+      },
+      {
+        "id": "metal_molten_gold",
+        "name": "Vàng Nóng Chảy 18K",
+        "hex": "#F59E0B"
+      },
+      {
+        "id": "metal_titanium_blue",
+        "name": "Titan Ánh Xanh",
+        "hex": "#0284C7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_metal",
+        "name": "PLA Ánh Kim Siêu Mịn",
+        "label": "PLA Silk Metal Bóng Láng",
+        "desc": "Hiệu ứng phản chiếu kim loại chất lỏng chân thực",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_chameleon",
+        "name": "PLA Đổi Màu Theo Góc Nhìn",
+        "label": "PLA Gradient Đa Sắc",
+        "desc": "Chuyển sắc lung linh theo ánh sáng môi trường",
+        "priceModifier": 25000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
     "id": "mw-cn-1702306",
     "modelId": "1702306",
     "title": "Rắn Gary Zootopia khớp uốn lượn linh hoạt (Zootopia Articulated Gary the Snake)",
@@ -2559,6 +3929,2366 @@
     "subCategory": "fidget_clicker",
     "subCategoryName": "Phím Bấm Fidget Clicker",
     "microSpecs": "Vỏ bơ xanh mướt · Hạt bơ xoay tròn và bấm clicky"
+  },
+  {
+    "id": "mw-cn-2528193",
+    "modelId": "2528193",
+    "title": "Cân thăng bằng toán học trực quan EqualiGo Balance (EqualiGo Math & Physics Balance Scale)",
+    "cleanTitle": "Cân thăng bằng toán học trực quan EqualiGo Balance",
+    "archetypeBadge": "In Nguyên Khối Không Ráp",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 109g",
+    "badgeTheme": "rose",
+    "originalTitle": "比比乐平衡天平“EqualiGo Balance”|数学物理教具|看得见的科学",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 119000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_2528193.png",
+    "imageAlt": "Cân thăng bằng toán học trực quan EqualiGo Balance (EqualiGo Math & Physics Balance Scale)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "豆莎造梦机",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2528193",
+    "downloads": 1038,
+    "likes": 530,
+    "prints": 767,
+    "weightGrams": 109,
+    "printTimeSeconds": 21987,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Vàng mai + Trắng sữa + Xanh pastel",
+    "headlineBenefit": "Giáo cụ học toán trực quan cho bé từ 4-10 tuổi, đồ chơi để bàn rèn tư duy logic gia đình.",
+    "desc": "Giáo cụ STEM trực quan hóa số học: khi tổng khối lượng hai vế bằng nhau, kim cân chỉ thẳng đứng; trẻ học phép cộng trừ và trọng lực mà không cần màn hình.",
+    "videoScript": "Quay video thử thách đặt các số ngẫu nhiên lên hai đĩa cân cho đến khi kim cân thăng bằng hoàn hảo.",
+    "productionNotes": "Giáo cụ STEM trực quan hóa số học: khi tổng khối lượng hai vế bằng nhau, kim cân chỉ thẳng đứng; trẻ học phép cộng trừ và trọng lực mà không cần màn hình.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "109g",
+      "printTime": "6.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2923012",
+    "modelId": "2923012",
+    "title": "Trực thăng bánh răng truyền động nón 90° quay cánh quạt (Helicopter 90° Bevel Gear Kinetic Toy)",
+    "cleanTitle": "Trực thăng bánh răng truyền động nón 90° quay cánh quạt",
+    "archetypeBadge": "Art Toy Sưu Tầm",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 41g",
+    "badgeTheme": "amber",
+    "originalTitle": "F系列1号手摇直升机齿轮传动玩具",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 79000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_2923012.png",
+    "imageAlt": "Trực thăng bánh răng truyền động nón 90° quay cánh quạt (Helicopter 90° Bevel Gear Kinetic Toy)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "蟹老板的非凡造物",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2923012",
+    "downloads": 1022,
+    "likes": 541,
+    "prints": 813,
+    "weightGrams": 41,
+    "printTimeSeconds": 8208,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh quân đội / Vàng cam + Đen",
+    "headlineBenefit": "Đồ chơi khám phá cơ cấu máy móc cho trẻ em, đồ chơi fidget giải tỏa căng thẳng bàn làm việc.",
+    "desc": "Cơ cấu truyền động bánh răng nón 90° kinh điển: quay tay cầm bên hông, cánh quạt chính trên nóc quay tít tạo luồng gió nhẹ; rèn luyện khả năng quan sát cơ khí.",
+    "videoScript": "Quay cận cảnh tay quay bánh răng nón ăn khớp êm ru, cánh quạt trực thăng quay tít vù vù thổi bay mẩu giấy.",
+    "productionNotes": "Cơ cấu truyền động bánh răng nón 90° kinh điển: quay tay cầm bên hông, cánh quạt chính trên nóc quay tít tạo luồng gió nhẹ; rèn luyện khả năng quan sát cơ khí.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "41g",
+      "printTime": "2.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1041029",
+    "modelId": "1041029",
+    "title": "Cờ Caro 3D lồng nuốt quân Gobblet tương tác đối kháng (Gobblet Gobblers 3D Interactive Strategy Boardgame)",
+    "cleanTitle": "Cờ Caro 3D lồng nuốt quân Gobblet tương tác đối kháng",
+    "archetypeBadge": "Khớp Khóa Cơ Học",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 30g",
+    "badgeTheme": "cyan",
+    "originalTitle": "套娃趣味益智井字棋",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_1041029.png",
+    "imageAlt": "Cờ Caro 3D lồng nuốt quân Gobblet tương tác đối kháng (Gobblet Gobblers 3D Interactive Strategy Boardgame)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "罡斩",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1041029",
+    "downloads": 2036,
+    "likes": 1403,
+    "prints": 1457,
+    "weightGrams": 30,
+    "printTimeSeconds": 6090,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Cam Neon + Xanh Dương Neon (2 phe đối kháng)",
+    "headlineBenefit": "Trò chơi tương tác cha mẹ và con cái cuối tuần, thi đấu trí tuệ đối kháng 2 người nhanh 5 phút.",
+    "desc": "Boardgame đối kháng tư duy chiến thuật đỉnh cao: quân cờ 3 kích cỡ có thể úp lồng trùm lên quân đối phương; rèn luyện trí nhớ không gian và sự tập trung.",
+    "videoScript": "Pha lật kèo bất ngờ khi mở quân lớn ra nuốt trọn quân đối thủ ở nước cờ quyết định.",
+    "productionNotes": "Boardgame đối kháng tư duy chiến thuật đỉnh cao: quân cờ 3 kích cỡ có thể úp lồng trùm lên quân đối phương; rèn luyện trí nhớ không gian và sự tập trung.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "30g",
+      "printTime": "1.7 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1229372",
+    "modelId": "1229372",
+    "title": "Bộ sưu tập 9 khóa Lỗ Ban Khổng Minh rèn luyện IQ & tư duy không gian (9-in-1 Kongming Luban Wooden-Style Puzzle Lock Collection)",
+    "cleanTitle": "Bộ sưu tập 9 khóa Lỗ Ban Khổng Minh rèn luyện IQ & tư duy không gian",
+    "archetypeBadge": "Chuyển Động Êm Ái",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 187g",
+    "badgeTheme": "emerald",
+    "originalTitle": "鲁班锁（九种合集）",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 149000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_1229372.png",
+    "imageAlt": "Bộ sưu tập 9 khóa Lỗ Ban Khổng Minh rèn luyện IQ & tư duy không gian (9-in-1 Kongming Luban Wooden-Style Puzzle Lock Collection)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "一人偷偷看星星",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1229372",
+    "downloads": 1119,
+    "likes": 296,
+    "prints": 779,
+    "weightGrams": 187,
+    "printTimeSeconds": 37572,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Wood Gỗ / Matte Nâu Walnut",
+    "headlineBenefit": "Đồ chơi rèn trí tuệ cho học sinh và người lớn, quà tặng giáo dục phong cách mộc trang nhã.",
+    "desc": "Tinh hoa mộng gỗ cổ truyền phương Đông với 9 cấp độ tháo lắp khác nhau: thử thách tháo rời và ghép lại các thanh khóa đan xen; rèn luyện kiên nhẫn và IQ.",
+    "videoScript": "Thử thách giải mã khóa Lỗ Ban 6 thanh trong 30 giây và pha lắp thanh then chốt vừa khít.",
+    "productionNotes": "Tinh hoa mộng gỗ cổ truyền phương Đông với 9 cấp độ tháo lắp khác nhau: thử thách tháo rời và ghép lại các thanh khóa đan xen; rèn luyện kiên nhẫn và IQ.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "187g",
+      "printTime": "10.4 giờ"
+    },
+    "colors": [
+      {
+        "id": "retro_wood_brown",
+        "name": "Nâu Gỗ Vintage",
+        "hex": "#7D5A44"
+      },
+      {
+        "id": "translucent_warm",
+        "name": "Trắng Ấm Xuyên Sáng",
+        "hex": "#FFF8E7"
+      },
+      {
+        "id": "matte_black",
+        "name": "Đen Khung Nhôm",
+        "hex": "#1A1A1A"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-767049",
+    "modelId": "767049",
+    "title": "Đường trượt bi vô tận dải Mobius giải mã topo học (Mobius Strip Infinity Marble Run Track)",
+    "cleanTitle": "Đường trượt bi vô tận dải Mobius giải mã topo học",
+    "archetypeBadge": "Khớp Xoay Linh Hoạt",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 113g",
+    "badgeTheme": "rose",
+    "originalTitle": "莫比乌斯环无限弹珠跑道",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 129000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_767049.png",
+    "imageAlt": "Đường trượt bi vô tận dải Mobius giải mã topo học (Mobius Strip Infinity Marble Run Track)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Barnacle Boy",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/767049",
+    "downloads": 669,
+    "likes": 535,
+    "prints": 279,
+    "weightGrams": 113,
+    "printTimeSeconds": 22757,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Cầu vồng lụa / Xanh navy nhũ",
+    "headlineBenefit": "Mô hình giáo cụ toán học topo, đồ chơi trượt bi thư giãn thị giác và thính giác để bàn làm việc.",
+    "desc": "Ứng dụng hình học phi Euclid vào đồ chơi: dải dốc xoắn 1 mặt kỳ diệu khiến viên bi phải lăn đủ 2 vòng bề mặt mới quay lại vị trí xuất phát; cực kỳ mê hoặc.",
+    "videoScript": "Thả viên bi kim loại sáng loáng chạy lượn sóng liên tục trên dải Mobius tạo âm thanh ASMR êm tai.",
+    "productionNotes": "Ứng dụng hình học phi Euclid vào đồ chơi: dải dốc xoắn 1 mặt kỳ diệu khiến viên bi phải lăn đủ 2 vòng bề mặt mới quay lại vị trí xuất phát; cực kỳ mê hoặc.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "113g",
+      "printTime": "6.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-529915",
+    "modelId": "529915",
+    "title": "Bảng cửu chương xoay cơ học 9x9 học toán thông minh (Mechanical Rotary 9x9 Multiplication Table Toy)",
+    "cleanTitle": "Bảng cửu chương xoay cơ học 9x9 học toán thông minh",
+    "archetypeBadge": "Fidget Chống Buồn Ngủ",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 356g",
+    "badgeTheme": "amber",
+    "originalTitle": "Multiplication 9x9  [九九乘法表]",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 249000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_529915.png",
+    "imageAlt": "Bảng cửu chương xoay cơ học 9x9 học toán thông minh (Mechanical Rotary 9x9 Multiplication Table Toy)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "DDWMAKER",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/529915",
+    "downloads": 1638,
+    "likes": 373,
+    "prints": 1055,
+    "weightGrams": 356,
+    "printTimeSeconds": 71220,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Trắng + Chữ Đen tương phản",
+    "headlineBenefit": "Giáo cụ học toán tiểu học trực quan, quà tặng con vào lớp 2 - lớp 3 thay thế sách bảng cửu chương truyền thống.",
+    "desc": "Công cụ cơ học hóa phép nhân 9x9: xoay trục số hàng và cột, kết quả lập tức xuất hiện trong ô cửa sổ quang học; giúp các bé tiểu học thuộc bảng nhân cực nhanh.",
+    "videoScript": "Đố nhanh bé xoay bảng tìm 7x8 và 9x9, tiếng xoay trục cơ học kêu lách cách vui tai.",
+    "productionNotes": "Công cụ cơ học hóa phép nhân 9x9: xoay trục số hàng và cột, kết quả lập tức xuất hiện trong ô cửa sổ quang học; giúp các bé tiểu học thuộc bảng nhân cực nhanh.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "356g",
+      "printTime": "19.8 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1327856",
+    "modelId": "1327856",
+    "title": "Con quay bánh răng hành tinh đa hướng xả stress (Multidirectional Planetary Gear Gyro Fidget Spinner)",
+    "cleanTitle": "Con quay bánh răng hành tinh đa hướng xả stress",
+    "archetypeBadge": "In Nguyên Khối Không Ráp",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 40g",
+    "badgeTheme": "cyan",
+    "originalTitle": "行星齿轮多向陀螺转盘解压玩具",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 79000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_1327856.png",
+    "imageAlt": "Con quay bánh răng hành tinh đa hướng xả stress (Multidirectional Planetary Gear Gyro Fidget Spinner)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "KL",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1327856",
+    "downloads": 4363,
+    "likes": 555,
+    "prints": 3096,
+    "weightGrams": 40,
+    "printTimeSeconds": 8154,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Dual-Color (Vàng - Xanh)",
+    "headlineBenefit": "Fidget giải tỏa căng thẳng cho học sinh và nhân viên văn phòng, tăng cường độ tập trung.",
+    "desc": "Kết hợp giữa con quay hồi chuyển 3D và cụm bánh răng hành tinh: in liền khối 100% không cần lắp ráp; xoay đa hướng mượt mà với hiệu ứng quang học cuốn hút.",
+    "videoScript": "Búng nhẹ con quay xoay tít trên bàn làm việc, các bánh răng hành tinh tự đảo chiều tạo ảo ảnh quang học kỳ thú.",
+    "productionNotes": "Kết hợp giữa con quay hồi chuyển 3D và cụm bánh răng hành tinh: in liền khối 100% không cần lắp ráp; xoay đa hướng mượt mà với hiệu ứng quang học cuốn hút.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "40g",
+      "printTime": "2.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_silk",
+        "name": "PLA Silk Cao Cấp",
+        "label": "PLA Silk Óng Ánh",
+        "desc": "Hiệu ứng phản chiếu óng ả như vải lụa tơ tằm",
+        "priceModifier": 20000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1211586",
+    "modelId": "1211586",
+    "title": "Bộ hồi Tourbillon đồng hồ cơ khí 100% in 3D không ốc vít (100% 3D Printed Mechanical Tourbillon Escapement)",
+    "cleanTitle": "Bộ hồi Tourbillon đồng hồ cơ khí 100% in 3D không ốc vít",
+    "archetypeBadge": "Art Toy Sưu Tầm",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 70g",
+    "badgeTheme": "emerald",
+    "originalTitle": "原创100%3D打印陀飞轮（无需任何五金）",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 129000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_1211586.png",
+    "imageAlt": "Bộ hồi Tourbillon đồng hồ cơ khí 100% in 3D không ốc vít (100% 3D Printed Mechanical Tourbillon Escapement)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Siegfried_Kircheis",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1211586",
+    "downloads": 8897,
+    "likes": 2255,
+    "prints": 6790,
+    "weightGrams": 70,
+    "printTimeSeconds": 13987,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Silk Vàng Gold + Đen Satin",
+    "headlineBenefit": "Mô hình khám phá nguyên lý đồng hồ cơ khí, vật phẩm decor bàn làm việc đậm chất công nghệ và kỹ thuật.",
+    "desc": "Đỉnh cao cơ khí đồng hồ Thụy Sĩ thu nhỏ: cơ cấu thoát Tourbillon tự dao động nhịp nhàng mà không cần bất kỳ ốc vít kim loại hay lò xo ngoài nào.",
+    "videoScript": "Lên dây cót in 3D, nghe tiếng gõ tích tắc giòn giã và ngắm lồng Tourbillon xoay nhịp nhàng dưới ánh đèn.",
+    "productionNotes": "Đỉnh cao cơ khí đồng hồ Thụy Sĩ thu nhỏ: cơ cấu thoát Tourbillon tự dao động nhịp nhàng mà không cần bất kỳ ốc vít kim loại hay lò xo ngoài nào.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "70g",
+      "printTime": "3.9 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_silk",
+        "name": "PLA Silk Cao Cấp",
+        "label": "PLA Silk Óng Ánh",
+        "desc": "Hiệu ứng phản chiếu óng ả như vải lụa tơ tằm",
+        "priceModifier": 20000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-529689",
+    "modelId": "529689",
+    "title": "Móc khóa động cơ chữ V cơ cấu Piston chuyển động thực (Interactive Moving V-Engine Piston Keychain)",
+    "cleanTitle": "Móc khóa động cơ chữ V cơ cấu Piston chuyển động thực",
+    "archetypeBadge": "Khớp Khóa Cơ Học",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 39g",
+    "badgeTheme": "rose",
+    "originalTitle": "可动引擎钥匙扣",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_529689.png",
+    "imageAlt": "Móc khóa động cơ chữ V cơ cấu Piston chuyển động thực (Interactive Moving V-Engine Piston Keychain)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "天福",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/529689",
+    "downloads": 2618,
+    "likes": 660,
+    "prints": 1965,
+    "weightGrams": 39,
+    "printTimeSeconds": 7916,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Bạc Kim Loại + Piston Đỏ",
+    "headlineBenefit": "Móc chìa khóa xe máy, ô tô, đồ chơi fidget cầm tay độc đáo cho nam giới và những người mê động cơ.",
+    "desc": "Mô hình động cơ V thu nhỏ thành móc khóa: xoay bánh đà, các piston thụt thò theo thứ tự đánh lửa chuẩn xác, cực kỳ mê hoặc fan cơ khí ô tô xe máy.",
+    "videoScript": "Tra chìa khóa xe rồi xoay trục cơ, xem 2 quả piston nhấp nhô nhịp nhàng ăn khớp nhau hoàn hảo.",
+    "productionNotes": "Mô hình động cơ V thu nhỏ thành móc khóa: xoay bánh đà, các piston thụt thò theo thứ tự đánh lửa chuẩn xác, cực kỳ mê hoặc fan cơ khí ô tô xe máy.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "39g",
+      "printTime": "2.2 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-412605",
+    "modelId": "412605",
+    "title": "Móc khóa trái tim bánh răng động học xoay vô tận V3 (V3 Kinetic Gear Heart Fidget Keychain)",
+    "cleanTitle": "Móc khóa trái tim bánh răng động học xoay vô tận V3",
+    "archetypeBadge": "Chuyển Động Êm Ái",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 15g",
+    "badgeTheme": "amber",
+    "originalTitle": "V3 齿轮心形解压玩具钥匙扣",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 49000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_412605.png",
+    "imageAlt": "Móc khóa trái tim bánh răng động học xoay vô tận V3 (V3 Kinetic Gear Heart Fidget Keychain)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Spike_Mix",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/412605",
+    "downloads": 1647,
+    "likes": 381,
+    "prints": 1210,
+    "weightGrams": 15,
+    "printTimeSeconds": 3058,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Đỏ Ruby Silk / Hồng Pastel",
+    "headlineBenefit": "Móc khóa cặp đôi, quà tặng ngày lễ tình nhân 14/2, 8/3, đồ chơi xoa dịu cảm xúc cầm tay.",
+    "desc": "Biểu tượng tình yêu kết hợp kỹ thuật cơ khí: trái tim cấu tạo từ 8 bánh răng ăn khớp, xoay một bánh răng khiến cả trái tim chuyển động nhịp nhàng.",
+    "videoScript": "Video hai bàn tay cùng xoay bánh răng trái tim, gửi gắm thông điệp 'trái tim chung một nhịp đập'.",
+    "productionNotes": "Biểu tượng tình yêu kết hợp kỹ thuật cơ khí: trái tim cấu tạo từ 8 bánh răng ăn khớp, xoay một bánh răng khiến cả trái tim chuyển động nhịp nhàng.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "15g",
+      "printTime": "0.8 giờ"
+    },
+    "colors": [
+      {
+        "id": "silk_pearl_white",
+        "name": "Trắng Ngọc Trai Silk",
+        "hex": "#F0ECE1"
+      },
+      {
+        "id": "silk_pastel_pink",
+        "name": "Hồng Lụa Pastel",
+        "hex": "#F7C6D0"
+      },
+      {
+        "id": "silk_champagne",
+        "name": "Vàng Champagne Óng",
+        "hex": "#EED9A7"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      },
+      {
+        "id": "pla_silk",
+        "name": "PLA Silk Cao Cấp",
+        "label": "PLA Silk Óng Ánh",
+        "desc": "Hiệu ứng phản chiếu óng ả như vải lụa tơ tằm",
+        "priceModifier": 20000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2692808",
+    "modelId": "2692808",
+    "title": "Móc khóa hộp số sàn 6 cấp gạt số cơ học mini (Mini 6-Speed Manual Shifter Gearbox Keychain)",
+    "cleanTitle": "Móc khóa hộp số sàn 6 cấp gạt số cơ học mini",
+    "archetypeBadge": "Khớp Xoay Linh Hoạt",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 15g",
+    "badgeTheme": "cyan",
+    "originalTitle": "迷你齿轮箱钥匙扣解压玩具",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 39000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_2692808.png",
+    "imageAlt": "Móc khóa hộp số sàn 6 cấp gạt số cơ học mini (Mini 6-Speed Manual Shifter Gearbox Keychain)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Wölhart",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2692808",
+    "downloads": 498,
+    "likes": 117,
+    "prints": 367,
+    "weightGrams": 15,
+    "printTimeSeconds": 1407,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Đen mờ + Cần gạt Đỏ",
+    "headlineBenefit": "Móc chìa khóa xe hơi, quà tặng bạn trai mê xe thể thao, đồ chơi bấm ngón tay giải tỏa căng thẳng khi kẹt xe.",
+    "desc": "Đưa cần số xe đua thể thao vào móc khóa bỏ túi: thao tác gạt số 1-2-3-4-5-6-R có khấc hãm nảy cơ học 'tách tách' đã tay, nhỏ gọn siêu nhẹ.",
+    "videoScript": "Mô phỏng cảnh dồn số về cua cực gắt với âm thanh gạt số cơ học đanh gọn chân thực.",
+    "productionNotes": "Đưa cần số xe đua thể thao vào móc khóa bỏ túi: thao tác gạt số 1-2-3-4-5-6-R có khấc hãm nảy cơ học 'tách tách' đã tay, nhỏ gọn siêu nhẹ.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "15g",
+      "printTime": "0.4 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1141687",
+    "modelId": "1141687",
+    "title": "Móc khóa bàn tay robot kẹp đồ cơ học mini (Mini Retractable Mechanical Robotic Claw Grabber)",
+    "cleanTitle": "Móc khóa bàn tay robot kẹp đồ cơ học mini",
+    "archetypeBadge": "Fidget Chống Buồn Ngủ",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 15g",
+    "badgeTheme": "emerald",
+    "originalTitle": "迷你机械爪勾",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 39000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_1141687.png",
+    "imageAlt": "Móc khóa bàn tay robot kẹp đồ cơ học mini (Mini Retractable Mechanical Robotic Claw Grabber)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "小籽",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1141687",
+    "downloads": 3191,
+    "likes": 1315,
+    "prints": 2195,
+    "weightGrams": 15,
+    "printTimeSeconds": 2347,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh Cyan + Vàng Cam",
+    "headlineBenefit": "Đồ chơi gắp kẹo mini cho bé, móc treo balo độc lạ, dụng cụ gắp đồ vui nhộn trên bàn học.",
+    "desc": "Cơ cấu tay kẹp robot thu nhỏ: bóp hai ngón tay, bàn tay cơ học vươn dài và kẹp chặt lấy vật thể nhỏ (kẹo, bút, đồng xu), kích thích trí tò mò của trẻ.",
+    "videoScript": "Thử thách gắp hạt đậu hoặc kẹo tròn đưa vào miệng chỉ bằng bàn tay robot mini tí hon.",
+    "productionNotes": "Cơ cấu tay kẹp robot thu nhỏ: bóp hai ngón tay, bàn tay cơ học vươn dài và kẹp chặt lấy vật thể nhỏ (kẹo, bút, đồng xu), kích thích trí tò mò của trẻ.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "15g",
+      "printTime": "0.7 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2616495",
+    "modelId": "2616495",
+    "title": "Móc khóa balo Bambu Lab mini mở nắp đựng vật nhỏ (Cute Bambu Lab Mini Backpack Case Keychain)",
+    "cleanTitle": "Móc khóa balo Bambu Lab mini mở nắp đựng vật nhỏ",
+    "archetypeBadge": "In Nguyên Khối Không Ráp",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • ART TOY ĐỘNG",
+    "subCategory": "art_toy_khop",
+    "subCategoryName": "Art Toy Khớp Động",
+    "microSpecs": "Nhựa PLA In Nguyên Khối · 15g",
+    "badgeTheme": "rose",
+    "originalTitle": "超可爱Bambu书包挂件",
+    "category": "Do_Choi_Moc_Khoa",
+    "type": "standard",
+    "price": 39000,
+    "originalPrice": null,
+    "badge": "✦ Viral Fidget",
+    "image": "assets/images/products/thumb_2616495.png",
+    "imageAlt": "Móc khóa balo Bambu Lab mini mở nắp đựng vật nhỏ (Cute Bambu Lab Mini Backpack Case Keychain)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "Hunter_3Design",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2616495",
+    "downloads": 1313,
+    "likes": 341,
+    "prints": 1050,
+    "weightGrams": 15,
+    "printTimeSeconds": 2303,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh Bambu + Xám Bạc",
+    "headlineBenefit": "Móc khóa balo đi học, hộp mini chống sốc đựng thẻ nhớ và phụ kiện máy in 3D.",
+    "desc": "Mô phỏng chiếc balo công nghệ Bambu Lab siêu dễ thương: nắp balo mở ra được để đựng thẻ nhớ SD, đầu phun nozzle dự phòng hoặc tai nghe AirPods.",
+    "videoScript": "Mở nắp balo tí hon lấy ra chiếc thẻ nhớ máy in hoặc viên kẹo bé xinh bất ngờ cho bạn bè.",
+    "productionNotes": "Mô phỏng chiếc balo công nghệ Bambu Lab siêu dễ thương: nắp balo mở ra được để đựng thẻ nhớ SD, đầu phun nozzle dự phòng hoặc tai nghe AirPods.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "15g",
+      "printTime": "0.6 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2680027",
+    "modelId": "2680027",
+    "title": "Mèo thò đầu hộp bí ẩn Pop-up Clicker Keychain",
+    "cleanTitle": "Mèo thò đầu hộp bí ẩn Pop-up Clicker Keychain",
+    "archetypeBadge": "Công Tắc Phím Cơ",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 26g",
+    "badgeTheme": "terracotta",
+    "originalTitle": "月薪喵点击器｜从盒子里探头的解压小猫",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 79000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2680027.png",
+    "imageAlt": "Mèo thò đầu hộp bí ẩn Pop-up Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2680027",
+    "downloads": 1365,
+    "likes": 859,
+    "prints": 621,
+    "weightGrams": 26,
+    "printTimeSeconds": 3900,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Nâu Kraft hộp carton + Trắng/Vàng mèo con",
+    "headlineBenefit": "Móc khóa balo, túi xách, đồ chơi bấm xả stress văn phòng, linh vật 'mèo kiếm tiền'.",
+    "desc": "Cơ cấu đòn bẩy thò thụt độc lạ: Mỗi lần bấm nút kêu tách, chú mèo nhỏ từ trong thùng carton sẽ bật thò đầu lên; nhả tay tự thụt xuống.",
+    "videoScript": "Quay video cận cảnh ngón tay nhấn liên hồi vào hộp carton mini, chú mèo thò đầu lên nhấp nhô theo nhịp nhạc beat Tik Tok.",
+    "productionNotes": "Pop-up lever + Switch cơ học MX, hành trình nhấn 4mm dứt khoát, tiếng gõ đanh thép.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "26g",
+      "printTime": "1.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1073472",
+    "modelId": "1073472",
+    "title": "Đệm chân mèo nảy nhíp 100% in 3D Compliant Clicker Keychain",
+    "cleanTitle": "Đệm chân mèo nảy nhíp 100% in 3D Compliant Clicker Keychain",
+    "archetypeBadge": "✦ Lựa Chọn Tiêu Biểu",
+    "useCaseEyebrow": "SẢN PHẨM TIÊU BIỂU • BỘ SƯU TẬP ATELIER",
+    "subCategory": "tieu_bieu",
+    "subCategoryName": "Lựa Chọn Tiêu Biểu",
+    "microSpecs": "Thiết kế flagship chuẩn xưởng · 26g",
+    "badgeTheme": "amber",
+    "originalTitle": "可爱解压猫爪-无需键盘轴-咔哒按压点击器",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Tiêu Biểu",
+    "image": "assets/images/products/thumb_1073472.png",
+    "imageAlt": "Đệm chân mèo nảy nhíp 100% in 3D Compliant Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "voxo3d",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1073472",
+    "downloads": 12462,
+    "likes": 3958,
+    "prints": 9894,
+    "weightGrams": 26,
+    "printTimeSeconds": 4200,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Hồng Pastel đệm thịt + Trắng thân chân mèo",
+    "headlineBenefit": "Móc khóa xe, quà tặng bạn gái, đồ chơi giải tỏa căng thẳng học đường.",
+    "desc": "Top 1 viral Xiaohongshu: Nhíp đàn hồi in 3D 100% không cần mua linh kiện ngoài, đệm thịt múp míp bấm nảy tưng bừng.",
+    "videoScript": "Macro cận cảnh bóp đệm thịt mèo phúng phính phát ra âm thanh 'tách tách' giòn tan gây nghiện ASMR.",
+    "productionNotes": "Cơ cấu đàn hồi tuân thủ (Compliant Mechanism) đúc liền khối, lực bấm mềm mại nhưng phản hồi cực đã.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": true,
+    "specs": {
+      "weight": "26g",
+      "printTime": "1.2 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1105014",
+    "modelId": "1105014",
+    "title": "Mõ tụng kinh Tích Công Đức +1 Clicker Keychain V3.0",
+    "cleanTitle": "Mõ tụng kinh Tích Công Đức +1 Clicker Keychain V3.0",
+    "archetypeBadge": "Thiết Kế Độc Lạ Viral",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 20g",
+    "badgeTheme": "rose",
+    "originalTitle": "指尖木鱼解压功德点击器免键轴版钥匙扣V3.0",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 59000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_1105014.png",
+    "imageAlt": "Mõ tụng kinh Tích Công Đức +1 Clicker Keychain V3.0",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1105014",
+    "downloads": 775,
+    "likes": 216,
+    "prints": 536,
+    "weightGrams": 20,
+    "printTimeSeconds": 2700,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Nâu gỗ gụ hoặc Đen mờ + Chữ vàng ánh kim",
+    "headlineBenefit": "Móc chìa khóa xe, bấm tích công đức khi kẹt xe hoặc deadline dí.",
+    "desc": "Trào lưu tâm linh giải nghiệp Gen Z: Bản nâng cấp V3.0 tích hợp lò xo lá in 3D 100%, gõ cộc cộc mô phỏng mõ chùa giải tỏa ức chế tức thì.",
+    "videoScript": "POV: Đi làm gặp sếp cáu gắt, lén thò tay vào túi quần gõ mõ 'Công đức +1' liên tục để lấy lại bình tĩnh.",
+    "productionNotes": "Lò xo vách mỏng in 3D độc quyền, đầu búa gõ vào buồng rỗng tạo tiếng gõ mõ đanh trầm.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "20g",
+      "printTime": "0.8 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1011786",
+    "modelId": "1011786",
+    "title": "Xửng bánh bao Dimsum 3 phím Switch Clicker Keychain",
+    "cleanTitle": "Xửng bánh bao Dimsum 3 phím Switch Clicker Keychain",
+    "archetypeBadge": "Âm Thanh Đanh Giòn",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 38g",
+    "badgeTheme": "emerald",
+    "originalTitle": "Clickey一笼包子解压按键钥匙扣3月13日版",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 99000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_1011786.png",
+    "imageAlt": "Xửng bánh bao Dimsum 3 phím Switch Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1011786",
+    "downloads": 2734,
+    "likes": 798,
+    "prints": 1840,
+    "weightGrams": 38,
+    "printTimeSeconds": 4800,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Nâu tre xửng hấp + Trắng sứ bánh bao",
+    "headlineBenefit": "Móc khóa balo cỡ vừa, đồ chơi để bàn làm việc văn phòng, quà tặng ẩm thực sáng tạo.",
+    "desc": "Xửng tre mini đường kính 60mm chứa 3 chiếc bánh bao múp míp, mỗi bánh là 1 phím switch cơ độc lập cho phép lướt ngón tay như đàn piano.",
+    "videoScript": "Mở nắp xửng hấp khói bay (hiệu ứng đá khô), 3 ngón tay gõ liên thanh như chơi beatbox trên bánh bao.",
+    "productionNotes": "Cụm 3 phím cơ Blue/Red switch, hành trình bấm sâu nảy giòn tan.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "38g",
+      "printTime": "1.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2232108",
+    "modelId": "2232108",
+    "title": "Đùi gà rán giòn rụm bấm xương Piston Clicker Keychain",
+    "cleanTitle": "Đùi gà rán giòn rụm bấm xương Piston Clicker Keychain",
+    "archetypeBadge": "Cơ Chế Nảy Nhíp 100%",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 20g",
+    "badgeTheme": "amber",
+    "originalTitle": "炸鸡腿按键点击器解压钥匙扣",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 75000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2232108.png",
+    "imageAlt": "Đùi gà rán giòn rụm bấm xương Piston Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2232108",
+    "downloads": 1916,
+    "likes": 774,
+    "prints": 1350,
+    "weightGrams": 20,
+    "printTimeSeconds": 3300,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Vàng nâu vỏ chiên xù + Trắng ngà xương gà",
+    "headlineBenefit": "Móc khóa túi xách, quà tặng troll bạn bè mê gà rán KFC/Lotteria.",
+    "desc": "Tạo hình đùi gà rán giòn rụm dài 75mm siêu thực; xương gà nhô lên là công tắc cơ học, ấn mạnh lún sâu kêu clack cực đanh.",
+    "videoScript": "Cầm đùi gà rán giả vờ đưa lên miệng cắn, đột nhiên ngón tay ấn mạnh vào xương gà kêu 'cạch' dứt khoát làm người xem giật mình.",
+    "productionNotes": "Piston trượt dẫn hướng trục đứng kết hợp switch bàn phím chống kẹt tuyệt đối.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "20g",
+      "printTime": "0.9 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2289815",
+    "modelId": "2289815",
+    "title": "Cốc cà phê Takeaway nắp khóa ren cơ khí Clicker Keychain",
+    "cleanTitle": "Cốc cà phê Takeaway nắp khóa ren cơ khí Clicker Keychain",
+    "archetypeBadge": "Giải Tỏa Căng Thẳng",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 20g",
+    "badgeTheme": "terracotta",
+    "originalTitle": "咖啡杯点击器解压钥匙扣（螺纹结构不用胶水）",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2289815.png",
+    "imageAlt": "Cốc cà phê Takeaway nắp khóa ren cơ khí Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2289815",
+    "downloads": 492,
+    "likes": 187,
+    "prints": 344,
+    "weightGrams": 20,
+    "printTimeSeconds": 3100,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Trắng thân cốc + Xanh lá/Nâu nắp cốc takeaway",
+    "headlineBenefit": "Móc chìa khóa xe máy/ô tô, phụ kiện thời trang văn phòng thanh lịch.",
+    "desc": "Thiết kế ren xoay tháo lắp 100% không dùng keo, ống hút là phím cơ bấm dứt khoát, phong cách Starbucks văn phòng sang trọng.",
+    "videoScript": "Đặt cốc cafe thật bên cạnh cốc cafe in 3D mini, bấm liên tục vào ống hút mini để tạo nhịp điệu nhạc acoustic.",
+    "productionNotes": "Nắp vặn ren cơ khí chuẩn xác, nút nhấn dạng plunger hành trình êm ái.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "20g",
+      "printTime": "0.9 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2721573",
+    "modelId": "2721573",
+    "title": "Máy ảnh Instax Mini 13 bấm nhả ảnh Pop-up Clicker Keychain",
+    "cleanTitle": "Máy ảnh Instax Mini 13 bấm nhả ảnh Pop-up Clicker Keychain",
+    "archetypeBadge": "Công Tắc Phím Cơ",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 54g",
+    "badgeTheme": "cyan",
+    "originalTitle": "新迷你 Instax 13 解压玩具/钥匙扣 - 推出相片",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 99000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2721573.png",
+    "imageAlt": "Máy ảnh Instax Mini 13 bấm nhả ảnh Pop-up Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2721573",
+    "downloads": 1112,
+    "likes": 571,
+    "prints": 840,
+    "weightGrams": 54,
+    "printTimeSeconds": 5400,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh pastel / Tím lilac / Hồng phấn + Ống kính đen",
+    "headlineBenefit": "Móc khóa balo học sinh, phụ kiện chụp ảnh sống ảo, quà tặng kỷ niệm cá nhân hóa ảnh in.",
+    "desc": "Siêu phẩm tương tác: Nhấn nút chụp kêu tách, cơ chế nhông nảy bên trong lập tức đẩy tấm ảnh Polaroid mini trồi lên khỏi khe máy.",
+    "videoScript": "Hỏi bạn 'Cười lên nào!', bấm nút chụp máy ảnh in 3D kêu 'tách', tấm ảnh mini thò ra in hình người bạn đó khiến người xem kinh ngạc.",
+    "productionNotes": "Cơ cấu màn trập cơ khí nhả lẫy lò xo kép (Dual-spring shutter ejection).",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "54g",
+      "printTime": "1.5 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2037832",
+    "modelId": "2037832",
+    "title": "Súng Desert Eagle lên đạn trượt nòng giật khấc Clicker Keychain",
+    "cleanTitle": "Súng Desert Eagle lên đạn trượt nòng giật khấc Clicker Keychain",
+    "archetypeBadge": "Âm Vang Tích Công Đức",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 40g",
+    "badgeTheme": "rose",
+    "originalTitle": "沙漠之鹰解压钥匙扣 – 滑动玩具",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 89000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2037832.png",
+    "imageAlt": "Súng Desert Eagle lên đạn trượt nòng giật khấc Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2037832",
+    "downloads": 1216,
+    "likes": 425,
+    "prints": 903,
+    "weightGrams": 40,
+    "printTimeSeconds": 4200,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Bạc kim loại / Đen mờ Military Tactical",
+    "headlineBenefit": "Móc khóa xe nam tính, đồ chơi EDC cầm tay giải trí khi rảnh rỗi.",
+    "desc": "Mô hình súng Desert Eagle dài 85mm an toàn 100%, nòng súng trượt giật khấc lò xo kêu clack dứt khoát như lên đạn súng thật.",
+    "videoScript": "Video ASMR kéo nòng súng liên thanh bằng một tay kêu tanh tách đanh thép, độ trễ giật khấc cực thỏa mãn.",
+    "productionNotes": "Slide racking trượt nòng tuyến tính có ngàm khóa detent và lò xo phản hồi dứt khoát.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "40g",
+      "printTime": "1.2 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2008793",
+    "modelId": "2008793",
+    "title": "Ấn triện hoàng cung Mã Thượng Bạo Phú / Phát Tài Clicker Keychain",
+    "cleanTitle": "Ấn triện hoàng cung Mã Thượng Bạo Phú / Phát Tài Clicker Keychain",
+    "archetypeBadge": "Thiết Kế Độc Lạ Viral",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 46g",
+    "badgeTheme": "emerald",
+    "originalTitle": "马上有钱新方式-马年专属点击暴富款",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 89000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2008793.png",
+    "imageAlt": "Ấn triện hoàng cung Mã Thượng Bạo Phú / Phát Tài Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2008793",
+    "downloads": 2538,
+    "likes": 805,
+    "prints": 1826,
+    "weightGrams": 46,
+    "printTimeSeconds": 4500,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Đỏ hoàng gia + Vàng ánh kim Gold Silk",
+    "headlineBenefit": "Móc khóa xe hơi, quà tặng năm mới cho đối tác, kích hoạt tài lộc bàn làm việc.",
+    "desc": "Hình dáng khối triện hoàng gia vuông vức 38x38x52mm nặng 46g cầm vừa 4 ngón tay; đỉnh triện là phím cơ màu vàng ròng kêu vang mang lộc tài.",
+    "videoScript": "Đóng triện xuống bàn như vua chúa ban chiếu chỉ, mỗi lần ấn là tiếng kêu 'keng' cùng chữ Phát Tài phát sáng dưới ánh đèn.",
+    "productionNotes": "Phím switch cơ học cao cấp gắn trong trụ đá phong thủy, nảy mạnh dứt khoát.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "46g",
+      "printTime": "1.2 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1454446",
+    "modelId": "1454446",
+    "title": "Lựu đạn tác chiến 5-in-1 rút chốt bật lẫy Fidget Keychain",
+    "cleanTitle": "Lựu đạn tác chiến 5-in-1 rút chốt bật lẫy Fidget Keychain",
+    "archetypeBadge": "Âm Thanh Đanh Giòn",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 50g",
+    "badgeTheme": "amber",
+    "originalTitle": "Fidget-Fuse 手雷五合一卡扣式解压玩具",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 95000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_1454446.png",
+    "imageAlt": "Lựu đạn tác chiến 5-in-1 rút chốt bật lẫy Fidget Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1454446",
+    "downloads": 904,
+    "likes": 366,
+    "prints": 754,
+    "weightGrams": 50,
+    "printTimeSeconds": 4800,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh rêu lính + Đen quân đội Tactical",
+    "headlineBenefit": "Móc khóa balo dã ngoại, quà tặng cho nam giới mê quân sự & game bắn súng PUBG/CS:GO.",
+    "desc": "Quả lựu đạn to tròn 48x70mm nặng 50g ôm trọn bàn tay, tích hợp 5 cơ chế giải trí: rút chốt, lẫy mỏ vịt lò xo bật nảy, xoay ngòi khấc haptic.",
+    "videoScript": "Cầm quả lựu đạn giả vờ rút chốt an toàn giật mạnh, lẫy bật ra phát tiếng 'cạch' đanh vang giật mình.",
+    "productionNotes": "Cơ cấu lò xo lá nhíp kẹp mỏ vịt (Lever Spoon release) kết hợp ngàm xoay cóc đa hướng.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "50g",
+      "printTime": "1.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2470743",
+    "modelId": "2470743",
+    "title": "Trụ cứu hỏa Hạ Hỏa / Xả giận nút dừng khẩn cấp Emergency Clicker",
+    "cleanTitle": "Trụ cứu hỏa Hạ Hỏa / Xả giận nút dừng khẩn cấp Emergency Clicker",
+    "archetypeBadge": "Cơ Chế Nảy Nhíp 100%",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 24g",
+    "badgeTheme": "terracotta",
+    "originalTitle": "“消消火”桌面消防栓按键解压摆件",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2470743.png",
+    "imageAlt": "Trụ cứu hỏa Hạ Hỏa / Xả giận nút dừng khẩn cấp Emergency Clicker",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2470743",
+    "downloads": 2458,
+    "likes": 674,
+    "prints": 1696,
+    "weightGrams": 24,
+    "printTimeSeconds": 3300,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Đỏ tươi cứu hỏa + Trắng viền nắp",
+    "headlineBenefit": "Móc khóa balo, bàn làm việc văn phòng công nghệ, giải tỏa stress phòng họp.",
+    "desc": "Thiết kế trụ cứu hỏa mini cao 56mm, nắp nút nấm dừng khẩn cấp (E-Stop); mỗi khi tức giận đập tay vào nắp kêu clack giải tỏa ức chế ngay.",
+    "videoScript": "Clip hài hước 'Khi khách đòi sửa thiết kế lần thứ 10', lia máy quay lại đập mạnh vào trụ cứu hỏa 'Hạ hỏa' kêu cạch liên thanh.",
+    "productionNotes": "Nút nấm công nghiệp dẫn hướng lò xo cơ học, hành trình nhấn chắc nịch.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "24g",
+      "printTime": "0.9 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2806889",
+    "modelId": "2806889",
+    "title": "Nắp chai nước ngọt Coca-Cola bật nắp Pop-snap Clicker Keychain",
+    "cleanTitle": "Nắp chai nước ngọt Coca-Cola bật nắp Pop-snap Clicker Keychain",
+    "archetypeBadge": "Giải Tỏa Căng Thẳng",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 26g",
+    "badgeTheme": "cyan",
+    "originalTitle": "解压玩具-点击器-可乐-九瓶",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 65000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2806889.png",
+    "imageAlt": "Nắp chai nước ngọt Coca-Cola bật nắp Pop-snap Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2806889",
+    "downloads": 667,
+    "likes": 406,
+    "prints": 502,
+    "weightGrams": 26,
+    "printTimeSeconds": 3600,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Đỏ Coca / Bạc ánh kim Retro",
+    "headlineBenefit": "Móc khóa chùm chìa khóa nhà/xe, quà tặng cho hội mê nước ngọt có gas.",
+    "desc": "Đường kính nắp lớn 48mm cầm đầm tay, màng nảy kim loại mô phỏng nắp chai giải khát ấn vào tâm kêu 'bụp tách' giòn tan như khui nắp bia.",
+    "videoScript": "Âm thanh ASMR mở nắp chai bia/nước ngọt thật lồng ghép tiếng bấm nắp chai in 3D giòn tan không phân biệt được.",
+    "productionNotes": "Cơ cấu vòm lưỡng ổn định (Bistable Dome Snap) nảy đảo chiều hai mặt cực giòn.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "26g",
+      "printTime": "1.0 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-720390",
+    "modelId": "720390",
+    "title": "Máy Game Boy Retro cụm phím điều hướng Haptic Clicker Keychain",
+    "cleanTitle": "Máy Game Boy Retro cụm phím điều hướng Haptic Clicker Keychain",
+    "archetypeBadge": "Công Tắc Phím Cơ",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 53g",
+    "badgeTheme": "rose",
+    "originalTitle": "Gameboy解压玩具",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 95000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_720390.png",
+    "imageAlt": "Máy Game Boy Retro cụm phím điều hướng Haptic Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/720390",
+    "downloads": 1226,
+    "likes": 1019,
+    "prints": 859,
+    "weightGrams": 53,
+    "printTimeSeconds": 5100,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xám cổ điển Classic Grey + Đỏ tím phím bấm",
+    "headlineBenefit": "Móc khóa balo hoài niệm thập niên 90s, đồ chơi bấm xả stress cho game thủ.",
+    "desc": "Máy GameBoy thu nhỏ kích thước 70x45x18mm nặng 53g cầm cực chắc tay, cụm phím D-pad và A/B nảy nam châm lực đẩy xúc giác tê tay.",
+    "videoScript": "Gợi nhớ kỷ niệm tuổi thơ cày Pokemon trên GameBoy, ngón tay bấm phím lướt tổ hợp mã lệnh Konami kêu tạch tạch.",
+    "productionNotes": "Cơ chế đệm đẩy từ tính (Magnetic Repulsion Detent), tuổi thọ bấm vĩnh cửu không mỏi.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "53g",
+      "printTime": "1.4 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-941560",
+    "modelId": "941560",
+    "title": "Bánh Burger Big Mac bánh kẹp phím cơ Clicker Keychain",
+    "cleanTitle": "Bánh Burger Big Mac bánh kẹp phím cơ Clicker Keychain",
+    "archetypeBadge": "Âm Vang Tích Công Đức",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 25g",
+    "badgeTheme": "emerald",
+    "originalTitle": "解压减压汉堡包功德+1食欲+1",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 75000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_941560.png",
+    "imageAlt": "Bánh Burger Big Mac bánh kẹp phím cơ Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/941560",
+    "downloads": 1372,
+    "likes": 791,
+    "prints": 846,
+    "weightGrams": 25,
+    "printTimeSeconds": 3600,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Nâu mè nướng + Xanh xà lách + Vàng phô mai",
+    "headlineBenefit": "Móc khóa balo túi xách, quà tặng cho tín đồ fastfood và ăn uống.",
+    "desc": "Ổ bánh kẹp burger đường kính 50mm nhiều tầng bắt mắt, nắp rắc mè là nút nhấn cơ học kêu giòn đanh kèm thông điệp Thực Dục +1.",
+    "videoScript": "Bấm burger mini kêu lách cách cùng dòng caption 'Mỗi lần stress hãy bấm burger để tích thêm cảm giác ngon miệng'.",
+    "productionNotes": "Switch cơ học ẩn bên trong ổ bánh, ấn lún sâu nảy dứt khoát.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "25g",
+      "printTime": "1.0 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-1784140",
+    "modelId": "1784140",
+    "title": "Quả bơ xanh múp mí hạt bơ cơ học Clicker Keychain",
+    "cleanTitle": "Quả bơ xanh múp mí hạt bơ cơ học Clicker Keychain",
+    "archetypeBadge": "Thiết Kế Độc Lạ Viral",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 31g",
+    "badgeTheme": "amber",
+    "originalTitle": "牛油果解压按键小挂件钥匙扣解压玩具",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 79000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_1784140.png",
+    "imageAlt": "Quả bơ xanh múp mí hạt bơ cơ học Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1784140",
+    "downloads": 688,
+    "likes": 407,
+    "prints": 314,
+    "weightGrams": 31,
+    "printTimeSeconds": 3900,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh rêu vỏ bơ + Vàng chanh ruột bơ + Nâu hạt",
+    "headlineBenefit": "Móc chìa khóa túi xách nữ, quà tặng healthy & trendy cho bạn gái.",
+    "desc": "Quả bơ dài 60mm nặng 31g béo tròn cầm ôm tay, hạt bơ tròn màu nâu ở chính giữa là phím bấm cơ học ấn thụt vào kêu clack sảng khoái.",
+    "videoScript": "Cận cảnh bàn tay bóp hạt quả bơ nảy lên thụt xuống phát âm thanh clicky đanh thép kết hợp nhạc ASMR êm dịu.",
+    "productionNotes": "Trục dẫn hướng hình cầu, hạt bơ đóng vai trò plunger nảy lò xo cơ học.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "31g",
+      "printTime": "1.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-834294",
+    "modelId": "834294",
+    "title": "Kem ốc quế Fastfood xoáy kem phím cơ Clicker Keychain",
+    "cleanTitle": "Kem ốc quế Fastfood xoáy kem phím cơ Clicker Keychain",
+    "archetypeBadge": "Âm Thanh Đanh Giòn",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 22g",
+    "badgeTheme": "terracotta",
+    "originalTitle": "麦麦甜筒按键fidget",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_834294.png",
+    "imageAlt": "Kem ốc quế Fastfood xoáy kem phím cơ Clicker Keychain",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "设计师",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/834294",
+    "downloads": 1858,
+    "likes": 590,
+    "prints": 1351,
+    "weightGrams": 22,
+    "printTimeSeconds": 3300,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Vàng ốc quế vân caro + Trắng sữa xoáy kem",
+    "headlineBenefit": "Móc khóa xe đạp điện, balo học sinh, phụ kiện trang trí mùa hè ngọt ngào.",
+    "desc": "Thiết kế cây kem ốc quế cao 65mm cầm vừa vặn các ngón tay; chóp xoáy kem bồng bềnh là phím bấm cơ học nảy lún phát tiếng kêu giòn tan.",
+    "videoScript": "Tạo hình que kem ốc quế ngọt ngào nhưng bấm vào phát tiếng 'tách' đanh vang cơ khí tạo sự tương phản cực cuốn hút.",
+    "productionNotes": "Cụm switch cơ học giấu kín trong lòng ốc quế, nhấn đầu xoáy kem nảy nhạy bén.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "22g",
+      "printTime": "0.9 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2891840",
+    "modelId": "2891840",
+    "title": "Mèo trộm ăn vặt bấm mông Clicker Keychain (Sneaky Snack Cat Fidget Clicker)",
+    "cleanTitle": "Mèo trộm ăn vặt bấm mông Clicker Keychain",
+    "archetypeBadge": "Cơ Chế Nảy Nhíp 100%",
+    "useCaseEyebrow": "BỎ TÚI • FIDGET XẢ STRESS",
+    "subCategory": "clicker_fidget",
+    "subCategoryName": "Clicker & Fidget",
+    "microSpecs": "Nhựa PLA Tough Chịu Lực · 25g",
+    "badgeTheme": "cyan",
+    "originalTitle": "咔哒猫——偷零食公猫解压玩具",
+    "category": "Moc_Khoa_Clicker_Viral",
+    "type": "standard",
+    "price": 69000,
+    "originalPrice": null,
+    "badge": "✦ Xả Stress",
+    "image": "assets/images/products/thumb_2891840.png",
+    "imageAlt": "Mèo trộm ăn vặt bấm mông Clicker Keychain (Sneaky Snack Cat Fidget Clicker)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "MakerWorld Designer",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2891840#profileId-3385922",
+    "downloads": 27,
+    "likes": 13,
+    "prints": 22,
+    "weightGrams": 25,
+    "printTimeSeconds": 3900,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Cam sọc mèo mướp + Đen mờ xô thức ăn",
+    "headlineBenefit": "Móc chìa khóa xe, đồ chơi troll bạn bè văn phòng, quà tặng cho hội 'con sen' yêu mèo.",
+    "desc": "Ý tưởng hài hước độc nhất vô nhị: Chú mèo chổng mông thò đầu vào xô ăn vặt, phần mông & trứng mèo là nút bấm switch cơ học MX, ấn lún kêu tách giòn tan; tích hợp sẵn khâu xỏ móc khóa.",
+    "videoScript": "Cận cảnh chú mèo thò đầu vào xô thức ăn, ngón tay ấn mạnh vào 'trứng mèo' phát tiếng clicky đanh thép kèm meme âm thanh mèo kêu thất thanh.",
+    "productionNotes": "Switch cơ học MX giấu trong xô thức ăn, điểm nhấn lực bấm vào mông mèo nảy dứt khoát.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "25g",
+      "printTime": "1.1 giờ"
+    },
+    "colors": [
+      {
+        "id": "clicker_cat_pink",
+        "name": "Hồng Đệm Mèo Pastel",
+        "hex": "#FDA4AF"
+      },
+      {
+        "id": "clicker_zen_wood",
+        "name": "Nâu Gỗ Mõ Trầm",
+        "hex": "#78350F"
+      },
+      {
+        "id": "clicker_neon_lime",
+        "name": "Xanh Chuối Neon Viral",
+        "hex": "#84CC16"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_tough",
+        "name": "PLA Chịu Va Đập Cao",
+        "label": "PLA Bền Bỉ Cơ Học",
+        "desc": "Đàn hồi tốt cho cơ cấu nảy nhíp hàng vạn lần bấm",
+        "priceModifier": 0
+      },
+      {
+        "id": "petg_sound",
+        "name": "PETG Âm Đanh Giòn",
+        "label": "PETG Clicker Siêu Đanh",
+        "desc": "Cho tiếng gõ giòn tan, nảy tay cực đã",
+        "priceModifier": 15000
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
   },
   {
     "id": "mw-cn-2936034",
@@ -3387,6 +7117,228 @@
     "subCategory": "co_cau_co_khi",
     "subCategoryName": "Cơ Cấu Bánh Răng & Khẩu Độ",
     "microSpecs": "Đổi mật mã tùy ý · Lõi rỗng cất giữ nhẫn hoặc thư tay"
+  },
+  {
+    "id": "mw-cn-1182396",
+    "modelId": "1182396",
+    "title": "Máy tính retro Mèo Mèo nghỉ ngơi hộp để bàn & Clicker (Retro PC Cat Desk Organizer)",
+    "cleanTitle": "Máy tính retro Mèo Mèo nghỉ ngơi hộp để bàn & Clicker",
+    "archetypeBadge": "Cơ Cấu Tiện Dụng",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • HỘP TIỆN ÍCH",
+    "subCategory": "hop_de_ban",
+    "subCategoryName": "Hộp Để Bàn Đa Năng",
+    "microSpecs": "Nhựa Bio-PLA Siêu Bền · 153g",
+    "badgeTheme": "slate",
+    "originalTitle": "《喵喵小憩机》-解压电脑猫猫，可按压",
+    "category": "Hop_De_Ban_Tien_Ich",
+    "type": "standard",
+    "price": 179000,
+    "originalPrice": null,
+    "badge": "✦ Mechanical Desk",
+    "image": "assets/images/products/thumb_1182396.png",
+    "imageAlt": "Máy tính retro Mèo Mèo nghỉ ngơi hộp để bàn & Clicker (Retro PC Cat Desk Organizer)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "MakerWorld Designer",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/1182396#profileId-1252518",
+    "downloads": 421,
+    "likes": 308,
+    "prints": 212,
+    "weightGrams": 153,
+    "printTimeSeconds": 15600,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Trắng kem Retro + Xám chuột máy tính + Hồng pastel",
+    "headlineBenefit": "Hộp đựng trang sức, thẻ nhớ, chìa khóa, kẹp giấy; decor bàn làm việc phong cách Y2K Retro.",
+    "desc": "Mô phỏng máy tính Windows 98 cổ điển siêu tinh xảo: Màn hình xoay được in hình mèo nghe nhạc, khay bàn phím trượt mở làm ngăn kéo đựng đồ, nút mèo nóc máy ấn nảy xả stress.",
+    "videoScript": "Kéo khay bàn phím mini lấy nhẫn cưới, sau đó bấm chú mèo trên màn hình máy tính cổ điển phát tiếng 'tách' hoài niệm.",
+    "productionNotes": "Trục xoay màn hình cơ học + Ngăn kéo trượt trơn tru + Nút nhấn switch cơ học.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "153g",
+      "printTime": "4.3 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2122042",
+    "modelId": "2122042",
+    "title": "Khung xoay lật ảnh Polaroid Rotary Flip Clock Decor (Polaroid Rotary Photo Display Flip Stand)",
+    "cleanTitle": "Khung xoay lật ảnh Polaroid Rotary Flip Clock Decor",
+    "archetypeBadge": "Công Thái Học Bàn Làm Việc",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • HỘP TIỆN ÍCH",
+    "subCategory": "hop_de_ban",
+    "subCategoryName": "Hộp Để Bàn Đa Năng",
+    "microSpecs": "Nhựa Bio-PLA Siêu Bền · 88g",
+    "badgeTheme": "amber",
+    "originalTitle": "拍立得翻转时钟",
+    "category": "Hop_De_Ban_Tien_Ich",
+    "type": "standard",
+    "price": 145000,
+    "originalPrice": null,
+    "badge": "✦ Mechanical Desk",
+    "image": "assets/images/products/thumb_2122042.png",
+    "imageAlt": "Khung xoay lật ảnh Polaroid Rotary Flip Clock Decor (Polaroid Rotary Photo Display Flip Stand)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "MakerWorld Designer",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2122042#profileId-2376852",
+    "downloads": 110,
+    "likes": 57,
+    "prints": 53,
+    "weightGrams": 88,
+    "printTimeSeconds": 9900,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Đen mờ / Trắng sứ phong cách Leica / Polaroid",
+    "headlineBenefit": "Trưng bày ảnh gia đình, người yêu, ảnh du lịch trên bàn làm việc; quà tặng kỷ niệm độc đáo.",
+    "desc": "Cơ chế lật trang ảnh cơ học mô phỏng đồng hồ lật số cổ điển: Trục quay kẹp các tấm ảnh Polaroid/Instax Mini, lăn con lăn để lật xem ảnh như album cơ khí mini.",
+    "videoScript": "Lăn nhẹ trục quay, các bức ảnh chụp lấy liền Polaroid lật phành phạch từng tấm theo phong cách đồng hồ cổ điển cực chill.",
+    "productionNotes": "Trục quay khấc bước (Rotary Step Cam) kết hợp các lá kẹp ngàm giữ ảnh chống rơi.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "88g",
+      "printTime": "2.8 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
+  },
+  {
+    "id": "mw-cn-2258248",
+    "modelId": "2258248",
+    "title": "Hộp rút co giãn đựng ảnh Polaroid Square thông minh (Telescopic Polaroid Square Photo Storage Box)",
+    "cleanTitle": "Hộp rút co giãn đựng ảnh Polaroid Square thông minh",
+    "archetypeBadge": "Tổ Chức Gọn Gàng",
+    "useCaseEyebrow": "BÀN LÀM VIỆC • HỘP TIỆN ÍCH",
+    "subCategory": "hop_de_ban",
+    "subCategoryName": "Hộp Để Bàn Đa Năng",
+    "microSpecs": "Nhựa Bio-PLA Siêu Bền · 87g",
+    "badgeTheme": "emerald",
+    "originalTitle": "拍立得Square伸缩相片收纳盒 | 无需五金",
+    "category": "Hop_De_Ban_Tien_Ich",
+    "type": "standard",
+    "price": 119000,
+    "originalPrice": null,
+    "badge": "✦ Mechanical Desk",
+    "image": "assets/images/products/thumb_2258248.png",
+    "imageAlt": "Hộp rút co giãn đựng ảnh Polaroid Square thông minh (Telescopic Polaroid Square Photo Storage Box)",
+    "imageSource": "preset",
+    "presetId": null,
+    "modelKey": null,
+    "author": "MakerWorld Designer",
+    "makerworldUrl": "https://makerworld.com.cn/zh/models/2258248#profileId-2541143",
+    "downloads": 355,
+    "likes": 103,
+    "prints": 206,
+    "weightGrams": 87,
+    "printTimeSeconds": 9000,
+    "aestheticScore": 5,
+    "uniquenessScore": 5,
+    "feasibilityScore": 5,
+    "selectionScore": 100.0,
+    "materialRecommendation": "PLA Xanh rêu / Trắng kem / Đen nhám",
+    "headlineBenefit": "Bảo quản chống ẩm, chống cong vênh cho 10 tấm ảnh chụp lấy liền Polaroid Square; hộp quà tặng ảnh.",
+    "desc": "Hộp đựng chuyên dụng cho ảnh Polaroid Square vuông: Cơ cấu ray lồng trượt co giãn (telescopic) 100% in 3D không cần ốc vít, kéo nhẹ mở rộng khoang để lấy ảnh an toàn.",
+    "videoScript": "Kéo nhẹ hai đầu hộp, thân hộp trượt dài ra để lộ bộ ảnh polaroid vuông vức xếp ngay ngắn như hộp ảo thuật.",
+    "productionNotes": "Ngàm trượt ray dẫn hướng lồng nhau (Telescopic sliding rails) có gờ chặn chống tuột.",
+    "licenseName": "Standard Digital File License",
+    "commercialStatus": "Chua_ro",
+    "isHero": false,
+    "specs": {
+      "weight": "87g",
+      "printTime": "2.5 giờ"
+    },
+    "colors": [
+      {
+        "id": "candy_green",
+        "name": "Xanh Ngọc Zootopia",
+        "hex": "#10B981"
+      },
+      {
+        "id": "candy_yellow",
+        "name": "Vàng Phô Mai",
+        "hex": "#FBBF24"
+      },
+      {
+        "id": "candy_white",
+        "name": "Trắng Sữa",
+        "hex": "#F8FAFC"
+      }
+    ],
+    "materials": [
+      {
+        "id": "pla_matte",
+        "name": "PLA Matte",
+        "label": "PLA Matte Thẩm Mỹ",
+        "desc": "Bề mặt mờ mịn cao cấp, triệt tiêu vân in hoàn hảo",
+        "priceModifier": 0
+      }
+    ],
+    "status": "active",
+    "updatedAt": "2026-10-31T00:00:00.000Z"
   },
   {
     "id": "mw-cn-951495",

@@ -10,7 +10,7 @@
     Trang_Diem_Vanity: {
       id: 'Trang_Diem_Vanity',
       name: 'Trang Điểm & Nơ Lụa',
-      shortName: 'Trang Điểm & Nơ Lụa',
+      shortName: 'Trang Điểm',
       title: 'Hộp Đựng Đồ Trang Điểm, Cọ Mỹ Phẩm & Trang Sức Lụa Thắt Nơ',
       heroId: 'mw-cn-1646129',
       desc: 'Ống cắm cọ Coquette, khay son nơ lụa, giá treo trang sức ribbon sang trọng.',
@@ -22,7 +22,7 @@
     Decor_Den_Noi_That: {
       id: 'Decor_Den_Noi_That',
       name: 'Decor & Đèn Nội Thất',
-      shortName: 'Decor & Đèn',
+      shortName: 'Đèn & Decor',
       title: 'Đèn Ngủ Nghệ Thuật, Bình Hoa Đánh Lừa Thị Giác & Tượng Decor',
       heroId: 'mw-cn-1438306',
       desc: 'Đèn ngủ nấm phát quang, bình hoa xếp nếp spiral, tranh phù điêu nghệ thuật.',
@@ -31,22 +31,22 @@
       icon: 'fa-lightbulb',
       badgeText: '✦ Ambient Craft'
     },
-    Do_Choi_Moc_Khoa: {
-      id: 'Do_Choi_Moc_Khoa',
-      name: 'Móc Khóa & Art Toy',
-      shortName: 'Đồ Chơi & Móc Khóa',
-      title: 'Đồ Chơi Khớp Động, Móc Khóa Hoạt Hình & Fidget Xả Stress',
-      heroId: 'mw-cn-1702306',
-      desc: 'Rồng khớp xoay flexi, móc khóa capybara đùn mông, fidget spinner giải tỏa stress.',
-      accentColor: '#0284C7',
-      accentBg: '#E0F2FE',
-      icon: 'fa-gamepad',
-      badgeText: '✦ Viral Fidget'
+    Hoa_Decor_Kim_Loai: {
+      id: 'Hoa_Decor_Kim_Loai',
+      name: 'Hoa Decor Kim Loại',
+      shortName: 'Hoa Kim Loại',
+      title: 'Nghệ Thuật Thực Vật Kim Loại Lỏng & Hoa Thủy Ngân Siêu Thực',
+      heroId: 'mw-cn-1334861',
+      desc: 'Bộ sưu tập hoa điêu khắc phong cách kim loại lỏng (Liquid Metal Art) phản chiếu óng ánh.',
+      accentColor: '#0D9488',
+      accentBg: '#F0FDFA',
+      icon: 'fa-gem',
+      badgeText: '✦ Kim Loại Lỏng'
     },
     Hop_De_Ban_Tien_Ich: {
       id: 'Hop_De_Ban_Tien_Ich',
       name: 'Hộp Để Bàn & Tiện Ích',
-      shortName: 'Hộp Bàn & Bánh Răng',
+      shortName: 'Bàn Làm Việc',
       title: 'Hộp Để Bàn Thông Minh, Cơ Cấu Bánh Răng & Tiện Ích Đa Năng',
       heroId: 'mw-cn-1971424',
       desc: 'Hộp ngăn kéo module mini, kệ pegboard xoay, khay cắm bút vát góc công thái học.',
@@ -58,7 +58,7 @@
     Ca_Nhan_Hoa_NFC: {
       id: 'Ca_Nhan_Hoa_NFC',
       name: 'Cá Nhân Hóa & NFC',
-      shortName: 'Cá Nhân Hóa & NFC',
+      shortName: 'Cá Nhân Hóa',
       title: 'Sản Phẩm Cá Nhân Hóa, Biển Số Xe, Mã QR & Móc Khóa NFC',
       heroId: 'mw-cn-1836100',
       desc: 'Bảng số điện thoại ô tô tạm thời, biển tên đèn LED để bàn, móc khóa khắc tên 3D.',
@@ -66,6 +66,30 @@
       accentBg: '#F3E8FF',
       icon: 'fa-fingerprint',
       badgeText: '✦ Smart Custom'
+    },
+    Do_Choi_Moc_Khoa: {
+      id: 'Do_Choi_Moc_Khoa',
+      name: 'Móc Khóa & Art Toy',
+      shortName: 'Đồ Chơi & Fidget',
+      title: 'Đồ Chơi Khớp Động, Móc Khóa Hoạt Hình & Fidget Xả Stress',
+      heroId: 'mw-cn-1702306',
+      desc: 'Rồng khớp xoay flexi, móc khóa capybara đùn mông, fidget spinner giải tỏa stress.',
+      accentColor: '#0284C7',
+      accentBg: '#E0F2FE',
+      icon: 'fa-gamepad',
+      badgeText: '✦ Viral Fidget'
+    },
+    Moc_Khoa_Clicker_Viral: {
+      id: 'Moc_Khoa_Clicker_Viral',
+      name: 'Móc Khóa Clicker Viral',
+      shortName: 'Clicker Viral',
+      title: 'Móc Khóa Âm Thanh, Clicker Cơ Học & Fidget Xả Stress Siêu Viral',
+      heroId: 'mw-cn-1073472',
+      desc: 'Mõ tụng kinh tích công đức, đệm chân mèo nảy nhíp, clicker công tắc phím cơ giải tỏa căng thẳng.',
+      accentColor: '#F43F5E',
+      accentBg: '#FFF1F2',
+      icon: 'fa-bullseye',
+      badgeText: '✦ Xả Stress'
     }
   };
 

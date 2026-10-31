@@ -13,7 +13,7 @@
   const EVENT_NAME = 'tt_products_updated';
   const FALLBACK_URL = 'products.json';
   const CURRENT_SCHEMA_VERSION = 5;
-  const CURRENT_CATALOG_REVISION = 'mw-55-v5-compact-tabs';
+  const CURRENT_CATALOG_REVISION = 'mw-105-v1-full';
 
   // 6 Sản phẩm legacy chuẩn làm fixture làm giàu dữ liệu cũ (Codex Directive)
   const LEGACY_FIXTURE_PRODUCTS = [
@@ -322,6 +322,207 @@
     "title": "Biển tên/biển hiệu để bàn texture cao cấp tùy biến chữ (Creative Customizable 3D Sign / Nameplate)",
     "cleanTitle": "Biển Tên Chức Danh Để Bàn Texture Cao Cấp Khắc Chữ"
   }
+,
+  "mw-cn-2266980": {
+    "title": "Hộp nắp đậy nếp lụa bánh kem gấu nhỏ kèm khay trang sức (Little Bear Silk Cake Vanity Box)",
+    "cleanTitle": "Hộp nắp đậy nếp lụa bánh kem gấu nhỏ kèm khay trang sức"
+  },
+  "mw-cn-1478590": {
+    "title": "Bình hoa vạt giấy gói đôi V3 (Twin Splicable Bouquet Vase)",
+    "cleanTitle": "Bình hoa vạt giấy gói đôi V3"
+  },
+  "mw-cn-1045280": {
+    "title": "Bình hoa mô phỏng giấy bọc hoa xòe (Bouquet Paper Wrap Vase)",
+    "cleanTitle": "Bình hoa mô phỏng giấy bọc hoa xòe"
+  },
+  "mw-cn-2705739": {
+    "title": "Vỏ bọc hoa bó mini nguyên khối (Mini Bouquet Wrap Shell Vase)",
+    "cleanTitle": "Vỏ bọc hoa bó mini nguyên khối"
+  },
+  "mw-cn-2756450": {
+    "title": "Bình hoa lá sen ôm hoa Endless Summer (Lotus Leaf Bouquet Vase)",
+    "cleanTitle": "Bình hoa lá sen ôm hoa Endless Summer"
+  },
+  "mw-cn-2451563": {
+    "title": "Bình hoa luồng gió uốn lượn (Wind & Silk Aerodynamic Curved Vase)",
+    "cleanTitle": "Bình hoa luồng gió uốn lượn"
+  },
+  "mw-cn-2214866": {
+    "title": "Bình hoa túi giấy kraft gấp nếp hoa hồng (Rose Kraft Bag Wrap Vase)",
+    "cleanTitle": "Bình hoa túi giấy kraft gấp nếp hoa hồng"
+  },
+  "mw-cn-2595057": {
+    "title": "Hoa Diên Vĩ Kim Loại Lỏng Đọng Sương (Metallic Iris Flower)",
+    "cleanTitle": "Hoa Diên Vĩ Kim Loại Lỏng Đọng Sương"
+  },
+  "mw-cn-2595994": {
+    "title": "Lá Trầu Bà Quy Bối Trúc Kim Loại (Metallic Monstera Leaf)",
+    "cleanTitle": "Lá Trầu Bà Quy Bối Trúc Kim Loại"
+  },
+  "mw-cn-2596131": {
+    "title": "Bướm Kim Loại Đọng Sương Cài Hoa (Metallic Dewdrop Butterfly)",
+    "cleanTitle": "Bướm Kim Loại Đọng Sương Cài Hoa"
+  },
+  "mw-cn-1334861": {
+    "title": "Hoa Hồng Vàng Nóng Chảy Nghệ Thuật (Molten Gold Rose Sculpture)",
+    "cleanTitle": "Hoa Hồng Vàng Nóng Chảy Nghệ Thuật"
+  },
+  "mw-cn-3027134": {
+    "title": "Hoa Hồng Kim Loại Lỏng Điêu Khắc (Melting Liquid Metal Rose)",
+    "cleanTitle": "Hoa Hồng Kim Loại Lỏng Điêu Khắc"
+  },
+  "mw-cn-831574": {
+    "title": "Hoa Hồng Cơ Khí Cyber Garden (Cyber Garden Metallic Rose)",
+    "cleanTitle": "Hoa Hồng Cơ Khí Cyber Garden"
+  },
+  "mw-cn-2492722": {
+    "title": "Hoa Rum Calla Lily Điêu Khắc 2 Dạng Cành (Calla Lily Flower)",
+    "cleanTitle": "Hoa Rum Calla Lily Điêu Khắc 2 Dạng Cành"
+  },
+  "mw-cn-2474622": {
+    "title": "Hoa Hồng Môn Nghệ Thuật Phân Cụm (Botanical Anthurium Art)",
+    "cleanTitle": "Hoa Hồng Môn Nghệ Thuật Phân Cụm"
+  },
+  "mw-cn-126235": {
+    "title": "Bó Hoa Tulip Nghệ Thuật Cắm Bình (Botanical Tulip Bouquet)",
+    "cleanTitle": "Bó Hoa Tulip Nghệ Thuật Cắm Bình"
+  },
+  "mw-cn-1967303": {
+    "title": "Hoa Dây Kim Loại Tối Giản Cắm Bình (Minimalist Wire-frame Flower)",
+    "cleanTitle": "Hoa Dây Kim Loại Tối Giản Cắm Bình"
+  },
+  "mw-cn-2528193": {
+    "title": "Cân thăng bằng toán học trực quan EqualiGo Balance (EqualiGo Math & Physics Balance Scale)",
+    "cleanTitle": "Cân thăng bằng toán học trực quan EqualiGo Balance"
+  },
+  "mw-cn-2923012": {
+    "title": "Trực thăng bánh răng truyền động nón 90° quay cánh quạt (Helicopter 90° Bevel Gear Kinetic Toy)",
+    "cleanTitle": "Trực thăng bánh răng truyền động nón 90° quay cánh quạt"
+  },
+  "mw-cn-1041029": {
+    "title": "Cờ Caro 3D lồng nuốt quân Gobblet tương tác đối kháng (Gobblet Gobblers 3D Interactive Strategy Boardgame)",
+    "cleanTitle": "Cờ Caro 3D lồng nuốt quân Gobblet tương tác đối kháng"
+  },
+  "mw-cn-1229372": {
+    "title": "Bộ sưu tập 9 khóa Lỗ Ban Khổng Minh rèn luyện IQ & tư duy không gian (9-in-1 Kongming Luban Wooden-Style Puzzle Lock Collection)",
+    "cleanTitle": "Bộ sưu tập 9 khóa Lỗ Ban Khổng Minh rèn luyện IQ & tư duy không gian"
+  },
+  "mw-cn-767049": {
+    "title": "Đường trượt bi vô tận dải Mobius giải mã topo học (Mobius Strip Infinity Marble Run Track)",
+    "cleanTitle": "Đường trượt bi vô tận dải Mobius giải mã topo học"
+  },
+  "mw-cn-529915": {
+    "title": "Bảng cửu chương xoay cơ học 9x9 học toán thông minh (Mechanical Rotary 9x9 Multiplication Table Toy)",
+    "cleanTitle": "Bảng cửu chương xoay cơ học 9x9 học toán thông minh"
+  },
+  "mw-cn-1327856": {
+    "title": "Con quay bánh răng hành tinh đa hướng xả stress (Multidirectional Planetary Gear Gyro Fidget Spinner)",
+    "cleanTitle": "Con quay bánh răng hành tinh đa hướng xả stress"
+  },
+  "mw-cn-1211586": {
+    "title": "Bộ hồi Tourbillon đồng hồ cơ khí 100% in 3D không ốc vít (100% 3D Printed Mechanical Tourbillon Escapement)",
+    "cleanTitle": "Bộ hồi Tourbillon đồng hồ cơ khí 100% in 3D không ốc vít"
+  },
+  "mw-cn-529689": {
+    "title": "Móc khóa động cơ chữ V cơ cấu Piston chuyển động thực (Interactive Moving V-Engine Piston Keychain)",
+    "cleanTitle": "Móc khóa động cơ chữ V cơ cấu Piston chuyển động thực"
+  },
+  "mw-cn-412605": {
+    "title": "Móc khóa trái tim bánh răng động học xoay vô tận V3 (V3 Kinetic Gear Heart Fidget Keychain)",
+    "cleanTitle": "Móc khóa trái tim bánh răng động học xoay vô tận V3"
+  },
+  "mw-cn-2692808": {
+    "title": "Móc khóa hộp số sàn 6 cấp gạt số cơ học mini (Mini 6-Speed Manual Shifter Gearbox Keychain)",
+    "cleanTitle": "Móc khóa hộp số sàn 6 cấp gạt số cơ học mini"
+  },
+  "mw-cn-1141687": {
+    "title": "Móc khóa bàn tay robot kẹp đồ cơ học mini (Mini Retractable Mechanical Robotic Claw Grabber)",
+    "cleanTitle": "Móc khóa bàn tay robot kẹp đồ cơ học mini"
+  },
+  "mw-cn-2616495": {
+    "title": "Móc khóa balo Bambu Lab mini mở nắp đựng vật nhỏ (Cute Bambu Lab Mini Backpack Case Keychain)",
+    "cleanTitle": "Móc khóa balo Bambu Lab mini mở nắp đựng vật nhỏ"
+  },
+  "mw-cn-2680027": {
+    "title": "Mèo thò đầu hộp bí ẩn Pop-up Clicker Keychain",
+    "cleanTitle": "Mèo thò đầu hộp bí ẩn Pop-up Clicker Keychain"
+  },
+  "mw-cn-1073472": {
+    "title": "Đệm chân mèo nảy nhíp 100% in 3D Compliant Clicker Keychain",
+    "cleanTitle": "Đệm chân mèo nảy nhíp 100% in 3D Compliant Clicker Keychain"
+  },
+  "mw-cn-1105014": {
+    "title": "Mõ tụng kinh Tích Công Đức +1 Clicker Keychain V3.0",
+    "cleanTitle": "Mõ tụng kinh Tích Công Đức +1 Clicker Keychain V3.0"
+  },
+  "mw-cn-1011786": {
+    "title": "Xửng bánh bao Dimsum 3 phím Switch Clicker Keychain",
+    "cleanTitle": "Xửng bánh bao Dimsum 3 phím Switch Clicker Keychain"
+  },
+  "mw-cn-2232108": {
+    "title": "Đùi gà rán giòn rụm bấm xương Piston Clicker Keychain",
+    "cleanTitle": "Đùi gà rán giòn rụm bấm xương Piston Clicker Keychain"
+  },
+  "mw-cn-2289815": {
+    "title": "Cốc cà phê Takeaway nắp khóa ren cơ khí Clicker Keychain",
+    "cleanTitle": "Cốc cà phê Takeaway nắp khóa ren cơ khí Clicker Keychain"
+  },
+  "mw-cn-2721573": {
+    "title": "Máy ảnh Instax Mini 13 bấm nhả ảnh Pop-up Clicker Keychain",
+    "cleanTitle": "Máy ảnh Instax Mini 13 bấm nhả ảnh Pop-up Clicker Keychain"
+  },
+  "mw-cn-2037832": {
+    "title": "Súng Desert Eagle lên đạn trượt nòng giật khấc Clicker Keychain",
+    "cleanTitle": "Súng Desert Eagle lên đạn trượt nòng giật khấc Clicker Keychain"
+  },
+  "mw-cn-2008793": {
+    "title": "Ấn triện hoàng cung Mã Thượng Bạo Phú / Phát Tài Clicker Keychain",
+    "cleanTitle": "Ấn triện hoàng cung Mã Thượng Bạo Phú / Phát Tài Clicker Keychain"
+  },
+  "mw-cn-1454446": {
+    "title": "Lựu đạn tác chiến 5-in-1 rút chốt bật lẫy Fidget Keychain",
+    "cleanTitle": "Lựu đạn tác chiến 5-in-1 rút chốt bật lẫy Fidget Keychain"
+  },
+  "mw-cn-2470743": {
+    "title": "Trụ cứu hỏa Hạ Hỏa / Xả giận nút dừng khẩn cấp Emergency Clicker",
+    "cleanTitle": "Trụ cứu hỏa Hạ Hỏa / Xả giận nút dừng khẩn cấp Emergency Clicker"
+  },
+  "mw-cn-2806889": {
+    "title": "Nắp chai nước ngọt Coca-Cola bật nắp Pop-snap Clicker Keychain",
+    "cleanTitle": "Nắp chai nước ngọt Coca-Cola bật nắp Pop-snap Clicker Keychain"
+  },
+  "mw-cn-720390": {
+    "title": "Máy Game Boy Retro cụm phím điều hướng Haptic Clicker Keychain",
+    "cleanTitle": "Máy Game Boy Retro cụm phím điều hướng Haptic Clicker Keychain"
+  },
+  "mw-cn-941560": {
+    "title": "Bánh Burger Big Mac bánh kẹp phím cơ Clicker Keychain",
+    "cleanTitle": "Bánh Burger Big Mac bánh kẹp phím cơ Clicker Keychain"
+  },
+  "mw-cn-1784140": {
+    "title": "Quả bơ xanh múp mí hạt bơ cơ học Clicker Keychain",
+    "cleanTitle": "Quả bơ xanh múp mí hạt bơ cơ học Clicker Keychain"
+  },
+  "mw-cn-834294": {
+    "title": "Kem ốc quế Fastfood xoáy kem phím cơ Clicker Keychain",
+    "cleanTitle": "Kem ốc quế Fastfood xoáy kem phím cơ Clicker Keychain"
+  },
+  "mw-cn-2891840": {
+    "title": "Mèo trộm ăn vặt bấm mông Clicker Keychain (Sneaky Snack Cat Fidget Clicker)",
+    "cleanTitle": "Mèo trộm ăn vặt bấm mông Clicker Keychain"
+  },
+  "mw-cn-1182396": {
+    "title": "Máy tính retro Mèo Mèo nghỉ ngơi hộp để bàn & Clicker (Retro PC Cat Desk Organizer)",
+    "cleanTitle": "Máy tính retro Mèo Mèo nghỉ ngơi hộp để bàn & Clicker"
+  },
+  "mw-cn-2122042": {
+    "title": "Khung xoay lật ảnh Polaroid Rotary Flip Clock Decor (Polaroid Rotary Photo Display Flip Stand)",
+    "cleanTitle": "Khung xoay lật ảnh Polaroid Rotary Flip Clock Decor"
+  },
+  "mw-cn-2258248": {
+    "title": "Hộp rút co giãn đựng ảnh Polaroid Square thông minh (Telescopic Polaroid Square Photo Storage Box)",
+    "cleanTitle": "Hộp rút co giãn đựng ảnh Polaroid Square thông minh"
+  }
 };
 
   const CATEGORY_REGISTRY = (window.TTCategoryRegistry && typeof window.TTCategoryRegistry === 'object')
@@ -365,12 +566,30 @@
     },
     Ca_Nhan_Hoa_NFC: {
       id: 'Ca_Nhan_Hoa_NFC',
-      shortName: 'Cá Nhân Hóa & NFC',
+      shortName: 'Cá Nhân Hóa',
       title: 'Sản Phẩm Cá Nhân Hóa, Biển Số Xe, Mã QR & Móc Khóa NFC',
       accentColor: '#7C3AED',
       accentBg: '#F3E8FF',
       icon: 'fa-fingerprint',
       badgeText: '✦ Smart Custom'
+    },
+    Hoa_Decor_Kim_Loai: {
+      id: 'Hoa_Decor_Kim_Loai',
+      shortName: 'Hoa Kim Loại',
+      title: 'Nghệ Thuật Thực Vật Kim Loại Lỏng & Hoa Thủy Ngân Siêu Thực',
+      accentColor: '#0D9488',
+      accentBg: '#F0FDFA',
+      icon: 'fa-gem',
+      badgeText: '✦ Kim Loại Lỏng'
+    },
+    Moc_Khoa_Clicker_Viral: {
+      id: 'Moc_Khoa_Clicker_Viral',
+      shortName: 'Clicker Viral',
+      title: 'Móc Khóa Âm Thanh, Clicker Cơ Học & Fidget Xả Stress Siêu Viral',
+      accentColor: '#F43F5E',
+      accentBg: '#FFF1F2',
+      icon: 'fa-bullseye',
+      badgeText: '✦ Xả Stress'
     }
   };
 

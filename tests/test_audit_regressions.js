@@ -231,7 +231,7 @@ async function run() {
     const next = createEnvironment(e.data);
     next.load('js/catalog-store.js');
     await next.win.TTCatalogStore.initCatalog();
-    assert.strictEqual(next.win.TTCatalogStore.getProductsSync(false).length, 55, 'Should load 55 items when back online');
+    assert.strictEqual(next.win.TTCatalogStore.getProductsSync(false).length, 105, 'Should load 105 items when back online');
   });
 
   // Ca C: Raw merge before sanitize preserves missing seed fields

@@ -28,9 +28,11 @@
     return new Set([
       'Trang_Diem_Vanity',
       'Decor_Den_Noi_That',
-      'Do_Choi_Moc_Khoa',
+      'Hoa_Decor_Kim_Loai',
       'Hop_De_Ban_Tien_Ich',
-      'Ca_Nhan_Hoa_NFC'
+      'Ca_Nhan_Hoa_NFC',
+      'Do_Choi_Moc_Khoa',
+      'Moc_Khoa_Clicker_Viral'
     ]);
   }
 

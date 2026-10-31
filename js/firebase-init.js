@@ -366,10 +366,11 @@ export const TTFirestore = {
 
     // Update catalog metadata
     try {
+      const currentRevision = (window.TTCatalogStore && window.TTCatalogStore.CURRENT_CATALOG_REVISION) || 'mw-105-v1-full';
       const metaRef = doc(db, 'metadata', 'catalog');
       await setDoc(metaRef, {
         totalProducts: success,
-        revision: 'mw-55-v2',
+        revision: currentRevision,
         lastSync: new Date().toISOString(),
         source: 'T&T 3D Labs Studio Admin Portal'
       }, { merge: true });
