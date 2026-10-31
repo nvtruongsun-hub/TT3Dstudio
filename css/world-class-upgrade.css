@@ -193,19 +193,21 @@ body.minimal-storefront {
 .minimal-storefront #store-birdseye-hub { padding: 48px 0; background: var(--bg-surface); border-color: var(--border-subtle); }
 .minimal-storefront #store-birdseye-hub h2, .minimal-storefront #view-store > section h2 { font-family: var(--font-display); font-size: clamp(25px,2.3vw,34px); font-weight: 600; letter-spacing: -.04em; line-height: 1.25; color: var(--text-primary); }
 .minimal-storefront #view-store > section > .max-w-7xl > div:first-child p { line-height: 1.75; color: var(--text-secondary); }
-.bento-categories { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); grid-auto-rows: 180px; gap: 16px; }
+.bento-categories { display: grid; grid-template-columns: repeat(6,minmax(0,1fr)); grid-auto-rows: 185px; gap: 16px; }
 .bento-card { position: relative; grid-column: span 2; display: flex; flex-direction: column; justify-content: space-between; text-align: left; border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px; background: var(--bg-surface); color: var(--text-primary); overflow: hidden; cursor: pointer; transition: transform .35s var(--ease-out-expo), border-color .25s, box-shadow .3s; }
 .bento-card:nth-child(-n+2) { grid-column: span 3; }
 .bento-card:nth-child(2) { background: #F8F4EE; border-color: #E6DFD5; }
 .bento-card:nth-child(3) { background: #F4F2EC; }
 .bento-card:nth-child(4) { background: #F5F3ED; }
 .bento-card:nth-child(5) { background: #FAF7F0; }
-.bento-card h3 { font-size: 16px; font-weight: 600; color: var(--text-primary); }
-.bento-card p { font-size: 11px; max-width: 240px; line-height: 1.6; color: var(--text-secondary); }
-.bento-card > div { max-width: 62%; position: relative; z-index: 1; }
-.bento-card-bg-img { position: absolute; width: 46%; max-width: 190px; aspect-ratio: 1; object-fit: cover; border-radius: 10px; right: 12px; bottom: 12px; border: 1px solid rgba(20, 20, 19, 0.08); box-shadow: 0 4px 16px rgba(20, 20, 19, 0.06); transition: transform .5s var(--ease-out-expo), box-shadow .35s; pointer-events: none; }
+.bento-card-content, .bento-card > div { max-width: 52%; position: relative; z-index: 2; }
+.bento-card:nth-child(-n+2) .bento-card-content, .bento-card:nth-child(-n+2) > div { max-width: 58%; }
+.bento-card h3 { font-size: 15px; font-weight: 700; color: var(--text-primary); line-height: 1.35; margin: 0; }
+.bento-card p { font-size: 11px; max-width: 220px; line-height: 1.5; color: var(--text-secondary); margin: 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.bento-card-bg-img { position: absolute; width: 38%; max-width: 125px; aspect-ratio: 1; object-fit: cover; border-radius: 10px; right: 14px; bottom: 14px; border: 1px solid rgba(20, 20, 19, 0.08); box-shadow: 0 4px 16px rgba(20, 20, 19, 0.06); transition: transform .5s var(--ease-out-expo), box-shadow .35s; pointer-events: none; z-index: 1; }
+.bento-card:nth-child(-n+2) .bento-card-bg-img { width: 32%; max-width: 155px; right: 16px; bottom: 16px; }
 .bento-card:hover .bento-card-bg-img { transform: scale(1.04) translateY(-2px); box-shadow: 0 8px 24px rgba(20, 20, 19, 0.12); }
-.bento-card-badge { position: relative; z-index: 1; font-size: 9px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: .07em; padding: 4px 7px; border: 1px solid var(--border-subtle); border-radius: 4px; background: rgba(255, 255, 255, 0.7); width: fit-content; }
+.bento-card-badge { position: relative; z-index: 2; font-size: 9px; color: var(--text-muted); font-family: var(--font-mono); letter-spacing: .07em; padding: 4px 7px; border: 1px solid var(--border-subtle); border-radius: 4px; background: rgba(255, 255, 255, 0.7); width: fit-content; }
 
 /* Product anatomy: image, useful name, price and one clear action. */
 .minimal-storefront #curated-product-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 22px; }
@@ -342,16 +344,17 @@ body.minimal-storefront {
   .studio-benefits small { display: none; }
   .minimal-storefront #store-birdseye-hub { padding-block: 32px; }
   .minimal-storefront #store-birdseye-hub h2, .minimal-storefront #view-store > section h2 { font-size: 26px; }
-  .bento-categories { grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: 165px; gap: 10px; }
-  .bento-card, .bento-card:nth-child(-n+2) { grid-column: span 1; padding: 13px; }
-  .bento-card:first-child { grid-column: span 2; }
-  .bento-card-bg-img { width: 60%; max-width: 125px; right: -3px; bottom: -8px; opacity: .9; }
-  .bento-card:first-child .bento-card-bg-img { width: 45%; max-width: 170px; }
-  .bento-card > div { max-width: 78%; }
-  .bento-card:first-child > div { max-width: 60%; }
+  .bento-categories { grid-template-columns: repeat(2,minmax(0,1fr)); grid-auto-rows: minmax(185px, auto); gap: 12px; }
+  .bento-card, .bento-card:nth-child(-n+2) { grid-column: span 1; padding: 14px; display: flex; flex-direction: column; justify-content: flex-start; align-items: flex-start; }
+  .bento-card:first-child { grid-column: span 2; min-height: 140px; }
+  .bento-card-content, .bento-card > div { max-width: 100%; position: relative; z-index: 2; }
+  .bento-card:first-child .bento-card-content, .bento-card:first-child > div { max-width: 58%; }
   .bento-card p { display: none; }
-  .bento-card h3 { font-size: 13px; line-height: 1.4; }
-  .bento-card-badge { font-size: 7px; padding: 3px 4px; letter-spacing: .015em; }
+  .bento-card:first-child p { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; font-size: 11px; margin-top: 4px; }
+  .bento-card h3 { font-size: 13px; line-height: 1.35; font-weight: 700; margin: 0; }
+  .bento-card-badge { font-size: 7.5px; padding: 3px 5px; letter-spacing: .02em; margin-bottom: 6px; }
+  .bento-card-bg-img { position: absolute; right: 10px; bottom: 10px; width: 68px; height: 68px; max-width: 68px; max-height: 68px; aspect-ratio: 1; object-fit: cover; border-radius: 8px; z-index: 1; opacity: 1; }
+  .bento-card:first-child .bento-card-bg-img { width: 95px; height: 95px; max-width: 95px; max-height: 95px; right: 14px; bottom: 14px; }
   .minimal-storefront #curated-product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 14px 10px; }
   .minimal-storefront .tt-product-body { padding: 12px 10px; gap: 10px; }
   .minimal-storefront .tt-product-body h3 { font-size: 12px; min-height: 37px; }
