@@ -64,26 +64,26 @@
 
   const VIEW_HASH_MAP = {
     'view-store': '#store',
-    'view-personalize': '#personalize',
+    'view-personalize': '#store',
     'view-inspiration': '#inspiration',
     'view-tracking': '#tracking',
     'view-support': '#support',
     'view-studio3d': '#store',
-    'view-configurator': '#personalize',
+    'view-configurator': '#store',
     'view-standards': '#support'
   };
 
   const HASH_VIEW_MAP = {
     '#store': 'view-store',
-    '#personalize': 'view-personalize',
+    '#personalize': 'view-store',
     '#inspiration': 'view-inspiration',
     '#tracking': 'view-tracking',
     '#support': 'view-support',
     '#studio3d': 'view-store',
     '#viewer': 'view-store',
     '#viewer-section': 'view-store',
-    '#calculator': 'view-personalize',
-    '#configurator': 'view-personalize',
+    '#calculator': 'view-store',
+    '#configurator': 'view-store',
     '#standards': 'view-support',
     '#quality': 'view-support',
     '#social-proof': 'view-store',
@@ -100,6 +100,9 @@
    * @param {boolean} scrollReset - Whether to reset scroll position to top
    */
   function switchWorkspace(targetViewId, pushHash = true, scrollReset = true) {
+    if (targetViewId === 'view-personalize' || targetViewId === 'view-configurator') {
+      targetViewId = 'view-store';
+    }
     if (!WORKSPACE_VIEWS.includes(targetViewId)) {
       targetViewId = 'view-store';
     }
