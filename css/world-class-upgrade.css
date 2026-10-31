@@ -27,17 +27,99 @@ body.minimal-storefront {
   --border-subtle: #E5E4DE;
   --border-strong: rgba(20, 20, 19, 0.16);
   --border-dark-subtle: rgba(255, 255, 255, 0.08);
-  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-display: 'Space Grotesk', 'Plus Jakarta Sans', sans-serif;
-  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
   --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
   background: var(--bg-canvas);
   color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 .minimal-storefront :focus-visible { outline-color: #C85A32 !important; }
-.minimal-storefront h1, .minimal-storefront h2, .minimal-storefront h3 { color: #141413; }
+.minimal-storefront h1, .minimal-storefront h2, .minimal-storefront h3 { color: #141413; font-family: var(--font-display); }
 .minimal-storefront h2 { font-family: var(--font-display); letter-spacing: -.035em; }
-.minimal-storefront .store-announcement { min-height: 32px; padding: 7px 20px; background: #141413; color: #F7F6F2; font-family: var(--font-mono); font-size: 11px; letter-spacing: .04em; }
+
+/* Top Automation Workshop Ticker (Argon 4 Certified) */
+.automation-marquee-bar, .minimal-storefront .automation-marquee-bar,
+.marquee-container, .minimal-storefront .marquee-container {
+  width: 100%;
+  overflow: hidden;
+  background-color: #141413;
+  color: #F7F6F2;
+  padding: 8px 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  position: relative;
+  z-index: 50;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  user-select: none;
+}
+.automation-marquee-bar:hover .automation-loop-track,
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+.automation-loop-track, .marquee-track {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: scrollMarquee 30s linear infinite;
+}
+.automation-loop-content, .marquee-content {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.automation-loop-item, .marquee-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 0 18px;
+}
+.automation-loop-item strong, .marquee-item strong {
+  color: #FFFFFF;
+  font-weight: 700;
+}
+.automation-loop-divider, .marquee-divider {
+  color: #D45B34;
+  opacity: 0.8;
+  padding: 0 2px;
+}
+@keyframes scrollMarquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+@media (max-width: 768px) {
+  .automation-marquee-bar, .minimal-storefront .automation-marquee-bar,
+  .marquee-container, .minimal-storefront .marquee-container {
+    font-size: 10px;
+    padding: 6px 0;
+  }
+  .automation-loop-item, .marquee-item {
+    padding: 0 12px;
+  }
+  .automation-loop-track, .marquee-track {
+    animation-duration: 22s;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .automation-loop-track, .marquee-track {
+    animation: none;
+  }
+  .automation-marquee-bar, .marquee-container {
+    overflow-x: auto;
+  }
+}
+
+.minimal-storefront .store-announcement { display: none; }
 .minimal-storefront .floating-navbar-container { background: var(--bg-surface-glass); border-bottom-color: #E5E4DE; }
 .minimal-storefront .minimal-header { min-height: 72px; padding-block: 10px; gap: 24px; }
 .minimal-storefront .brand-logo { width: 174px; height: 42px; }
@@ -155,6 +237,16 @@ body.minimal-storefront {
 .minimal-storefront .minimal-catalog-toolbar select { min-height: 44px; padding-inline: 10px; border-color: var(--border-subtle); border-radius: 6px; background: #fff; }
 .minimal-storefront .product-view-controls { display: none; }
 .minimal-storefront .product-selection-summary { background: var(--bg-surface); color: var(--accent-primary); font-family: var(--font-mono); }
+.studio-catalog-loading { min-height: 220px; display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-secondary); font-size: 13px; }
+.studio-catalog-actions { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: flex-end; }
+.studio-reset-filters { display: inline-flex; gap: 8px; align-items: center; min-height: 44px; color: var(--accent-primary); font-size: 11px; border: 0; background: transparent; cursor: pointer; }
+.studio-reset-filters[hidden] { display: none; }
+.minimal-storefront .minimal-catalog-toolbar { flex-wrap: wrap; gap: 10px; }
+.minimal-storefront .sticky-catalog-header { top: 72px; }
+@media (max-width: 1099px) { .minimal-storefront .sticky-catalog-header { top: 66px; } }
+@media (max-width: 767px) { .minimal-storefront .sticky-catalog-header { top: 62px; } }
+.studio-loading-orb { width: 18px; height: 18px; flex-shrink: 0; border: 2px solid var(--border-subtle); border-top-color: var(--accent-primary); border-radius: 50%; animation: studio-loading-spin 1s linear infinite; }
+@keyframes studio-loading-spin { to { transform: rotate(360deg); } }
 
 /* Supporting sections keep the same palette and existing interactions. */
 .minimal-storefront #home-shop-the-look { background: var(--bg-surface); padding-block: 56px; border: 0; }

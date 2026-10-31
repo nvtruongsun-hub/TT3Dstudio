@@ -31,6 +31,7 @@ const REQUIRED_PREFLIGHT_FILES = [
   'admin.html',
   'products.json',
   'css/style.css',
+  'css/catalog.css',
   'css/admin.css',
   'css/world-class-upgrade.css',
   'css/tailwind-input.css',
