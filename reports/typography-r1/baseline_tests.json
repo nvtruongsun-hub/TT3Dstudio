@@ -1,0 +1,78 @@
+[
+  {
+    "name": "test_admin_dark_saas_ui.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_admin_database_sync.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_admin_orders_telegram.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_audit_r2_verification.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_audit_regressions.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_behavior.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_codex_r7_invariants.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_differentiation_lookbook.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_dual_track_fulfillment.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_firebase_integration.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_hero_showcase_regression.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_mobile_store_overhaul.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_poster_stall_verification.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_precision_craft_features.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_storefront_telegram_order_flow.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_telegram_phone_autoresolve.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_workshop_order_confirmation.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_world_class_storefront.js",
+    "status": "PASS"
+  },
+  {
+    "name": "test_zalo_telegram_fix.js",
+    "status": "PASS"
+  }
+]

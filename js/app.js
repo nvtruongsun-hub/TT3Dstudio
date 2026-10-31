@@ -551,8 +551,11 @@
       }
 
       if (titleEl) {
-        titleEl.textContent = ({'mw-cn-1646129':'Khay trang sức Nơ Lụa','mw-cn-1147539':'Biển tên để bàn','mw-cn-2235027':'Đèn bàn Washi'})[product.id] || product.title || '';
-        titleEl.title = product.title || '';
+        const presentation = (window.TTCatalogStore && typeof window.TTCatalogStore.getProductPresentation === 'function')
+          ? window.TTCatalogStore.getProductPresentation(product)
+          : { title: product.cleanTitle || product.title || '' };
+        titleEl.textContent = presentation.title;
+        titleEl.title = presentation.title;
       }
       if (tagEl) tagEl.textContent = 'Lựa chọn từ xưởng';
       if (matEl) matEl.textContent = 'Chọn mẫu · Chọn màu';
@@ -572,6 +575,20 @@
     preloader.src = targetSrc;
   }
   window.switchHeroShowcase = switchHeroShowcase;
+
+  function syncLookbookTitles() {
+    if (!window.TTCatalogStore || typeof window.TTCatalogStore.getProductByIdSync !== 'function') return;
+    document.querySelectorAll('[data-product-title]').forEach(el => {
+      const id = el.dataset.productTitle;
+      const prod = window.TTCatalogStore.getProductByIdSync(id);
+      if (prod && typeof window.TTCatalogStore.getProductPresentation === 'function') {
+        const pres = window.TTCatalogStore.getProductPresentation(prod);
+        el.textContent = pres.title;
+      }
+    });
+  }
+  window.syncLookbookTitles = syncLookbookTitles;
+
 
   function switchHeroColor(colorId, colorName, hex) {
     const nameEl = document.getElementById('hero-selected-color-name');
@@ -1499,6 +1516,7 @@
 
   // Lắng nghe cập nhật catalog để đồng bộ Hero Showcase (Codex TT3D-HERO-20261024-R1)
   window.addEventListener('tt_products_updated', () => {
+      syncLookbookTitles();
     if (typeof refreshHeroShowcase === 'function') {
       refreshHeroShowcase();
     }
