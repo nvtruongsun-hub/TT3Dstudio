@@ -13,7 +13,7 @@
   const EVENT_NAME = 'tt_products_updated';
   const FALLBACK_URL = 'products.json';
   const CURRENT_SCHEMA_VERSION = 5;
-  const CURRENT_CATALOG_REVISION = 'mw-55-v3';
+  const CURRENT_CATALOG_REVISION = 'mw-55-v4-typo-r1';
 
   // 6 Sản phẩm legacy chuẩn làm fixture làm giàu dữ liệu cũ (Codex Directive)
   const LEGACY_FIXTURE_PRODUCTS = [
@@ -99,6 +99,231 @@
   ];
 
   // 5 Danh mục sản phẩm chuẩn hóa toàn hệ thống (Central Category Registry)
+  
+  // Baseline Seed Snapshot phục vụ 3-way merge an toàn (Codex Directive TT3D-STUDIO-TYPO-R1)
+  const BASELINE_PRODUCT_SEED_MAP = {
+  "mw-cn-2084928": {
+    "title": "Ống cắm cọ trang điểm Nếp gấp lụa thắt nơ ngọt ngào (Sweet Silk Bow Vanity Pot)",
+    "cleanTitle": "Khay Đựng Son & Nước Hoa Nơ Lụa Sweet Silk"
+  },
+  "mw-cn-2531095": {
+    "title": "Bình cắm cọ trang điểm Nếp lụa thắt nơ cánh bướm lớn (Silk Bow Deluxe Caddy)",
+    "cleanTitle": "Bình Cắm Cọ Deluxe Cánh Bướm Nơ Đôi"
+  },
+  "mw-cn-1646129": {
+    "title": "Khay đĩa lụa mềm thắt nơ đựng trang sức & chìa khóa (Coquette Silk Ribbon Vanity Tray)",
+    "cleanTitle": "Khay Nơ Lụa Đựng Trang Sức & Chìa Khóa"
+  },
+  "mw-cn-2053572": {
+    "title": "Hộp trang sức nắp đậy nếp lụa quả đào thắt nơ (Silk Pleated Peach Jewelry Box)",
+    "cleanTitle": "Hộp Trang Sức Nắp Quả Đào Nếp Lụa Thắt Nơ"
+  },
+  "mw-cn-2332788": {
+    "title": "Ống đựng cọ trang điểm nơ lụa satin kem tươi (Cream Satin Ribbon Brush Holder)",
+    "cleanTitle": "Ống Đựng Cọ Trang Điểm Satin Kem Tươi"
+  },
+  "mw-cn-2332220": {
+    "title": "Hộp vỏ sò lụa thắt nơ ngọc trai đựng nhẫn & dây chuyền (Silk Seashell Bow Jewelry Box)",
+    "cleanTitle": "Hộp Vỏ Sò Lụa Thắt Nơ Đựng Nhẫn Cưới"
+  },
+  "mw-cn-2510097": {
+    "title": "Đĩa khay lụa nếp gấp mỹ thuật trưng bày nước hoa & son (Silk Pleated Material Pallet)",
+    "cleanTitle": "Đĩa Lụa Nếp Gấp Mỹ Thuật Trưng Bày Son"
+  },
+  "mw-cn-2771973": {
+    "title": "Chén trang sức Ballet nếp gấp mây bồng bềnh (Cloud Pleat Ballet Jewelry Pot)",
+    "cleanTitle": "Chén Trang Sức Nếp Gấp Mây Ballet"
+  },
+  "mw-cn-2615328": {
+    "title": "Hộp trang sức đan len nơ hồng cao cấp (Pink Bow Knit Cosmetic Box)",
+    "cleanTitle": "Hộp Đựng Mỹ Phẩm Vân Đan Len Nơ Hồng"
+  },
+  "mw-cn-2709441": {
+    "title": "Hộp trang sức 5 ngăn cánh đại thiên thần xa hoa (Archangel Wings 5-compartment Jewelry Box)",
+    "cleanTitle": "Hộp Trang Sức 5 Ngăn Cánh Thiên Thần"
+  },
+  "mw-cn-2761118": {
+    "title": "Hộp pho mát rèm cuốn chống bụi đựng mỹ phẩm & serum (Cheese Roller Shutter Vanity Box)",
+    "cleanTitle": "Tủ Mỹ Phẩm Rèm Cuốn 2 Tầng Chống Bụi Phô Mai"
+  },
+  "mw-cn-1954833": {
+    "title": "Đèn ngủ tam giác cấu trúc len dệt cổ điển (Triangle Retro Woven Lamp)",
+    "cleanTitle": "Đèn Ngủ Tam Giác Cấu Trúc Len Dệt Cổ Điển"
+  },
+  "mw-cn-1438306": {
+    "title": "Đế đèn đám mây phi hành gia lơ lửng đa năng (Astronaut Cloud Ambient Night Lamp)",
+    "cleanTitle": "Đèn Đám Mây Phi Hành Gia Lơ Lửng Đa Năng"
+  },
+  "mw-cn-2327403": {
+    "title": "Đèn cây nấm bề mặt dệt len ấm áp (Woven Texture Mushroom Lamp)",
+    "cleanTitle": "Đèn Nấm Bề Mặt Dệt Len Bắc Âu"
+  },
+  "mw-cn-2235027": {
+    "title": "Đèn bàn giấy Washi KŌHAKU tối giản Nhật Bản (KŌHAKU Washi Minimalist Lamp)",
+    "cleanTitle": "Đèn Bàn Giấy Washi KŌHAKU Tối Giản"
+  },
+  "mw-cn-2791883": {
+    "title": "Đèn voan mỏng hữu cơ Lunelle thanh lịch (Lunelle Organic Tulle Lamp)",
+    "cleanTitle": "Đèn Voan Mỏng Hữu Cơ Lunelle Thanh Lịch"
+  },
+  "mw-cn-2768588": {
+    "title": "Đèn nan tre đan truyền thống hiệu ứng bóng đổ (Traditional Bamboo Weaving Shadow Lamp)",
+    "cleanTitle": "Đèn Nan Tre Đan Truyền Thống Đổ Bóng Nghệ Thuật"
+  },
+  "mw-cn-2050227": {
+    "title": "Đèn thiền Zen Garden phong cách tối giản Bắc Âu (Zen Minimalist LED Kit 001 Lamp)",
+    "cleanTitle": "Đèn Thiền Zen Garden Phong Cách Tối Giản Bắc Âu"
+  },
+  "mw-cn-1008515": {
+    "title": "Bình hoa tạo hình túi giấy xi măng nhăn nghệ thuật (Crinkled Paper Bag Vase)",
+    "cleanTitle": "Bình Hoa Túi Giấy Xi Măng Đánh Lừa Thị Giác"
+  },
+  "mw-cn-2600068": {
+    "title": "Bình hoa ảo giác túi nilon trong suốt phồng nước (Illusion Plastic Bag Vase)",
+    "cleanTitle": "Bình Hoa Ảo Giác Túi Nilon Trong Suốt Phồng Nước"
+  },
+  "mw-cn-1151680": {
+    "title": "Bình hoa tạo hình túi vải mềm nhăn phồng tạo khối (Fabric Textured Soft Bag Vase)",
+    "cleanTitle": "Bình Hoa Dáng Túi Vải Mềm Thắt Dây Độc Bản"
+  },
+  "mw-cn-475316": {
+    "title": "Bàn trà mini phản trọng lực Tensegrity huyền bí (Tensegrity Anti-Gravity Floating Table)",
+    "cleanTitle": "Bàn Trà Mini Phản Trọng Lực Tensegrity Huyền Bí"
+  },
+  "mw-cn-1702306": {
+    "title": "Rắn Gary Zootopia khớp uốn lượn linh hoạt (Zootopia Articulated Gary the Snake)",
+    "cleanTitle": "Mô Hình Rắn Gary Khớp Động Uốn Lượn 3D"
+  },
+  "mw-cn-1553726": {
+    "title": "Chuột thiên thần có cánh mini đáng yêu (Cute Winged Angel Mouse Figurine)",
+    "cleanTitle": "Mô Hình Chuột Thiên Thần Có Cánh Mini Đáng Yêu"
+  },
+  "mw-cn-1795991": {
+    "title": "Đá cuội bấm phím cơ Clicker xả stress ASMR 3D (Stone Pebble Mechanical Fidget Clicker)",
+    "cleanTitle": "Đá Cuội Fidget Phím Cơ ASMR Bỏ Túi"
+  },
+  "mw-cn-2370777": {
+    "title": "Clicker cơ học 100% in 3D không cần linh kiện ngoài v2 (100% 3D Printed Fidget Clicker)",
+    "cleanTitle": "Clicker Cơ Học 100% In 3D Liền Khối Không Switch"
+  },
+  "mw-cn-2331892": {
+    "title": "Kem ốc quế bấm Clicker phím cơ xả stress mini (Ice Cream Fidget Clicker)",
+    "cleanTitle": "Fidget Kem Ốc Quế Switch Cơ Pastel"
+  },
+  "mw-cn-2415902": {
+    "title": "Chim béo tròn bấm phím nhảy múa xả stress (Chubby Bird Fidget Clicker)",
+    "cleanTitle": "Fidget Chim Béo Nhảy Múa Khi Bấm Phím"
+  },
+  "mw-cn-1433737": {
+    "title": "Mèo con mini khớp động uốn lượn trong lòng bàn tay (Mini Articulated Flexible Kitten)",
+    "cleanTitle": "Mèo Con Mini Khớp Động Uốn Lượn Trong Lòng Bàn Tay"
+  },
+  "mw-cn-125751": {
+    "title": "Gấu trúc khớp cử động móc khóa linh hoạt (Articulated Panda Keychain)",
+    "cleanTitle": "Móc Khóa Gấu Trúc Khớp Cử Động Linh Hoạt"
+  },
+  "mw-cn-704003": {
+    "title": "Gundam mecha khớp cử động in liền khối móc khóa (Print-in-Place Articulated Gundam Keychain)",
+    "cleanTitle": "Móc Khóa Gundam Mecha Khớp Cử Động Liền Khối"
+  },
+  "mw-cn-1360122": {
+    "title": "Bàn phím Bambu xả stress không cần trục kim loại (Bambu Lab Fidget Mechanical Keyboard)",
+    "cleanTitle": "Bàn Phím Mini Fidget 4 Nút Tháo Rời Keycap"
+  },
+  "mw-cn-1753199": {
+    "title": "Quả bơ bấm Clicker phím cơ xả stress dễ thương (Avocado Mechanical Fidget Clicker)",
+    "cleanTitle": "Móc Khóa Fidget Quả Bơ Switch Cơ Hạt Tách Rời"
+  },
+  "mw-cn-2936034": {
+    "title": "Ghế sofa gấu Werwer giá đỡ điện thoại phong cách Retro (Werwer Bear Sofa Phone Stand)",
+    "cleanTitle": "Giá Đỡ Điện Thoại Ghế Sofa Gấu Werwer Phong Cách Retro"
+  },
+  "mw-cn-2996948": {
+    "title": "Giỏ xếp nếp Origami co giãn thông minh đa năng (Collapsible Folding Basket)",
+    "cleanTitle": "Giỏ Xếp Nếp Origami Co Giãn Đa Năng Xếp Gọn"
+  },
+  "mw-cn-1223355": {
+    "title": "Ống bút ống nước Mario có ngăn kéo bí mật ẩn (Mario Pipe Pen Holder Hidden Drawer)",
+    "cleanTitle": "Ống Cắm Bút Ống Nước Mario Có Ngăn Kéo Bí Mật Ẩn"
+  },
+  "mw-cn-1404920": {
+    "title": "Hệ module ngăn kéo xếp chồng mini để bàn Pork3D (Pork3D Stackable Desk Drawers)",
+    "cleanTitle": "Hệ Module Ngăn Kéo Xếp Chồng Mini Để Bàn Pork3D"
+  },
+  "mw-cn-1827939": {
+    "title": "Hộp xoay 3 tầng vòng tròn ma thuật Sakura (Sakura Magic Circle 3-Tier Rotating Box)",
+    "cleanTitle": "Hộp Xoay 3 Tầng Vòng Tròn Ma Thuật Sakura Mở Bung"
+  },
+  "mw-cn-1971424": {
+    "title": "Hộp bánh xe đu quay Ferris xoay cơ học lưu trữ mini (Ferris Wheel Mechanical Carousel Box)",
+    "cleanTitle": "Hộp Bánh Xe Đu Quay Ferris Xoay Cơ Học Lưu Trữ Mini"
+  },
+  "mw-cn-181548": {
+    "title": "Hộp xoay đa tầng cơ học tiện ích để bàn (Multi-tier Swivel Desktop Storage Box)",
+    "cleanTitle": "Hộp Xoay Đa Tầng Cơ Học Tiện Ích Để Bàn Văn Phòng"
+  },
+  "mw-cn-1037659": {
+    "title": "Kẹp giữ cáp sạc kiểu dáng bậc thang decor (Stepped Cable Organizer Clip)",
+    "cleanTitle": "Kẹp Giữ Cáp Sạc Kiểu Dáng Bậc Thang Chống Rơi Dây"
+  },
+  "mw-cn-701384": {
+    "title": "Kẹp cáp bàn IKEA Skadis phong cách tối giản (IKEA Skadis Cable Clip)",
+    "cleanTitle": "Kẹp Giữ Dây Cáp Bảng Đục Lỗ IKEA Skadis Tối Giản"
+  },
+  "mw-cn-176739": {
+    "title": "Hộp khẩu độ máy ảnh cơ chế Iris xoay mở 100% 3D (Mechanical Iris Aperture Box)",
+    "cleanTitle": "Hộp Khẩu Độ Máy Ảnh Cơ Chế Iris Xoay Mở 100% 3D"
+  },
+  "mw-cn-1012842": {
+    "title": "Hộp mật mã xoay Cryptex Da Vinci giải đố (Da Vinci Mechanical Cryptex Puzzle Box)",
+    "cleanTitle": "Hộp Mật Mã Xoay Cryptex Da Vinci Giải Đố Cơ Khí"
+  },
+  "mw-cn-951495": {
+    "title": "Biển số điện thoại đỗ xe ô tô xoay giấu số tùy biến (Custom Rotating Car Parking Phone Plate)",
+    "cleanTitle": "Biển Số Đỗ Xe Taplo Cơ Chế Xoay Lật Ẩn Số Riêng Tư"
+  },
+  "mw-cn-2206348": {
+    "title": "Biển đỗ xe ô tô cử chỉ tay số phong cách trẻ trung (Hand Gesture Temporary Car Parking Plate)",
+    "cleanTitle": "Biển Đỗ Xe Ô Tô Cử Chỉ Tay Số Thể Thao Nổi Bật"
+  },
+  "mw-cn-2719031": {
+    "title": "Biển đỗ xe oval nghiêng tối giản không cần AMS (Minimalist Oval Angled Parking Plate)",
+    "cleanTitle": "Thẻ Đỗ Xe Ô Tô Oval Góc Nghiêng 45° Tối Giản Kính Lái"
+  },
+  "mw-cn-3060338": {
+    "title": "Biển đỗ xe bồ hóng đen mini đổi số trang trí taplo (Black Soot Sprite Car Parking Plate)",
+    "cleanTitle": "Biển Đỗ Xe Bồ Hóng Hoạt Hình Đổi Số Trang Trí Taplo"
+  },
+  "mw-cn-2808063": {
+    "title": "Biển số xe bàn phím bấm số Clicky cơ học (Clicky Mechanical Car Parking Number Display)",
+    "cleanTitle": "Biển Số Xe Bàn Phím Bấm Switch Cơ Học Clicky Độc Lạ"
+  },
+  "mw-cn-1769352": {
+    "title": "Biển mã QR quầy thu ngân không cần AMS thẻ trượt (WeChat/Bank QR Code Stand No-AMS)",
+    "cleanTitle": "Biển Mã QR Quầy Thu Ngân Thẻ Trượt Chuyển Khoản Nhanh"
+  },
+  "mw-cn-694992": {
+    "title": "Biển đứng mã QR quầy vỉa hè/cà phê gấp gọn (Street Vendor Payment QR Stand)",
+    "cleanTitle": "Biển Đứng Mã QR Thanh Toán Gấp Gọn Quầy Cafe Vỉa Hè"
+  },
+  "mw-cn-558306": {
+    "title": "Biển đứng Logo 3D & mã QR mạng xã hội cá nhân (Custom 3D Logo & QR Stand)",
+    "cleanTitle": "Standee Biển Đứng Logo 3D Đa Tầng Kèm Mã QR Mạng Xã Hội"
+  },
+  "mw-cn-939925": {
+    "title": "Móc khóa đĩa than Vinyl gắn chip NFC phát nhạc Spotify (Vinyl Record NFC Spotify Keychain)",
+    "cleanTitle": "Móc Khóa Đĩa Than Vinyl Gắn Chip NFC Quét Nhạc Spotify"
+  },
+  "mw-cn-1836100": {
+    "title": "Đèn tranh thấu quang Lithophane ngọn núi vàng phát sáng phong thủy (Lithophane Golden Mountain Night Lamp)",
+    "cleanTitle": "Đèn Tranh Thấu Quang Lithophane Ngọn Núi Vàng Phong Thủy"
+  },
+  "mw-cn-1147539": {
+    "title": "Biển tên/biển hiệu để bàn texture cao cấp tùy biến chữ (Creative Customizable 3D Sign / Nameplate)",
+    "cleanTitle": "Biển Tên Chức Danh Để Bàn Texture Cao Cấp Khắc Chữ"
+  }
+};
+
   const CATEGORY_REGISTRY = (window.TTCategoryRegistry && typeof window.TTCategoryRegistry === 'object')
     ? window.TTCategoryRegistry
     : {
@@ -406,10 +631,56 @@
    * Hợp nhất thô (Raw Merge) trước khi Sanitize để bảo toàn toàn bộ trường seed bị thiếu
    * và bảo tồn dữ liệu tùy chỉnh của Admin (Codex Section 5.1 F06)
    */
+  
+  // Presentation API helpers (Codex Section 4 - WP-1)
+  function presentationText(value) {
+    return typeof value === 'string'
+      ? value.normalize('NFC').replace(/\s+/gu, ' ').trim()
+      : '';
+  }
+
+  function fallbackProductTitle(value) {
+    const original = presentationText(value);
+    const withoutImporterId = original
+      .replace(/\s*#MW-\d+\s*$/iu, '')
+      .trim();
+    return withoutImporterId || original;
+  }
+
+  function getProductPresentation(product) {
+    const p = product && typeof product === 'object' ? product : {};
+    const title = presentationText(p.cleanTitle)
+      || fallbackProductTitle(p.title)
+      || 'Sản phẩm T&T';
+    const categoryLabel = presentationText(
+      CATEGORY_REGISTRY[p.category]?.shortName
+    ) || 'Thiết kế T&T';
+    const sourceSpecs = p.specs && typeof p.specs === 'object'
+      && !Array.isArray(p.specs) ? p.specs : {};
+    const specs = [...new Set(
+      ['material', 'layer', 'dimensions', 'weight']
+        .map(key => presentationText(sourceSpecs[key]))
+        .filter(Boolean)
+    )].slice(0, 2);
+    return {
+      title,
+      subtitle: presentationText(p.headlineBenefit),
+      categoryLabel,
+      specs
+    };
+  }
+
   function mergeRawBeforeSanitize(storedRaw, baseSeed) {
     if (!baseSeed) return { item: storedRaw, changed: false };
     const merged = { ...baseSeed };
     let changed = false;
+
+    // Three-way merge for cleanTitle (Codex WP-1B Directive)
+    // Nếu storedRaw khớp baseline seed cũ (chưa bị Admin sửa), cho phép seed mới cập nhật cleanTitle
+    const baseline = storedRaw.id ? BASELINE_PRODUCT_SEED_MAP[storedRaw.id] : null;
+    const isUnmodifiedSeed = baseline &&
+      storedRaw.title === baseline.title &&
+      (storedRaw.cleanTitle || '') === (baseline.cleanTitle || '');
 
     for (const key of Object.keys(storedRaw)) {
       const val = storedRaw[key];
@@ -417,6 +688,12 @@
 
       if (key === 'specs' && val && typeof val === 'object' && !Array.isArray(val)) {
         merged.specs = { ...(baseSeed.specs || {}), ...val };
+        changed = true;
+        continue;
+      }
+
+      if (key === 'cleanTitle' && isUnmodifiedSeed && baseSeed.cleanTitle) {
+        merged.cleanTitle = baseSeed.cleanTitle;
         changed = true;
         continue;
       }
@@ -1051,6 +1328,7 @@
     getCategoryHeroSync,
     getProductById,
     getProductByIdSync,
+    getProductPresentation,
     saveProducts,
     upsertProduct,
     deleteProduct,

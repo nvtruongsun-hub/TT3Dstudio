@@ -801,6 +801,9 @@
     window.modalSelectedMat = initialMat;
 
     // Fill Visuals with Safe Text / DOM API
+    const modalView = (window.TTCatalogStore && typeof window.TTCatalogStore.getProductPresentation === 'function')
+      ? window.TTCatalogStore.getProductPresentation(item)
+      : { title: item.cleanTitle || getCleanTitle(item.title) };
     const imgEl = document.getElementById('order-prod-img');
     const badgeEl = document.getElementById('order-prod-badge');
     const titleEl = document.getElementById('order-prod-title');
@@ -815,7 +818,7 @@
 
     if (imgEl) {
       imgEl.src = sanitizeImageUrl(item.image);
-      imgEl.alt = item.imageAlt || getCleanTitle(item.title) || 'Ảnh sản phẩm';
+      imgEl.alt = item.imageAlt || modalView.title || 'Ảnh sản phẩm';
       imgEl.onerror = function () {
         this.onerror = null;
         this.src = 'assets/images/logo-premium-mark.svg';
@@ -844,7 +847,7 @@
       window.setModalImageViewMode('studio');
     }
 
-    if (titleEl) titleEl.textContent = getCleanTitle(item.title);
+    if (titleEl) titleEl.textContent = modalView.title;
     if (descEl) descEl.textContent = item.desc || item.headlineBenefit || '';
 
     // Per-SKU Option Schema (Audited Standard F15: Tùy chọn riêng theo từng sản phẩm)
