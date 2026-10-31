@@ -105,7 +105,7 @@ body.minimal-storefront {
 .minimal-storefront #store-search-input { height: 44px; border-radius: 8px; border-color: #daddd1; background: #fff; font-size: 13px; }
 .minimal-storefront #store-category-filters { padding: 24px 0 16px; margin-top: 0; gap: 8px; }
 .minimal-storefront .segmented-pill { min-height: 40px; padding: 8px 14px; border: 1px solid #e1e2d9; background: transparent; border-radius: 6px; font-family: var(--font-sans); font-size: 12px; font-weight: 500; white-space: nowrap; box-shadow: none; }
-.minimal-storefront .segmented-pill.active { background: #30372a; border-color: #30372a; color: #fff !important; }
+.minimal-storefront .segmented-pill.active { background: #30372a; border-color: #30372a; color: #fff; }
 .minimal-storefront .minimal-catalog-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin: 0 0 22px !important; color: #62665e; font-size: 11px; }
 .minimal-storefront .minimal-catalog-toolbar label { display: flex; align-items: center; gap: 10px; }
 .minimal-storefront #store-sort-input { min-height: 40px; max-width: 190px; padding: 6px; color: #353a2e; background: transparent; border: 0; border-bottom: 1px solid #d4d7cc; border-radius: 0; font-size: 12px; }
