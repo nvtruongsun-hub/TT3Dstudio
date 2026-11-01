@@ -95,14 +95,21 @@
 
     async function verifyAdminAccess() {
       if (window.TTSupabase && window.TTSupabase.isAuthenticated()) {
-        if (window.TTSupabase.isAdmin()) {
+        let isRealAdmin = false;
+        if (typeof window.TTSupabase.verifyAdminServerSide === 'function') {
+          isRealAdmin = await window.TTSupabase.verifyAdminServerSide();
+        } else {
+          isRealAdmin = window.TTSupabase.isAdmin();
+        }
+
+        if (isRealAdmin) {
           if (lockScreen) lockScreen.classList.add('hidden');
           if (adminApp) adminApp.classList.remove('hidden');
           loadAllDashboardData();
           return true;
         } else {
           if (loginError) {
-            loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin).';
+            loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin) được cấp quyền bởi máy chủ Database.';
             loginError.classList.remove('hidden');
           }
           await window.TTSupabase.signOut();
@@ -138,10 +145,17 @@
             return;
           }
 
-          if (!window.TTSupabase.isAdmin()) {
+          let isRealAdmin = false;
+          if (typeof window.TTSupabase.verifyAdminServerSide === 'function') {
+            isRealAdmin = await window.TTSupabase.verifyAdminServerSide();
+          } else {
+            isRealAdmin = window.TTSupabase.isAdmin();
+          }
+
+          if (!isRealAdmin) {
             await window.TTSupabase.signOut();
             if (loginError) {
-              loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin).';
+              loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin) được cấp quyền bởi máy chủ Database.';
               loginError.classList.remove('hidden');
             }
             return;

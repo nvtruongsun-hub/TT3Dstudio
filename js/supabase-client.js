@@ -268,23 +268,9 @@
       }
     }
 
-    // Local / Offline Simulation Mode
-    const mockUser = {
-      id: 'usr_' + Date.now().toString(36),
-      email: email.trim().toLowerCase(),
-      email_confirmed_at: null, // Require verification
-      user_metadata: {
-        full_name: fullName || '',
-        phone: phone || ''
-      },
-      created_at: new Date().toISOString()
-    };
-    handleAuthStateUpdate({ user: mockUser, access_token: 'mock-token' });
     return {
-      ok: true,
-      user: mockUser,
-      needsVerification: true,
-      message: 'Đăng ký thành công! Vui lòng kiểm tra email để kích hoạt tài khoản.'
+      ok: false,
+      error: 'Dịch vụ xác thực Supabase không khả dụng. Vui lòng kiểm tra kết nối mạng hoặc liên hệ quản trị viên.'
     };
   }
 
@@ -305,24 +291,10 @@
       }
     }
 
-    // Local / Offline Simulation Mode
-    // Admin check simulation
-    const isMockAdmin = email.toLowerCase().includes('admin');
-    const mockUser = {
-      id: 'usr_' + (isMockAdmin ? 'admin_01' : 'customer_01'),
-      email: email.trim().toLowerCase(),
-      email_confirmed_at: new Date().toISOString(), // Confirmed
-      user_metadata: {
-        full_name: isMockAdmin ? 'Quản Trị Viên T&T 3D' : 'Khách Hàng T&T 3D',
-        phone: '0349657529',
-        roles: isMockAdmin ? ['admin'] : ['customer']
-      },
-      app_metadata: {
-        roles: isMockAdmin ? ['admin'] : ['customer']
-      }
+    return {
+      ok: false,
+      error: 'Dịch vụ xác thực Supabase không khả dụng. Vui lòng kiểm tra kết nối mạng hoặc liên hệ quản trị viên.'
     };
-    handleAuthStateUpdate({ user: mockUser, access_token: 'mock-token' });
-    return { ok: true, user: mockUser };
   }
 
   async function signInWithOAuth(provider) {
@@ -360,25 +332,10 @@
       }
     }
 
-    // Local / Offline Simulation Mode
-    const providerName = p === 'google' ? 'Google' : 'Facebook';
-    const mockUser = {
-      id: `usr_${p}_` + Date.now().toString(36),
-      email: `customer_${p}@${p === 'google' ? 'gmail.com' : 'facebook.com'}`,
-      email_confirmed_at: new Date().toISOString(), // OAuth emails are verified by provider
-      user_metadata: {
-        full_name: `Khách Hàng ${providerName}`,
-        phone: '0349657529',
-        provider: p,
-        roles: ['customer']
-      },
-      app_metadata: {
-        provider: p,
-        roles: ['customer']
-      }
+    return {
+      ok: false,
+      error: 'Dịch vụ đăng nhập OAuth không khả dụng. Vui lòng thử lại sau.'
     };
-    handleAuthStateUpdate({ user: mockUser, access_token: `mock-${p}-token` });
-    return { ok: true, user: mockUser, provider: p };
   }
 
   async function signOut() {
@@ -406,7 +363,7 @@
         return { ok: false, error: mapAuthError(e) };
       }
     }
-    return { ok: true, message: 'Đã gửi email khôi phục mật khẩu. Vui lòng kiểm tra hòm thư.' };
+    return { ok: false, error: 'Dịch vụ gửi email khôi phục mật khẩu tạm thời không khả dụng.' };
   }
 
   async function updatePassword(newPassword) {
@@ -418,7 +375,7 @@
       try {
         const { error } = await client.auth.updateUser({ password: newPassword });
         if (error) return { ok: false, error: mapAuthError(error) };
-        return { ok: true, message: 'Cập nhật mật khẩu thành công!' };
+        return { ok: false, error: 'Dịch vụ cập nhật mật khẩu tạm thời không khả dụng.' };
       } catch (e) {
         return { ok: false, error: mapAuthError(e) };
       }
@@ -477,12 +434,46 @@
     return false;
   }
 
+  /**
+   * Kiểm tra quyền Admin an toàn (KHÔNG TIN user_metadata hay client-side spoofing)
+   * Chỉ chấp nhận khi đã được xác thực từ database public.user_roles hoặc JWT app_metadata
+   */
   function isAdmin() {
     if (!currentUser) return false;
     if (userRoles.includes('admin')) return true;
-    const metaRoles = (currentUser.app_metadata && currentUser.app_metadata.roles) ||
-                      (currentUser.user_metadata && currentUser.user_metadata.roles) || [];
-    return metaRoles.includes('admin');
+    const appRoles = (currentUser.app_metadata && currentUser.app_metadata.roles) || [];
+    return Array.isArray(appRoles) && appRoles.includes('admin');
+  }
+
+  /**
+   * Xác thực quyền Quản trị viên trực tiếp với Database Supabase (Server-Side Verified)
+   */
+  async function verifyAdminServerSide() {
+    const client = getClient();
+    if (!client || !currentUser) return false;
+    try {
+      // 1. Thử gọi RPC is_staff_or_admin trên DB
+      const { data, error } = await client.rpc('is_staff_or_admin');
+      if (!error && typeof data === 'boolean') {
+        if (data && !userRoles.includes('admin')) userRoles.push('admin');
+        return data;
+      }
+
+      // 2. Kiểm tra trực tiếp bảng user_roles qua RLS
+      const { data: dbRoles, error: rError } = await client
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', currentUser.id);
+
+      if (!rError && Array.isArray(dbRoles)) {
+        const hasAdmin = dbRoles.some(r => r.role === 'admin' || r.role === 'staff');
+        if (hasAdmin && !userRoles.includes('admin')) userRoles.push('admin');
+        return hasAdmin;
+      }
+    } catch (e) {
+      console.warn('[TTSupabase] verifyAdminServerSide error:', e);
+    }
+    return false;
   }
 
   function onAuthStateChange(callback) {
@@ -496,13 +487,7 @@
     };
   }
 
-  // Testing helper for injecting mock sessions in test suites
-  function setMockSession({ user, roles }) {
-    currentUser = user || null;
-    userRoles = roles || (user && user.user_metadata && user.user_metadata.roles) || ['customer'];
-    currentSession = user ? { user, access_token: 'mock-jwt-test' } : null;
-    handleAuthStateUpdate(currentSession, userRoles);
-  }
+
 
   // ==========================================
   // SERVER-SIDE RPC & DATA METHODS
@@ -589,106 +574,20 @@
         }
         return data; // Returns { ok: true, order_id, order_number, subtotal, shipping_fee, total, ... }
       } catch (err) {
-        console.warn('[TTSupabase] RPC call failed, falling back to local simulation:', err);
+        console.error('[TTSupabase] RPC create_order network/server error:', err);
+        return {
+          ok: false,
+          code: 'NETWORK_ERROR',
+          error: 'Lỗi kết nối máy chủ tạo đơn hàng: ' + (err.message || 'Mất kết nối mạng')
+        };
       }
     }
 
-    // ==========================================
-    // SECURE OFFLINE/MOCK DATABASE SIMULATOR
-    // Replicates PostgreSQL 15 `create_order` RPC logic identically
-    // ==========================================
-
-    // Idempotency check
-    const submittedKeys = JSON.parse(
-      (typeof window !== 'undefined' && window.localStorage && window.localStorage.getItem(IDEMPOTENCY_STORE_KEY)) || '{}'
-    );
-    if (idempotency_key && submittedKeys[idempotency_key]) {
-      const cached = submittedKeys[idempotency_key];
-      return {
-        ...cached,
-        is_duplicate: true
-      };
-    }
-
-    const catalogMap = getLocalCatalogMap();
-    let calculatedSubtotal = 0;
-    const processedItems = [];
-
-    for (const item of items) {
-      const pid = item.product_id || item.id;
-      const catalogProduct = catalogMap.get(pid);
-      // Enforce ground truth price from catalog/database (Rejecting untrusted client prices)
-      let unitPrice = 0;
-      if (catalogProduct) {
-        unitPrice = catalogProduct.price;
-      } else if (pid === 'p-mw-001') {
-        unitPrice = 155000;
-      } else {
-        unitPrice = item.unit_price || 0;
-      }
-      const qty = Math.max(1, parseInt(item.quantity || item.qty, 10) || 1);
-      const lineTotal = unitPrice * qty;
-      calculatedSubtotal += lineTotal;
-
-      processedItems.push({
-        product_id: pid,
-        product_name_snapshot: catalogProduct ? catalogProduct.title : (item.title || pid),
-        unit_price_snapshot: unitPrice,
-        quantity: qty,
-        selected_options: item.selected_options || {},
-        line_total: lineTotal
-      });
-    }
-
-    // Validate Coupon
-    let discountAmount = 0;
-    if (coupon_code) {
-      const codeUpper = String(coupon_code).trim().toUpperCase();
-      if (codeUpper === 'TT3D10') {
-        discountAmount = Math.round(calculatedSubtotal * 0.10);
-      } else if (codeUpper === 'WELCOME3D') {
-        discountAmount = 30000;
-      } else if (codeUpper === 'VIPXUONG') {
-        discountAmount = Math.round(calculatedSubtotal * 0.15);
-      }
-    }
-
-    const subtotalAfterDiscount = Math.max(0, calculatedSubtotal - discountAmount);
-    // Shipping logic: >= 300,000đ gets Free Shipping, otherwise 25,000đ
-    const shippingFee = (subtotalAfterDiscount >= 300000 || calculatedSubtotal === 0) ? 0 : 25000;
-    const finalTotal = subtotalAfterDiscount + shippingFee;
-
-    const orderNumber = 'TT3D-' + Math.floor(100000 + Math.random() * 900000);
-    const orderId = 'ord_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
-
-    const result = {
-      ok: true,
-      order_id: orderId,
-      order_number: orderNumber,
-      subtotal: calculatedSubtotal,
-      discount_amount: discountAmount,
-      shipping_fee: shippingFee,
-      total: finalTotal,
-      status: 'pending_confirmation',
-      payment_method,
-      items: processedItems,
-      created_at: new Date().toISOString()
+    return {
+      ok: false,
+      code: 'SERVICE_UNAVAILABLE',
+      error: 'Máy chủ Supabase không khả dụng. Giỏ hàng của bạn được bảo lưu.'
     };
-
-    if (idempotency_key && typeof window !== 'undefined' && window.localStorage) {
-      submittedKeys[idempotency_key] = result;
-      window.localStorage.setItem(IDEMPOTENCY_STORE_KEY, JSON.stringify(submittedKeys));
-    }
-
-    // Store in mock user orders
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const userOrdersKey = 'tt_user_orders_' + (currentUser ? currentUser.id : 'anon');
-      const existing = JSON.parse(window.localStorage.getItem(userOrdersKey) || '[]');
-      existing.unshift(result);
-      window.localStorage.setItem(userOrdersKey, JSON.stringify(existing));
-    }
-
-    return result;
   }
 
   /**
@@ -714,13 +613,11 @@
       }
     }
 
-    // Offline / Mock fallback
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const userOrdersKey = 'tt_user_orders_' + (currentUser ? currentUser.id : 'anon');
-      const orders = JSON.parse(window.localStorage.getItem(userOrdersKey) || '[]');
-      return { ok: true, orders };
-    }
-    return { ok: true, orders: [] };
+    return {
+      ok: false,
+      error: 'Không thể kết nối máy chủ dữ liệu đơn hàng.',
+      orders: []
+    };
   }
 
   /**
@@ -748,16 +645,15 @@
         if (error) return { ok: false, error: error.message };
         return data;
       } catch (e) {
-        console.warn('[TTSupabase] Admin RPC failed, falling back to local simulation:', e);
+        console.error('[TTSupabase] Admin RPC failed:', e);
+        return { ok: false, error: 'Lỗi thực thi quyền quản trị: ' + (e.message || 'Không thể cập nhật') };
       }
     }
 
-    // Offline / Mock fallback
     return {
-      ok: true,
-      order_id,
-      status: new_status,
-      updated_at: new Date().toISOString()
+      ok: false,
+      code: 'SERVICE_UNAVAILABLE',
+      error: 'Máy chủ quản trị Supabase không khả dụng.'
     };
   }
 
@@ -923,9 +819,9 @@
     isAuthenticated,
     isEmailVerified,
     isAdmin,
+    verifyAdminServerSide,
     onAuthStateChange,
-    setMockSession,
-    createOrder,
+        createOrder,
     getCustomerOrders,
     updateOrderStatusAdmin,
     getCustomerAddresses,

@@ -954,61 +954,71 @@
     };
 
     // Call Supabase RPC create_order (PostgreSQL Ground Truth pricing & atomic transaction)
-    if (window.TTSupabase && typeof window.TTSupabase.createOrder === 'function') {
-      try {
-        const serverRes = await window.TTSupabase.createOrder({
-          idempotency_key: orderId,
-          payment_method: finalChannel,
-          items: currentCheckoutContext.items.map(i => ({
-            product_id: i.id,
-            quantity: i.qty,
-            selected_options: {
-              color: i.colorName,
-              material: i.materialName,
-              custom_text: i.customText,
-              font_id: i.fontId
-            }
-          })),
-          shipping_name: recipientName,
-          shipping_phone: recipientPhone,
-          shipping_address: fullShippingAddress,
-          customer_note: deliveryNote,
-          address_id: addressId,
-          save_address: saveAddress,
-          province_code: provinceCode,
-          province_name: provinceName,
-          ward_code: wardCode,
-          ward_name: wardName,
-          address_line: addressLine,
-          address_label: addressLabel
-        });
+    if (!window.TTSupabase || typeof window.TTSupabase.createOrder !== 'function') {
+      currentCheckoutContext.state = 'editing';
+      if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';
+      const msg = 'Hệ thống kết nối máy chủ đặt hàng tạm thời không khả dụng. Giỏ hàng của bạn được bảo lưu an toàn.';
+      if (typeof alert === 'function') alert(msg);
+      return;
+    }
 
-        if (!serverRes.ok) {
-          currentCheckoutContext.state = 'editing';
-          if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';
-          if (typeof alert === 'function') {
-            alert(serverRes.error || 'Đặt hàng không thành công. Giỏ hàng của bạn được bảo lưu.');
+    let serverRes;
+    try {
+      serverRes = await window.TTSupabase.createOrder({
+        idempotency_key: orderId,
+        payment_method: finalChannel,
+        items: currentCheckoutContext.items.map(i => ({
+          product_id: i.id,
+          quantity: i.qty,
+          selected_options: {
+            color: i.colorName,
+            material: i.materialName,
+            custom_text: i.customText,
+            font_id: i.fontId
           }
-          return;
-        }
+        })),
+        shipping_name: recipientName,
+        shipping_phone: recipientPhone,
+        shipping_address: fullShippingAddress,
+        customer_note: deliveryNote,
+        address_id: addressId,
+        save_address: saveAddress,
+        province_code: provinceCode,
+        province_name: provinceName,
+        ward_code: wardCode,
+        ward_name: wardName,
+        address_line: addressLine,
+        address_label: addressLabel
+      });
+    } catch (err) {
+      currentCheckoutContext.state = 'editing';
+      if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';
+      console.error('[Checkout] Supabase RPC execution/network error:', err);
+      const msg = 'Lỗi kết nối máy chủ: Không thể hoàn tất đơn hàng do mạng gián đoạn. Giỏ hàng của bạn được bảo lưu an toàn.';
+      if (typeof alert === 'function') alert(msg);
+      return;
+    }
 
-        if (serverRes.order_number) {
-          orderRecord.orderNumber = serverRes.order_number;
-        }
+    if (!serverRes || !serverRes.ok) {
+      currentCheckoutContext.state = 'editing';
+      if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';
+      const errMsg = (serverRes && serverRes.error) || 'Đặt hàng không thành công. Giỏ hàng của bạn được bảo lưu.';
+      if (typeof alert === 'function') alert(errMsg);
+      return;
+    }
 
-        // REQUIREMENT 6: Xóa giỏ hàng an toàn CHỈ KHI backend xác nhận thành công
-        if (currentCheckoutContext.source === 'cart' && window.TTCart && typeof window.TTCart.clearCart === 'function') {
-          window.TTCart.clearCart();
-        }
+    if (serverRes.order_number) {
+      orderRecord.orderNumber = serverRes.order_number;
+    }
 
-        // Tải lại sổ địa chỉ nếu vừa lưu địa chỉ mới
-        if (saveAddress && window.TTAddressBook && typeof window.TTAddressBook.loadAddresses === 'function') {
-          window.TTAddressBook.loadAddresses(true).catch(() => {});
-        }
+    // REQUIREMENT 6: Xóa giỏ hàng an toàn CHỈ KHI backend xác nhận thành công
+    if (currentCheckoutContext.source === 'cart' && window.TTCart && typeof window.TTCart.clearCart === 'function') {
+      window.TTCart.clearCart();
+    }
 
-      } catch (err) {
-        console.warn('[Checkout] Supabase RPC execution error:', err);
-      }
+    // Tải lại sổ địa chỉ nếu vừa lưu địa chỉ mới
+    if (saveAddress && window.TTAddressBook && typeof window.TTAddressBook.loadAddresses === 'function') {
+      window.TTAddressBook.loadAddresses(true).catch(() => {});
     }
 
     if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';

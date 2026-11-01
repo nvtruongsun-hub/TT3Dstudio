@@ -89,13 +89,13 @@ ADD COLUMN IF NOT EXISTS order_shipping_snapshot JSONB DEFAULT '{}'::jsonb;
 -- 4. NÂNG CẤP HÀM SECURE ORDER RPC VỚI SMART ADDRESS SUPPORT
 CREATE OR REPLACE FUNCTION public.create_order(
     p_items JSONB,
-    p_shipping_name TEXT,
-    p_shipping_phone TEXT,
-    p_shipping_address TEXT,
-    p_customer_note TEXT,
-    p_payment_method TEXT,
-    p_coupon_code TEXT,
-    p_idempotency_key TEXT,
+    p_shipping_name TEXT DEFAULT NULL,
+    p_shipping_phone TEXT DEFAULT NULL,
+    p_shipping_address TEXT DEFAULT NULL,
+    p_customer_note TEXT DEFAULT NULL,
+    p_payment_method TEXT DEFAULT 'cod',
+    p_coupon_code TEXT DEFAULT NULL,
+    p_idempotency_key TEXT DEFAULT NULL,
     p_address_id UUID DEFAULT NULL,
     p_save_address BOOLEAN DEFAULT FALSE,
     p_province_code TEXT DEFAULT NULL,
@@ -124,6 +124,7 @@ DECLARE
     v_item RECORD;
     v_prod RECORD;
     v_coupon RECORD;
+    v_coupon_id UUID := NULL;
     v_addr RECORD;
     v_line_total INT;
     v_existing_id UUID;
@@ -326,6 +327,7 @@ BEGIN
         WHERE code = UPPER(TRIM(p_coupon_code)) AND is_active = TRUE;
 
         IF v_coupon.id IS NOT NULL THEN
+                v_coupon_id := v_coupon.id;
             IF (v_coupon.expires_at IS NULL OR v_coupon.expires_at > NOW()) AND 
                (v_coupon.usage_limit IS NULL OR v_coupon.used_count < v_coupon.usage_limit) AND
                (v_subtotal >= v_coupon.min_order_value) THEN
@@ -366,7 +368,7 @@ BEGIN
     ) VALUES (
         v_order_number, v_user_id, 'request_received', 
         COALESCE(p_payment_method, 'cod'), 'pending',
-        v_subtotal, v_discount, v_shipping_fee, v_total, v_coupon.id,
+        v_subtotal, v_discount, v_shipping_fee, v_total, v_coupon_id,
         v_final_name, v_final_phone, v_final_address, 
         NULLIF(TRIM(p_customer_note), ''), p_idempotency_key,
         v_saved_address_id, v_snapshot

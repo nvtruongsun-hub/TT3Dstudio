@@ -609,7 +609,7 @@ $$;
 CREATE OR REPLACE FUNCTION public.update_order_status_admin(
     p_order_id UUID,
     p_new_status TEXT,
-    p_note TEXT,
+    p_note TEXT DEFAULT NULL,
     p_carrier_name TEXT DEFAULT NULL,
     p_carrier_tracking_code TEXT DEFAULT NULL,
     p_carrier_tracking_url TEXT DEFAULT NULL,
