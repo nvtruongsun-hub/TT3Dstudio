@@ -4,7 +4,7 @@
 **Dự án:** T&T 3D Studio  
 **Website:** `https://nvtruongsun-hub.github.io/TT3Dstudio/`  
 **Nhánh kiểm định:** `feature/smart-address-checkout`  
-**Commit cơ sở được báo cáo:** `b4ca76f` (Đầy đủ mã nguồn tại HEAD)  
+**Commit cơ sở được báo cáo:** `b4ca76f` | **Commit nghiệm thu & bộ kiểm thử (HEAD):** `9d2e8a8`  
 **Môi trường kiểm tra:** Supabase Cloud (`nbsumfhfxohawiuxrwqj`, Region: `ap-southeast-1`, Postgres Engine 17)  
 **Thời gian hoàn thành kiểm định:** 01/11/2026 13:15 (Giờ Hà Nội)  
 **Quyết định cuối cùng:** **🟢 GO (ĐỦ ĐIỀU KIỆN MERGE VÀO MAIN KHI NGƯỜI DÙNG PHÊ DUYỆT)**  
