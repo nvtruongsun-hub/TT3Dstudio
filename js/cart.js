@@ -460,12 +460,33 @@
     }
   }
 
-  // Khởi động Checkout chuẩn
+  // Khởi động Checkout chuẩn (Bắt buộc xác thực đăng nhập)
   function triggerCheckout() {
     if (cart.length === 0) {
       if (window.showToast) window.showToast('Giỏ hàng trống!', 'error');
       return;
     }
+
+    // MANDATORY AUTH CHECK (Codex Directive 2026-10-31)
+    if (window.TTSupabase && !window.TTSupabase.isAuthenticated()) {
+      closeCart();
+      if (window.TTAccountManager && typeof window.TTAccountManager.openAuthModal === 'function') {
+        window.TTAccountManager.openAuthModal('login', 'checkout');
+      } else if (typeof alert === 'function') {
+        alert('Khách hàng bắt buộc phải đăng nhập trước khi tiến hành đặt hàng.');
+      }
+      return;
+    }
+
+    // MANDATORY EMAIL VERIFICATION CHECK
+    if (window.TTSupabase && !window.TTSupabase.isEmailVerified()) {
+      closeCart();
+      if (typeof alert === 'function') {
+        alert('Vui lòng xác minh địa chỉ email của bạn trước khi tiến hành đặt hàng.');
+      }
+      return;
+    }
+
     closeCart();
     if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
       window.TTCheckout.openCheckout(cart, currentDiscountPercent, { source: 'cart' });

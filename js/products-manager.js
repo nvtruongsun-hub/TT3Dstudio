@@ -1266,12 +1266,31 @@
     const line = buildConfiguredLine();
     if (!line) return;
 
+    // MANDATORY AUTH CHECK (Codex Directive 2026-10-31)
+    if (window.TTSupabase && !window.TTSupabase.isAuthenticated()) {
+      window.closeProductDetailModal({ immediate: true });
+      if (window.TTAccountManager && typeof window.TTAccountManager.openAuthModal === 'function') {
+        window.TTAccountManager.openAuthModal('login', 'direct_checkout');
+      } else if (typeof alert === 'function') {
+        alert('Khách hàng bắt buộc phải đăng nhập trước khi tiến hành đặt hàng.');
+      }
+      return;
+    }
+
+    if (window.TTSupabase && !window.TTSupabase.isEmailVerified()) {
+      window.closeProductDetailModal({ immediate: true });
+      if (typeof alert === 'function') {
+        alert('Vui lòng xác minh địa chỉ email của bạn trước khi tiến hành đặt hàng.');
+      }
+      return;
+    }
+
     window.closeProductDetailModal({ immediate: true });
 
     if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
       window.TTCheckout.openCheckout([line], 0, { source: 'direct' });
     }
-  };
+  };
 
   // Mở không gian 3D từ Modal chi tiết (Codex Section 5.2 F01)
   window.open3DFromModal = function () {

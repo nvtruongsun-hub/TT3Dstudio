@@ -24,34 +24,42 @@
 <body class="admin-body min-h-screen flex flex-col antialiased selection:bg-[#FF5C00] selection:text-white admin-scroll">
 
   <!-- =========================================================================
-       1. SECURITY LOCK SCREEN (PIN PROTECTION: 2026)
+       1. SECURITY RBAC LOGIN SCREEN (SUPABASE POSTGRESQL 15 AUTH)
        ========================================================================= -->
   <div id="admin-lock-screen" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#0C0C0E]/95 backdrop-blur-xl">
     <div class="w-full max-w-sm p-6 rounded-2xl admin-card border border-[rgba(255,255,255,0.07)] text-center space-y-6 shadow-2xl bg-[#16161A]">
       <div class="w-14 h-14 mx-auto rounded-xl bg-[rgba(255,92,0,0.1)] border border-[#FF5C00]/30 flex items-center justify-center text-[#FF5C00] text-xl shadow-sm">
-        <i class="fa-solid fa-shield-halved"></i>
+        <i class="fa-solid fa-user-shield"></i>
       </div>
 
       <div class="space-y-1.5">
         <h1 class="text-base font-bold text-[#F4F4F5] tracking-tight">T&amp;T 3D Labs Studio OS</h1>
-        <p class="text-xs text-[#A1A1AA]">Nhập mã PIN quản trị xưởng để tiếp tục</p>
+        <p class="text-xs text-[#A1A1AA]">Cổng Quản Trị Hệ Thống (RBAC Backend Auth)</p>
       </div>
 
-      <form id="pin-form" class="space-y-4">
+      <form id="admin-login-form" class="space-y-4 text-left">
         <div>
-          <input type="password" id="admin-pin-input" maxlength="6" autofocus placeholder="••••" 
-                 class="w-full px-4 py-2.5 rounded-xl admin-input text-center text-lg font-mono tracking-widest text-[#F4F4F5] focus:outline-none">
-          <p id="pin-error" class="text-[#F43F5E] text-xs mt-2 hidden">Mã PIN không chính xác. Mặc định là 2026.</p>
+          <label for="admin-email-input" class="block text-[11px] font-medium text-zinc-400 mb-1">Email Quản trị viên</label>
+          <input type="email" id="admin-email-input" required autofocus placeholder="admin@tt3dlabs.vn" 
+                 class="w-full px-3.5 py-2.5 rounded-xl admin-input text-xs text-[#F4F4F5] focus:outline-none">
         </div>
 
+        <div>
+          <label for="admin-password-input" class="block text-[11px] font-medium text-zinc-400 mb-1">Mật khẩu xác thực</label>
+          <input type="password" id="admin-password-input" required placeholder="••••••••" 
+                 class="w-full px-3.5 py-2.5 rounded-xl admin-input text-xs text-[#F4F4F5] focus:outline-none">
+        </div>
+
+        <p id="admin-login-error" class="text-[#F43F5E] text-xs hidden p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-center"></p>
+
         <button type="submit" class="w-full py-2.5 rounded-xl btn-orange-primary text-xs font-semibold">
-          Xác thực truy cập
+          Đăng nhập Quản trị viên
         </button>
       </form>
 
       <div class="text-[11px] text-[#71717A] font-mono flex items-center justify-center gap-2">
         <span class="status-dot-6 bg-[#10B981]"></span>
-        <span>Bảo mật nội bộ • Cổng Admin T&amp;T 3D Labs</span>
+        <span>Phân quyền Backend • Supabase PostgreSQL RLS</span>
       </div>
     </div>
   </div>
@@ -1140,6 +1148,10 @@
   <div id="admin-toast-container" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-2 pointer-events-none"></div>
 
   <!-- Firebase & Google Analytics Engine (tt3dlabs) -->
+  <!-- Supabase Cloud PostgreSQL 15+ & Auth Engine -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js?v=5.0"></script>
+
   <script type="module" src="js/firebase-init.js?v=1.0"></script>
 
   <!-- Central Engines Scripts -->
