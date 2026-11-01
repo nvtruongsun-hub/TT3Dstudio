@@ -291,7 +291,7 @@ body.minimal-storefront {
 
 /* Mobile navigation has an explicit component grid, independent of generated utilities. */
 .minimal-storefront .mobile-bottom-dock { border-top: 1px solid #dae3d5; background: #fffffffa; padding: 5px 8px calc(5px + env(safe-area-inset-bottom,0px)); }
-.minimal-storefront .mobile-bottom-dock > div { display: grid; grid-template-columns: repeat(5,minmax(0,1fr)); gap: 2px; }
+.minimal-storefront .mobile-bottom-dock > div { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 2px; }
 .minimal-storefront .dock-item { min-width: 0; min-height: 48px; gap: 5px; justify-content: center; color: #637261; border-radius: 8px; }
 .minimal-storefront .dock-item.active { background: var(--bg-surface); color: var(--accent-primary); }
 .minimal-storefront .dock-item.active::before { content: none; }
@@ -310,7 +310,7 @@ body.minimal-storefront {
   .minimal-storefront .minimal-hero-title { font-size: 50px; }
   .minimal-storefront .minimal-product-grid { grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
   .minimal-storefront #curated-product-grid { gap: 16px; }
-  .minimal-storefront #view-store { padding-bottom: 64px; }
+  .minimal-storefront #view-store, .minimal-storefront #view-inspiration, .minimal-storefront #view-tracking, .minimal-storefront #view-support { padding-bottom: calc(76px + env(safe-area-inset-bottom,0px)); }
 }
 @media (max-width: 767px) {
   .minimal-storefront .store-announcement { min-height: 27px; padding: 5px 12px; font-size: 9px; }

@@ -830,10 +830,15 @@
 
       // 2. Customer Alert (if present)
       if (res.customerAlert) {
-        const alertBox = document.createElement('div');
-        alertBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-3';
-        alertBox.innerHTML = `<i class="fa-solid fa-bell text-amber-600 mt-0.5 shrink-0"></i><div><strong class="font-bold">Cần bạn xác nhận:</strong> ${escapeHtmlApp(res.customerAlert)}</div>`;
-        card.appendChild(alertBox);
+        const alertMsg = typeof res.customerAlert === 'object'
+          ? (res.customerAlert.message || res.customerAlert.text || res.customerAlert.content || '')
+          : String(res.customerAlert || '');
+        if (alertMsg) {
+          const alertBox = document.createElement('div');
+          alertBox.className = 'p-4 rounded-2xl bg-amber-50 border border-amber-200 text-xs text-amber-900 flex items-start gap-3';
+          alertBox.innerHTML = `<i class="fa-solid fa-bell text-amber-600 mt-0.5 shrink-0"></i><div><strong class="font-bold">Cần bạn xác nhận:</strong> ${escapeHtmlApp(alertMsg)}</div>`;
+          card.appendChild(alertBox);
+        }
       }
 
       // 3. 6-Milestone Timeline Progress Indicator

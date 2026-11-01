@@ -28,17 +28,17 @@ body.light-theme {
   --text-muted: #6E7973;
   --text-inverse: #FFFFFF;
 
-  /* Signature Artisan Accent: Warm Terracotta Clay (Đất nung thủ công) */
-  --accent-primary: #D45B34;
-  --accent-hover: #BD4A26;
-  --accent-active: #A63C1B;
+  /* Signature Artisan Accent: Warm Terracotta Clay (Đất nung thủ công, WCAG AA >= 4.5:1) */
+  --accent-primary: #B84824;
+  --accent-hover: #9E3C1B;
+  --accent-active: #8A3316;
   --button-primary-fg: #FFFFFF;
-  --accent-text: #D45B34;
-  --accent-subtle: rgba(212, 91, 52, 0.08);
-  --accent-ring: rgba(212, 91, 52, 0.25);
+  --accent-text: #B84824;
+  --accent-subtle: rgba(184, 72, 36, 0.08);
+  --accent-ring: rgba(184, 72, 36, 0.25);
 
   /* Warm Craft Clay Tone */
-  --accent-craft-orange: #D45B34;
+  --accent-craft-orange: #B84824;
   --accent-craft-orange-subtle: #FFF5F0;
 
   /* Natural Botanical Status */
@@ -134,8 +134,10 @@ html.light-theme .brand-logo-light,
 html.light-theme .text-\[\#FF5C00\],
 html[data-theme="light"] .text-\[\#FF5C00\],
 body.light-theme .text-\[\#FF5C00\],
-.text-\[\#FF5C00\] {
-  color: #D45B34 !important;
+.text-\[\#FF5C00\],
+.text-\[\#D45B34\],
+.text-\[\#C85A32\] {
+  color: #B84824 !important;
 }
 
 /* Global Form Placeholders complying with token contrast */
@@ -1899,4 +1901,12 @@ html.light-theme .layercraft-controls-bar {
   padding-top: 6px;
   padding-bottom: 6px;
   border-bottom: 1px solid rgba(229, 228, 222, 0.8);
+}
+
+/* Accessible touch target size for footer links (WCAG 2.2 AA >= 24px) */
+footer ul li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 28px;
+  padding: 4px 0;
 }
