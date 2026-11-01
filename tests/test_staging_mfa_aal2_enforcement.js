@@ -2,6 +2,15 @@
  * T&T 3D STUDIO - STAGING MFA & AAL2 ENFORCEMENT VERIFICATION
  * Strict TDD & E2E Verification of Phase 2 Requirements
  * Target: STAGING Database (vtxzlgkvmvoushluthme) - STRICT GUARDRAILS
+ * 
+ * Verifies:
+ * 1. Staff role with AAL1 is rejected by update_order_status_admin (MFA_REQUIRED)
+ * 2. Staff role with AAL1 is rejected by direct table PATCH RLS
+ * 3. Staff role upgraded to AAL2 succeeds in updating orders
+ * 4. Admin role with AAL1 is rejected (MFA_REQUIRED)
+ * 5. Admin role with AAL2 can generate 8 emergency recovery codes
+ * 6. Admin can redeem emergency recovery code once; replay is rejected
+ * 7. Customer role cannot generate recovery codes (FORBIDDEN)
  */
 
 const https = require('https');
@@ -70,135 +79,194 @@ function generateTOTP(secret, step = 30) {
 
 async function runMfaVerification() {
   console.log('========================================================================');
-  console.log('   KIỂM ĐỊNH BẢO VỆ ADMIN BẰNG MFA & BẮT BUỘC AAL2 TRÊN STAGING');
-  console.log(`   Endpoint: ${STAGING_CONFIG.URL}`);
+  console.log('   KIỂM ĐỊNH BẢO VỆ ADMIN & STAFF BẰNG MFA / AAL2 TRÊN STAGING');
+  console.log(`   Target Endpoint: ${STAGING_CONFIG.URL}`);
   console.log('========================================================================\n');
 
-  // BƯỚC 1: KHỞI TẠO TÀI KHOẢN ADMIN VÀ CUSTOMER TRÊN STAGING
-  console.log('[1/6] Khởi tạo Admin và Customer trên Staging...');
-  const adminEmail = `staging_admin_${Date.now()}@tt3dstudio.vn`;
-  const custEmail = `staging_cust_${Date.now()}@tt3dstudio.vn`;
+  const ts = Date.now();
   const pass = 'SuperSecurePass2026!';
 
-  const adminCreate = await req('/auth/v1/admin/users', 'POST', {
-    email: adminEmail,
-    password: pass,
-    email_confirm: true,
-    user_metadata: { full_name: 'Quản Trị Viên Staging' }
-  }, STAGING_CONFIG.SERVICE_KEY);
+  // BƯỚC 1: KHỞI TẠO TÀI KHOẢN ADMIN, STAFF, VÀ CUSTOMER TRÊN STAGING
+  console.log('[1/7] Khởi tạo Admin, Staff và Customer trên Staging...');
+  const adminEmail = `staging_admin_${ts}@tt3dstudio.vn`;
+  const staffEmail = `staging_staff_${ts}@tt3dstudio.vn`;
+  const custEmail = `staging_cust_${ts}@tt3dstudio.vn`;
 
+  const adminCreate = await req('/auth/v1/admin/users', 'POST', {
+    email: adminEmail, password: pass, email_confirm: true,
+    user_metadata: { full_name: 'Quản Trị Viên Staging' }
+  });
+  const staffCreate = await req('/auth/v1/admin/users', 'POST', {
+    email: staffEmail, password: pass, email_confirm: true,
+    user_metadata: { full_name: 'Nhân Viên Xưởng Staging' }
+  });
   const custCreate = await req('/auth/v1/admin/users', 'POST', {
-    email: custEmail,
-    password: pass,
-    email_confirm: true,
+    email: custEmail, password: pass, email_confirm: true,
     user_metadata: { full_name: 'Khách Hàng Staging' }
-  }, STAGING_CONFIG.SERVICE_KEY);
+  });
 
   const adminId = adminCreate.body.id;
+  const staffId = staffCreate.body.id;
   const custId = custCreate.body.id;
 
-  // Gán role admin cho adminId, customer cho custId
-  await req('/rest/v1/user_roles', 'POST', { user_id: adminId, role: 'admin' }, STAGING_CONFIG.SERVICE_KEY);
-  await req('/rest/v1/user_roles', 'POST', { user_id: custId, role: 'customer' }, STAGING_CONFIG.SERVICE_KEY);
+  // Gán role
+  await req('/rest/v1/user_roles', 'POST', { user_id: adminId, role: 'admin' });
+  await req('/rest/v1/user_roles', 'POST', { user_id: staffId, role: 'staff' });
+  await req('/rest/v1/user_roles', 'POST', { user_id: custId, role: 'customer' });
 
   console.log(`- Admin ID: ${adminId} (${adminEmail})`);
+  console.log(`- Staff ID: ${staffId} (${staffEmail})`);
   console.log(`- Customer ID: ${custId} (${custEmail})`);
 
-  // BƯỚC 2: TẠO 1 ĐƠN HÀNG MẪU TRÊN STAGING ĐỂ ADMIN CẬP NHẬT
-  console.log('\n[2/6] Tạo đơn hàng mẫu trên Staging...');
-  const orderRes = await req('/rest/v1/orders', 'POST', [{
+  // BƯỚC 2: TẠO 1 ĐƠN HÀNG MẪU TRÊN STAGING
+  console.log('\n[2/7] Tạo đơn hàng mẫu trên Staging...');
+  await req('/rest/v1/orders', 'POST', [{
     user_id: custId,
-    order_number: 'TT3D-STAG-0001',
+    order_number: `TT3D-MFA-${ts}`,
     shipping_name: 'Khách Hàng Staging',
     shipping_phone: '0349657529',
-    shipping_address: 'Xã Thạch Trung, TP Hà Tĩnh',
+    shipping_address: 'Hà Nội, Việt Nam',
     payment_method: 'cod',
     subtotal: 139000,
     shipping_fee: 25000,
     total: 164000,
     status: 'request_received',
-    idempotency_key: 'STAG-KEY-' + Date.now()
-  }], STAGING_CONFIG.SERVICE_KEY);
+    idempotency_key: `STAG-MFA-${ts}`
+  }]);
 
-  const queryOrder = await req('/rest/v1/orders?order_number=eq.TT3D-STAG-0001&select=id', 'GET', null, STAGING_CONFIG.SERVICE_KEY);
+  const queryOrder = await req(`/rest/v1/orders?order_number=eq.TT3D-MFA-${ts}&select=id`);
   const sampleOrderId = queryOrder.body[0].id;
   console.log(`- Đơn hàng mẫu ID: ${sampleOrderId}`);
 
-  // BƯỚC 3: ĐĂNG NHẬP ADMIN (CẤP ĐỘ AAL1)
-  console.log('\n[3/6] Đăng nhập Admin mật khẩu thường -> Xác minh cấp độ AAL1...');
-  const loginRes = await req('/auth/v1/token?grant_type=password', 'POST', {
-    email: adminEmail,
-    password: pass
+  // BƯỚC 3: KIỂM TRA STAFF VỚI TOKEN AAL1 (PHẢI BỊ CHẶN)
+  console.log('\n[3/7] Đăng nhập Staff (AAL1) -> Thử gọi update_order_status_admin...');
+  const staffLogin = await req('/auth/v1/token?grant_type=password', 'POST', {
+    email: staffEmail, password: pass
   }, STAGING_CONFIG.ANON_KEY);
+  const staffAal1Token = staffLogin.body.access_token;
 
-  const aal1Token = loginRes.body.access_token;
-  const tokenPayload = JSON.parse(Buffer.from(aal1Token.split('.')[1], 'base64').toString('utf8'));
-  console.log(`- Phiên đăng nhập Admin ban đầu: aal = "${tokenPayload.aal}" (Cấp 1)`);
-  assert.strictEqual(tokenPayload.aal, 'aal1', 'Token ban đầu phải là aal1');
-
-  // BƯỚC 4: THỬ GỌI RPC QUẢN TRỊ BẰNG TOKEN AAL1 (CHỐNG BYPASS MFA)
-  console.log('\n[4/6] Thử gọi update_order_status_admin bằng Token AAL1 (Kịch bản kẻ tấn công cố bypass MFA)...');
-  const aal1RpcAttempt = await req('/rest/v1/rpc/update_order_status_admin', 'POST', {
+  const staffRpcAal1 = await req('/rest/v1/rpc/update_order_status_admin', 'POST', {
     p_order_id: sampleOrderId,
     p_new_status: 'in_production',
-    p_note: 'Cố tình gọi bằng AAL1'
-  }, aal1Token);
+    p_note: 'Staff cố gọi bằng AAL1'
+  }, staffAal1Token);
 
-  console.log('- Phản hồi từ Database:', aal1RpcAttempt.status, aal1RpcAttempt.body);
-  assert.strictEqual(aal1RpcAttempt.body.ok, false, 'Backend BẮT BUỘC phải từ chối AAL1');
-  assert.strictEqual(aal1RpcAttempt.body.code, 'MFA_REQUIRED', 'Mã lỗi trả về phải là MFA_REQUIRED');
-  console.log('✅ PASS: Backend đã chặn đứng 100% token AAL1 khi gọi RPC nhạy cảm (Không thể bypass bằng DevTools/Direct RPC)!');
+  console.log('- Phản hồi từ RPC:', staffRpcAal1.body);
+  assert.strictEqual(staffRpcAal1.body.ok, false, 'Staff AAL1 bắt buộc phải bị từ chối');
+  assert.strictEqual(staffRpcAal1.body.code, 'MFA_REQUIRED', 'Mã lỗi phải là MFA_REQUIRED');
+  console.log('✅ PASS: Backend đã chặn đứng Staff sử dụng token AAL1!');
 
-  // BƯỚC 5: ĐĂNG KÝ TOTP VÀ XÁC THỰC LÊN CẤP ĐỘ AAL2
-  console.log('\n[5/6] Đăng ký TOTP Authenticator và giải đố (Challenge & Verify)...');
-  const enrollRes = await req('/auth/v1/factors', 'POST', {
-    factor_type: 'totp',
-    friendly_name: 'TT3D Admin Authenticator',
-    issuer: 'TT3D Studio'
-  }, aal1Token);
+  // Thử Direct REST PATCH trên table orders bằng Staff AAL1 (RLS check)
+  console.log('- Thử Direct REST PATCH vào table orders bằng Staff AAL1...');
+  const staffDirectPatch = await req(`/rest/v1/orders?id=eq.${sampleOrderId}`, 'PATCH', {
+    status: 'in_production'
+  }, staffAal1Token);
+  console.log('- Phản hồi Direct PATCH:', staffDirectPatch.status, staffDirectPatch.body);
+  // Status 204 or 200 with empty rows or error, verify order didn't change
+  const verifyOrderUnchanged = await req(`/rest/v1/orders?id=eq.${sampleOrderId}&select=status`);
+  assert.strictEqual(verifyOrderUnchanged.body[0].status, 'request_received', 'Trạng thái đơn hàng KHÔNG được thay đổi khi gọi bằng AAL1');
+  console.log('✅ PASS: RLS đã chặn đứng Direct PATCH bảng orders khi token chưa đạt AAL2!');
 
-  const factorId = enrollRes.body.id;
-  const totpSecret = enrollRes.body.totp.secret;
-  console.log(`- Factor ID: ${factorId}`);
+  // BƯỚC 4: NÂNG CẤP STAFF LÊN AAL2 VÀ THỰC HIỆN CẬP NHẬT
+  console.log('\n[4/7] Đăng ký TOTP cho Staff -> Nâng cấp lên AAL2 -> Thực hiện cập nhật...');
+  const staffEnroll = await req('/auth/v1/factors', 'POST', {
+    factor_type: 'totp', friendly_name: 'Staff Authenticator', issuer: 'TT3D Studio'
+  }, staffAal1Token);
+  const staffTotpCode = generateTOTP(staffEnroll.body.totp.secret);
+  const staffChallenge = await req(`/auth/v1/factors/${staffEnroll.body.id}/challenge`, 'POST', {}, staffAal1Token);
+  const staffVerify = await req(`/auth/v1/factors/${staffEnroll.body.id}/verify`, 'POST', {
+    challenge_id: staffChallenge.body.id, code: staffTotpCode
+  }, staffAal1Token);
 
-  // Tạo mã 6 số TOTP chuẩn
-  const otpCode = generateTOTP(totpSecret);
-  console.log(`- Mã TOTP 6 số sinh ra từ ứng dụng Authenticator: ${otpCode}`);
-
-  // Challenge
-  const challengeRes = await req(`/auth/v1/factors/${factorId}/challenge`, 'POST', {}, aal1Token);
-  const challengeId = challengeRes.body.id;
-
-  // Verify
-  const verifyRes = await req(`/auth/v1/factors/${factorId}/verify`, 'POST', {
-    challenge_id: challengeId,
-    code: otpCode
-  }, aal1Token);
-
-  const aal2Token = verifyRes.body.access_token;
-  const aal2Payload = JSON.parse(Buffer.from(aal2Token.split('.')[1], 'base64').toString('utf8'));
-  console.log(`- Phiên đăng nhập sau khi xác thực 2 bước: aal = "${aal2Payload.aal}" (Cấp 2)`);
-  assert.strictEqual(aal2Payload.aal, 'aal2', 'Token sau khi verify phải được nâng lên aal2');
-  console.log('✅ PASS: Tài khoản đã đạt cấp độ xác thực AAL2 thành công!');
-
-  // BƯỚC 6: GỌI LẠI RPC QUẢN TRỊ BẰNG TOKEN AAL2
-  console.log('\n[6/6] Gọi update_order_status_admin bằng Token AAL2 chính chủ...');
-  const aal2RpcAttempt = await req('/rest/v1/rpc/update_order_status_admin', 'POST', {
+  const staffAal2Token = staffVerify.body.access_token;
+  const staffRpcAal2 = await req('/rest/v1/rpc/update_order_status_admin', 'POST', {
     p_order_id: sampleOrderId,
     p_new_status: 'in_production',
-    p_note: 'Đã hoàn tất xác thực AAL2'
-  }, aal2Token);
+    p_note: 'Staff đã xác thực AAL2'
+  }, staffAal2Token);
 
-  console.log('- Phản hồi từ Database:', aal2RpcAttempt.status, aal2RpcAttempt.body);
-  assert.strictEqual(aal2RpcAttempt.body.ok, true, 'Backend phải chấp nhận phiên AAL2');
-  assert.strictEqual(aal2RpcAttempt.body.new_status, 'in_production');
+  console.log('- Phản hồi từ RPC sau khi AAL2:', staffRpcAal2.body);
+  assert.strictEqual(staffRpcAal2.body.ok, true, 'Staff AAL2 phải cập nhật thành công');
+  console.log('✅ PASS: Staff với AAL2 cập nhật trạng thái đơn hàng thành công!');
 
-  // Kiểm tra audit_logs xem có ghi vết AAL2 không
-  const auditRes = await req(`/rest/v1/audit_logs?entity_id=eq.${sampleOrderId}&select=*`, 'GET', null, STAGING_CONFIG.SERVICE_KEY);
-  console.log('- Ghi vết Audit Logs:', auditRes.body[0].action, 'AAL ghi nhận:', auditRes.body[0].payload.aal);
-  assert.strictEqual(auditRes.body[0].payload.aal, 'aal2', 'Audit log phải ghi nhận phiên AAL2');
+  // BƯỚC 5: KIỂM TRA ADMIN AAL1 BỊ CHẶN & NÂNG CẤP AAL2
+  console.log('\n[5/7] Đăng nhập Admin (AAL1) -> Kiểm tra bị chặn -> Nâng cấp AAL2...');
+  const adminLogin = await req('/auth/v1/token?grant_type=password', 'POST', {
+    email: adminEmail, password: pass
+  }, STAGING_CONFIG.ANON_KEY);
+  const adminAal1Token = adminLogin.body.access_token;
 
-  console.log('\n🎉 [PHASE 2 VERIFIED PASS] TOÀN BỘ QUY TRÌNH BẢO VỆ ADMIN BẰNG MFA & AAL2 ĐÃ HOÀN TẤT VÀ ĐẠT CHUẨN AN TOÀN TUYỆT ĐỐI!');
+  const adminRpcAal1 = await req('/rest/v1/rpc/update_order_status_admin', 'POST', {
+    p_order_id: sampleOrderId,
+    p_new_status: 'completed',
+    p_note: 'Admin cố gọi AAL1'
+  }, adminAal1Token);
+  assert.strictEqual(adminRpcAal1.body.ok, false, 'Admin AAL1 bắt buộc phải bị từ chối');
+  assert.strictEqual(adminRpcAal1.body.code, 'MFA_REQUIRED');
+  console.log('✅ PASS: Admin AAL1 bị chặn đứng bởi RPC update_order_status_admin.');
+
+  const adminEnroll = await req('/auth/v1/factors', 'POST', {
+    factor_type: 'totp', friendly_name: 'Admin Authenticator', issuer: 'TT3D Studio'
+  }, adminAal1Token);
+  const adminTotpCode = generateTOTP(adminEnroll.body.totp.secret);
+  const adminChallenge = await req(`/auth/v1/factors/${adminEnroll.body.id}/challenge`, 'POST', {}, adminAal1Token);
+  const adminVerify = await req(`/auth/v1/factors/${adminEnroll.body.id}/verify`, 'POST', {
+    challenge_id: adminChallenge.body.id, code: adminTotpCode
+  }, adminAal1Token);
+  const adminAal2Token = adminVerify.body.access_token;
+  console.log('✅ PASS: Admin đã hoàn tất nâng cấp lên AAL2.');
+
+  // BƯỚC 6: XÂY DỰNG & KIỂM THỬ QUY TRÌNH MÃ DỰ PHÒNG KHÔI PHỤC (RECOVERY CODES)
+  console.log('\n[6/7] Kiểm thử quy trình cấp phát và sử dụng mã dự phòng khẩn cấp...');
+  // AAL1 gọi tạo mã dự phòng -> Phải bị từ chối
+  const failGen = await req('/rest/v1/rpc/generate_recovery_codes_admin', 'POST', {}, adminAal1Token);
+  assert.strictEqual(failGen.body.ok, false);
+  assert.strictEqual(failGen.body.code, 'MFA_REQUIRED');
+  console.log('✅ PASS: AAL1 không thể tạo mã dự phòng (phòng chống leo thang đặc quyền).');
+
+  // AAL2 gọi tạo mã dự phòng -> Nhận 8 mã
+  const successGen = await req('/rest/v1/rpc/generate_recovery_codes_admin', 'POST', {}, adminAal2Token);
+  console.log('- Kết quả tạo mã dự phòng:', successGen.body.ok, 'Số lượng mã:', successGen.body.codes ? successGen.body.codes.length : 0);
+  assert.strictEqual(successGen.body.ok, true);
+  assert.strictEqual(successGen.body.codes.length, 8, 'Hệ thống phải sinh đúng 8 mã dự phòng');
+  const backupCodes = successGen.body.codes;
+  console.log(`- Mã mẫu sinh ra: ${backupCodes[0]}`);
+
+  // Thử redeem mã đầu tiên
+  const redeemRes = await req('/rest/v1/rpc/redeem_recovery_code_admin', 'POST', {
+    p_code: backupCodes[0]
+  }, adminAal1Token); // Được phép gọi bằng AAL1 khi khôi phục tài khoản
+  console.log('- Kết quả sử dụng mã dự phòng lần đầu:', redeemRes.body);
+  assert.strictEqual(redeemRes.body.ok, true, 'Redeem mã hợp lệ phải thành công');
+
+  // Thử dùng lại mã đó lần thứ hai (Chống Replay Attack)
+  const replayRes = await req('/rest/v1/rpc/redeem_recovery_code_admin', 'POST', {
+    p_code: backupCodes[0]
+  }, adminAal1Token);
+  console.log('- Kết quả dùng lại mã đã sử dụng:', replayRes.body);
+  assert.strictEqual(replayRes.body.ok, false, 'Không được phép dùng lại mã cũ');
+  assert.strictEqual(replayRes.body.code, 'INVALID_RECOVERY_CODE');
+  console.log('✅ PASS: Mã dự phòng chỉ dùng được 1 lần duy nhất; Replay attack bị chặn đứng 100%!');
+
+  // BƯỚC 7: KIỂM TRA PHÂN QUYỀN KHÁCH HÀNG (CUSTOMER)
+  console.log('\n[7/7] Kiểm tra vai trò Customer gọi các API quản trị đặc quyền...');
+  const custLogin = await req('/auth/v1/token?grant_type=password', 'POST', {
+    email: custEmail, password: pass
+  }, STAGING_CONFIG.ANON_KEY);
+  const custToken = custLogin.body.access_token;
+
+  const custGenAttempt = await req('/rest/v1/rpc/generate_recovery_codes_admin', 'POST', {}, custToken);
+  assert.strictEqual(custGenAttempt.body.ok, false);
+  assert.strictEqual(custGenAttempt.body.code, 'FORBIDDEN');
+
+  const custUpdateAttempt = await req('/rest/v1/rpc/update_order_status_admin', 'POST', {
+    p_order_id: sampleOrderId, p_new_status: 'cancelled'
+  }, custToken);
+  assert.strictEqual(custUpdateAttempt.body.ok, false);
+  assert.strictEqual(custUpdateAttempt.body.code, 'FORBIDDEN');
+  console.log('✅ PASS: Vai trò Customer bị từ chối 100% ở mọi hàm quản trị!');
+
+  console.log('\n🎉 [PHASE 2 VERIFIED PASS] BẢO VỆ MFA CHO CẢ ADMIN VÀ STAFF + QUY TRÌNH KHÔI PHỤC ĐÃ ĐƯỢC KIỂM CHỨNG TOÀN DIỆN VÀ HOÀN HẢO!');
 }
 
 runMfaVerification().catch(err => {

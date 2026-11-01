@@ -2,7 +2,7 @@
  * T&T 3D STUDIO - SECURE SUPABASE CLIENT & AUTH ENGINE
  * Cloud PostgreSQL 15+ & GoTrue Authentication Layer
  * Enforcing:
- * 1. Client-side Anon Key safety (zero service_role or admin secrets on client)
+ * 1. Client-side Anon Key safety (zero privileged backend secrets on client)
  * 2. Mandatory Authentication & Email Verification before Checkout
  * 3. Server-side Ground Truth Pricing & Idempotent Atomic Order Placement (RPC create_order)
  * 4. Role-Based Access Control (Admin vs Customer) with RLS
@@ -12,25 +12,39 @@
 (function (window) {
   'use strict';
 
-  // Multi-environment routing: Production vs Staging
+  // Multi-environment routing: Build-time static configuration enforced
   const PROD_URL = 'https://nbsumfhfxohawiuxrwqj.supabase.co';
   const PROD_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';
 
-  const STAGING_URL = 'https://vtxzlgkvmvoushluthme.supabase.co';
-  const STAGING_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eHpsZ2t2bXZvdXNobHV0aG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MDU4NzgsImV4cCI6MjEwOTA4MTg3OH0.e78lpCrZZ07Y15aXXXTceNQxzsd46XyTLWebXZZB4oo';
-
   function resolveEnvironment() {
-    if (typeof window !== 'undefined') {
-      if (window.TT_ENV && window.TT_ENV.SUPABASE_URL) {
-        return { url: window.TT_ENV.SUPABASE_URL, anon: window.TT_ENV.SUPABASE_ANON_KEY || PROD_ANON, env: 'custom' };
-      }
-      try {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get('env') === 'staging' || window.location.hostname.includes('staging') || window.location.hostname === '127.0.0.1' || window.location.hostname === 'localhost') {
-          return { url: STAGING_URL, anon: STAGING_ANON, env: 'staging' };
-        }
-      } catch (e) {}
+    // 1. Kiem tra moi truong Node.js (danh cho test suites)
+    if (typeof process !== 'undefined' && process.env && process.env.SUPABASE_URL) {
+      return {
+        url: process.env.SUPABASE_URL,
+        anon: process.env.SUPABASE_ANON_KEY || PROD_ANON,
+        env: process.env.NODE_ENV || 'test'
+      };
     }
+
+    // 2. Kiem tra moi truong Browser (bat buoc thong qua window.TT_ENV build-time)
+    if (typeof window !== 'undefined') {
+      // BAO VE BAO MAT: Chan dung moi no luc chuyen moi truong qua URL query string (?env=...)
+      try {
+        if (window.location && window.location.search && window.location.search.indexOf('env=') !== -1) {
+          console.warn('[Security Guard] Chuyen doi moi truong backend qua URL parameter (?env=...) da bi vo hieu hoa hoan toan de dam bao an toan tuyet doi.');
+        }
+      } catch (_) {}
+
+      if (window.TT_ENV && window.TT_ENV.SUPABASE_URL) {
+        return {
+          url: window.TT_ENV.SUPABASE_URL,
+          anon: window.TT_ENV.SUPABASE_ANON_KEY || PROD_ANON,
+          env: window.TT_ENV.ENV_NAME || 'build_configured'
+        };
+      }
+    }
+
+    // 3. Fallback mac dinh la Production
     return { url: PROD_URL, anon: PROD_ANON, env: 'production' };
   }
 
@@ -849,7 +863,9 @@
     addCustomerAddress,
     updateCustomerAddress,
     deleteCustomerAddress,
-    setDefaultCustomerAddress
+    setDefaultCustomerAddress,
+    getActiveConfig: () => activeEnv,
+    isProduction: () => activeEnv.env === 'production' || activeEnv.url.includes(PROD_URL)
   };
 
 })(typeof window !== 'undefined' ? window : global);

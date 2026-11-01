@@ -24,6 +24,7 @@ node_modules/
 out/
 dist/
 dist_staging/
+dist_staging_deploy/
 dist_backup/
 
 
