@@ -31,8 +31,10 @@
 
   <!-- Supabase Cloud PostgreSQL 15+ & Auth Engine -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="js/supabase-client.js?v=5.1"></script>
-  <script src="js/account-manager.js?v=5.1"></script>
+  <script src="js/supabase-client.js?v=5.2"></script>
+  <script src="js/vn-administrative.js?v=5.2"></script>
+  <script src="js/address-book.js?v=5.2"></script>
+  <script src="js/account-manager.js?v=5.2"></script>
 
   <!-- Central Runtime Engines -->
   <script src="js/category-registry.js?v=5.0-mw105"></script>
@@ -41,7 +43,7 @@
   <script src="js/purchase-config.js?v=4.0"></script>
   <script src="js/cart.js?v=4.1"></script>
   <script src="js/telegram-notifier.js?v=4.3"></script>
-  <script src="js/checkout.js?v=4.3"></script>
+  <script src="js/checkout.js?v=5.2"></script>
   <script src="js/order-engine.js?v=4.3"></script>
   <script src="js/studio-state.js?v=4.1"></script>
   <script src="js/personalize-studio.js?v=4.1"></script>
@@ -1287,86 +1289,187 @@
 
   <!-- DIRECT CHECKOUT MODAL -->
   <div id="checkout-modal" class="fixed inset-0 z-[140] hidden items-center justify-center p-4 bg-black/60 backdrop-blur-sm" role="dialog" aria-modal="true" aria-labelledby="checkout-modal-title">
-    <div class="w-full max-w-lg bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
+    <div class="w-full max-w-xl bg-[var(--bg-surface)] rounded-3xl border border-[var(--border-subtle)] shadow-2xl overflow-hidden flex flex-col max-h-[92vh]">
       
       <!-- Modal Header -->
       <div class="px-6 py-4 border-b border-[var(--border-subtle)] flex items-center justify-between shrink-0 bg-[var(--bg-surface)]">
         <div class="flex items-center gap-2">
-          <span class="w-2 h-2 rounded-full bg-[#D45B34]"></span>
-          <h3 id="checkout-modal-title" class="text-sm font-bold text-[var(--text-primary)]">Xác Nhận Đặt Hàng &amp; Nhận Lịch In</h3>
+          <span class="w-2.5 h-2.5 rounded-full bg-[#D45B34] animate-pulse"></span>
+          <div>
+            <h3 id="checkout-modal-title" class="text-sm font-bold text-[var(--text-primary)]">Xác Nhận Đặt Hàng (One-Page Checkout)</h3>
+            <p class="text-[10px] text-[var(--text-secondary)]">T&amp;T 3D Labs · Xưởng in 3D Hà Tĩnh · Giao hàng toàn quốc</p>
+          </div>
         </div>
-        <button type="button" id="checkout-close-btn" onclick="window.TTCheckout.closeCheckoutModal()" class="w-8 h-8 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center" aria-label="Đóng bảng đặt hàng">
+        <button type="button" id="checkout-close-btn" onclick="window.TTCheckout.closeCheckoutModal()" class="w-8 h-8 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center transition-colors" aria-label="Đóng bảng đặt hàng">
           <i class="fa-solid fa-xmark text-sm"></i>
         </button>
       </div>
 
-      <!-- Section 1: Customer Form Input -->
-      <div id="checkout-form-section" class="p-6 overflow-y-auto space-y-4 flex-1">
+      <!-- Section 1: Customer Form Input (One-Page Flow) -->
+      <div id="checkout-form-section" class="p-5 sm:p-6 overflow-y-auto space-y-4 flex-1">
         
-        <!-- Summary Lines -->
-        <div class="p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] space-y-2">
-          <div class="text-[11px] font-mono uppercase tracking-wider text-[var(--text-secondary)] font-bold">Mặt Hàng Đã Chọn:</div>
-          <div id="checkout-summary-lines" class="space-y-1"></div>
+        <!-- 1. ĐỊA CHỈ NHẬN HÀNG (SMART ADDRESS BOOK) -->
+        <div class="space-y-2.5">
+          <div class="flex items-center justify-between">
+            <label class="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 uppercase tracking-wider">
+              <i class="fa-solid fa-location-dot text-[#D45B34]"></i>
+              <span>1. Địa Chỉ Nhận Hàng</span>
+            </label>
+            <button type="button" id="checkout-btn-toggle-address-mode" class="text-[11px] text-[#D45B34] hover:underline font-semibold cursor-pointer">
+              + Nhập địa chỉ mới
+            </button>
+          </div>
+
+          <!-- Khung A: Danh sách địa chỉ đã lưu (cho khách cũ) -->
+          <div id="checkout-saved-addresses-view" class="space-y-2">
+            <div id="checkout-saved-address-cards" class="space-y-2">
+              <!-- Rendered dynamically by TTCheckout -->
+            </div>
+          </div>
+
+          <!-- Khung B: Form nhập địa chỉ 2 cấp mới -->
+          <div id="checkout-new-address-view" class="p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] space-y-3 hidden">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div>
+                <label for="checkout-cust-name" class="font-medium text-[var(--text-secondary)] block mb-1">Họ và tên người nhận <span class="text-rose-500">*</span></label>
+                <input type="text" id="checkout-cust-name" placeholder="Nguyễn Văn A" class="w-full px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:border-[var(--accent-primary)] outline-none">
+              </div>
+              <div>
+                <label for="checkout-cust-phone" class="font-medium text-[var(--text-secondary)] block mb-1">Số điện thoại liên hệ <span class="text-rose-500">*</span></label>
+                <input type="tel" id="checkout-cust-phone" placeholder="0349xxxxxx" class="w-full px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] font-mono focus:border-[var(--accent-primary)] outline-none">
+              </div>
+            </div>
+
+            <!-- 2 Cấp hành chính: Tỉnh/Thành phố & Phường/Xã -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div>
+                <label for="checkout-province-select" class="font-medium text-[var(--text-secondary)] block mb-1">Tỉnh / Thành phố <span class="text-rose-500">*</span></label>
+                <select id="checkout-province-select" class="w-full px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:border-[var(--accent-primary)] outline-none cursor-pointer">
+                  <option value="">-- Chọn Tỉnh / Thành phố --</option>
+                </select>
+              </div>
+              <div>
+                <label for="checkout-ward-select" class="font-medium text-[var(--text-secondary)] block mb-1">Phường / Xã / Đặc khu <span class="text-rose-500">*</span></label>
+                <select id="checkout-ward-select" class="w-full px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:border-[var(--accent-primary)] outline-none cursor-pointer" disabled>
+                  <option value="">-- Chọn Tỉnh trước --</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label for="checkout-cust-address-line" class="font-medium text-[var(--text-secondary)] block mb-1">Số nhà, ngõ/đường, thôn/xóm, tòa nhà <span class="text-rose-500">*</span></label>
+              <input type="text" id="checkout-cust-address-line" placeholder="Số 12 đường Hải Thượng Lãn Ông..." class="w-full px-3 py-2 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:border-[var(--accent-primary)] outline-none">
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs items-center">
+              <div>
+                <label class="font-medium text-[var(--text-secondary)] block mb-1">Loại địa chỉ</label>
+                <div class="flex items-center gap-2">
+                  <label class="flex items-center gap-1 text-[11px] cursor-pointer">
+                    <input type="radio" name="checkout-addr-label" value="home" checked class="text-orange-500">
+                    <span>Nhà riêng</span>
+                  </label>
+                  <label class="flex items-center gap-1 text-[11px] cursor-pointer">
+                    <input type="radio" name="checkout-addr-label" value="office" class="text-orange-500">
+                    <span>Cơ quan</span>
+                  </label>
+                  <label class="flex items-center gap-1 text-[11px] cursor-pointer">
+                    <input type="radio" name="checkout-addr-label" value="other" class="text-orange-500">
+                    <span>Khác</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="flex items-center gap-2 pt-3 sm:pt-0">
+                <input type="checkbox" id="checkout-save-address-chk" checked class="rounded text-[#D45B34] focus:ring-[#D45B34]">
+                <label for="checkout-save-address-chk" class="text-[11px] text-[var(--text-secondary)] cursor-pointer">
+                  Lưu vào sổ địa chỉ tài khoản
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. TÓM TẮT SẢN PHẨM & MÃ GIẢM GIÁ -->
+        <div class="p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] space-y-3">
+          <label class="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 uppercase tracking-wider">
+            <i class="fa-solid fa-cube text-[#D45B34]"></i>
+            <span>2. Tóm Tắt Sản Phẩm Đặt In</span>
+          </label>
+          <div id="checkout-summary-lines" class="space-y-1.5 max-h-36 overflow-y-auto pr-1"></div>
           
-          <div class="pt-2 border-t border-[var(--border-subtle)] space-y-1 text-xs">
-            <div class="flex justify-between text-[var(--text-secondary)]">
-              <span>Tiền hàng:</span>
-              <span id="checkout-total-subtotal" class="font-mono text-[var(--text-primary)]">0 đ</span>
+          <!-- Mã Giảm Giá -->
+          <div class="pt-2 border-t border-[var(--border-subtle)] flex items-center gap-2">
+            <div class="relative flex-1">
+              <i class="fa-solid fa-ticket absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500 text-xs"></i>
+              <input type="text" id="checkout-coupon-input" placeholder="Mã giảm giá (nếu có)" class="w-full pl-8 pr-3 py-1.5 rounded-xl bg-[var(--bg-surface)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] uppercase font-mono focus:border-[var(--accent-primary)] outline-none">
             </div>
-            <div class="flex justify-between text-[var(--text-secondary)]">
-              <span>Ưu đãi:</span>
-              <span id="checkout-total-discount" class="font-mono text-[var(--status-success)] font-bold">0 đ</span>
-            </div>
-            <div class="flex justify-between text-[var(--text-secondary)]">
-              <span>Phí vận chuyển:</span>
-              <span id="checkout-total-shipping" class="font-mono text-[var(--text-primary)]">25.000 đ</span>
-            </div>
-            <div class="flex justify-between font-bold text-sm text-[var(--text-primary)] pt-1 border-t border-[var(--border-subtle)]">
-              <span>Tổng thanh toán:</span>
-              <span id="checkout-total-grand" class="font-mono text-[var(--accent-primary)] text-base font-bold">0 đ</span>
-            </div>
+            <button type="button" id="checkout-coupon-apply-btn" class="px-3.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-semibold shrink-0 transition-colors cursor-pointer">
+              Áp dụng
+            </button>
+          </div>
+          <div id="checkout-coupon-msg" class="text-[11px] hidden font-medium"></div>
+        </div>
+
+        <!-- 3. PHƯƠNG THỨC THANH TOÁN -->
+        <div class="space-y-2">
+          <label class="text-xs font-bold text-[var(--text-primary)] flex items-center gap-1.5 uppercase tracking-wider">
+            <i class="fa-solid fa-credit-card text-[#D45B34]"></i>
+            <span>3. Phương Thức Thanh Toán</span>
+          </label>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+            <label class="p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] hover:border-[#D45B34]/60 flex items-start gap-2.5 cursor-pointer transition-colors">
+              <input type="radio" name="checkout-payment-method" value="cod" checked class="mt-0.5 text-orange-500">
+              <div>
+                <span class="font-bold text-[var(--text-primary)] block">Thanh toán khi nhận hàng (COD)</span>
+                <span class="text-[10px] text-[var(--text-secondary)]">Kiểm tra chi tiết phôi in 3D trước khi trả tiền</span>
+              </div>
+            </label>
+            <label class="p-3 rounded-xl border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)] hover:border-[#D45B34]/60 flex items-start gap-2.5 cursor-pointer transition-colors">
+              <input type="radio" name="checkout-payment-method" value="zalo" class="mt-0.5 text-orange-500">
+              <div>
+                <span class="font-bold text-[var(--text-primary)] block">Chuyển khoản &amp; Giữ hàng qua Zalo</span>
+                <span class="text-[10px] text-[var(--text-secondary)]">Trao đổi tiến độ in và video sản phẩm qua Zalo</span>
+              </div>
+            </label>
           </div>
         </div>
 
-        <!-- Customer Form -->
-        <div class="space-y-3 text-xs">
-          <div>
-            <label for="checkout-cust-name" class="font-bold text-[var(--text-primary)] block mb-1">Họ và Tên của bạn <span class="text-rose-500">*</span></label>
-            <input type="text" id="checkout-cust-name" placeholder="Nguyễn Văn A" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:border-[var(--accent-primary)] outline-none">
-          </div>
+        <!-- 4. GHI CHÚ ĐẶT HÀNG -->
+        <div class="space-y-1 text-xs">
+          <label for="checkout-cust-note" class="font-medium text-[var(--text-secondary)] block">Ghi chú giao hàng &amp; xưởng in 3D (nếu có)</label>
+          <input type="text" id="checkout-cust-note" placeholder="Chỉ dẫn đường, giờ nhận hoặc yêu cầu đóng hộp quà tặng..." class="w-full px-3 py-2 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] focus:border-[var(--accent-primary)] outline-none">
+        </div>
 
-          <div>
-            <label for="checkout-cust-phone" class="font-bold text-[var(--text-primary)] block mb-1">Số điện thoại liên hệ <span class="text-rose-500">*</span></label>
-            <input type="tel" id="checkout-cust-phone" placeholder="0349xxxxxx" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] font-mono focus:border-[var(--accent-primary)] outline-none">
+        <!-- 5. TỔNG THANH TOÁN -->
+        <div class="p-3.5 rounded-2xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] space-y-1.5 text-xs">
+          <div class="flex justify-between text-[var(--text-secondary)]">
+            <span>Tiền hàng:</span>
+            <span id="checkout-total-subtotal" class="font-mono text-[var(--text-primary)]">0 đ</span>
           </div>
-
-          <div>
-            <label for="checkout-cust-address" class="font-bold text-[var(--text-primary)] block mb-1">Địa chỉ nhận hàng chi tiết <span class="text-rose-500">*</span></label>
-            <input type="text" id="checkout-cust-address" placeholder="Số nhà, ngõ/đường, Phường/Xã, Quận/Huyện, Tỉnh/TP" class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:border-[var(--accent-primary)] outline-none">
+          <div class="flex justify-between text-[var(--text-secondary)]">
+            <span>Ưu đãi giảm giá:</span>
+            <span id="checkout-total-discount" class="font-mono text-[var(--status-success)] font-bold">0 đ</span>
           </div>
-
-          <div>
-            <label for="checkout-cust-note" class="font-bold text-[var(--text-primary)] block mb-1">Ghi chú thêm cho xưởng (nếu có)</label>
-            <input type="text" id="checkout-cust-note" placeholder="Yêu cầu giờ giao, đóng gói quà tặng..." class="w-full px-3.5 py-2.5 rounded-xl bg-[var(--bg-surface-elevated)] border border-[var(--border-subtle)] text-xs text-[var(--text-primary)] placeholder-[var(--text-tertiary)] focus:border-[var(--accent-primary)] outline-none">
+          <div class="flex justify-between text-[var(--text-secondary)]">
+            <span>Phí vận chuyển:</span>
+            <span id="checkout-total-shipping" class="font-mono text-[var(--text-primary)]">25.000 đ</span>
           </div>
-
-          <div class="flex items-center gap-2 pt-1">
-            <input type="checkbox" id="checkout-remember-me" class="rounded text-[var(--accent-primary)] focus:ring-[var(--accent-primary)]">
-            <label for="checkout-remember-me" class="text-[11px] text-[var(--text-secondary)] cursor-pointer">Ghi nhớ thông tin cho lần mua sau trên thiết bị này</label>
+          <div class="flex justify-between font-bold text-sm text-[var(--text-primary)] pt-1.5 border-t border-[var(--border-subtle)]">
+            <span>Tổng thanh toán:</span>
+            <span id="checkout-total-grand" class="font-mono text-[#D45B34] text-base font-bold">0 đ</span>
           </div>
         </div>
 
-        <!-- Action Submit Buttons -->
-        <div class="space-y-2 pt-2 border-t border-[var(--border-subtle)]">
-          <button type="button" id="checkout-btn-submit-cod" onclick="window.TTCheckout.submitCheckout('cod')" class="w-full btn-primary text-xs !py-3 !font-bold flex items-center justify-center gap-2">
-            <i class="fa-solid fa-truck-fast"></i>
-            <span>Xác Nhận Đặt Hàng COD (Kiểm Hàng Trước Khi Thanh Toán)</span>
+        <!-- Nút Xác Nhận Đặt Hàng Ngay -->
+        <div class="pt-2">
+          <button type="button" id="checkout-btn-submit-order" onclick="window.TTCheckout.submitCheckout()" class="w-full btn-primary text-xs !py-3.5 !font-bold flex items-center justify-center gap-2 shadow-lg shadow-orange-600/20 active:scale-[0.99] transition-all cursor-pointer">
+            <i class="fa-solid fa-lock"></i>
+            <span id="checkout-btn-submit-text">XÁC NHẬN ĐẶT HÀNG NGAY</span>
           </button>
-
-          <button type="button" id="checkout-btn-submit-zalo" onclick="window.TTCheckout.submitCheckout('zalo')" class="w-full btn-secondary text-xs !py-2.5 !font-semibold flex items-center justify-center gap-2">
-            <i class="fa-solid fa-comment-dots text-[var(--accent-primary)]"></i>
-            <span>Chuyển Đơn Qua Zalo Kỹ Thuật Viên</span>
-          </button>
+          <p class="text-[10px] text-center text-zinc-500 mt-2">
+            Được bảo mật mã hóa end-to-end · Hỗ trợ 1 đổi 1 mọi lỗi in từ xưởng T&amp;T 3D Studio
+          </p>
         </div>
       </div>
 
@@ -1397,11 +1500,11 @@
 
         <!-- Action Handoffs -->
         <div class="space-y-2 pt-2">
-          <button type="button" 
-                  onclick="window.TTCheckout.closeCheckoutModal(); window.switchWorkspace('view-tracking');" 
-                  class="w-full btn-primary text-xs !py-3 !font-bold flex items-center justify-center gap-2">
-            <i class="fa-solid fa-truck-fast"></i>
-            <span>Tra cứu yêu cầu đặt hàng. Ngay</span>
+          <button type="button" id="checkout-btn-view-my-orders"
+                  onclick="window.TTCheckout.closeCheckoutModal(); if (window.TTAccountManager) { window.TTAccountManager.openAccountModal(); window.TTAccountManager.switchAccountTab('orders'); } else { window.switchWorkspace('view-tracking'); }" 
+                  class="w-full btn-primary text-xs !py-3 !font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md">
+            <i class="fa-solid fa-box-archive"></i>
+            <span>Xem đơn hàng của tôi</span>
           </button>
 
           <a id="checkout-btn-open-zalo" aria-disabled="true" class="w-full btn-secondary text-xs !py-2.5 !font-semibold flex items-center justify-center gap-2 text-center">
@@ -1779,27 +1882,137 @@
           </div>
         </div>
 
-        <!-- SECTION 2: PROFILE FORM -->
+        <!-- SECTION 2: PROFILE & ADDRESS BOOK -->
         <div id="account-sec-profile" class="hidden space-y-4">
-          <div class="p-4 rounded-xl bg-zinc-900 border border-zinc-800 space-y-3">
-            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Thông tin giao hàng mặc định</h3>
+          
+          <!-- Sổ Địa Chỉ Giao Hàng -->
+          <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
+            <div class="flex items-center justify-between">
+              <div>
+                <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+                  <i class="fa-solid fa-address-book text-orange-500"></i>
+                  <span>Sổ địa chỉ giao hàng</span>
+                </h3>
+                <p class="text-[11px] text-zinc-400">Quản lý các địa chỉ nhận hàng để thanh toán nhanh 1-chạm</p>
+              </div>
+              <button type="button" id="account-btn-add-address" class="px-3 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>Thêm địa chỉ</span>
+              </button>
+            </div>
+
+            <!-- Danh sách địa chỉ đã lưu -->
+            <div id="account-address-list" class="space-y-2.5 pt-1">
+              <!-- Rendered dynamically by TTAccountManager -->
+            </div>
+          </div>
+
+          <!-- Thông tin tài khoản cơ bản -->
+          <div class="p-4 rounded-2xl bg-zinc-900 border border-zinc-800 space-y-3">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider flex items-center gap-2">
+              <i class="fa-regular fa-user text-orange-500"></i>
+              <span>Hồ sơ cá nhân</span>
+            </h3>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
               <div>
                 <label class="block text-zinc-400 text-[11px] mb-1">Họ và tên</label>
-                <input type="text" id="profile-name" class="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:outline-none">
+                <input type="text" id="profile-name" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:outline-none focus:border-orange-500">
               </div>
               <div>
                 <label class="block text-zinc-400 text-[11px] mb-1">Số điện thoại</label>
-                <input type="tel" id="profile-phone" class="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:outline-none">
+                <input type="tel" id="profile-phone" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:outline-none focus:border-orange-500 font-mono">
               </div>
             </div>
-            <div>
-              <label class="block text-zinc-400 text-[11px] mb-1">Địa chỉ nhận hàng chi tiết</label>
-              <textarea id="profile-address" rows="2" class="w-full px-3 py-2 rounded-lg bg-zinc-800 border border-zinc-700 text-white focus:outline-none text-xs"></textarea>
+            <div class="pt-1">
+              <button type="button" id="profile-save-btn" class="px-4 py-2 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white text-xs font-bold transition-colors cursor-pointer">
+                Cập nhật hồ sơ
+              </button>
             </div>
-            <button type="button" class="px-4 py-2 rounded-lg bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition-colors">
-              Lưu thay đổi hồ sơ
-            </button>
+          </div>
+
+          <!-- Modal con: Thêm / Sửa Địa Chỉ trong Sổ Địa Chỉ -->
+          <div id="account-address-form-modal" class="fixed inset-0 z-[150] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+            <div class="w-full max-w-md bg-[#18181C] border border-zinc-700 rounded-3xl p-5 space-y-3.5 text-xs text-white shadow-2xl">
+              <div class="flex items-center justify-between border-b border-zinc-800 pb-2.5">
+                <h4 id="account-address-form-title" class="font-bold text-sm text-white">Thêm địa chỉ giao hàng</h4>
+                <button type="button" id="account-address-form-close" class="w-7 h-7 rounded-lg bg-zinc-800 hover:bg-zinc-700 text-zinc-400 hover:text-white flex items-center justify-center">
+                  <i class="fa-solid fa-xmark text-xs"></i>
+                </button>
+              </div>
+
+              <input type="hidden" id="account-addr-edit-id" value="">
+
+              <div>
+                <label class="block text-[11px] text-zinc-400 mb-1">Loại địa chỉ</label>
+                <div class="flex items-center gap-3">
+                  <label class="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="account-addr-label" value="home" checked class="text-orange-500">
+                    <span>Nhà riêng</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="account-addr-label" value="office" class="text-orange-500">
+                    <span>Cơ quan</span>
+                  </label>
+                  <label class="flex items-center gap-1.5 cursor-pointer">
+                    <input type="radio" name="account-addr-label" value="other" class="text-orange-500">
+                    <span>Khác</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11px] text-zinc-400 mb-1">Họ tên người nhận <span class="text-rose-500">*</span></label>
+                  <input type="text" id="account-addr-name" placeholder="Nguyễn Văn A" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:border-orange-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-[11px] text-zinc-400 mb-1">Số điện thoại <span class="text-rose-500">*</span></label>
+                  <input type="tel" id="account-addr-phone" placeholder="0349xxxxxx" class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:border-orange-500 outline-none font-mono">
+                </div>
+              </div>
+
+              <!-- 2 Cấp hành chính -->
+              <div class="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label class="block text-[11px] text-zinc-400 mb-1">Tỉnh / Thành phố <span class="text-rose-500">*</span></label>
+                  <select id="account-addr-province" class="w-full px-2.5 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:border-orange-500 outline-none cursor-pointer">
+                    <option value="">-- Chọn Tỉnh --</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-[11px] text-zinc-400 mb-1">Phường / Xã <span class="text-rose-500">*</span></label>
+                  <select id="account-addr-ward" class="w-full px-2.5 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:border-orange-500 outline-none cursor-pointer" disabled>
+                    <option value="">-- Chọn Tỉnh trước --</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-[11px] text-zinc-400 mb-1">Số nhà, đường, xóm, tòa nhà <span class="text-rose-500">*</span></label>
+                <input type="text" id="account-addr-line" placeholder="Số 12 đường..." class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:border-orange-500 outline-none">
+              </div>
+
+              <div>
+                <label class="block text-[11px] text-zinc-400 mb-1">Ghi chú giao hàng (nếu có)</label>
+                <input type="text" id="account-addr-note" placeholder="Chỉ dẫn ngõ, đối diện trường..." class="w-full px-3 py-2 rounded-xl bg-zinc-800 border border-zinc-700 text-white focus:border-orange-500 outline-none">
+              </div>
+
+              <div class="flex items-center gap-2 pt-1">
+                <input type="checkbox" id="account-addr-default" class="rounded text-orange-500 focus:ring-orange-500">
+                <label for="account-addr-default" class="text-[11px] text-zinc-300 cursor-pointer">Đặt làm địa chỉ giao hàng mặc định</label>
+              </div>
+
+              <div id="account-addr-error" class="p-2.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 text-[11px] hidden"></div>
+
+              <div class="flex items-center justify-end gap-2 pt-2 border-t border-zinc-800">
+                <button type="button" id="account-addr-cancel-btn" class="px-3.5 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-zinc-300 text-xs transition-colors">
+                  Hủy
+                </button>
+                <button type="button" id="account-addr-submit-btn" class="px-4 py-1.5 rounded-xl bg-orange-600 hover:bg-orange-500 text-white text-xs font-bold transition-colors">
+                  Lưu địa chỉ
+                </button>
+              </div>
+            </div>
           </div>
         </div>
 

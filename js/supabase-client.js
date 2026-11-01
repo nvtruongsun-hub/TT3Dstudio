@@ -426,6 +426,27 @@
     return { ok: true, message: 'Cập nhật mật khẩu thành công!' };
   }
 
+  async function updateProfile({ fullName, phone }) {
+    const client = getClient();
+    if (client) {
+      try {
+        const data = {};
+        if (fullName !== undefined) data.full_name = fullName;
+        if (phone !== undefined) data.phone = phone;
+        const { data: resData, error } = await client.auth.updateUser({ data });
+        if (error) return { ok: false, error: mapAuthError(error) };
+        if (resData && resData.user) {
+          currentUser = resData.user;
+          notifyAuthListeners(currentUser);
+        }
+        return { ok: true, user: currentUser };
+      } catch (e) {
+        return { ok: false, error: mapAuthError(e) };
+      }
+    }
+    return { ok: true };
+  }
+
   function getUser() {
     return currentUser;
   }
@@ -552,7 +573,15 @@
           p_payment_method: payment_method,
           p_coupon_code: coupon_code || null,
           p_customer_note: customer_note || null,
-          p_idempotency_key: idempotency_key || null
+          p_idempotency_key: idempotency_key || null,
+          p_address_id: orderPayload.address_id || null,
+          p_save_address: !!orderPayload.save_address,
+          p_province_code: orderPayload.province_code || null,
+          p_province_name: orderPayload.province_name || null,
+          p_ward_code: orderPayload.ward_code || null,
+          p_ward_name: orderPayload.ward_name || null,
+          p_address_line: orderPayload.address_line || null,
+          p_address_label: orderPayload.address_label || 'home'
         });
 
         if (error) {
@@ -732,6 +761,154 @@
     };
   }
 
+  /**
+   * Smart Address Management APIs
+   */
+  async function getCustomerAddresses() {
+    if (!isAuthenticated()) {
+      return { ok: false, error: 'Vui lòng đăng nhập để xem sổ địa chỉ.' };
+    }
+    const client = getClient();
+    if (client) {
+      try {
+        const { data, error } = await client
+          .from('customer_addresses')
+          .select('*')
+          .order('is_default', { ascending: false })
+          .order('created_at', { ascending: false });
+        if (error) return { ok: false, error: error.message };
+        return { ok: true, addresses: data || [] };
+      } catch (e) {
+        console.warn('[TTSupabase] Addresses fetch error:', e);
+      }
+    }
+    return { ok: true, addresses: [] };
+  }
+
+  async function addCustomerAddress(addr) {
+    if (!isAuthenticated()) {
+      return { ok: false, error: 'Vui lòng đăng nhập để thêm địa chỉ.' };
+    }
+    const client = getClient();
+    const user = getUser();
+    if (client && user) {
+      try {
+        if (addr.is_default) {
+          await client
+            .from('customer_addresses')
+            .update({ is_default: false })
+            .eq('user_id', user.id);
+        }
+        const { data, error } = await client
+          .from('customer_addresses')
+          .insert([{
+            user_id: user.id,
+            label: addr.label || 'home',
+            recipient_name: addr.recipient_name,
+            recipient_phone: addr.recipient_phone,
+            province_code: addr.province_code,
+            province_name: addr.province_name,
+            ward_code: addr.ward_code,
+            ward_name: addr.ward_name,
+            address_line: addr.address_line,
+            delivery_note: addr.delivery_note || null,
+            is_default: !!addr.is_default
+          }])
+          .select()
+          .single();
+        if (error) return { ok: false, error: error.message };
+        return { ok: true, address: data };
+      } catch (e) {
+        return { ok: false, error: e.message };
+      }
+    }
+    return { ok: false, error: 'Client không khả dụng.' };
+  }
+
+  async function updateCustomerAddress(id, addr) {
+    if (!isAuthenticated()) return { ok: false, error: 'Chưa đăng nhập.' };
+    const client = getClient();
+    const user = getUser();
+    if (client && user) {
+      try {
+        if (addr.is_default) {
+          await client
+            .from('customer_addresses')
+            .update({ is_default: false })
+            .eq('user_id', user.id)
+            .neq('id', id);
+        }
+        const { data, error } = await client
+          .from('customer_addresses')
+          .update({
+            label: addr.label,
+            recipient_name: addr.recipient_name,
+            recipient_phone: addr.recipient_phone,
+            province_code: addr.province_code,
+            province_name: addr.province_name,
+            ward_code: addr.ward_code,
+            ward_name: addr.ward_name,
+            address_line: addr.address_line,
+            delivery_note: addr.delivery_note,
+            is_default: addr.is_default
+          })
+          .eq('id', id)
+          .eq('user_id', user.id)
+          .select()
+          .single();
+        if (error) return { ok: false, error: error.message };
+        return { ok: true, address: data };
+      } catch (e) {
+        return { ok: false, error: e.message };
+      }
+    }
+    return { ok: false, error: 'Client không khả dụng.' };
+  }
+
+  async function deleteCustomerAddress(id) {
+    if (!isAuthenticated()) return { ok: false, error: 'Chưa đăng nhập.' };
+    const client = getClient();
+    const user = getUser();
+    if (client && user) {
+      try {
+        const { error } = await client
+          .from('customer_addresses')
+          .delete()
+          .eq('id', id)
+          .eq('user_id', user.id);
+        if (error) return { ok: false, error: error.message };
+        return { ok: true };
+      } catch (e) {
+        return { ok: false, error: e.message };
+      }
+    }
+    return { ok: false, error: 'Client không khả dụng.' };
+  }
+
+  async function setDefaultCustomerAddress(id) {
+    if (!isAuthenticated()) return { ok: false, error: 'Chưa đăng nhập.' };
+    const client = getClient();
+    const user = getUser();
+    if (client && user) {
+      try {
+        await client
+          .from('customer_addresses')
+          .update({ is_default: false })
+          .eq('user_id', user.id);
+        const { error } = await client
+          .from('customer_addresses')
+          .update({ is_default: true })
+          .eq('id', id)
+          .eq('user_id', user.id);
+        if (error) return { ok: false, error: error.message };
+        return { ok: true };
+      } catch (e) {
+        return { ok: false, error: e.message };
+      }
+    }
+    return { ok: false, error: 'Client không khả dụng.' };
+  }
+
   // Export module
   window.TTSupabase = {
     signUp,
@@ -740,6 +917,7 @@
     signOut,
     resetPassword,
     updatePassword,
+    updateProfile,
     getUser,
     getSession,
     isAuthenticated,
@@ -749,7 +927,12 @@
     setMockSession,
     createOrder,
     getCustomerOrders,
-    updateOrderStatusAdmin
+    updateOrderStatusAdmin,
+    getCustomerAddresses,
+    addCustomerAddress,
+    updateCustomerAddress,
+    deleteCustomerAddress,
+    setDefaultCustomerAddress
   };
 
 })(typeof window !== 'undefined' ? window : global);

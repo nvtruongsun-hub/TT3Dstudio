@@ -389,6 +389,229 @@
    * @param {number} discountPercent - Mức giảm giá áp dụng
    * @param {Object} options - Tùy chọn nguồn { source: 'cart' | 'direct' }
    */
+  
+  /**
+   * Khởi tạo và đồng bộ dropdown 2 cấp hành chính (Tỉnh/Thành phố & Phường/Xã)
+   */
+  function initAdminDropdowns() {
+    if (typeof document === 'undefined') return;
+    const provSelect = document.getElementById('checkout-province-select');
+    const wardSelect = document.getElementById('checkout-ward-select');
+    if (!provSelect || !wardSelect) return;
+
+    // Chỉ điền tỉnh nếu chưa có options
+    const optLen = (provSelect.options ? provSelect.options.length : 0);
+    if (optLen <= 1 && window.VNAdmin && Array.isArray(window.VNAdmin.ALL_PROVINCES)) {
+      provSelect.innerHTML = '<option value="">-- Chọn Tỉnh / Thành phố --</option>';
+      window.VNAdmin.ALL_PROVINCES.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.code;
+        opt.textContent = p.name;
+        provSelect.appendChild(opt);
+      });
+    }
+
+    provSelect.onchange = function () {
+      const pCode = provSelect.value;
+      if (!pCode || !window.VNAdmin) {
+        wardSelect.innerHTML = '<option value="">-- Chọn Tỉnh trước --</option>';
+        wardSelect.disabled = true;
+        return;
+      }
+      const wards = window.VNAdmin.getWardsByProvince(pCode);
+      wardSelect.innerHTML = '<option value="">-- Chọn Phường / Xã / Đặc khu --</option>';
+      wards.forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w.code;
+        opt.textContent = w.name + (w.old_district ? ' (' + w.old_district + ')' : '');
+        wardSelect.appendChild(opt);
+      });
+      wardSelect.disabled = false;
+      updateCheckoutTotalsDisplay();
+    };
+  }
+
+  /**
+   * Cập nhật hiển thị tổng tiền & chiết khấu trong Checkout
+   */
+  function updateCheckoutTotalsDisplay() {
+    if (!currentCheckoutContext) return;
+    const totals = calculateOrderTotals(currentCheckoutContext.items, currentCheckoutContext.discountPercent);
+
+    const subtotalEl = document.getElementById('checkout-total-subtotal') || document.getElementById('checkout-subtotal-val');
+    if (subtotalEl) subtotalEl.textContent = formatMoney(totals.subtotal);
+
+    const discountEl = document.getElementById('checkout-total-discount') || document.getElementById('checkout-discount-val');
+    if (discountEl) {
+      discountEl.textContent = totals.discountAmount > 0 ? `-${formatMoney(totals.discountAmount)}` : '0 đ';
+    }
+
+    const shipEl = document.getElementById('checkout-total-shipping') || document.getElementById('checkout-shipping-val');
+    if (shipEl) {
+      shipEl.textContent = totals.shippingFee === 0 ? 'Miễn phí (Freeship)' : formatMoney(totals.shippingFee);
+    }
+
+    const grandEl = document.getElementById('checkout-total-grand') || document.getElementById('checkout-total-val');
+    if (grandEl) grandEl.textContent = formatMoney(totals.finalTotal);
+  }
+
+  /**
+   * Chuyển đổi giữa chế độ Chọn địa chỉ đã lưu và Nhập địa chỉ mới
+   */
+  function toggleCheckoutAddressMode() {
+    if (!currentCheckoutContext) return;
+    const savedView = document.getElementById('checkout-saved-addresses-view');
+    const newView = document.getElementById('checkout-new-address-view');
+    const toggleBtn = document.getElementById('checkout-btn-toggle-address-mode');
+
+    if (currentCheckoutContext.addressMode === 'saved') {
+      currentCheckoutContext.addressMode = 'new';
+      if (savedView) savedView.classList.add('hidden');
+      if (newView) newView.classList.remove('hidden');
+      if (toggleBtn) toggleBtn.textContent = '← Chọn địa chỉ đã lưu';
+    } else {
+      currentCheckoutContext.addressMode = 'saved';
+      if (savedView) savedView.classList.remove('hidden');
+      if (newView) newView.classList.add('hidden');
+      if (toggleBtn) toggleBtn.textContent = '+ Nhập địa chỉ mới';
+    }
+  }
+
+  /**
+   * Hiển thị Sổ địa chỉ thông minh trong Checkout Modal
+   */
+  async function renderCheckoutAddressBook() {
+    if (typeof document === 'undefined') return;
+    initAdminDropdowns();
+
+    const savedView = document.getElementById('checkout-saved-addresses-view');
+    const newView = document.getElementById('checkout-new-address-view');
+    const cardsContainer = document.getElementById('checkout-saved-address-cards');
+    const toggleBtn = document.getElementById('checkout-btn-toggle-address-mode');
+
+    let addresses = [];
+    if (window.TTAddressBook && typeof window.TTAddressBook.loadAddresses === 'function') {
+      addresses = await window.TTAddressBook.loadAddresses();
+    }
+
+    if (Array.isArray(addresses) && addresses.length > 0) {
+      // Khách đã có địa chỉ lưu
+      currentCheckoutContext.addressMode = 'saved';
+      if (savedView) savedView.classList.remove('hidden');
+      if (newView) newView.classList.add('hidden');
+      if (toggleBtn) {
+        toggleBtn.classList.remove('hidden');
+        toggleBtn.textContent = '+ Nhập địa chỉ mới';
+      }
+
+      // Xác định địa chỉ được chọn ban đầu (mặc định hoặc địa chỉ đầu tiên)
+      const defaultAddr = addresses.find(a => a.is_default) || addresses[0];
+      currentCheckoutContext.selectedAddressId = defaultAddr.id;
+
+      if (cardsContainer) {
+        cardsContainer.innerHTML = '';
+        addresses.forEach(addr => {
+          const isSelected = addr.id === currentCheckoutContext.selectedAddressId;
+          const meta = window.TTAddressBook.getLabelMeta(addr.label);
+          const fullAddrText = window.TTAddressBook.formatFullAddress(addr);
+
+          const card = document.createElement('div');
+          card.className = `p-3 rounded-2xl border transition-all cursor-pointer ${
+            isSelected
+              ? 'bg-[#D45B34]/5 border-[#D45B34] shadow-xs'
+              : 'bg-[var(--bg-surface-elevated)] border-[var(--border-subtle)] hover:border-zinc-400'
+          }`;
+
+          card.onclick = () => {
+            currentCheckoutContext.selectedAddressId = addr.id;
+            renderCheckoutAddressBook();
+          };
+
+          card.innerHTML = `
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <input type="radio" name="checkout-addr-select" ${isSelected ? 'checked' : ''} class="text-[#D45B34] focus:ring-[#D45B34] pointer-events-none mt-0.5">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] font-bold ${meta.badgeClass}">
+                  <i class="fa-solid ${meta.icon}"></i>
+                  <span>${meta.name}</span>
+                </span>
+                ${addr.is_default ? '<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/15 text-amber-500 border border-amber-500/30">Mặc định</span>' : ''}
+              </div>
+              <span class="text-xs font-mono font-bold text-[var(--text-primary)]">${addr.recipient_phone}</span>
+            </div>
+            <div class="mt-1.5 pl-5 space-y-0.5 text-xs">
+              <div class="font-bold text-[var(--text-primary)]">${escapeHtml(addr.recipient_name)}</div>
+              <div class="text-[var(--text-secondary)] text-[11px] leading-relaxed">${escapeHtml(fullAddrText)}</div>
+              ${addr.delivery_note ? `<div class="text-[10px] text-zinc-400 italic"><i class="fa-solid fa-note-sticky mr-1"></i>${escapeHtml(addr.delivery_note)}</div>` : ''}
+            </div>
+          `;
+
+          cardsContainer.appendChild(card);
+        });
+      }
+    } else {
+      // Khách chưa có địa chỉ lưu -> Hiện form nhập địa chỉ mới
+      currentCheckoutContext.addressMode = 'new';
+      if (savedView) savedView.classList.add('hidden');
+      if (newView) newView.classList.remove('hidden');
+      if (toggleBtn) toggleBtn.classList.add('hidden');
+
+      // Tự động điền họ tên, số điện thoại từ tài khoản nếu có
+      const currentUser = (window.TTSupabase && typeof window.TTSupabase.getUser === 'function')
+        ? window.TTSupabase.getUser()
+        : null;
+
+      const nameInput = document.getElementById('checkout-cust-name');
+      const phoneInput = document.getElementById('checkout-cust-phone');
+      if (currentUser && currentUser.user_metadata) {
+        if (nameInput && !nameInput.value) nameInput.value = currentUser.user_metadata.full_name || '';
+        if (phoneInput && !phoneInput.value) phoneInput.value = currentUser.user_metadata.phone || '';
+      }
+    }
+  }
+
+  /**
+   * Áp dụng mã giảm giá
+   */
+  function applyCheckoutCoupon() {
+    if (!currentCheckoutContext) return;
+    const input = document.getElementById('checkout-coupon-input');
+    const msg = document.getElementById('checkout-coupon-msg');
+    const code = input ? input.value.trim().toUpperCase() : '';
+
+    if (!code) {
+      currentCheckoutContext.discountPercent = 0;
+      updateCheckoutTotalsDisplay();
+      if (msg) {
+        msg.className = 'text-[11px] text-zinc-400 font-medium block';
+        msg.textContent = 'Đã hủy mã giảm giá.';
+      }
+      return;
+    }
+
+    // Danh mục mã ưu đãi T&T 3D Studio
+    const coupons = {
+      'TT3D10': { percent: 10, note: 'Giảm 10% đơn hàng chào mừng' },
+      'GIAM10': { percent: 10, note: 'Ưu đãi 10% khách hàng mới' },
+      'TT3D15': { percent: 15, note: 'Giảm 15% tri ân khách hàng thân thiết' },
+      'TT3D20': { percent: 20, note: 'Ưu đãi đặc biệt 20% xưởng in' }
+    };
+
+    if (coupons[code]) {
+      currentCheckoutContext.discountPercent = coupons[code].percent;
+      updateCheckoutTotalsDisplay();
+      if (msg) {
+        msg.className = 'text-[11px] text-emerald-500 font-medium block';
+        msg.textContent = `✓ Áp dụng mã ${code}: ${coupons[code].note}`;
+      }
+    } else {
+      if (msg) {
+        msg.className = 'text-[11px] text-rose-500 font-medium block';
+        msg.textContent = 'Mã giảm giá không hợp lệ hoặc đã hết hạn.';
+      }
+    }
+  }
+
   function openCheckoutModal(items, discountPercent = 0, options = {}) {
     if (!Array.isArray(items) || items.length === 0) {
       if (typeof alert === 'function') {
@@ -449,6 +672,8 @@
       discountPercent: Math.min(100, Math.max(0, parseInt(discountPercent, 10) || 0)),
       clientRequestId: generateOrderId(),
       state: 'editing',
+      addressMode: 'saved', // 'saved' hoặc 'new'
+      selectedAddressId: null,
       createdAt: new Date().toISOString()
     };
 
@@ -464,25 +689,8 @@
     const totals = calculateOrderTotals(currentCheckoutContext.items, currentCheckoutContext.discountPercent);
     const saved = getSavedCustomerPreferences();
 
-    // Điền thông tin khách hàng nếu đã lưu
-    const nameInput = document.getElementById('checkout-cust-name');
-    const phoneInput = document.getElementById('checkout-cust-phone');
-    const addrInput = document.getElementById('checkout-cust-address') || document.getElementById('checkout-cust-addr');
-    const noteInput = document.getElementById('checkout-cust-note');
-    const rememberCheckbox = document.getElementById('checkout-remember-me');
-
-    if (saved) {
-      if (nameInput) nameInput.value = saved.name || '';
-      if (phoneInput) phoneInput.value = saved.phone || '';
-      if (addrInput) addrInput.value = saved.address || '';
-      if (rememberCheckbox) rememberCheckbox.checked = true;
-    } else {
-      if (nameInput) nameInput.value = '';
-      if (phoneInput) phoneInput.value = '';
-      if (addrInput) addrInput.value = '';
-      if (noteInput) noteInput.value = '';
-      if (rememberCheckbox) rememberCheckbox.checked = false;
-    }
+    // Tải và hiển thị Sổ địa chỉ thông minh
+    renderCheckoutAddressBook();
 
     // Hiển thị tóm tắt danh sách mặt hàng (An toàn XSS)
     const summaryContainer = document.getElementById('checkout-summary-lines') || document.getElementById('checkout-summary-container');
@@ -598,43 +806,119 @@
       return;
     }
 
-    const nameInput = document.getElementById('checkout-cust-name');
-    const phoneInput = document.getElementById('checkout-cust-phone');
-    const addrInput = document.getElementById('checkout-cust-address') || document.getElementById('checkout-cust-addr');
-    const noteInput = document.getElementById('checkout-cust-note');
-    const rememberCheckbox = document.getElementById('checkout-remember-me');
+    // Xác định kênh thanh toán (từ radio hoặc từ đối số)
+    const selectedPaymentRadio = (typeof document !== 'undefined' && typeof document.querySelector === 'function')
+      ? document.querySelector('input[name="checkout-payment-method"]:checked')
+      : null;
+    const finalChannel = selectedPaymentRadio ? selectedPaymentRadio.value : (channel || 'cod');
 
-    const name = nameInput ? nameInput.value.trim() : '';
-    const rawPhone = phoneInput ? phoneInput.value.trim() : '';
-    const address = addrInput ? addrInput.value.trim() : '';
-    const note = noteInput ? noteInput.value.trim() : '';
-    const remember = rememberCheckbox ? rememberCheckbox.checked : false;
+    let recipientName = '';
+    let recipientPhone = '';
+    let fullShippingAddress = '';
+    let addressId = null;
+    let provinceCode = null;
+    let provinceName = null;
+    let wardCode = null;
+    let wardName = null;
+    let addressLine = null;
+    let addressLabel = 'home';
+    let saveAddress = false;
+    let deliveryNote = '';
 
-    // Validate tên
-    if (!name) {
-      if (typeof alert === 'function') alert('Vui lòng nhập Họ và Tên của bạn.');
-      if (nameInput) nameInput.focus();
-      return;
-    }
+    const noteInput = (typeof document !== 'undefined') ? document.getElementById('checkout-cust-note') : null;
+    deliveryNote = noteInput ? noteInput.value.trim() : '';
 
-    // Chuẩn hóa và validate số điện thoại (Chuẩn di động Việt Nam)
-    const cleanPhone = rawPhone.replace(/[\s.-]/g, '');
-    const phoneRegex = /^(?:0|\+84)(?:3|5|7|8|9)\d{8}$/;
-    if (!phoneRegex.test(cleanPhone)) {
-      if (typeof alert === 'function') alert('Vui lòng nhập số điện thoại hợp lệ (10 chữ số) để kỹ thuật viên liên hệ.');
-      if (phoneInput) phoneInput.focus();
-      return;
-    }
+    // Phân nhánh đọc địa chỉ: Đã lưu (Saved) hoặc Nhập mới (New)
+    if (currentCheckoutContext.addressMode === 'saved') {
+      const addresses = (window.TTAddressBook && window.TTAddressBook.addresses) ? window.TTAddressBook.addresses : [];
+      const selected = addresses.find(a => a.id === currentCheckoutContext.selectedAddressId) || addresses.find(a => a.is_default) || addresses[0];
 
-    // Validate địa chỉ
-    if (!address) {
-      if (typeof alert === 'function') alert('Vui lòng nhập địa chỉ nhận hàng.');
-      if (addrInput) addrInput.focus();
-      return;
+      if (!selected) {
+        if (typeof alert === 'function') alert('Vui lòng chọn hoặc thêm địa chỉ nhận hàng.');
+        return;
+      }
+
+      addressId = selected.id;
+      recipientName = selected.recipient_name;
+      recipientPhone = selected.recipient_phone;
+      provinceCode = selected.province_code;
+      provinceName = selected.province_name;
+      wardCode = selected.ward_code;
+      wardName = selected.ward_name;
+      addressLine = selected.address_line;
+      addressLabel = selected.label || 'home';
+      fullShippingAddress = window.TTAddressBook ? window.TTAddressBook.formatFullAddress(selected) : `${addressLine}, ${wardName}, ${provinceName}`;
+      if (!deliveryNote && selected.delivery_note) deliveryNote = selected.delivery_note;
+    } else {
+      // Chế độ nhập địa chỉ mới (2 cấp hành chính)
+      const nameInput = document.getElementById('checkout-cust-name');
+      const phoneInput = document.getElementById('checkout-cust-phone');
+      const provSelect = document.getElementById('checkout-province-select');
+      const wardSelect = document.getElementById('checkout-ward-select');
+      const lineInput = document.getElementById('checkout-cust-address-line') || document.getElementById('checkout-cust-address');
+      const saveChk = document.getElementById('checkout-save-address-chk');
+      const labelRadio = (typeof document !== 'undefined' && typeof document.querySelector === 'function')
+        ? document.querySelector('input[name="checkout-addr-label"]:checked')
+        : null;
+
+      recipientName = nameInput ? nameInput.value.trim() : '';
+      const rawPhone = phoneInput ? phoneInput.value.trim() : '';
+      provinceCode = provSelect ? provSelect.value : '';
+      provinceName = (provSelect && provSelect.selectedIndex >= 0) ? provSelect.options[provSelect.selectedIndex].textContent : '';
+      wardCode = wardSelect ? wardSelect.value : '';
+      wardName = (wardSelect && wardSelect.selectedIndex >= 0) ? wardSelect.options[wardSelect.selectedIndex].textContent : '';
+      addressLine = lineInput ? lineInput.value.trim() : '';
+      addressLabel = labelRadio ? labelRadio.value : 'home';
+      saveAddress = saveChk ? saveChk.checked : false;
+
+      // Validate tên người nhận
+      if (!recipientName) {
+        if (typeof alert === 'function') alert('Vui lòng nhập Họ và Tên người nhận hàng.');
+        if (nameInput) nameInput.focus();
+        return;
+      }
+
+      // Chuẩn hóa và validate số điện thoại
+      recipientPhone = rawPhone.replace(/[\s.-]/g, '');
+      const phoneRegex = /^(?:0|\+84)(?:3|5|7|8|9)\d{8}$/;
+      if (!phoneRegex.test(recipientPhone)) {
+        if (typeof alert === 'function') alert('Vui lòng nhập số điện thoại hợp lệ (10 chữ số) để kỹ thuật viên liên hệ.');
+        if (phoneInput) phoneInput.focus();
+        return;
+      }
+
+      // Validate 2 cấp hành chính (nếu có dropdown)
+      if (provSelect && !provinceCode) {
+        if (typeof alert === 'function') alert('Vui lòng chọn Tỉnh / Thành phố nhận hàng.');
+        provSelect.focus();
+        return;
+      }
+
+      if (wardSelect && !wardCode && !wardSelect.disabled) {
+        if (typeof alert === 'function') alert('Vui lòng chọn Phường / Xã / Đặc khu nhận hàng.');
+        wardSelect.focus();
+        return;
+      }
+
+      // Validate số nhà, tên đường
+      if (!addressLine) {
+        if (typeof alert === 'function') alert('Vui lòng nhập số nhà, ngõ/đường hoặc thôn xóm.');
+        if (lineInput) lineInput.focus();
+        return;
+      }
+
+      const parts = [addressLine];
+      if (wardName && !wardName.includes('--')) parts.push(wardName);
+      if (provinceName && !provinceName.includes('--')) parts.push(provinceName);
+      fullShippingAddress = parts.join(', ');
     }
 
     // Đánh dấu trạng thái submitting
     currentCheckoutContext.state = 'submitting';
+
+    // Cập nhật nút bấm sang trạng thái loading
+    const submitBtnText = document.getElementById('checkout-btn-submit-text');
+    if (submitBtnText) submitBtnText.textContent = 'ĐANG XỬ LÝ ĐẶT HÀNG...';
 
     // Tính toán lại tổng tiền từ context
     const totals = calculateOrderTotals(currentCheckoutContext.items, currentCheckoutContext.discountPercent);
@@ -644,14 +928,14 @@
       schemaVersion: 1,
       clientRequestId: orderId,
       createdAt: new Date().toISOString(),
-      channel: channel || 'zalo', // 'zalo' hoặc 'cod'
-      source: currentCheckoutContext.source, // 'direct' hoặc 'cart'
+      channel: finalChannel,
+      source: currentCheckoutContext.source,
       status: 'handoff_ready',
       customer: {
-        name,
-        phone: cleanPhone,
-        address,
-        note
+        name: recipientName,
+        phone: recipientPhone,
+        address: fullShippingAddress,
+        note: deliveryNote
       },
       items: currentCheckoutContext.items.map(i => ({
         id: i.id,
@@ -674,7 +958,7 @@
       try {
         const serverRes = await window.TTSupabase.createOrder({
           idempotency_key: orderId,
-          payment_method: channel || 'cod',
+          payment_method: finalChannel,
           items: currentCheckoutContext.items.map(i => ({
             product_id: i.id,
             quantity: i.qty,
@@ -685,26 +969,49 @@
               font_id: i.fontId
             }
           })),
-          shipping_name: name,
-          shipping_phone: cleanPhone,
-          shipping_address: address,
-          customer_note: note
+          shipping_name: recipientName,
+          shipping_phone: recipientPhone,
+          shipping_address: fullShippingAddress,
+          customer_note: deliveryNote,
+          address_id: addressId,
+          save_address: saveAddress,
+          province_code: provinceCode,
+          province_name: provinceName,
+          ward_code: wardCode,
+          ward_name: wardName,
+          address_line: addressLine,
+          address_label: addressLabel
         });
 
         if (!serverRes.ok) {
           currentCheckoutContext.state = 'editing';
+          if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';
           if (typeof alert === 'function') {
             alert(serverRes.error || 'Đặt hàng không thành công. Giỏ hàng của bạn được bảo lưu.');
           }
           return;
         }
+
         if (serverRes.order_number) {
           orderRecord.orderNumber = serverRes.order_number;
         }
+
+        // REQUIREMENT 6: Xóa giỏ hàng an toàn CHỈ KHI backend xác nhận thành công
+        if (currentCheckoutContext.source === 'cart' && window.TTCart && typeof window.TTCart.clearCart === 'function') {
+          window.TTCart.clearCart();
+        }
+
+        // Tải lại sổ địa chỉ nếu vừa lưu địa chỉ mới
+        if (saveAddress && window.TTAddressBook && typeof window.TTAddressBook.loadAddresses === 'function') {
+          window.TTAddressBook.loadAddresses(true).catch(() => {});
+        }
+
       } catch (err) {
         console.warn('[Checkout] Supabase RPC execution error:', err);
       }
     }
+
+    if (submitBtnText) submitBtnText.textContent = 'XÁC NHẬN ĐẶT HÀNG NGAY';
 
     // Lưu vào draft storage và thông tin ghi nhớ với contract chặt chẽ (Codex F03)
     const saved = saveOrderDraft(orderRecord);
@@ -717,7 +1024,7 @@
       return;
     }
 
-    saveCustomerPreferences({ name, phone: cleanPhone, address }, remember);
+    saveCustomerPreferences({ name: recipientName, phone: recipientPhone, address: fullShippingAddress }, saveAddress);
     currentCheckoutContext.state = 'handoff_ready';
 
     // Gửi sự kiện phân tích purchase / order_submitted an toàn
@@ -865,6 +1172,21 @@
     const closeBtn = document.getElementById('checkout-close-btn');
     const submitZaloBtn = document.getElementById('checkout-submit-zalo');
     const submitCodBtn = document.getElementById('checkout-submit-cod');
+    const submitOrderBtn = document.getElementById('checkout-btn-submit-order');
+    const toggleAddrBtn = document.getElementById('checkout-btn-toggle-address-mode');
+    const applyCouponBtn = document.getElementById('checkout-coupon-apply-btn');
+
+    if (submitOrderBtn) {
+      submitOrderBtn.addEventListener('click', () => submitCheckout());
+    }
+
+    if (toggleAddrBtn) {
+      toggleAddrBtn.addEventListener('click', toggleCheckoutAddressMode);
+    }
+
+    if (applyCouponBtn) {
+      applyCouponBtn.addEventListener('click', applyCheckoutCoupon);
+    }
 
     if (closeBtn) {
       closeBtn.addEventListener('click', closeCheckoutModal);
@@ -942,6 +1264,9 @@
     closeCheckoutModal,
     submitCheckout,
     calculateOrderTotals,
+    toggleCheckoutAddressMode,
+    applyCheckoutCoupon,
+    renderCheckoutAddressBook,
     getCurrentContext,
     escapeHtml,
     formatMoney,

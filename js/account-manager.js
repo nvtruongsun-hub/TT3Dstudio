@@ -251,6 +251,37 @@
           }
         });
       }
+
+      // Address Book Form Modal Events
+      const btnAddAddr = document.getElementById('account-btn-add-address');
+      if (btnAddAddr) {
+        btnAddAddr.addEventListener('click', () => this.openAddressModal('add'));
+      }
+
+      const closeAddrBtn = document.getElementById('account-address-form-close');
+      if (closeAddrBtn) {
+        closeAddrBtn.addEventListener('click', () => this.closeAddressModal());
+      }
+
+      const cancelAddrBtn = document.getElementById('account-addr-cancel-btn');
+      if (cancelAddrBtn) {
+        cancelAddrBtn.addEventListener('click', () => this.closeAddressModal());
+      }
+
+      const submitAddrBtn = document.getElementById('account-addr-submit-btn');
+      if (submitAddrBtn) {
+        submitAddrBtn.addEventListener('click', () => this.handleAddressFormSubmit());
+      }
+
+      const provSelect = document.getElementById('account-addr-province');
+      if (provSelect) {
+        provSelect.addEventListener('change', () => this.handleProvinceChange());
+      }
+
+      const saveProfileBtn = document.getElementById('profile-save-btn');
+      if (saveProfileBtn) {
+        saveProfileBtn.addEventListener('click', () => this.handleProfileUpdate());
+      }
     }
 
     openAuthModal(tab = 'login', intent = null) {
@@ -338,6 +369,13 @@
           }
         }
       });
+
+      if (tab === 'profile') {
+        this.loadUserProfile();
+        this.renderAddressBook();
+      } else if (tab === 'orders') {
+        this.loadCustomerOrders();
+      }
     }
 
     async handleLoginSubmit() {
@@ -429,6 +467,306 @@
       if (res.ok) {
         this.orders = res.orders || [];
         this.renderOrdersList();
+      }
+    }
+
+
+    initAddressSelectors() {
+      const provSelect = document.getElementById('account-addr-province');
+      if (!provSelect) return;
+      const optLen = provSelect.options ? provSelect.options.length : 0;
+      if (optLen <= 1 && window.VNAdmin && Array.isArray(window.VNAdmin.ALL_PROVINCES)) {
+        provSelect.innerHTML = '<option value="">-- Chọn Tỉnh / Thành phố --</option>';
+        window.VNAdmin.ALL_PROVINCES.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.code;
+          opt.textContent = p.name;
+          provSelect.appendChild(opt);
+        });
+      }
+    }
+
+    handleProvinceChange() {
+      const provSelect = document.getElementById('account-addr-province');
+      const wardSelect = document.getElementById('account-addr-ward');
+      if (!provSelect || !wardSelect) return;
+
+      const pCode = provSelect.value;
+      if (!pCode || !window.VNAdmin) {
+        wardSelect.innerHTML = '<option value="">-- Chọn Tỉnh trước --</option>';
+        wardSelect.disabled = true;
+        return;
+      }
+
+      const wards = window.VNAdmin.getWardsByProvince(pCode);
+      wardSelect.innerHTML = '<option value="">-- Chọn Phường / Xã / Đặc khu --</option>';
+      wards.forEach(w => {
+        const opt = document.createElement('option');
+        opt.value = w.code;
+        opt.textContent = w.name + (w.old_district ? ' (' + w.old_district + ')' : '');
+        wardSelect.appendChild(opt);
+      });
+      wardSelect.disabled = false;
+    }
+
+    openAddressModal(mode = 'add', addressId = null) {
+      this.initAddressSelectors();
+      const modal = document.getElementById('account-address-form-modal');
+      const title = document.getElementById('account-address-form-title');
+      const editIdInput = document.getElementById('account-addr-edit-id');
+      const nameInput = document.getElementById('account-addr-name');
+      const phoneInput = document.getElementById('account-addr-phone');
+      const provSelect = document.getElementById('account-addr-province');
+      const wardSelect = document.getElementById('account-addr-ward');
+      const lineInput = document.getElementById('account-addr-line');
+      const noteInput = document.getElementById('account-addr-note');
+      const defaultChk = document.getElementById('account-addr-default');
+      const errBox = document.getElementById('account-addr-error');
+
+      if (errBox) errBox.classList.add('hidden');
+
+      if (mode === 'edit' && addressId && window.TTAddressBook) {
+        const addr = window.TTAddressBook.getAddressById(addressId);
+        if (!addr) return;
+        if (title) title.textContent = 'Chỉnh sửa địa chỉ giao hàng';
+        if (editIdInput) editIdInput.value = addr.id;
+        if (nameInput) nameInput.value = addr.recipient_name || '';
+        if (phoneInput) phoneInput.value = addr.recipient_phone || '';
+        if (lineInput) lineInput.value = addr.address_line || '';
+        if (noteInput) noteInput.value = addr.delivery_note || '';
+        if (defaultChk) defaultChk.checked = !!addr.is_default;
+
+        // Label radio
+        const labelRadio = document.querySelector(`input[name="account-addr-label"][value="${addr.label || 'home'}"]`);
+        if (labelRadio) labelRadio.checked = true;
+
+        // Populate province & ward
+        if (provSelect && addr.province_code) {
+          provSelect.value = addr.province_code;
+          this.handleProvinceChange();
+          if (wardSelect && addr.ward_code) {
+            wardSelect.value = addr.ward_code;
+          }
+        }
+      } else {
+        if (title) title.textContent = 'Thêm địa chỉ giao hàng';
+        if (editIdInput) editIdInput.value = '';
+        if (lineInput) lineInput.value = '';
+        if (noteInput) noteInput.value = '';
+        if (defaultChk) defaultChk.checked = false;
+
+        const homeRadio = document.querySelector('input[name="account-addr-label"][value="home"]');
+        if (homeRadio) homeRadio.checked = true;
+
+        // Prefill from current user profile
+        const user = (window.TTSupabase && typeof window.TTSupabase.getUser === 'function') ? window.TTSupabase.getUser() : null;
+        if (nameInput) nameInput.value = (user && user.user_metadata && user.user_metadata.full_name) || '';
+        if (phoneInput) phoneInput.value = (user && user.user_metadata && user.user_metadata.phone) || '';
+
+        if (provSelect) provSelect.value = '';
+        if (wardSelect) {
+          wardSelect.innerHTML = '<option value="">-- Chọn Tỉnh trước --</option>';
+          wardSelect.disabled = true;
+        }
+      }
+
+      if (modal) {
+        modal.classList.remove('hidden');
+        modal.classList.add('flex');
+      }
+    }
+
+    closeAddressModal() {
+      const modal = document.getElementById('account-address-form-modal');
+      if (modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    }
+
+    async handleAddressFormSubmit() {
+      const editId = document.getElementById('account-addr-edit-id')?.value;
+      const name = document.getElementById('account-addr-name')?.value.trim();
+      const rawPhone = document.getElementById('account-addr-phone')?.value.trim();
+      const provSelect = document.getElementById('account-addr-province');
+      const wardSelect = document.getElementById('account-addr-ward');
+      const line = document.getElementById('account-addr-line')?.value.trim();
+      const note = document.getElementById('account-addr-note')?.value.trim();
+      const defaultChk = document.getElementById('account-addr-default');
+      const isDefault = defaultChk ? defaultChk.checked : false;
+      const labelRadio = document.querySelector('input[name="account-addr-label"]:checked');
+      const label = labelRadio ? labelRadio.value : 'home';
+      const errBox = document.getElementById('account-addr-error');
+
+      const showError = (msg) => {
+        if (errBox) {
+          errBox.textContent = msg;
+          errBox.classList.remove('hidden');
+        } else if (typeof alert === 'function') {
+          alert(msg);
+        }
+      };
+
+      if (!name) return showError('Vui lòng nhập họ và tên người nhận.');
+      const cleanPhone = (rawPhone || '').replace(/[\s.-]/g, '');
+      const phoneRegex = /^(?:0|\+84)(?:3|5|7|8|9)\d{8}$/;
+      if (!phoneRegex.test(cleanPhone)) return showError('Vui lòng nhập số điện thoại hợp lệ (10 chữ số).');
+      if (!provSelect || !provSelect.value) return showError('Vui lòng chọn Tỉnh / Thành phố.');
+      if (!wardSelect || !wardSelect.value) return showError('Vui lòng chọn Phường / Xã.');
+      if (!line) return showError('Vui lòng nhập số nhà, tên đường, thôn/xóm.');
+
+      const pCode = provSelect.value;
+      const pName = provSelect.options[provSelect.selectedIndex]?.textContent || '';
+      const wCode = wardSelect.value;
+      const wName = wardSelect.options[wardSelect.selectedIndex]?.textContent || '';
+
+      const payload = {
+        label,
+        recipient_name: name,
+        recipient_phone: cleanPhone,
+        province_code: pCode,
+        province_name: pName,
+        ward_code: wCode,
+        ward_name: wName,
+        address_line: line,
+        delivery_note: note,
+        is_default: isDefault
+      };
+
+      if (!window.TTAddressBook) return;
+
+      const submitBtn = document.getElementById('account-addr-submit-btn');
+      if (submitBtn) submitBtn.disabled = true;
+
+      try {
+        let res;
+        if (editId) {
+          res = await window.TTAddressBook.updateAddress(editId, payload);
+        } else {
+          res = await window.TTAddressBook.addAddress(payload);
+        }
+
+        if (res.ok) {
+          this.closeAddressModal();
+          await this.renderAddressBook();
+          if (window.showToast) window.showToast('Lưu địa chỉ thành công!', 'success');
+        } else {
+          showError(res.error || 'Lỗi khi lưu địa chỉ.');
+        }
+      } catch (err) {
+        showError(err.message || 'Lỗi xử lý địa chỉ.');
+      } finally {
+        if (submitBtn) submitBtn.disabled = false;
+      }
+    }
+
+    async renderAddressBook() {
+      const container = document.getElementById('account-address-list');
+      if (!container || !window.TTAddressBook) return;
+
+      container.innerHTML = '<div class="text-zinc-500 text-xs py-2">Đang tải sổ địa chỉ...</div>';
+      const addresses = await window.TTAddressBook.loadAddresses();
+
+      if (!Array.isArray(addresses) || addresses.length === 0) {
+        container.innerHTML = `
+          <div class="p-6 text-center text-zinc-500 border border-dashed border-zinc-800 rounded-xl space-y-2">
+            <i class="fa-solid fa-map-location-dot text-2xl text-zinc-600"></i>
+            <p class="text-xs">Bạn chưa lưu địa chỉ giao hàng nào.</p>
+            <p class="text-[11px] text-zinc-400">Thêm địa chỉ ngay để được tự động điền khi mua hàng 1-chạm!</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = addresses.map(addr => {
+        const meta = window.TTAddressBook.getLabelMeta(addr.label);
+        const fullAddr = window.TTAddressBook.formatFullAddress(addr);
+        return `
+          <div class="p-3.5 rounded-xl bg-zinc-800/60 border border-zinc-700/60 space-y-2 hover:border-zinc-600 transition-colors">
+            <div class="flex items-start justify-between gap-2">
+              <div class="flex items-center gap-2">
+                <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold ${meta.badgeClass}">
+                  <i class="fa-solid ${meta.icon}"></i>
+                  <span>${meta.name}</span>
+                </span>
+                ${addr.is_default ? '<span class="inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-bold bg-amber-500/20 text-amber-400 border border-amber-500/30">Mặc định</span>' : ''}
+              </div>
+              <div class="flex items-center gap-1.5">
+                ${!addr.is_default ? `
+                  <button type="button" onclick="window.TTAccountManager.handleSetDefaultAddress('${addr.id}')" class="px-2 py-1 rounded-lg bg-zinc-700 hover:bg-zinc-600 text-[10px] text-zinc-300 transition-colors">
+                    Đặt mặc định
+                  </button>
+                ` : ''}
+                <button type="button" onclick="window.TTAccountManager.openAddressModal('edit', '${addr.id}')" class="p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-zinc-700 transition-colors" title="Chỉnh sửa">
+                  <i class="fa-solid fa-pen-to-square text-xs"></i>
+                </button>
+                <button type="button" onclick="window.TTAccountManager.handleDeleteAddress('${addr.id}')" class="p-1.5 rounded-lg text-zinc-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors" title="Xóa">
+                  <i class="fa-solid fa-trash-can text-xs"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-0.5 text-xs text-white">
+              <div class="flex items-center gap-2">
+                <span class="font-bold">${addr.recipient_name}</span>
+                <span class="text-zinc-400 font-mono text-[11px]">${addr.recipient_phone}</span>
+              </div>
+              <div class="text-zinc-300 text-[11px] leading-relaxed">${fullAddr}</div>
+              ${addr.delivery_note ? `<div class="text-[10px] text-zinc-400 italic pt-0.5"><i class="fa-solid fa-note-sticky mr-1 text-orange-400"></i>${addr.delivery_note}</div>` : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async handleSetDefaultAddress(id) {
+      if (!window.TTAddressBook) return;
+      const res = await window.TTAddressBook.setDefault(id);
+      if (res.ok) {
+        await this.renderAddressBook();
+        if (window.showToast) window.showToast('Đã đặt làm địa chỉ mặc định!', 'success');
+      } else {
+        if (window.showToast) window.showToast(res.error || 'Lỗi khi đặt mặc định', 'error');
+      }
+    }
+
+    async handleDeleteAddress(id) {
+      if (typeof confirm === 'function' && !confirm('Bạn có chắc chắn muốn xóa địa chỉ giao hàng này?')) {
+        return;
+      }
+      if (!window.TTAddressBook) return;
+      const res = await window.TTAddressBook.deleteAddress(id);
+      if (res.ok) {
+        await this.renderAddressBook();
+        if (window.showToast) window.showToast('Đã xóa địa chỉ thành công!', 'info');
+      } else {
+        if (window.showToast) window.showToast(res.error || 'Lỗi khi xóa địa chỉ', 'error');
+      }
+    }
+
+    loadUserProfile() {
+      const user = (window.TTSupabase && typeof window.TTSupabase.getUser === 'function') ? window.TTSupabase.getUser() : null;
+      const nameInput = document.getElementById('profile-name');
+      const phoneInput = document.getElementById('profile-phone');
+      if (user && user.user_metadata) {
+        if (nameInput) nameInput.value = user.user_metadata.full_name || '';
+        if (phoneInput) phoneInput.value = user.user_metadata.phone || '';
+      }
+    }
+
+    async handleProfileUpdate() {
+      const nameInput = document.getElementById('profile-name');
+      const phoneInput = document.getElementById('profile-phone');
+      const fullName = nameInput ? nameInput.value.trim() : '';
+      const phone = phoneInput ? phoneInput.value.trim() : '';
+
+      if (window.TTSupabase && typeof window.TTSupabase.updateProfile === 'function') {
+        const res = await window.TTSupabase.updateProfile({ fullName, phone });
+        if (res.ok) {
+          if (window.showToast) window.showToast('Cập nhật hồ sơ cá nhân thành công!', 'success');
+        } else {
+          if (window.showToast) window.showToast(res.error || 'Lỗi khi cập nhật hồ sơ', 'error');
+        }
       }
     }
 
