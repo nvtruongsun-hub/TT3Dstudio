@@ -218,6 +218,9 @@
     if (msg.includes('rate limit')) {
       return 'Bạn thao tác quá nhanh. Vui lòng đợi trong giây lát rồi thử lại.';
     }
+    if (msg.includes('provider is not enabled') || msg.includes('unsupported provider')) {
+      return 'Cổng đăng nhập Facebook hiện đang chờ cấu hình App ID từ Meta for Developers. Quý khách vui lòng chọn "Đăng nhập bằng Google" (1 chạm tức thì) hoặc đăng ký bằng Email!';
+    }
     return err.message || 'Lỗi xác thực hệ thống. Vui lòng thử lại.';
   }
 
