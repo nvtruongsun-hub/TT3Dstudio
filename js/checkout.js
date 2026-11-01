@@ -397,6 +397,24 @@
       return;
     }
 
+    // MANDATORY AUTH CHECK (Codex Directive 2026-10-31)
+    if (window.TTSupabase && !window.TTSupabase.isAuthenticated()) {
+      if (window.TTAccountManager && typeof window.TTAccountManager.openAuthModal === 'function') {
+        window.TTAccountManager.openAuthModal('login', 'checkout');
+      } else if (typeof alert === 'function') {
+        alert('Khách hàng bắt buộc phải đăng nhập trước khi tiến hành đặt hàng.');
+      }
+      return;
+    }
+
+    // MANDATORY EMAIL VERIFICATION CHECK
+    if (window.TTSupabase && !window.TTSupabase.isEmailVerified()) {
+      if (typeof alert === 'function') {
+        alert('Vui lòng xác minh địa chỉ email của bạn trước khi tiến hành đặt hàng.');
+      }
+      return;
+    }
+
     // Chặn các dòng CAD cũ có id print-quote-* hoặc category custom-print ở đầu vào checkout (Codex R2-01)
     const hasLegacyCadQuote = items.some(item => item && (String(item.id || '').startsWith('print-quote-') || item.category === 'custom-print'));
     if (hasLegacyCadQuote) {
@@ -650,6 +668,43 @@
       })),
       totals
     };
+
+    // Call Supabase RPC create_order (PostgreSQL Ground Truth pricing & atomic transaction)
+    if (window.TTSupabase && typeof window.TTSupabase.createOrder === 'function') {
+      try {
+        const serverRes = await window.TTSupabase.createOrder({
+          idempotency_key: orderId,
+          payment_method: channel || 'cod',
+          items: currentCheckoutContext.items.map(i => ({
+            product_id: i.id,
+            quantity: i.qty,
+            selected_options: {
+              color: i.colorName,
+              material: i.materialName,
+              custom_text: i.customText,
+              font_id: i.fontId
+            }
+          })),
+          shipping_name: name,
+          shipping_phone: cleanPhone,
+          shipping_address: address,
+          customer_note: note
+        });
+
+        if (!serverRes.ok) {
+          currentCheckoutContext.state = 'editing';
+          if (typeof alert === 'function') {
+            alert(serverRes.error || 'Đặt hàng không thành công. Giỏ hàng của bạn được bảo lưu.');
+          }
+          return;
+        }
+        if (serverRes.order_number) {
+          orderRecord.orderNumber = serverRes.order_number;
+        }
+      } catch (err) {
+        console.warn('[Checkout] Supabase RPC execution error:', err);
+      }
+    }
 
     // Lưu vào draft storage và thông tin ghi nhớ với contract chặt chẽ (Codex F03)
     const saved = saveOrderDraft(orderRecord);

@@ -8,7 +8,6 @@
   'use strict';
 
   const SESSION_KEY_AUTH = 'tt_admin_authenticated';
-  const DEFAULT_PIN = '2026';
 
   let currentEditingProductId = null;
   let activeFilterCategory = 'all';
@@ -84,57 +83,93 @@
     }, 3200);
   }
 
-  // 1. PIN AUTHENTICATION
+  // 1. SUPABASE RBAC BACKEND AUTHENTICATION (Replacing Client PIN 2026)
   function initAuth() {
     const lockScreen = document.getElementById('admin-lock-screen');
     const adminApp = document.getElementById('admin-app');
-    const pinForm = document.getElementById('pin-form');
-    const pinInput = document.getElementById('admin-pin-input');
-    const pinError = document.getElementById('pin-error');
+    const adminLoginForm = document.getElementById('admin-login-form') || document.getElementById('pin-form');
+    const emailInput = document.getElementById('admin-email-input');
+    const passwordInput = document.getElementById('admin-password-input');
+    const loginError = document.getElementById('admin-login-error') || document.getElementById('pin-error');
     const btnLogout = document.getElementById('btn-logout');
 
-    const isAuth = sessionStorage.getItem(SESSION_KEY_AUTH) === 'true';
-
-    if (isAuth) {
-      if (lockScreen) lockScreen.classList.add('hidden');
-      if (adminApp) adminApp.classList.remove('hidden');
-      loadAllDashboardData();
-    } else {
+    async function verifyAdminAccess() {
+      if (window.TTSupabase && window.TTSupabase.isAuthenticated()) {
+        if (window.TTSupabase.isAdmin()) {
+          if (lockScreen) lockScreen.classList.add('hidden');
+          if (adminApp) adminApp.classList.remove('hidden');
+          loadAllDashboardData();
+          return true;
+        } else {
+          if (loginError) {
+            loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin).';
+            loginError.classList.remove('hidden');
+          }
+          await window.TTSupabase.signOut();
+        }
+      }
       if (lockScreen) lockScreen.classList.remove('hidden');
       if (adminApp) adminApp.classList.add('hidden');
-      if (pinInput && typeof pinInput.focus === 'function') pinInput.focus();
+      if (emailInput && typeof emailInput.focus === 'function') emailInput.focus();
+      return false;
     }
 
-    if (pinForm) {
-      pinForm.addEventListener('submit', (e) => {
+    if (adminLoginForm) {
+      adminLoginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const pin = pinInput.value.trim();
-        if (pin === DEFAULT_PIN) {
-          sessionStorage.setItem(SESSION_KEY_AUTH, 'true');
-          lockScreen.classList.add('hidden');
-          adminApp.classList.remove('hidden');
-          if (pinError) pinError.classList.add('hidden');
-          pinInput.value = '';
-          showToast('Xác thực thành công! Chào mừng Quản trị viên T&T 3D Labs.');
+        const email = emailInput ? emailInput.value.trim() : '';
+        const password = passwordInput ? passwordInput.value : '';
+
+        if (!email || !password) {
+          if (loginError) {
+            loginError.textContent = 'Vui lòng nhập email và mật khẩu Quản trị viên.';
+            loginError.classList.remove('hidden');
+          }
+          return;
+        }
+
+        if (window.TTSupabase) {
+          const res = await window.TTSupabase.signIn({ email, password });
+          if (!res.ok) {
+            if (loginError) {
+              loginError.textContent = res.error;
+              loginError.classList.remove('hidden');
+            }
+            return;
+          }
+
+          if (!window.TTSupabase.isAdmin()) {
+            await window.TTSupabase.signOut();
+            if (loginError) {
+              loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin).';
+              loginError.classList.remove('hidden');
+            }
+            return;
+          }
+
+          if (lockScreen) lockScreen.classList.add('hidden');
+          if (adminApp) adminApp.classList.remove('hidden');
+          if (loginError) loginError.classList.add('hidden');
+          showToast('Xác thực Quản trị viên thành công!');
           loadAllDashboardData();
-        } else {
-          if (pinError) pinError.classList.remove('hidden');
-          pinInput.select();
-          pinInput.focus();
         }
       });
     }
 
     if (btnLogout) {
-      btnLogout.addEventListener('click', () => {
+      btnLogout.addEventListener('click', async () => {
         if (confirm('Bạn có chắc chắn muốn đăng xuất phiên quản trị?')) {
-          sessionStorage.removeItem(SESSION_KEY_AUTH);
-          adminApp.classList.add('hidden');
-          lockScreen.classList.remove('hidden');
+          if (window.TTSupabase) {
+            await window.TTSupabase.signOut();
+          }
+          if (adminApp) adminApp.classList.add('hidden');
+          if (lockScreen) lockScreen.classList.remove('hidden');
           showToast('Đã đăng xuất phiên làm việc an toàn.');
         }
       });
     }
+
+    verifyAdminAccess();
   }
 
   // 2. TAB NAVIGATION
