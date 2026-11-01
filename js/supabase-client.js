@@ -18,6 +18,7 @@
   const DEFAULT_SUPABASE_ANON_KEY = (window.TT_ENV && window.TT_ENV.SUPABASE_ANON_KEY) || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';
 
   const STORAGE_AUTH_KEY = 'tt3d_supabase_auth_session';
+  const STORAGE_PROFILE_KEY = 'tt3d_supabase_user_profile';
   const IDEMPOTENCY_STORE_KEY = 'tt3d_submitted_idempotency_keys';
 
   let supabaseClient = null;
@@ -73,8 +74,15 @@
           const data = JSON.parse(raw);
           if (data && data.user) {
             currentUser = data.user;
-            currentSession = data.session || { user: data.user, access_token: 'mock-jwt-token' };
+            currentSession = data.session || (data.access_token ? data : { user: data.user, access_token: 'mock-jwt-token' });
             userRoles = data.roles || ['customer'];
+          }
+        }
+        const profileRaw = window.localStorage.getItem(STORAGE_PROFILE_KEY);
+        if (profileRaw) {
+          const pData = JSON.parse(profileRaw);
+          if (pData && pData.roles) {
+            userRoles = pData.roles;
           }
         }
       }
@@ -109,6 +117,29 @@
     return supabaseClient;
   }
 
+  // Auto-initialize client and restore active session immediately on script load
+  function initAuthClient() {
+    const client = getClient();
+    if (client && client.auth && typeof client.auth.getSession === 'function') {
+      try {
+        const promise = client.auth.getSession();
+        if (promise && typeof promise.then === 'function') {
+          promise.then(res => {
+            if (res && res.data && res.data.session) {
+              handleAuthStateUpdate(res.data.session);
+            }
+          }).catch(err => {
+            console.warn('[TTSupabase] getSession failed on load:', err);
+          });
+        }
+      } catch (e) {
+        console.warn('[TTSupabase] initAuthClient exception:', e);
+      }
+    }
+  }
+
+  initAuthClient();
+
   function handleAuthStateUpdate(session, explicitRoles = null) {
     currentSession = session;
     currentUser = session ? session.user : null;
@@ -123,16 +154,28 @@
                     ['customer'];
       }
       if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify({
-          user: currentUser,
-          session: currentSession,
-          roles: userRoles
+        window.localStorage.setItem(STORAGE_PROFILE_KEY, JSON.stringify({
+          userId: currentUser.id,
+          email: currentUser.email,
+          roles: userRoles,
+          updatedAt: new Date().toISOString()
         }));
+        // If supabaseClient is absent (mock mode), persist to STORAGE_AUTH_KEY as fallback
+        if (!supabaseClient) {
+          window.localStorage.setItem(STORAGE_AUTH_KEY, JSON.stringify({
+            user: currentUser,
+            session: currentSession,
+            roles: userRoles
+          }));
+        }
       }
     } else {
       userRoles = ['customer'];
       if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.removeItem(STORAGE_AUTH_KEY);
+        window.localStorage.removeItem(STORAGE_PROFILE_KEY);
+        if (!supabaseClient) {
+          window.localStorage.removeItem(STORAGE_AUTH_KEY);
+        }
       }
     }
 
@@ -296,6 +339,9 @@
         });
 
         if (error) return { ok: false, error: mapAuthError(error) };
+        if (data && data.url && typeof window !== 'undefined' && window.location) {
+          window.location.href = data.url;
+        }
         return { ok: true, data };
       } catch (e) {
         return { ok: false, error: mapAuthError(e) };
@@ -382,8 +428,20 @@
 
   function isEmailVerified() {
     if (!currentUser) return false;
-    // Supabase sets email_confirmed_at when verified
-    return !!(currentUser.email_confirmed_at);
+    // Check confirmed timestamps
+    if (currentUser.email_confirmed_at || currentUser.confirmed_at) return true;
+    // Check metadata email_verified flag (used by Google/OAuth)
+    if (currentUser.user_metadata && (currentUser.user_metadata.email_verified === true || currentUser.user_metadata.email_verified === 'true')) {
+      return true;
+    }
+    // Check provider
+    const provider = (currentUser.app_metadata && currentUser.app_metadata.provider) ||
+                     (currentUser.user_metadata && currentUser.user_metadata.provider);
+    if (provider === 'google' || provider === 'facebook') return true;
+    if (Array.isArray(currentUser.identities) && currentUser.identities.some(i => i.provider === 'google' || i.provider === 'facebook')) {
+      return true;
+    }
+    return false;
   }
 
   function isAdmin() {
