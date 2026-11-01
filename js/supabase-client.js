@@ -270,6 +270,59 @@
     return { ok: true, user: mockUser };
   }
 
+  async function signInWithOAuth(provider) {
+    const validProviders = ['google', 'facebook'];
+    const p = String(provider || '').toLowerCase().trim();
+    if (!validProviders.includes(p)) {
+      return {
+        ok: false,
+        error: `Phương thức đăng nhập '${provider}' không hợp lệ hoặc chưa được hỗ trợ. Vui lòng chọn Google hoặc Facebook.`
+      };
+    }
+
+    const client = getClient();
+    if (client && client.auth && typeof client.auth.signInWithOAuth === 'function') {
+      try {
+        const redirectTo = (typeof window !== 'undefined' && window.location)
+          ? (window.location.origin + window.location.pathname)
+          : 'https://nvtruongsun-hub.github.io/TT3Dstudio/';
+
+        const { data, error } = await client.auth.signInWithOAuth({
+          provider: p,
+          options: {
+            redirectTo,
+            queryParams: p === 'google' ? { access_type: 'offline', prompt: 'consent' } : {}
+          }
+        });
+
+        if (error) return { ok: false, error: mapAuthError(error) };
+        return { ok: true, data };
+      } catch (e) {
+        return { ok: false, error: mapAuthError(e) };
+      }
+    }
+
+    // Local / Offline Simulation Mode
+    const providerName = p === 'google' ? 'Google' : 'Facebook';
+    const mockUser = {
+      id: `usr_${p}_` + Date.now().toString(36),
+      email: `customer_${p}@${p === 'google' ? 'gmail.com' : 'facebook.com'}`,
+      email_confirmed_at: new Date().toISOString(), // OAuth emails are verified by provider
+      user_metadata: {
+        full_name: `Khách Hàng ${providerName}`,
+        phone: '0349657529',
+        provider: p,
+        roles: ['customer']
+      },
+      app_metadata: {
+        provider: p,
+        roles: ['customer']
+      }
+    };
+    handleAuthStateUpdate({ user: mockUser, access_token: `mock-${p}-token` });
+    return { ok: true, user: mockUser, provider: p };
+  }
+
   async function signOut() {
     const client = getClient();
     if (client) {
@@ -613,6 +666,7 @@
   window.TTSupabase = {
     signUp,
     signIn,
+    signInWithOAuth,
     signOut,
     resetPassword,
     updatePassword,

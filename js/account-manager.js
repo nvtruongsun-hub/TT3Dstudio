@@ -140,6 +140,53 @@
         });
       });
 
+      // Social OAuth Buttons (Google & Facebook)
+      const btnGoogle = document.getElementById('auth-btn-google');
+      if (btnGoogle) {
+        btnGoogle.addEventListener('click', async () => {
+          if (window.TTSupabase && typeof window.TTSupabase.signInWithOAuth === 'function') {
+            const res = await window.TTSupabase.signInWithOAuth('google');
+            if (!res.ok) {
+              const errBox = document.getElementById('auth-error-alert');
+              if (errBox) {
+                errBox.textContent = res.error;
+                errBox.classList.remove('hidden');
+              }
+            } else if (res.user) {
+              this.closeAuthModal();
+              if (window.showToast) window.showToast('Đăng nhập Google thành công!', 'success');
+              if (this.pendingIntent === 'checkout' && window.TTCheckout) {
+                const cart = (window.TTCart && window.TTCart.getCart) ? window.TTCart.getCart() : [];
+                window.TTCheckout.openCheckout(cart, 0, { source: 'cart' });
+              }
+            }
+          }
+        });
+      }
+
+      const btnFacebook = document.getElementById('auth-btn-facebook');
+      if (btnFacebook) {
+        btnFacebook.addEventListener('click', async () => {
+          if (window.TTSupabase && typeof window.TTSupabase.signInWithOAuth === 'function') {
+            const res = await window.TTSupabase.signInWithOAuth('facebook');
+            if (!res.ok) {
+              const errBox = document.getElementById('auth-error-alert');
+              if (errBox) {
+                errBox.textContent = res.error;
+                errBox.classList.remove('hidden');
+              }
+            } else if (res.user) {
+              this.closeAuthModal();
+              if (window.showToast) window.showToast('Đăng nhập Facebook thành công!', 'success');
+              if (this.pendingIntent === 'checkout' && window.TTCheckout) {
+                const cart = (window.TTCart && window.TTCart.getCart) ? window.TTCart.getCart() : [];
+                window.TTCheckout.openCheckout(cart, 0, { source: 'cart' });
+              }
+            }
+          }
+        });
+      }
+
       // Bind Login Form
       const loginForm = document.getElementById('auth-login-form');
       if (loginForm) {
@@ -215,6 +262,12 @@
           }
         }
       });
+      const socialBox = document.getElementById('auth-social-container');
+      if (socialBox) {
+        if (tab === 'forgot') socialBox.classList.add('hidden');
+        else socialBox.classList.remove('hidden');
+      }
+
       // Clear alerts
       const errBox = document.getElementById('auth-error-alert');
       if (errBox) errBox.classList.add('hidden');
