@@ -71,6 +71,32 @@
       this.updateHeaderUI(user);
       if (user) {
         this.loadCustomerOrders();
+        // Auto-resume pending checkout intent if user just authenticated
+        let intent = this.pendingIntent;
+        if (!intent && typeof window !== 'undefined' && window.sessionStorage) {
+          try {
+            intent = window.sessionStorage.getItem('tt3d_pending_intent');
+            window.sessionStorage.removeItem('tt3d_pending_intent');
+          } catch (e) {}
+        }
+        if (intent === 'checkout' || intent === 'direct_checkout') {
+          this.pendingIntent = null;
+          this.closeAuthModal();
+          setTimeout(() => {
+            if (window.TTCheckout && typeof window.TTCheckout.openCheckout === 'function') {
+              const cart = (window.TTCart && window.TTCart.getCart) ? window.TTCart.getCart() : [];
+              if (cart.length > 0) {
+                window.TTCheckout.openCheckout(cart, 0, { source: 'cart' });
+              }
+            }
+          }, 150);
+        }
+        // Clean up URL fragment if redirected back from OAuth
+        if (typeof window !== 'undefined' && window.location && window.location.hash && window.location.hash.includes('access_token')) {
+          if (window.history && typeof window.history.replaceState === 'function') {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search);
+          }
+        }
       } else {
         this.orders = [];
       }
@@ -229,6 +255,9 @@
 
     openAuthModal(tab = 'login', intent = null) {
       this.pendingIntent = intent;
+      if (intent && typeof window !== 'undefined' && window.sessionStorage) {
+        try { window.sessionStorage.setItem('tt3d_pending_intent', intent); } catch (e) {}
+      }
       const modal = document.getElementById('auth-modal');
       if (!modal) return;
       modal.classList.remove('hidden');
