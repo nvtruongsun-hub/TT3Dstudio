@@ -133,21 +133,31 @@ async function verifyBackupConsistency() {
   console.log('\n[4/5] Diễn tập phục hồi trên schema riêng (backup_restore_verification) tại Staging...');
   
   try {
-    // Chuẩn bị schema cô lập với các bảng nghiệp vụ và Foreign Key nội bộ
+    // Chuẩn bị schema cô lập với toàn bộ 10 bảng nghiệp vụ và Foreign Key nội bộ
     const setupSchemaSql = `
       CREATE SCHEMA IF NOT EXISTS backup_restore_verification;
+      DROP TABLE IF EXISTS backup_restore_verification.audit_logs CASCADE;
+      DROP TABLE IF EXISTS backup_restore_verification.order_status_history CASCADE;
       DROP TABLE IF EXISTS backup_restore_verification.order_items CASCADE;
       DROP TABLE IF EXISTS backup_restore_verification.orders CASCADE;
       DROP TABLE IF EXISTS backup_restore_verification.customer_addresses CASCADE;
+      DROP TABLE IF EXISTS backup_restore_verification.user_roles CASCADE;
       DROP TABLE IF EXISTS backup_restore_verification.profiles CASCADE;
       DROP TABLE IF EXISTS backup_restore_verification.products CASCADE;
+      DROP TABLE IF EXISTS backup_restore_verification.coupons CASCADE;
       DROP TABLE IF EXISTS backup_restore_verification.categories CASCADE;
 
       CREATE TABLE backup_restore_verification.categories (LIKE public.categories INCLUDING ALL);
       CREATE TABLE backup_restore_verification.products (LIKE public.products INCLUDING ALL);
+      CREATE TABLE backup_restore_verification.coupons (LIKE public.coupons INCLUDING DEFAULTS);
+      ALTER TABLE backup_restore_verification.coupons ADD PRIMARY KEY (id);
       
       CREATE TABLE backup_restore_verification.profiles (LIKE public.profiles INCLUDING DEFAULTS);
       ALTER TABLE backup_restore_verification.profiles ADD PRIMARY KEY (id);
+
+      CREATE TABLE backup_restore_verification.user_roles (LIKE public.user_roles INCLUDING DEFAULTS);
+      ALTER TABLE backup_restore_verification.user_roles ADD PRIMARY KEY (user_id, role);
+      ALTER TABLE backup_restore_verification.user_roles ADD CONSTRAINT fk_roles_user FOREIGN KEY (user_id) REFERENCES backup_restore_verification.profiles(id) ON DELETE CASCADE;
 
       CREATE TABLE backup_restore_verification.customer_addresses (LIKE public.customer_addresses INCLUDING DEFAULTS);
       ALTER TABLE backup_restore_verification.customer_addresses ADD PRIMARY KEY (id);
@@ -162,6 +172,13 @@ async function verifyBackupConsistency() {
       ALTER TABLE backup_restore_verification.order_items ADD PRIMARY KEY (id);
       ALTER TABLE backup_restore_verification.order_items ADD CONSTRAINT fk_items_order FOREIGN KEY (order_id) REFERENCES backup_restore_verification.orders(id) ON DELETE CASCADE;
       ALTER TABLE backup_restore_verification.order_items ADD CONSTRAINT fk_items_prod FOREIGN KEY (product_id) REFERENCES backup_restore_verification.products(id) ON DELETE CASCADE;
+
+      CREATE TABLE backup_restore_verification.order_status_history (LIKE public.order_status_history INCLUDING DEFAULTS);
+      ALTER TABLE backup_restore_verification.order_status_history ADD PRIMARY KEY (id);
+      ALTER TABLE backup_restore_verification.order_status_history ADD CONSTRAINT fk_hist_order FOREIGN KEY (order_id) REFERENCES backup_restore_verification.orders(id) ON DELETE CASCADE;
+
+      CREATE TABLE backup_restore_verification.audit_logs (LIKE public.audit_logs INCLUDING DEFAULTS);
+      ALTER TABLE backup_restore_verification.audit_logs ADD PRIMARY KEY (id);
     `;
     const setupRes = await queryStagingSql(setupSchemaSql);
     assert.strictEqual(setupRes.status, 201, 'Khởi tạo schema phục hồi thất bại');
@@ -195,28 +212,42 @@ async function verifyBackupConsistency() {
     }));
 
     // Nạp dữ liệu tuần tự theo đúng thứ tự phụ thuộc khóa ngoại
-    console.log('- Nạp categories...');
+    console.log('- Nạp categories (1/10)...');
     const catRes = await queryStagingSql(`
       INSERT INTO backup_restore_verification.categories
       SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.categories, '${JSON.stringify(tables.categories).replace(/'/g, "''")}'::jsonb);
     `);
     assert.strictEqual(catRes.status, 201);
 
-    console.log('- Nạp products...');
+    console.log('- Nạp products (2/10)...');
     const prodRes = await queryStagingSql(`
       INSERT INTO backup_restore_verification.products
       SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.products, '${JSON.stringify(tables.products).replace(/'/g, "''")}'::jsonb);
     `);
     assert.strictEqual(prodRes.status, 201);
 
-    console.log('- Nạp profiles...');
+    console.log('- Nạp coupons (3/10)...');
+    const coupRes = await queryStagingSql(`
+      INSERT INTO backup_restore_verification.coupons
+      SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.coupons, '${JSON.stringify(tables.coupons).replace(/'/g, "''")}'::jsonb);
+    `);
+    assert.strictEqual(coupRes.status, 201);
+
+    console.log('- Nạp profiles (4/10)...');
     const profRes = await queryStagingSql(`
       INSERT INTO backup_restore_verification.profiles
       SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.profiles, '${JSON.stringify(maskedProfiles).replace(/'/g, "''")}'::jsonb);
     `);
     assert.strictEqual(profRes.status, 201);
 
-    console.log('- Nạp customer_addresses...');
+    console.log('- Nạp user_roles (5/10)...');
+    const roleRes = await queryStagingSql(`
+      INSERT INTO backup_restore_verification.user_roles
+      SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.user_roles, '${JSON.stringify(tables.user_roles).replace(/'/g, "''")}'::jsonb);
+    `);
+    assert.strictEqual(roleRes.status, 201);
+
+    console.log('- Nạp customer_addresses (6/10)...');
     const addrRes = await queryStagingSql(`
       INSERT INTO backup_restore_verification.customer_addresses
       SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.customer_addresses, '${JSON.stringify(maskedAddresses).replace(/'/g, "''")}'::jsonb);
@@ -224,7 +255,7 @@ async function verifyBackupConsistency() {
     if (addrRes.status !== 201) console.error('addrRes Error:', addrRes.data || addrRes.raw);
     assert.strictEqual(addrRes.status, 201);
 
-    console.log('- Nạp orders...');
+    console.log('- Nạp orders (7/10)...');
     const ordRes = await queryStagingSql(`
       INSERT INTO backup_restore_verification.orders
       SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.orders, '${JSON.stringify(maskedOrders).replace(/'/g, "''")}'::jsonb);
@@ -232,7 +263,7 @@ async function verifyBackupConsistency() {
     if (ordRes.status !== 201) console.error('ordRes Error:', ordRes.data || ordRes.raw);
     assert.strictEqual(ordRes.status, 201);
 
-    console.log('- Nạp order_items...');
+    console.log('- Nạp order_items (8/10)...');
     const itemRes = await queryStagingSql(`
       INSERT INTO backup_restore_verification.order_items
       SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.order_items, '${JSON.stringify(tables.order_items).replace(/'/g, "''")}'::jsonb);
@@ -240,34 +271,62 @@ async function verifyBackupConsistency() {
     if (itemRes.status !== 201) console.error('itemRes Error:', itemRes.data || itemRes.raw);
     assert.strictEqual(itemRes.status, 201);
 
+    console.log('- Nạp order_status_history (9/10)...');
+    const histRes = await queryStagingSql(`
+      INSERT INTO backup_restore_verification.order_status_history
+      SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.order_status_history, '${JSON.stringify(tables.order_status_history).replace(/'/g, "''")}'::jsonb);
+    `);
+    if (histRes.status !== 201) console.error('histRes Error:', histRes.data || histRes.raw);
+    assert.strictEqual(histRes.status, 201);
+
+    console.log('- Nạp audit_logs (10/10)...');
+    const auditRes = await queryStagingSql(`
+      INSERT INTO backup_restore_verification.audit_logs
+      SELECT * FROM jsonb_populate_recordset(NULL::backup_restore_verification.audit_logs, '${JSON.stringify(tables.audit_logs).replace(/'/g, "''")}'::jsonb);
+    `);
+    if (auditRes.status !== 201) console.error('auditRes Error:', auditRes.data || auditRes.raw);
+    assert.strictEqual(auditRes.status, 201);
+
     // Kiểm tra số lượng bản ghi sau khi phục hồi
     const countRes = await queryStagingSql(`
       SELECT
         (SELECT count(*) FROM backup_restore_verification.categories) as cat_count,
         (SELECT count(*) FROM backup_restore_verification.products) as prod_count,
+        (SELECT count(*) FROM backup_restore_verification.coupons) as coup_count,
         (SELECT count(*) FROM backup_restore_verification.profiles) as prof_count,
+        (SELECT count(*) FROM backup_restore_verification.user_roles) as role_count,
         (SELECT count(*) FROM backup_restore_verification.customer_addresses) as addr_count,
         (SELECT count(*) FROM backup_restore_verification.orders) as ord_count,
-        (SELECT count(*) FROM backup_restore_verification.order_items) as item_count;
+        (SELECT count(*) FROM backup_restore_verification.order_items) as item_count,
+        (SELECT count(*) FROM backup_restore_verification.order_status_history) as hist_count,
+        (SELECT count(*) FROM backup_restore_verification.audit_logs) as audit_count;
     `);
 
     const counts = countRes.data[0];
-    console.log('\n- Kết quả kiểm đếm sau phục hồi:');
+    console.log('\n- Kết quả kiểm đếm sau phục hồi 10 bảng nghiệp vụ:');
     console.log(`  + categories: ${counts.cat_count} (kỳ vọng: ${tables.categories.length})`);
     console.log(`  + products: ${counts.prod_count} (kỳ vọng: ${tables.products.length})`);
+    console.log(`  + coupons: ${counts.coup_count} (kỳ vọng: ${tables.coupons.length})`);
     console.log(`  + profiles: ${counts.prof_count} (kỳ vọng: ${tables.profiles.length})`);
+    console.log(`  + user_roles: ${counts.role_count} (kỳ vọng: ${tables.user_roles.length})`);
     console.log(`  + customer_addresses: ${counts.addr_count} (kỳ vọng: ${tables.customer_addresses.length})`);
     console.log(`  + orders: ${counts.ord_count} (kỳ vọng: ${tables.orders.length})`);
     console.log(`  + order_items: ${counts.item_count} (kỳ vọng: ${tables.order_items.length})`);
+    console.log(`  + order_status_history: ${counts.hist_count} (kỳ vọng: ${tables.order_status_history.length})`);
+    console.log(`  + audit_logs: ${counts.audit_count} (kỳ vọng: ${tables.audit_logs.length})`);
 
     assert.strictEqual(parseInt(counts.cat_count), tables.categories.length);
     assert.strictEqual(parseInt(counts.prod_count), tables.products.length);
+    assert.strictEqual(parseInt(counts.coup_count), tables.coupons.length);
     assert.strictEqual(parseInt(counts.prof_count), tables.profiles.length);
+    assert.strictEqual(parseInt(counts.role_count), tables.user_roles.length);
     assert.strictEqual(parseInt(counts.addr_count), tables.customer_addresses.length);
     assert.strictEqual(parseInt(counts.ord_count), tables.orders.length);
     assert.strictEqual(parseInt(counts.item_count), tables.order_items.length);
+    assert.strictEqual(parseInt(counts.hist_count), tables.order_status_history.length);
+    assert.strictEqual(parseInt(counts.audit_count), tables.audit_logs.length);
 
-    console.log('✅ PASS: Khôi phục thành công 100% dữ liệu nghiệp vụ với Foreign Key ràng buộc chặt chẽ!');
+    console.log('✅ PASS: Khôi phục thành công 100% (10/10 bảng nghiệp vụ) với Foreign Key ràng buộc chặt chẽ!');
 
   } finally {
     console.log('\n[*] Dọn dẹp schema kiểm thử khôi phục (DROP SCHEMA backup_restore_verification CASCADE)...');
