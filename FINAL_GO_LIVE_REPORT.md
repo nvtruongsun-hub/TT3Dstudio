@@ -4,7 +4,7 @@
 **Dự án:** T&T 3D Studio  
 **Website Production:** `https://nvtruongsun-hub.github.io/TT3Dstudio/`  
 **Nhánh kiểm định:** `feature/smart-address-checkout`  
-**Commit nghiệm thu cơ sở:** `b4ca76f` | **Commit nghiệm thu & bộ kiểm thử (HEAD):** `4890317` (và các script đối chiếu hiện tại)  
+**Commit nghiệm thu cơ sở:** `b4ca76f` | **Commit nghiệm thu & bộ kiểm thử (HEAD):** `2a82e0a` (và các script đối chiếu hiện tại)  
 **Môi trường kiểm tra:** Supabase Cloud (`nbsumfhfxohawiuxrwqj`, Region: `ap-southeast-1`, PostgreSQL 17.11)  
 **Thời gian hoàn thành:** 01/11/2026 13:48 (Giờ Hà Nội)  
 **Quyết định cuối cùng:** **🔴 NO-GO (CHƯA ĐỦ ĐIỀU KIỆN MERGE VÀO MAIN - CẦN GIẢI QUYẾT CÁC ĐIỂM CHẶN DƯỚI ĐÂY)**  
