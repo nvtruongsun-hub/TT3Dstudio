@@ -212,7 +212,11 @@ FOR EACH ROW EXECUTE FUNCTION public.handle_updated_at();
 
 -- Trigger creating profile and default role on auth.users signup
 CREATE OR REPLACE FUNCTION public.handle_new_user()
-RETURNS TRIGGER AS $$
+RETURNS TRIGGER
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public, auth
+AS $$
 BEGIN
     INSERT INTO public.profiles (id, full_name, phone, shipping_address)
     VALUES (
@@ -229,7 +233,8 @@ BEGIN
 
     RETURN NEW;
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
+$$;
+
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
@@ -252,25 +257,35 @@ ALTER TABLE public.audit_logs ENABLE ROW LEVEL SECURITY;
 
 -- Helper function: Check if current authenticated user has 'admin' role
 CREATE OR REPLACE FUNCTION public.is_admin()
-RETURNS BOOLEAN AS $$
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+STABLE
+SET search_path = public, auth
+AS $$
 BEGIN
     RETURN EXISTS (
         SELECT 1 FROM public.user_roles
         WHERE user_id = auth.uid() AND role = 'admin'
     );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+$$;
 
 -- Helper function: Check if user has 'staff' or 'admin' role
 CREATE OR REPLACE FUNCTION public.is_staff_or_admin()
-RETURNS BOOLEAN AS $$
+RETURNS BOOLEAN
+LANGUAGE plpgsql
+SECURITY DEFINER
+STABLE
+SET search_path = public, auth
+AS $$
 BEGIN
     RETURN EXISTS (
         SELECT 1 FROM public.user_roles
         WHERE user_id = auth.uid() AND role IN ('staff', 'admin')
     );
 END;
-$$ LANGUAGE plpgsql SECURITY DEFINER STABLE;
+$$;
 
 -- PROFILES POLICIES
 CREATE POLICY "Users can view own profile"

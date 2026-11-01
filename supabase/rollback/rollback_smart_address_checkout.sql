@@ -24,6 +24,11 @@ DROP FUNCTION IF EXISTS public.ensure_single_default_customer_address();
 -- ALTER TABLE public.orders DROP COLUMN IF EXISTS order_shipping_snapshot;
 
 -- 3. KHÔI PHỤC HÀM create_order VỀ PHIÊN BẢN 8 THAM SỐ GỐC (20261031_ecommerce_upgrade.sql)
+-- Xóa hàm 16 tham số mới để tránh xung đột PostgREST overload collision (PGRST203)
+DROP FUNCTION IF EXISTS public.create_order(
+    JSONB, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT, UUID, BOOLEAN, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT
+);
+
 CREATE OR REPLACE FUNCTION public.create_order(
     p_items JSONB,
     p_shipping_name TEXT,
