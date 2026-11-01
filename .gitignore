@@ -30,3 +30,6 @@ dist_backup/
 # Agent Telemetry & Logs
 .agents/
 
+
+# Database Backups & Local Dumps
+supabase/backups/

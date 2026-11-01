@@ -690,3 +690,9 @@ BEGIN
     );
 END;
 $$;
+
+-- Principle of Least Privilege: Revoke anonymous execute on sensitive admin RPC and trigger functions
+REVOKE EXECUTE ON FUNCTION public.update_order_status_admin(UUID, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT) FROM anon, public;
+GRANT EXECUTE ON FUNCTION public.update_order_status_admin(UUID, TEXT, TEXT, TEXT, TEXT, TEXT, TEXT) TO authenticated;
+
+REVOKE EXECUTE ON FUNCTION public.handle_new_user() FROM anon, public;
