@@ -69,12 +69,22 @@
   function initCachedSession() {
     try {
       if (typeof window !== 'undefined' && window.localStorage) {
-        const raw = window.localStorage.getItem(STORAGE_AUTH_KEY);
+        // Check custom storage key or default Supabase key (sb-*-auth-token)
+        let raw = window.localStorage.getItem(STORAGE_AUTH_KEY);
+        if (!raw) {
+          for (let i = 0; i < window.localStorage.length; i++) {
+            const k = window.localStorage.key(i);
+            if (k && k.startsWith('sb-') && k.endsWith('-auth-token')) {
+              raw = window.localStorage.getItem(k);
+              break;
+            }
+          }
+        }
         if (raw) {
           const data = JSON.parse(raw);
           if (data && data.user) {
             currentUser = data.user;
-            currentSession = data.session || (data.access_token ? data : { user: data.user, access_token: 'mock-jwt-token' });
+            currentSession = data.access_token ? data : (data.session || { user: data.user, access_token: 'mock-jwt-token' });
             userRoles = data.roles || ['customer'];
           }
         }
@@ -101,7 +111,6 @@
         supabaseClient = window.supabase.createClient(DEFAULT_SUPABASE_URL, DEFAULT_SUPABASE_ANON_KEY, {
           auth: {
             persistSession: true,
-            storageKey: STORAGE_AUTH_KEY,
             autoRefreshToken: true,
             detectSessionInUrl: true
           }
