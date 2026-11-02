@@ -32,7 +32,7 @@
   <!-- Supabase Cloud PostgreSQL 15+ & Auth Engine -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/env-config.js?v=5.2"></script>
-  <script src="js/supabase-client.js?v=5.2"></script>
+  <script src="js/supabase-client.js?v=5.3-mfa"></script>
   <script src="js/vn-administrative.js?v=5.2"></script>
   <script src="js/address-book.js?v=5.2"></script>
   <script src="js/account-manager.js?v=5.2"></script>
@@ -55,7 +55,6 @@
   <script src="js/viewer3d.js?v=4.0"></script>
   <script src="js/calculator.js?v=4.0"></script>
   <script src="js/config.js?v=4.0"></script>
-  <script src="js/automation-simulator.js?v=4.1"></script>
   <script src="js/product-experience.js?v=20261031-motion-r1" defer></script>
   <script src="js/app.js?v=20261031-atelier-nopersonalize" defer></script>
   <script src="js/interface-motion.js?v=20261031-atelier-r1" defer></script>
@@ -621,7 +620,7 @@
                 <i class="fa-solid fa-chevron-down accordion-chevron"></i>
               </summary>
               <div class="accordion-content">
-                Các mẫu có sẵn tại xưởng sẽ được đóng gói giao ngay trong ngày. Với các mẫu làm theo đơn hoặc khắc tên riêng, thời gian chế tác tại xưởng Hà Nội từ 1–2 ngày làm việc. Thời gian vận chuyển: nội thành Hà Nội 1–2 ngày; các tỉnh thành khác 2–3 ngày qua GHTK / Viettel Post.
+                Các mẫu có sẵn tại xưởng sẽ được đóng gói giao ngay trong ngày. Với các mẫu làm theo đơn hoặc khắc tên riêng, thời gian chế tác tại xưởng Hà Tĩnh từ 1–2 ngày làm việc. Thời gian vận chuyển: nội tỉnh Hà Tĩnh 1 ngày; các tỉnh thành khác 2–3 ngày qua GHTK / Viettel Post.
               </div>
             </details>
 
@@ -641,7 +640,7 @@
                 <i class="fa-solid fa-chevron-down accordion-chevron"></i>
               </summary>
               <div class="accordion-content">
-                T&amp;T 3D Labs cam kết đổi mới 1-1 miễn phí trong vòng 7 ngày kể từ khi nhận hàng nếu sản phẩm có lỗi kỹ thuật in (nứt vỡ, bung lớp, sai màu sắc đã chốt) hoặc hư hỏng do quá trình vận chuyển bưu tá. Bạn chỉ cần gửi ảnh/video kiện hàng qua Zalo kỹ thuật viên xưởng.
+                T&amp;T 3D Studio cam kết đổi mới 1-1 miễn phí trong vòng 7 ngày kể từ khi nhận hàng nếu sản phẩm có lỗi kỹ thuật in (nứt vỡ, bung lớp, sai màu sắc đã chốt) hoặc hư hỏng do quá trình vận chuyển bưu tá. Bạn chỉ cần gửi ảnh/video kiện hàng qua Zalo kỹ thuật viên xưởng.
               </div>
             </details>
           </div>
@@ -737,7 +736,7 @@
                     <span class="text-xs text-slate-400 line-through ml-2">458.000 đ</span>
                   </div>
                   <button type="button" 
-                          onclick="window.TTCart.addItem({id:'mw-cn-1971424', title:'Hộp Bánh Xe Đu Quay Ferris Xoay Cơ Học', price:239000, qty:1}); window.TTCart.addItem({id:'mw-cn-1404920', title:'Hệ Module Ngăn Kéo Xếp Chồng Mini Pork3D', price:219000, qty:1}); window.TTCart.openCart();" 
+                          onclick="window.TTCart.addItem({id:'mw-cn-1971424', title:'Hộp Bánh Xe Đu Quay Ferris Xoay Cơ Học', price:239000, qty:1}); window.TTCart.addItem({id:'mw-cn-1404920', title:'Hệ Module Ngăn Kéo Xếp Chồng Mini Pork3D', price:219000, qty:1}); window.TTCart.applyCoupon('TT3D10'); window.TTCart.openCart();" 
                           class="btn-primary text-xs !py-3 !px-4">
                     Mua Trọn Bộ
                   </button>
@@ -805,7 +804,7 @@
                     <span class="text-xs text-slate-400 line-through ml-2">304.000 đ</span>
                   </div>
                   <button type="button" 
-                          onclick="window.TTCart.addItem({id:'mw-cn-2084928', title:'Khay Đựng Son & Nước Hoa Nơ Lụa Sweet Silk', price:139000, qty:1}); window.TTCart.addItem({id:'mw-cn-2531095', title:'Bình Cắm Cọ Deluxe Cánh Bướm Nơ Đôi', price:165000, qty:1}); window.TTCart.openCart();" 
+                          onclick="window.TTCart.addItem({id:'mw-cn-2084928', title:'Khay Đựng Son & Nước Hoa Nơ Lụa Sweet Silk', price:139000, qty:1}); window.TTCart.addItem({id:'mw-cn-2531095', title:'Bình Cắm Cọ Deluxe Cánh Bướm Nơ Đôi', price:165000, qty:1}); window.TTCart.applyCoupon('TT3D10'); window.TTCart.openCart();" 
                           class="btn-primary text-xs !py-3 !px-4">
                     Mua Trọn Bộ
                   </button>
@@ -873,7 +872,7 @@
                     <span class="text-xs text-slate-400 line-through ml-2">168.000 đ</span>
                   </div>
                   <button type="button" 
-                          onclick="window.TTCart.addItem({id:'mw-cn-1769352', title:'Biển Mã QR Quầy Thu Ngân Thẻ Trượt', price:69000, qty:1}); window.TTCart.addItem({id:'mw-cn-1147539', title:'Biển Tên Chức Danh Để Bàn Khắc Chữ Theo Yêu Cầu', price:99000, qty:1}); window.TTCart.openCart();" 
+                          onclick="window.TTCart.addItem({id:'mw-cn-1769352', title:'Biển Mã QR Quầy Thu Ngân Thẻ Trượt', price:69000, qty:1}); window.TTCart.addItem({id:'mw-cn-1147539', title:'Biển Tên Chức Danh Để Bàn Khắc Chữ Theo Yêu Cầu', price:99000, qty:1}); window.TTCart.applyCoupon('TT3D10'); window.TTCart.openCart();" 
                           class="btn-primary text-xs !py-3 !px-4">
                     Mua Trọn Bộ
                   </button>
@@ -1071,7 +1070,7 @@
             <div class="accordion-content space-y-2">
               <p class="text-xs text-[#586057]">Chúng tôi luôn sẵn sàng lắng nghe mọi ý kiến đóng góp của quý khách:</p>
               <div class="p-3 rounded-xl bg-[#F7F6F2] border border-[#DCDDD5] space-y-1 text-xs font-mono">
-                <div><strong>Xưởng chế tác:</strong> T&amp;T 3D Labs Studio, Hà Nội</div>
+                <div><strong>Xưởng chế tác:</strong> T&amp;T 3D Studio, Tỉnh Hà Tĩnh</div>
                 <div><strong>Hotline kỹ thuật:</strong> <span class="dynamic-hotline-text">0349.657.529</span></div>
                 <div><strong>Zalo tư vấn:</strong> Nhắn trực tiếp qua biểu tượng Zalo trên website</div>
                 <div><strong>Giờ làm việc:</strong> 8:30 – 19:30 (Thứ 2 đến Thứ 7)</div>
@@ -1298,7 +1297,7 @@
           <span class="w-2.5 h-2.5 rounded-full bg-[#D45B34] animate-pulse"></span>
           <div>
             <h3 id="checkout-modal-title" class="text-sm font-bold text-[var(--text-primary)]">Xác Nhận Đặt Hàng (One-Page Checkout)</h3>
-            <p class="text-[10px] text-[var(--text-secondary)]">T&amp;T 3D Labs · Xưởng in 3D Hà Tĩnh · Giao hàng toàn quốc</p>
+            <p class="text-[10px] text-[var(--text-secondary)]">T&amp;T 3D Studio · Xưởng in 3D Hà Tĩnh · Giao hàng toàn quốc</p>
           </div>
         </div>
         <button type="button" id="checkout-close-btn" onclick="window.TTCheckout.closeCheckoutModal()" class="w-8 h-8 rounded-xl bg-[var(--bg-surface-elevated)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] flex items-center justify-center transition-colors" aria-label="Đóng bảng đặt hàng">

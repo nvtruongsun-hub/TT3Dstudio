@@ -58,7 +58,6 @@ const REQUIRED_PREFLIGHT_FILES = [
   'js/personalize-studio.js',
   'js/gift-quiz.js',
   'js/admin.js',
-  'js/automation-simulator.js',
   'js/studio-state.js'
 ];
 

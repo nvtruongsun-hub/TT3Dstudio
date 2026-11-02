@@ -103,10 +103,7 @@
         }
 
         if (isRealAdmin) {
-          if (lockScreen) lockScreen.classList.add('hidden');
-          if (adminApp) adminApp.classList.remove('hidden');
-          loadAllDashboardData();
-          return true;
+          return startMfaGate();
         } else {
           if (loginError) {
             loginError.textContent = 'Từ chối truy cập: Tài khoản không có vai trò Quản trị viên (Admin) được cấp quyền bởi máy chủ Database.';
@@ -161,12 +158,159 @@
             return;
           }
 
-          if (lockScreen) lockScreen.classList.add('hidden');
-          if (adminApp) adminApp.classList.remove('hidden');
           if (loginError) loginError.classList.add('hidden');
-          showToast('Xác thực Quản trị viên thành công!');
-          loadAllDashboardData();
+          await startMfaGate();
         }
+      });
+    }
+
+    // ---- MFA / AAL2 GATE (BLOCKER #05, #12) ----
+    // Dashboard chỉ mở khi phiên đạt AAL2. Chưa có TOTP -> bắt buộc đăng ký;
+    // mất thiết bị -> mã dự phòng gỡ factor cũ phía server rồi đăng ký lại.
+    const mfaPanel = document.getElementById('admin-mfa-panel');
+    const mfaTitle = document.getElementById('admin-mfa-title');
+    const mfaHint = document.getElementById('admin-mfa-hint');
+    const mfaEnrollBox = document.getElementById('admin-mfa-enroll');
+    const mfaQr = document.getElementById('admin-mfa-qr');
+    const mfaSecret = document.getElementById('admin-mfa-secret');
+    const mfaForm = document.getElementById('admin-mfa-form');
+    const mfaCodeInput = document.getElementById('admin-mfa-code');
+    const recoveryForm = document.getElementById('admin-recovery-form');
+    const recoveryInput = document.getElementById('admin-recovery-code');
+    const recoveryCodesBox = document.getElementById('admin-recovery-codes');
+    const recoveryCodesList = document.getElementById('admin-recovery-codes-list');
+    const recoveryCodesDone = document.getElementById('admin-recovery-codes-done');
+    const mfaError = document.getElementById('admin-mfa-error');
+    const btnToggleRecovery = document.getElementById('admin-mfa-toggle-recovery');
+    const btnMfaCancel = document.getElementById('admin-mfa-cancel');
+    const CHALLENGE_HINT = 'Nhập mã 6 số đang hiển thị trên ứng dụng Authenticator của bạn.';
+    let mfaFactorId = null;
+    let mfaIsNewEnrollment = false;
+
+    function showMfaError(msg) {
+      if (!mfaError) return;
+      mfaError.textContent = msg || '';
+      mfaError.classList.toggle('hidden', !msg);
+    }
+
+    function openDashboard() {
+      if (mfaPanel) mfaPanel.classList.add('hidden');
+      if (adminLoginForm) adminLoginForm.classList.remove('hidden');
+      if (lockScreen) lockScreen.classList.add('hidden');
+      if (adminApp) adminApp.classList.remove('hidden');
+      showToast('Xác thực Quản trị viên (AAL2) thành công!');
+      loadAllDashboardData();
+    }
+
+    // step: 'enroll' | 'challenge' | 'recovery' | 'codes'
+    function showMfaStep(step) {
+      if (adminLoginForm) adminLoginForm.classList.add('hidden');
+      if (mfaPanel) mfaPanel.classList.remove('hidden');
+      if (mfaEnrollBox) mfaEnrollBox.classList.toggle('hidden', step !== 'enroll');
+      if (mfaForm) mfaForm.classList.toggle('hidden', step === 'recovery' || step === 'codes');
+      if (recoveryForm) recoveryForm.classList.toggle('hidden', step !== 'recovery');
+      if (recoveryCodesBox) recoveryCodesBox.classList.toggle('hidden', step !== 'codes');
+      if (btnToggleRecovery) {
+        btnToggleRecovery.classList.toggle('hidden', step !== 'challenge' && step !== 'recovery');
+        btnToggleRecovery.textContent = step === 'recovery' ? 'Quay lại nhập mã Authenticator' : 'Mất thiết bị? Dùng mã dự phòng';
+      }
+      showMfaError('');
+    }
+
+    async function beginEnrollment() {
+      const res = await window.TTSupabase.enrollTotp();
+      if (!res.ok) {
+        showMfaStep('challenge');
+        showMfaError('Không thể khởi tạo đăng ký Authenticator: ' + res.error);
+        return;
+      }
+      mfaFactorId = res.factorId;
+      mfaIsNewEnrollment = true;
+      if (mfaTitle) mfaTitle.textContent = 'Bắt buộc bật xác thực 2 bước';
+      if (mfaHint) mfaHint.textContent = 'Quét mã QR bằng Google Authenticator / Microsoft Authenticator, rồi nhập mã 6 số để kích hoạt.';
+      if (mfaQr) mfaQr.src = res.qrCode;
+      if (mfaSecret) mfaSecret.textContent = res.secret;
+      showMfaStep('enroll');
+      if (mfaCodeInput) { mfaCodeInput.value = ''; mfaCodeInput.focus(); }
+    }
+
+    async function startMfaGate() {
+      if (lockScreen) lockScreen.classList.remove('hidden');
+      if (adminApp) adminApp.classList.add('hidden');
+      const status = await window.TTSupabase.getMfaStatus();
+      if (!status.ok) {
+        showMfaStep('challenge');
+        showMfaError('Không kiểm tra được trạng thái MFA: ' + status.error);
+        return false;
+      }
+      if (status.currentLevel === 'aal2') { openDashboard(); return true; }
+      if (status.verifiedTotp.length === 0) { await beginEnrollment(); return false; }
+
+      mfaFactorId = status.verifiedTotp[0].id;
+      mfaIsNewEnrollment = false;
+      if (mfaTitle) mfaTitle.textContent = 'Xác thực 2 bước';
+      if (mfaHint) mfaHint.textContent = CHALLENGE_HINT;
+      showMfaStep('challenge');
+      if (mfaCodeInput) { mfaCodeInput.value = ''; mfaCodeInput.focus(); }
+      return false;
+    }
+
+    if (mfaForm) {
+      mfaForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (!mfaFactorId) return;
+        const res = await window.TTSupabase.verifyTotp(mfaFactorId, mfaCodeInput ? mfaCodeInput.value : '');
+        if (!res.ok) { showMfaError(res.error); return; }
+
+        if (mfaIsNewEnrollment) {
+          // Factor mới vừa verify -> phiên đã AAL2 -> phát hành bộ mã dự phòng.
+          const codes = await window.TTSupabase.generateRecoveryCodes();
+          if (codes && codes.ok && Array.isArray(codes.codes)) {
+            if (recoveryCodesList) recoveryCodesList.textContent = codes.codes.join('\n');
+            if (mfaTitle) mfaTitle.textContent = 'Đã bật xác thực 2 bước';
+            if (mfaHint) mfaHint.textContent = '';
+            showMfaStep('codes');
+            return;
+          }
+          showToast('Đã bật MFA nhưng chưa tạo được mã dự phòng. Hãy thử lại sau.');
+        }
+        openDashboard();
+      });
+    }
+
+    if (recoveryForm) {
+      recoveryForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const code = recoveryInput ? recoveryInput.value.trim() : '';
+        if (!code) { showMfaError('Vui lòng nhập mã dự phòng.'); return; }
+        const res = await window.TTSupabase.resetMfaWithRecoveryCode(code);
+        if (!res || !res.ok) {
+          showMfaError((res && res.error) || 'Mã dự phòng không chính xác hoặc đã được sử dụng.');
+          return;
+        }
+        if (recoveryInput) recoveryInput.value = '';
+        showToast('Đã gỡ thiết bị cũ. Hãy đăng ký Authenticator mới.');
+        await beginEnrollment();
+      });
+    }
+
+    if (btnToggleRecovery) {
+      btnToggleRecovery.addEventListener('click', () => {
+        const toRecovery = recoveryForm && recoveryForm.classList.contains('hidden');
+        showMfaStep(toRecovery ? 'recovery' : 'challenge');
+        if (mfaHint) mfaHint.textContent = toRecovery
+          ? 'Mã dự phòng sẽ gỡ thiết bị Authenticator cũ, sau đó bạn đăng ký thiết bị mới.'
+          : CHALLENGE_HINT;
+      });
+    }
+
+    if (recoveryCodesDone) recoveryCodesDone.addEventListener('click', openDashboard);
+
+    if (btnMfaCancel) {
+      btnMfaCancel.addEventListener('click', async () => {
+        await window.TTSupabase.signOut();
+        if (mfaPanel) mfaPanel.classList.add('hidden');
+        if (adminLoginForm) adminLoginForm.classList.remove('hidden');
       });
     }
 

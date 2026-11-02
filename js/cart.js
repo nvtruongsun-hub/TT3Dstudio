@@ -451,7 +451,7 @@
   // Mã giảm giá
   function applyCoupon(code) {
     const clean = (code || '').trim().toUpperCase();
-    if (clean === 'TT3D2026' || clean === 'STUDIO' || clean === 'SPECIAL10') {
+    if (clean === 'TT3D10' || clean === 'TT3D2026' || clean === 'STUDIO' || clean === 'SPECIAL10') {
       currentDiscountPercent = 10;
       saveCart();
       if (window.showToast) window.showToast('Đã áp dụng mã ưu đãi giảm 10% thành công!');
@@ -589,6 +589,7 @@
     clearCart,
     openCart,
     closeCart,
+    applyCoupon,
     getItems: () => [...cart],
     getDiscountPercent: () => currentDiscountPercent,
     renderCartUI

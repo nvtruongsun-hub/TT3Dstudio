@@ -674,8 +674,8 @@
           p_order_id: order_id,
           p_new_status: new_status,
           p_note: note || null,
-          p_carrier: carrier || null,
-          p_tracking_number: tracking_number || null
+          p_carrier_name: carrier || null,
+          p_carrier_tracking_code: tracking_number || null
         });
         if (error) return { ok: false, error: error.message };
         return data;
@@ -690,6 +690,95 @@
       code: 'SERVICE_UNAVAILABLE',
       error: 'Máy chủ quản trị Supabase không khả dụng.'
     };
+  }
+
+  /**
+   * MFA / AAL2 APIs cho Admin & Staff (Fix BLOCKER #05, #12)
+   * AAL2 chỉ do Supabase Auth cấp sau khi verify TOTP thành công.
+   */
+  async function getMfaStatus() {
+    const client = getClient();
+    if (!client || !client.auth || !client.auth.mfa) {
+      return { ok: false, error: 'Dịch vụ MFA không khả dụng.' };
+    }
+    try {
+      const { data: aal, error: aalErr } = await client.auth.mfa.getAuthenticatorAssuranceLevel();
+      if (aalErr) return { ok: false, error: aalErr.message };
+      const { data: factors, error: fErr } = await client.auth.mfa.listFactors();
+      if (fErr) return { ok: false, error: fErr.message };
+      const all = (factors && factors.all) || [];
+      return {
+        ok: true,
+        currentLevel: aal.currentLevel,
+        verifiedTotp: all.filter(f => f.factor_type === 'totp' && f.status === 'verified'),
+        unverifiedTotp: all.filter(f => f.factor_type === 'totp' && f.status !== 'verified')
+      };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  }
+
+  async function enrollTotp() {
+    const client = getClient();
+    if (!client || !client.auth || !client.auth.mfa) return { ok: false, error: 'Dịch vụ MFA không khả dụng.' };
+    try {
+      // Dọn factor chưa verify còn sót (lần đăng ký trước bị bỏ dở) để tránh trùng friendlyName.
+      const status = await getMfaStatus();
+      if (status.ok) {
+        for (const f of status.unverifiedTotp) {
+          await client.auth.mfa.unenroll({ factorId: f.id });
+        }
+      }
+      const { data, error } = await client.auth.mfa.enroll({
+        factorType: 'totp',
+        friendlyName: 'TT3D Admin ' + new Date().toISOString().slice(0, 10)
+      });
+      if (error) return { ok: false, error: error.message };
+      return { ok: true, factorId: data.id, qrCode: data.totp.qr_code, secret: data.totp.secret };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  }
+
+  async function verifyTotp(factorId, code) {
+    const client = getClient();
+    if (!client || !client.auth || !client.auth.mfa) return { ok: false, error: 'Dịch vụ MFA không khả dụng.' };
+    const cleanCode = String(code || '').replace(/\s/g, '');
+    if (!/^\d{6}$/.test(cleanCode)) return { ok: false, error: 'Mã xác thực phải gồm 6 chữ số.' };
+    try {
+      const { data, error } = await client.auth.mfa.challengeAndVerify({ factorId, code: cleanCode });
+      if (error) return { ok: false, error: 'Mã xác thực không đúng hoặc đã hết hạn.' };
+      // Lấy phiên mới (aal2) để các RPC tiếp theo mang JWT đã nâng cấp.
+      const { data: sessionData } = await client.auth.getSession();
+      if (sessionData && sessionData.session) handleAuthStateUpdate(sessionData.session);
+      return { ok: true, data };
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
+  }
+
+  async function generateRecoveryCodes() {
+    const client = getClient();
+    if (!client || !client.rpc) return { ok: false, error: 'Client không khả dụng.' };
+    const { data, error } = await client.rpc('generate_recovery_codes_admin');
+    if (error) return { ok: false, error: error.message };
+    return data;
+  }
+
+  async function resetMfaWithRecoveryCode(code) {
+    const client = getClient();
+    if (!client || !client.functions) return { ok: false, error: 'Client không khả dụng.' };
+    try {
+      const { data, error } = await client.functions.invoke('mfa-recovery-reset', { body: { code } });
+      if (error) {
+        let detail = null;
+        try { detail = error.context && await error.context.json(); } catch (_) { /* ignore */ }
+        return detail || { ok: false, error: 'Mã dự phòng không chính xác hoặc đã được sử dụng.' };
+      }
+      return data;
+    } catch (e) {
+      return { ok: false, error: e.message };
+    }
   }
 
   /**
@@ -859,6 +948,11 @@
         createOrder,
     getCustomerOrders,
     updateOrderStatusAdmin,
+    getMfaStatus,
+    enrollTotp,
+    verifyTotp,
+    generateRecoveryCodes,
+    resetMfaWithRecoveryCode,
     getCustomerAddresses,
     addCustomerAddress,
     updateCustomerAddress,
