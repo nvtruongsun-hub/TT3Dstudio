@@ -1,5 +1,9 @@
 const https = require('https');
-const token = 'REDACTED_SUPABASE_ACCESS_TOKEN';
+const token = process.env.SUPABASE_ACCESS_TOKEN;
+if (!token) {
+  console.error('❌ Thiếu biến môi trường SUPABASE_ACCESS_TOKEN.');
+  process.exit(1);
+}
 const projectRef = 'nbsumfhfxohawiuxrwqj';
 
 function runSql(sql) {

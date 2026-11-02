@@ -10,7 +10,7 @@ const STAGING_CONFIG = {
   PROJECT_REF: 'vtxzlgkvmvoushluthme',
   URL: 'https://vtxzlgkvmvoushluthme.supabase.co',
   ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eHpsZ2t2bXZvdXNobHV0aG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MDU4NzgsImV4cCI6MjEwOTA4MTg3OH0.e78lpCrZZ07Y15aXXXTceNQxzsd46XyTLWebXZZB4oo',
-  SERVICE_KEY: 'REDACTED_STAGING_SERVICE_KEY'
+  SERVICE_KEY: process.env.STAGING_SERVICE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY || ''
 };
 
 function assertNotProduction(targetUrlOrRef) {

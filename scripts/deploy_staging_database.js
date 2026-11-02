@@ -3,7 +3,11 @@ const path = require('path');
 const https = require('https');
 
 const STAGING_REF = 'vtxzlgkvmvoushluthme';
-const TOKEN = process.env.SUPABASE_ACCESS_TOKEN || 'REDACTED_SUPABASE_ACCESS_TOKEN';
+const TOKEN = process.env.SUPABASE_ACCESS_TOKEN;
+if (!TOKEN) {
+  console.error('❌ Thiếu biến môi trường SUPABASE_ACCESS_TOKEN.');
+  process.exit(1);
+}
 
 function queryStagingSql(sql) {
   return new Promise((resolve, reject) => {

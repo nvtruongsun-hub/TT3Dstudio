@@ -2,7 +2,10 @@ const https = require('https');
 
 const SUPABASE_URL = 'https://nbsumfhfxohawiuxrwqj.supabase.co';
 const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';
-const SERVICE_KEY = 'REDACTED_PROD_SERVICE_ROLE_KEY';
+const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+if (!SERVICE_KEY) {
+  console.warn('⚠️ CẢNH BÁO: SUPABASE_SERVICE_ROLE_KEY chưa được đặt trong biến môi trường. Script yêu cầu biến này để thực thi thao tác đặc quyền.');
+}
 
 function req(path, method = 'GET', body = null, token = SERVICE_KEY) {
   return new Promise((resolve, reject) => {
