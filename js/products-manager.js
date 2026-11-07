@@ -242,10 +242,15 @@
     const isNFC = /nfc|wifi/i.test(item.title || '') && item.category === 'Ca_Nhan_Hoa_NFC';
     const badge = personalizable ? 'Thêm tên riêng' : (isNFC ? 'NFC tích hợp' : '');
     const original = Number(item.originalPrice) > Number(item.price) ? formatMoney(item.originalPrice) : '';
+    const rawImg = sanitizeImageUrl(item.image);
+    const webpImg = rawImg.replace(/\.(png|jpe?g)($|\?)/i, '.webp$2');
     return `
       <article class="catalog-product-card tt-product-card studio-product-card" data-product-id="${escapeHTML(item.id)}">
         <button type="button" class="catalog-product-photo tt-product-media" data-action="open-detail" data-product-id="${escapeHTML(item.id)}" aria-label="Xem ảnh và chi tiết ${escapeHTML(title)}">
-          <img src="${sanitizeImageUrl(item.image)}" width="600" height="600" loading="lazy" decoding="async" alt="${escapeHTML(item.imageAlt || title)}" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+          <picture class="catalog-product-picture">
+            <source srcset="${webpImg}" type="image/webp">
+            <img src="${rawImg}" width="600" height="600" loading="lazy" decoding="async" alt="${escapeHTML(item.imageAlt || title)}" onerror="this.onerror=null; this.src='assets/images/logo-premium-mark.svg';">
+          </picture>
           ${badge ? `<span class="catalog-product-badge">${badge}</span>` : ''}
           <span class="catalog-photo-hint" aria-hidden="true"><i class="fa-solid fa-arrow-up-right-from-square"></i></span>
         </button>

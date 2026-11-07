@@ -12,7 +12,7 @@
 const https = require('https');
 
 const SUPABASE_URL = 'https://nbsumfhfxohawiuxrwqj.supabase.co';
-const ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';
+const ANON_KEY = 'sb_publishable_axTex7YiB0DOBquiWFtR-g_L-0q8n5e';
 
 function apiRequest(path, method = 'GET', body = null, token = ANON_KEY) {
   return new Promise((resolve, reject) => {

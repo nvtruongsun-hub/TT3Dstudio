@@ -7,11 +7,11 @@ let code = fs.readFileSync(filePath, 'utf8');
 const target = `  // Configurable Supabase Endpoint & Anon Key
   // Note: anon public key is safe for client-side use under PostgreSQL Row Level Security (RLS)
   const DEFAULT_SUPABASE_URL = (window.TT_ENV && window.TT_ENV.SUPABASE_URL) || 'https://nbsumfhfxohawiuxrwqj.supabase.co';
-  const DEFAULT_SUPABASE_ANON_KEY = (window.TT_ENV && window.TT_ENV.SUPABASE_ANON_KEY) || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';`;
+  const DEFAULT_SUPABASE_ANON_KEY = (window.TT_ENV && window.TT_ENV.SUPABASE_ANON_KEY) || 'sb_publishable_axTex7YiB0DOBquiWFtR-g_L-0q8n5e';`;
 
 const replacement = `  // Multi-environment routing: Production vs Staging
   const PROD_URL = 'https://nbsumfhfxohawiuxrwqj.supabase.co';
-  const PROD_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';
+  const PROD_ANON = 'sb_publishable_axTex7YiB0DOBquiWFtR-g_L-0q8n5e';
 
   const STAGING_URL = 'https://vtxzlgkvmvoushluthme.supabase.co';
   const STAGING_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ0eHpsZ2t2bXZvdXNobHV0aG1lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM1MDU4NzgsImV4cCI6MjEwOTA4MTg3OH0.e78lpCrZZ07Y15aXXXTceNQxzsd46XyTLWebXZZB4oo';

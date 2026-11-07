@@ -5,10 +5,11 @@ Write-Host "==========================================================" -Foregro
 Write-Host "   END-TO-END STORE, TRACKING & NAVIGATION SIMULATION" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-$appJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/app.js", [System.Text.Encoding]::UTF8)
-$html = [System.IO.File]::ReadAllText("$PSScriptRoot/index.html", [System.Text.Encoding]::UTF8)
-$productsJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/products-manager.js", [System.Text.Encoding]::UTF8)
-$orderJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/order-engine.js", [System.Text.Encoding]::UTF8)
+$baseDir = if (Test-Path "$PSScriptRoot/index.html") { $PSScriptRoot } else { (Resolve-Path "$PSScriptRoot/..").Path }
+$appJs = [System.IO.File]::ReadAllText("$baseDir/js/app.js", [System.Text.Encoding]::UTF8)
+$html = [System.IO.File]::ReadAllText("$baseDir/index.html", [System.Text.Encoding]::UTF8)
+$productsJs = [System.IO.File]::ReadAllText("$baseDir/js/products-manager.js", [System.Text.Encoding]::UTF8)
+$orderJs = [System.IO.File]::ReadAllText("$baseDir/js/order-engine.js", [System.Text.Encoding]::UTF8)
 
 # 1. Test hash map completeness in js/app.js
 $requiredHashes = @('#store', '#personalize', '#inspiration', '#tracking', '#support')

@@ -1,4 +1,4 @@
-﻿# VIBECODE HYBRID ORCHESTRATION RULES (CODEX MASTER + ARGON 4 CO-PILOT + ANTIGRAVITY WORKER)
+# VIBECODE HYBRID ORCHESTRATION RULES (CODEX MASTER + ARGON 4 CO-PILOT + ANTIGRAVITY WORKER)
 
 ## I. TRẠNG THÁI QUY TẮC (RULE STATUS)
 - **[SUSPENDED]:** Tạm dừng quy tắc "Argon 4 là bộ não duy nhất". Không còn khóa cứng tiến trình khi mất kết nối Chrome MCP.
@@ -110,3 +110,26 @@ Khi điều phối tác vụ thuộc **Nhóm 1** và **Nhóm 2**, Agent tự đ�
      `Stop-Process -Name "POWERPNT" -Force -ErrorAction SilentlyContinue`
 3. **Điều phối GPU tuần tự (Sequential GPU Rendering):**
    * Không chạy đồng thời (parallel) việc render của Remotion, PowerPoint `CreateVideo` và CapCut Export để tránh tràn VRAM. Bắt buộc thực thi tuần tự: **Tạo Assets (Remotion/PPTX) -> Chờ hoàn tất file MP4 -> Đẩy vào CapCutAPI**.
+
+
+---
+
+# AI WORKSPACE & FOLDER GOVERNANCE RULES
+
+Mọi AI Agent khi làm việc trong workspace này BẮT BUỘC tuân thủ 15 quy định quản trị cấu trúc sau:
+
+1. **Kiểm tra cấu trúc trước khi tạo:** Luôn kiểm tra cây thư mục hiện tại trước khi tạo bất kỳ file hoặc folder mới nào.
+2. **Hạn chế tối đa tạo file tại root:** Không tạo file tại thư mục gốc nếu không có lý do kỹ thuật bắt buộc.
+3. **Cập nhật báo cáo hiện hành:** Không tạo file báo cáo mới nếu có thể cập nhật vào báo cáo hiện có liên quan. Toàn bộ báo cáo bắt buộc lưu trong `reports/` hoặc `docs/`.
+4. **Cấm đặt tên file rác:** Tuyệt đối không đặt tên kiểu `final`, `final_v2`, `fixed`, `latest`, `temp`, `backup_copy` gây nhiễu loạn phiên bản.
+5. **Vị trí của Tests:** Mọi bài test lâu dài bắt buộc phải nằm trong thư mục `tests/`.
+6. **Vị trí của Scripts:** Mọi script tự động hóa lâu dài bắt buộc phải nằm trong `scripts/` hoặc `tools/`.
+7. **Vị trí của Tài liệu:** Mọi tài liệu kỹ thuật, kiến trúc, hướng dẫn phải nằm trong thư mục `docs/` hoặc `reports/`.
+8. **Dọn dẹp file tạm:** Mọi file tạm thời (scratch, test output tạm) phải được dọn dẹp hoặc lưu đúng vào thư mục `archive/` hoặc `tmp/` sau khi hoàn thành task.
+9. **Bảo mật dữ liệu:** Không tự ý tạo file backup chứa dữ liệu nhạy cảm hoặc thông tin người dùng.
+10. **Bảo toàn kiến trúc:** Không tùy tiện thay đổi cấu trúc thư mục của repository khi giải quyết các task thông thường.
+11. **Không xóa khi chưa hiểu rõ:** Tuyệt đối không xóa bất kỳ file nào chỉ vì chưa hiểu rõ chức năng; phải xác minh tham chiếu hoặc xin duyệt trước.
+12. **Tận dụng thư mục hiện có:** Không tạo thư mục mới nếu đã có sẵn thư mục phù hợp với mục đích lưu trữ.
+13. **Kiểm soát file phát sinh:** Cuối mỗi task, Agent phải tự rà soát danh sách file mới phát sinh và đưa về đúng vị trí chuẩn mực.
+14. **Không trùng lặp báo cáo:** Không tạo nhiều file báo cáo độc lập chỉ để trình bày cùng một kết quả.
+15. **Tối giản & Dễ bảo trì:** Luôn ưu tiên giữ cấu trúc gọn gàng, tinh giản, tường minh và dễ bảo trì lâu dài.

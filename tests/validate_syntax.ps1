@@ -56,10 +56,12 @@ function Test-FileBrackets($filePath) {
 }
 
 Write-Host "Validating JS and CSS files..."
+$baseDir = if (Test-Path "$PSScriptRoot/index.html") { $PSScriptRoot } else { (Resolve-Path "$PSScriptRoot/..").Path }
 $files = @('js/app.js', 'js/viewer3d.js', 'js/products-manager.js', 'js/calculator.js', 'js/cart.js', 'css/style.css')
 $allOk = $true
 foreach ($f in $files) {
-    if (-not (Test-FileBrackets $f)) { $allOk = $false }
+    $fullPath = Join-Path $baseDir $f
+    if (-not (Test-FileBrackets $fullPath)) { $allOk = $false }
 }
 
 if (-not $allOk) { exit 1 } else { Write-Host "All files syntactically balanced!" -ForegroundColor Green; exit 0 }

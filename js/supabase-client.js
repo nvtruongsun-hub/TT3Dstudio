@@ -14,7 +14,7 @@
 
   // Multi-environment routing: Build-time static configuration enforced
   const PROD_URL = 'https://nbsumfhfxohawiuxrwqj.supabase.co';
-  const PROD_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5ic3VtZmhmeG9oYXdpdXhyd3FqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM0Njk4NzAsImV4cCI6MjEwOTA0NTg3MH0.fptFtIhcY90mm_Oj4FoxzI6ZPpkf9du876UMMXj14Io';
+  const PROD_ANON = 'sb_publishable_axTex7YiB0DOBquiWFtR-g_L-0q8n5e';
 
   function resolveEnvironment() {
     // 1. Kiem tra moi truong Node.js (danh cho test suites)

@@ -545,6 +545,11 @@
 
       if (imgEl) {
         const alt = product.title || 'Sản phẩm chế tác T&T 3D';
+        // Update picture WebP source if present
+        const sourceEl = document.getElementById('hero-showcase-source');
+        if (sourceEl) {
+          sourceEl.srcset = targetSrc.replace(/\.(png|jpe?g)($|\?)/i, '.webp$2');
+        }
         if (window.TTInterfaceMotion) window.TTInterfaceMotion.swapHeroImage(imgEl, targetSrc, alt);
         else { imgEl.src = targetSrc; imgEl.alt = alt; }
       }

@@ -16,7 +16,7 @@ set /p opt="Vui long chon (1, 2 hoac 3, mac dinh la 1): "
 if "%opt%"=="2" (
     echo.
     echo Dang khoi dong may chu Web noi bo...
-    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0server.ps1"
+    powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0scripts\server.ps1" -Path "%~dp0"
     goto end
 )
 

@@ -5,13 +5,14 @@ Write-Host "==========================================================" -Foregro
 Write-Host "   TEST SUITE: T&T 3D STORE & REAL TRACKING ARCHITECTURE" -ForegroundColor Cyan
 Write-Host "==========================================================" -ForegroundColor Cyan
 
-$html = [System.IO.File]::ReadAllText("$PSScriptRoot/index.html", [System.Text.Encoding]::UTF8)
-$appJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/app.js", [System.Text.Encoding]::UTF8)
-$productsJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/products-manager.js", [System.Text.Encoding]::UTF8)
-$orderJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/order-engine.js", [System.Text.Encoding]::UTF8)
-$cartJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/cart.js", [System.Text.Encoding]::UTF8)
-$checkoutJs = [System.IO.File]::ReadAllText("$PSScriptRoot/js/checkout.js", [System.Text.Encoding]::UTF8)
-$css = [System.IO.File]::ReadAllText("$PSScriptRoot/css/style.css", [System.Text.Encoding]::UTF8)
+$baseDir = if (Test-Path "$PSScriptRoot/index.html") { $PSScriptRoot } else { (Resolve-Path "$PSScriptRoot/..").Path }
+$html = [System.IO.File]::ReadAllText("$baseDir/index.html", [System.Text.Encoding]::UTF8)
+$appJs = [System.IO.File]::ReadAllText("$baseDir/js/app.js", [System.Text.Encoding]::UTF8)
+$productsJs = [System.IO.File]::ReadAllText("$baseDir/js/products-manager.js", [System.Text.Encoding]::UTF8)
+$orderJs = [System.IO.File]::ReadAllText("$baseDir/js/order-engine.js", [System.Text.Encoding]::UTF8)
+$cartJs = [System.IO.File]::ReadAllText("$baseDir/js/cart.js", [System.Text.Encoding]::UTF8)
+$checkoutJs = [System.IO.File]::ReadAllText("$baseDir/js/checkout.js", [System.Text.Encoding]::UTF8)
+$css = [System.IO.File]::ReadAllText("$baseDir/css/style.css", [System.Text.Encoding]::UTF8)
 
 $tests = @(
     # R1: 5 Discrete User-Centric Views
